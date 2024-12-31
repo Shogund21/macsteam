@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { StatusSelect } from "@/components/projects/StatusSelect";
+import { PrioritySelect } from "@/components/projects/PrioritySelect";
 
 interface Project {
   id: string;
@@ -78,6 +79,35 @@ const Projects = () => {
     }
   };
 
+  const handlePriorityChange = async (projectId: string, newPriority: string) => {
+    try {
+      const { error } = await supabase
+        .from("projects")
+        .update({ priority: newPriority })
+        .eq("id", projectId);
+
+      if (error) throw error;
+
+      setProjects(projects.map(project => 
+        project.id === projectId 
+          ? { ...project, priority: newPriority }
+          : project
+      ));
+
+      toast({
+        title: "Success",
+        description: "Project priority updated successfully",
+      });
+    } catch (error) {
+      console.error("Error updating project priority:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update project priority. Please try again.",
+      });
+    }
+  };
+
   return (
     <Layout>
       <div className="space-y-8 animate-fade-in">
@@ -121,9 +151,12 @@ const Projects = () => {
                       onValueChange={(value) => handleStatusChange(project.id, value)}
                     />
                   </div>
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">Priority:</span>
-                    <span className="text-sm">{project.priority}</span>
+                    <PrioritySelect
+                      value={project.priority}
+                      onValueChange={(value) => handlePriorityChange(project.id, value)}
+                    />
                   </div>
                   {project.startdate && (
                     <div className="flex justify-between">
