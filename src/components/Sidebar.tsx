@@ -5,7 +5,6 @@ import {
   Wrench,
   Briefcase,
   MapPin,
-  ClipboardList,
   Settings,
   LogOut,
 } from "lucide-react";
@@ -18,7 +17,6 @@ const Sidebar = () => {
     { name: "Equipment", href: "/equipment", icon: Wrench },
     { name: "Projects", href: "/projects", icon: Briefcase },
     { name: "Locations", href: "/locations", icon: MapPin },
-    { name: "Work Orders", href: "/work-orders", icon: ClipboardList },
     { name: "Settings", href: "/settings", icon: Settings },
   ];
 
