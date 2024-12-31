@@ -1,24 +1,32 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "@/pages/Index";
-import AddEquipment from "@/pages/AddEquipment";
 import Equipment from "@/pages/Equipment";
-import AddProject from "@/pages/AddProject";
 import Projects from "@/pages/Projects";
 import Settings from "@/pages/Settings";
-import "./App.css";
+import AddEquipment from "@/pages/AddEquipment";
+import AddProject from "@/pages/AddProject";
+import MaintenanceChecks from "@/pages/MaintenanceChecks";
+import { Toaster } from "@/components/ui/toaster";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/add-equipment" element={<AddEquipment />} />
-        <Route path="/equipment" element={<Equipment />} />
-        <Route path="/add-project" element={<AddProject />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/settings" element={<Settings />} />
-      </Routes>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/equipment" element={<Equipment />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/add-equipment" element={<AddEquipment />} />
+          <Route path="/add-project" element={<AddProject />} />
+          <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
+        </Routes>
+        <Toaster />
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 

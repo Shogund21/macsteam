@@ -42,6 +42,91 @@ export type Database = {
         }
         Relationships: []
       }
+      hvac_maintenance_checks: {
+        Row: {
+          air_filter_status: string | null
+          belt_condition: string | null
+          check_date: string | null
+          chiller_pressure_reading: number | null
+          chiller_temperature_reading: number | null
+          condenser_condition: string | null
+          created_at: string | null
+          equipment_id: string | null
+          id: string
+          notes: string | null
+          oil_level_status: string | null
+          refrigerant_level: string | null
+          status: Database["public"]["Enums"]["maintenance_check_status"] | null
+          technician_id: string | null
+          unusual_noise: boolean | null
+          unusual_noise_description: string | null
+          updated_at: string | null
+          vibration_description: string | null
+          vibration_observed: boolean | null
+        }
+        Insert: {
+          air_filter_status?: string | null
+          belt_condition?: string | null
+          check_date?: string | null
+          chiller_pressure_reading?: number | null
+          chiller_temperature_reading?: number | null
+          condenser_condition?: string | null
+          created_at?: string | null
+          equipment_id?: string | null
+          id?: string
+          notes?: string | null
+          oil_level_status?: string | null
+          refrigerant_level?: string | null
+          status?:
+            | Database["public"]["Enums"]["maintenance_check_status"]
+            | null
+          technician_id?: string | null
+          unusual_noise?: boolean | null
+          unusual_noise_description?: string | null
+          updated_at?: string | null
+          vibration_description?: string | null
+          vibration_observed?: boolean | null
+        }
+        Update: {
+          air_filter_status?: string | null
+          belt_condition?: string | null
+          check_date?: string | null
+          chiller_pressure_reading?: number | null
+          chiller_temperature_reading?: number | null
+          condenser_condition?: string | null
+          created_at?: string | null
+          equipment_id?: string | null
+          id?: string
+          notes?: string | null
+          oil_level_status?: string | null
+          refrigerant_level?: string | null
+          status?:
+            | Database["public"]["Enums"]["maintenance_check_status"]
+            | null
+          technician_id?: string | null
+          unusual_noise?: boolean | null
+          unusual_noise_description?: string | null
+          updated_at?: string | null
+          vibration_description?: string | null
+          vibration_observed?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hvac_maintenance_checks_equipment_id_fkey"
+            columns: ["equipment_id"]
+            isOneToOne: false
+            referencedRelation: "equipment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hvac_maintenance_checks_technician_id_fkey"
+            columns: ["technician_id"]
+            isOneToOne: false
+            referencedRelation: "technicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           createdat: string | null
@@ -122,7 +207,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      maintenance_check_status: "completed" | "pending" | "issue_found"
     }
     CompositeTypes: {
       [_ in never]: never
