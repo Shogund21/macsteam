@@ -12,6 +12,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Layout from "@/components/Layout";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -20,7 +27,7 @@ const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   model: z.string().min(2, "Model must be at least 2 characters"),
   serialNumber: z.string().min(2, "Serial number must be at least 2 characters"),
-  location: z.string().min(2, "Location must be at least 2 characters"),
+  location: z.string().min(2, "Location is required"),
   status: z.string().min(2, "Status is required"),
 });
 
@@ -67,6 +74,8 @@ const AddEquipment = () => {
       });
     }
   };
+
+  const locations = ["021A", "021B", "757", "776A", "776B"];
 
   return (
     <Layout>
@@ -128,9 +137,20 @@ const AddEquipment = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Location</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter location" {...field} />
-                  </FormControl>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a location" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {locations.map((location) => (
+                        <SelectItem key={location} value={location}>
+                          {location}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
