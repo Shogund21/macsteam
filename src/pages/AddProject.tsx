@@ -21,8 +21,8 @@ const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   description: z.string().optional(),
   status: z.string().min(2, "Status is required"),
-  startDate: z.string().optional(),
-  endDate: z.string().optional(),
+  startdate: z.string().optional(),
+  enddate: z.string().optional(),
   priority: z.string().min(2, "Priority is required"),
 });
 
@@ -39,8 +39,8 @@ const AddProject = () => {
       name: "",
       description: "",
       status: "",
-      startDate: "",
-      endDate: "",
+      startdate: "",
+      enddate: "",
       priority: "",
     },
   });
@@ -52,8 +52,8 @@ const AddProject = () => {
         name: values.name,
         description: values.description,
         status: values.status,
-        startDate: values.startDate || null,
-        endDate: values.endDate || null,
+        startdate: values.startdate || null,
+        enddate: values.enddate || null,
         priority: values.priority,
       });
       
@@ -63,7 +63,7 @@ const AddProject = () => {
         title: "Success",
         description: "Project added successfully",
       });
-      navigate("/");
+      navigate("/projects");
     } catch (error) {
       console.error("Error adding project:", error);
       toast({
@@ -132,7 +132,7 @@ const AddProject = () => {
 
             <FormField
               control={form.control}
-              name="startDate"
+              name="startdate"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Start Date</FormLabel>
@@ -146,7 +146,7 @@ const AddProject = () => {
 
             <FormField
               control={form.control}
-              name="endDate"
+              name="enddate"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>End Date</FormLabel>
@@ -176,7 +176,7 @@ const AddProject = () => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/projects")}
               >
                 Cancel
               </Button>
