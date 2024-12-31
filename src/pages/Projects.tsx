@@ -16,6 +16,8 @@ interface Project {
   startdate: string | null;
   enddate: string | null;
   priority: string;
+  createdat: string | null;
+  updatedat: string | null;
 }
 
 const Projects = () => {
@@ -54,14 +56,17 @@ const Projects = () => {
     try {
       const { error } = await supabase
         .from("projects")
-        .update({ status: newStatus })
+        .update({ 
+          status: newStatus,
+          updatedat: new Date().toISOString()
+        })
         .eq("id", projectId);
 
       if (error) throw error;
 
       setProjects(projects.map(project => 
         project.id === projectId 
-          ? { ...project, status: newStatus }
+          ? { ...project, status: newStatus, updatedat: new Date().toISOString() }
           : project
       ));
 
@@ -83,14 +88,17 @@ const Projects = () => {
     try {
       const { error } = await supabase
         .from("projects")
-        .update({ priority: newPriority })
+        .update({ 
+          priority: newPriority,
+          updatedat: new Date().toISOString()
+        })
         .eq("id", projectId);
 
       if (error) throw error;
 
       setProjects(projects.map(project => 
         project.id === projectId 
-          ? { ...project, priority: newPriority }
+          ? { ...project, priority: newPriority, updatedat: new Date().toISOString() }
           : project
       ));
 
