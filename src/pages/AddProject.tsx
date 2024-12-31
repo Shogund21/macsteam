@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { StatusSelect } from "@/components/projects/StatusSelect";
 import {
   Form,
   FormControl,
@@ -38,7 +39,7 @@ const AddProject = () => {
     defaultValues: {
       name: "",
       description: "",
-      status: "",
+      status: "Not Started",
       startdate: "",
       enddate: "",
       priority: "",
@@ -123,7 +124,10 @@ const AddProject = () => {
                 <FormItem>
                   <FormLabel>Status</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter project status" {...field} />
+                    <StatusSelect
+                      value={field.value}
+                      onValueChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
