@@ -44,7 +44,7 @@ const AddEquipment = () => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from("equipment").insert([values]);
+      const { error } = await supabase.from("equipment").insert(values);
       
       if (error) throw error;
       
