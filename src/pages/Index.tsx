@@ -1,7 +1,8 @@
 import { Card } from "@/components/ui/card";
 import Layout from "@/components/Layout";
+import { cn } from "@/lib/utils";
 import {
-  Tool,
+  Wrench,
   Briefcase,
   AlertCircle,
   CheckCircle2,
@@ -13,7 +14,7 @@ const Index = () => {
     {
       name: "Total Equipment",
       value: "245",
-      icon: Tool,
+      icon: Wrench,
       change: "+4.75%",
       changeType: "positive",
     },

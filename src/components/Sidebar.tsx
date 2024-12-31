@@ -2,7 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard,
-  Tool,
+  Wrench,
   Briefcase,
   MapPin,
   ClipboardList,
@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   const navigation = [
     { name: "Dashboard", href: "/", icon: LayoutDashboard },
-    { name: "Equipment", href: "/equipment", icon: Tool },
+    { name: "Equipment", href: "/equipment", icon: Wrench },
     { name: "Projects", href: "/projects", icon: Briefcase },
     { name: "Locations", href: "/locations", icon: MapPin },
     { name: "Work Orders", href: "/work-orders", icon: ClipboardList },
