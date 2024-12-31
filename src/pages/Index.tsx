@@ -20,10 +20,16 @@ const Index = () => {
             </p>
           </div>
           <div className="flex gap-4">
-            <Button onClick={() => navigate("/add-equipment")}>
+            <Button 
+              onClick={() => navigate("/add-equipment")}
+              className="bg-black hover:bg-black/90"
+            >
               <Plus className="mr-2 h-4 w-4" /> Add Equipment
             </Button>
-            <Button onClick={() => navigate("/add-technician")}>
+            <Button 
+              onClick={() => navigate("/add-technician")}
+              className="bg-black hover:bg-black/90"
+            >
               <Plus className="mr-2 h-4 w-4" /> Add Technician
             </Button>
           </div>
