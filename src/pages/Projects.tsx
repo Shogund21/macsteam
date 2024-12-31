@@ -5,6 +5,7 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { StatusSelect } from "@/components/projects/StatusSelect";
 
 interface Project {
   id: string;
@@ -48,6 +49,35 @@ const Projects = () => {
     }
   };
 
+  const handleStatusChange = async (projectId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from("projects")
+        .update({ status: newStatus })
+        .eq("id", projectId);
+
+      if (error) throw error;
+
+      setProjects(projects.map(project => 
+        project.id === projectId 
+          ? { ...project, status: newStatus }
+          : project
+      ));
+
+      toast({
+        title: "Success",
+        description: "Project status updated successfully",
+      });
+    } catch (error) {
+      console.error("Error updating project status:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update project status. Please try again.",
+      });
+    }
+  };
+
   return (
     <Layout>
       <div className="space-y-8 animate-fade-in">
@@ -84,9 +114,12 @@ const Projects = () => {
                   {project.description || "No description"}
                 </p>
                 <div className="mt-4 space-y-2">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">Status:</span>
-                    <span className="text-sm">{project.status}</span>
+                    <StatusSelect
+                      value={project.status}
+                      onValueChange={(value) => handleStatusChange(project.id, value)}
+                    />
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm font-medium">Priority:</span>
