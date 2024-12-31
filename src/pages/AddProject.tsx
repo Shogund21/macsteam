@@ -180,7 +180,11 @@ const AddProject = () => {
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
+              >
                 {isSubmitting ? "Adding..." : "Add Project"}
               </Button>
             </div>
