@@ -28,12 +28,22 @@ const EquipmentForm = () => {
       serialNumber: "",
       location: "",
       status: "",
+      lastMaintenance: null,
+      nextMaintenance: null,
     },
   });
 
   const onSubmit = async (values: EquipmentFormValues) => {
     try {
-      const { error } = await supabase.from("equipment").insert(values);
+      const { error } = await supabase.from("equipment").insert({
+        name: values.name,
+        model: values.model,
+        serialNumber: values.serialNumber,
+        location: values.location,
+        status: values.status,
+        lastMaintenance: values.lastMaintenance,
+        nextMaintenance: values.nextMaintenance,
+      });
       
       if (error) throw error;
 
