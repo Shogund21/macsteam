@@ -8,12 +8,46 @@ import {
   CheckCircle2,
   Clock,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
+  // Fetch equipment data
+  const { data: equipmentData, isLoading: equipmentLoading } = useQuery({
+    queryKey: ['equipment'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('equipment')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching equipment:', error);
+        throw error;
+      }
+      return data;
+    },
+  });
+
+  // Fetch technicians data
+  const { data: techniciansData, isLoading: techniciansLoading } = useQuery({
+    queryKey: ['technicians'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('technicians')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching technicians:', error);
+        throw error;
+      }
+      return data;
+    },
+  });
+
   const stats = [
     {
       name: "Total Equipment",
-      value: "245",
+      value: equipmentLoading ? "..." : equipmentData?.length.toString() || "0",
       icon: Wrench,
       change: "+4.75%",
       changeType: "positive",
@@ -33,8 +67,10 @@ const Index = () => {
       changeType: "positive",
     },
     {
-      name: "Issues Reported",
-      value: "7",
+      name: "Available Technicians",
+      value: techniciansLoading 
+        ? "..." 
+        : techniciansData?.filter(tech => tech.isAvailable).length.toString() || "0",
       icon: AlertCircle,
       change: "-1.5%",
       changeType: "positive",
@@ -138,30 +174,27 @@ const Index = () => {
           </Card>
 
           <Card className="p-6 glass">
-            <h2 className="text-lg font-semibold mb-4">Upcoming Maintenance</h2>
+            <h2 className="text-lg font-semibold mb-4">Equipment Overview</h2>
             <div className="space-y-4">
-              <div className="p-4 rounded-lg border border-border">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Quarterly HVAC Inspection</p>
-                    <p className="text-sm text-muted-foreground">Building A</p>
+              {equipmentLoading ? (
+                <p>Loading equipment data...</p>
+              ) : equipmentData && equipmentData.length > 0 ? (
+                equipmentData.slice(0, 3).map((equipment) => (
+                  <div key={equipment.id} className="p-4 rounded-lg border border-border">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="font-medium">{equipment.name}</p>
+                        <p className="text-sm text-muted-foreground">{equipment.location}</p>
+                      </div>
+                      <span className="px-2 py-1 text-xs font-medium rounded-full bg-accent">
+                        {equipment.status}
+                      </span>
+                    </div>
                   </div>
-                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-accent">
-                    Tomorrow
-                  </span>
-                </div>
-              </div>
-              <div className="p-4 rounded-lg border border-border">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium">Fire Safety Check</p>
-                    <p className="text-sm text-muted-foreground">All Locations</p>
-                  </div>
-                  <span className="px-2 py-1 text-xs font-medium rounded-full bg-accent">
-                    Next Week
-                  </span>
-                </div>
-              </div>
+                ))
+              ) : (
+                <p>No equipment data available</p>
+              )}
             </div>
           </Card>
         </div>
