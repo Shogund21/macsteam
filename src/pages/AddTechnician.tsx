@@ -25,12 +25,14 @@ const formSchema = z.object({
   specialization: z.string().min(2, "Specialization must be at least 2 characters"),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 const AddTechnician = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: "",
@@ -41,10 +43,16 @@ const AddTechnician = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from("technicians").insert(values);
+      const { error } = await supabase.from("technicians").insert({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        phone: values.phone,
+        specialization: values.specialization,
+      });
       
       if (error) throw error;
       

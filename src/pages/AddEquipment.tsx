@@ -25,12 +25,14 @@ const formSchema = z.object({
   status: z.string().min(2, "Status must be at least 2 characters"),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 const AddEquipment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -41,10 +43,16 @@ const AddEquipment = () => {
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: FormValues) => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from("equipment").insert(values);
+      const { error } = await supabase.from("equipment").insert({
+        name: values.name,
+        model: values.model,
+        serialNumber: values.serialNumber,
+        location: values.location,
+        status: values.status,
+      });
       
       if (error) throw error;
       
