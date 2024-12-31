@@ -1,13 +1,27 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { Plus } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 const Equipment = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const { data: equipment, isLoading } = useQuery({
     queryKey: ['equipment'],
@@ -24,6 +38,31 @@ const Equipment = () => {
       return data;
     },
   });
+
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('equipment')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      queryClient.invalidateQueries({ queryKey: ['equipment'] });
+      
+      toast({
+        title: "Success",
+        description: "Equipment deleted successfully",
+      });
+    } catch (error) {
+      console.error('Error deleting equipment:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete equipment. Please try again.",
+      });
+    }
+  };
 
   return (
     <Layout>
@@ -49,8 +88,34 @@ const Equipment = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {equipment.map((item) => (
               <Card key={item.id} className="p-6">
-                <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
-                <div className="space-y-2 text-sm">
+                <div className="flex justify-between items-start">
+                  <h3 className="text-lg font-semibold">{item.name}</h3>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50">
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="bg-white">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Equipment</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this equipment? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction 
+                          onClick={() => handleDelete(item.id)}
+                          className="bg-red-500 hover:bg-red-600 text-white"
+                        >
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
+                <div className="space-y-2 text-sm mt-2">
                   <p><span className="font-medium">Model:</span> {item.model}</p>
                   <p><span className="font-medium">Serial Number:</span> {item.serialNumber}</p>
                   <p><span className="font-medium">Location:</span> {item.location}</p>

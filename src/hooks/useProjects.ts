@@ -8,7 +8,11 @@ export const useProjects = () => {
   const [loading, setLoading] = useState(true);
   
   const { fetchProjects } = useProjectsQuery();
-  const { handleStatusChange, handlePriorityChange } = useProjectMutations(projects, setProjects);
+  const { 
+    handleStatusChange, 
+    handlePriorityChange, 
+    handleDelete 
+  } = useProjectMutations(projects, setProjects);
 
   useEffect(() => {
     const loadProjects = async () => {
@@ -24,6 +28,7 @@ export const useProjects = () => {
     projects,
     loading,
     handleStatusChange,
-    handlePriorityChange
+    handlePriorityChange,
+    handleDelete
   };
 };

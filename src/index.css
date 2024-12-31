@@ -78,4 +78,13 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
+
+  /* Fix dropdown transparency */
+  [data-radix-popper-content-wrapper] {
+    @apply bg-white shadow-lg rounded-md border border-gray-200 !important;
+  }
+
+  .select-content {
+    @apply bg-white !important;
+  }
 }

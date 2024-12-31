@@ -4,7 +4,13 @@ import { ProjectsHeader } from "@/components/projects/ProjectsHeader";
 import { useProjects } from "@/hooks/useProjects";
 
 const Projects = () => {
-  const { projects, loading, handleStatusChange, handlePriorityChange } = useProjects();
+  const { 
+    projects, 
+    loading, 
+    handleStatusChange, 
+    handlePriorityChange,
+    handleDelete 
+  } = useProjects();
 
   return (
     <Layout>
@@ -25,6 +31,7 @@ const Projects = () => {
                 project={project}
                 onStatusChange={handleStatusChange}
                 onPriorityChange={handlePriorityChange}
+                onDelete={handleDelete}
               />
             ))}
           </div>
