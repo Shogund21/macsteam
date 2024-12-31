@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import Layout from "@/components/Layout";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -13,16 +11,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { Input } from "@/components/ui/input";
+import Layout from "@/components/Layout";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   model: z.string().min(2, "Model must be at least 2 characters"),
   serialNumber: z.string().min(2, "Serial number must be at least 2 characters"),
   location: z.string().min(2, "Location must be at least 2 characters"),
-  status: z.string().min(2, "Status must be at least 2 characters"),
+  status: z.string().min(2, "Status is required"),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -30,7 +29,6 @@ type FormValues = z.infer<typeof formSchema>;
 const AddEquipment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
@@ -44,7 +42,6 @@ const AddEquipment = () => {
   });
 
   const onSubmit = async (values: FormValues) => {
-    setIsSubmitting(true);
     try {
       const { error } = await supabase.from("equipment").insert({
         name: values.name,
@@ -55,12 +52,12 @@ const AddEquipment = () => {
       });
       
       if (error) throw error;
-      
+
       toast({
         title: "Success",
         description: "Equipment added successfully",
       });
-      navigate("/");
+      navigate("/equipment");
     } catch (error) {
       console.error("Error adding equipment:", error);
       toast({
@@ -68,8 +65,6 @@ const AddEquipment = () => {
         title: "Error",
         description: "Failed to add equipment. Please try again.",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -159,16 +154,15 @@ const AddEquipment = () => {
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/equipment")}
               >
                 Cancel
               </Button>
               <Button 
-                type="submit" 
-                disabled={isSubmitting}
+                type="submit"
                 className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
               >
-                {isSubmitting ? "Adding..." : "Add Equipment"}
+                Add Equipment
               </Button>
             </div>
           </form>
