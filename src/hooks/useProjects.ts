@@ -36,7 +36,7 @@ export const useProjects = () => {
         .from("projects")
         .update({ 
           status: newStatus,
-          updatedat: new Date().toISOString()
+          updatedat: new Date().toISOString()  // Changed from updated_at to updatedat
         })
         .eq("id", projectId);
 
@@ -68,7 +68,7 @@ export const useProjects = () => {
         .from("projects")
         .update({ 
           priority: newPriority,
-          updatedat: new Date().toISOString()
+          updatedat: new Date().toISOString()  // Changed from updated_at to updatedat
         })
         .eq("id", projectId);
 
