@@ -42,6 +42,42 @@ export type Database = {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          createdat: string | null
+          description: string | null
+          enddate: string | null
+          id: string
+          name: string
+          priority: string
+          startdate: string | null
+          status: string
+          updatedat: string | null
+        }
+        Insert: {
+          createdat?: string | null
+          description?: string | null
+          enddate?: string | null
+          id?: string
+          name: string
+          priority: string
+          startdate?: string | null
+          status: string
+          updatedat?: string | null
+        }
+        Update: {
+          createdat?: string | null
+          description?: string | null
+          enddate?: string | null
+          id?: string
+          name?: string
+          priority?: string
+          startdate?: string | null
+          status?: string
+          updatedat?: string | null
+        }
+        Relationships: []
+      }
       technicians: {
         Row: {
           createdAt: string | null
