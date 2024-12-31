@@ -4,6 +4,7 @@ import AddEquipment from "@/pages/AddEquipment";
 import Equipment from "@/pages/Equipment";
 import AddProject from "@/pages/AddProject";
 import Projects from "@/pages/Projects";
+import Settings from "@/pages/Settings";
 import "./App.css";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route path="/equipment" element={<Equipment />} />
         <Route path="/add-project" element={<AddProject />} />
         <Route path="/projects" element={<Projects />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   );
