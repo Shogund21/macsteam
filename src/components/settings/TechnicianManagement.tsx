@@ -184,7 +184,10 @@ const TechnicianManagement = () => {
             />
           </div>
         </div>
-        <Button type="submit" className="w-full sm:w-auto">
+        <Button 
+          type="submit" 
+          className="w-full sm:w-auto bg-blue-500 text-black hover:bg-blue-600"
+        >
           <UserPlus className="mr-2" />
           Add Technician
         </Button>
