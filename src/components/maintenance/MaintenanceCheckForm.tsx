@@ -398,7 +398,12 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           >
             Cancel
           </Button>
-          <Button type="submit">Submit Check</Button>
+          <Button 
+            type="submit"
+            className="bg-blue-500 text-black hover:bg-blue-600"
+          >
+            Submit Check
+          </Button>
         </div>
       </form>
     </Form>
