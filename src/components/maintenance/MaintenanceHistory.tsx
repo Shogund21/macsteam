@@ -10,8 +10,6 @@ import {
 } from "@/components/ui/table";
 import { format } from "date-fns";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -19,6 +17,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { Database } from "@/integrations/supabase/types";
+
+type MaintenanceCheckStatus = Database["public"]["Enums"]["maintenance_check_status"];
 
 const MaintenanceHistory = () => {
   const { toast } = useToast();
@@ -42,7 +44,7 @@ const MaintenanceHistory = () => {
   });
 
   const updateStatusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string, status: string }) => {
+    mutationFn: async ({ id, status }: { id: string, status: MaintenanceCheckStatus }) => {
       const { error } = await supabase
         .from('hvac_maintenance_checks')
         .update({ status })
@@ -66,7 +68,7 @@ const MaintenanceHistory = () => {
     },
   });
 
-  const handleStatusChange = (id: string, newStatus: string) => {
+  const handleStatusChange = (id: string, newStatus: MaintenanceCheckStatus) => {
     updateStatusMutation.mutate({ id, status: newStatus });
   };
 
@@ -108,7 +110,7 @@ const MaintenanceHistory = () => {
               <TableCell>
                 <Select
                   value={check.status}
-                  onValueChange={(value) => handleStatusChange(check.id, value)}
+                  onValueChange={(value: MaintenanceCheckStatus) => handleStatusChange(check.id, value)}
                 >
                   <SelectTrigger className="w-[180px]">
                     <SelectValue placeholder="Update status" />
