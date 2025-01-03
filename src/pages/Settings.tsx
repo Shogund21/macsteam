@@ -1,6 +1,7 @@
 import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TechnicianManagement from "@/components/settings/TechnicianManagement";
 
 const Settings = () => {
   return (
@@ -23,15 +24,13 @@ const Settings = () => {
           <TabsContent value="general" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>General Settings</CardTitle>
+                <CardTitle>Technician Management</CardTitle>
                 <CardDescription>
-                  Configure your basic preferences and account settings.
+                  Add, remove, and manage technicians in your organization.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground">
-                  General settings will be implemented here.
-                </p>
+                <TechnicianManagement />
               </CardContent>
             </Card>
           </TabsContent>
