@@ -10,11 +10,13 @@ export const usePriorityMutation = (
 
   const handlePriorityChange = async (projectId: string, newPriority: string) => {
     try {
+      const timestamp = new Date().toISOString();
+      
       const { error } = await supabase
         .from("projects")
         .update({ 
           priority: newPriority,
-          updatedat: new Date().toISOString()
+          updatedat: timestamp
         })
         .eq("id", projectId);
 
@@ -22,7 +24,7 @@ export const usePriorityMutation = (
 
       setProjects(projects.map(project => 
         project.id === projectId 
-          ? { ...project, priority: newPriority, updatedat: new Date().toISOString() }
+          ? { ...project, priority: newPriority, updatedat: timestamp }
           : project
       ));
 
