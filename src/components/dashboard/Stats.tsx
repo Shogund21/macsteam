@@ -21,6 +21,49 @@ const Stats = () => {
     },
   });
 
+  // Fetch projects data
+  const { data: projectsData, isLoading: projectsLoading } = useQuery({
+    queryKey: ['projects'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching projects:', error);
+        throw error;
+      }
+      return data;
+    },
+  });
+
+  // Fetch maintenance checks data for pending tasks
+  const { data: maintenanceData, isLoading: maintenanceLoading } = useQuery({
+    queryKey: ['maintenance_checks'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('hvac_maintenance_checks')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching maintenance checks:', error);
+        throw error;
+      }
+      return data;
+    },
+  });
+
+  // Calculate active projects (those with status 'in_progress' or 'ongoing')
+  const activeProjectsCount = projectsData?.filter(project => 
+    project.status.toLowerCase() === 'in progress' || 
+    project.status.toLowerCase() === 'ongoing'
+  ).length || 0;
+
+  // Calculate pending tasks (maintenance checks with status 'pending')
+  const pendingTasksCount = maintenanceData?.filter(check => 
+    check.status === 'pending'
+  ).length || 0;
+
   // Fetch technicians data
   const { data: techniciansData, isLoading: techniciansLoading } = useQuery({
     queryKey: ['technicians'],
@@ -47,14 +90,14 @@ const Stats = () => {
     },
     {
       name: "Active Projects",
-      value: "12",
+      value: projectsLoading ? "..." : activeProjectsCount.toString(),
       icon: Briefcase,
       change: "-0.5%",
       changeType: "negative",
     },
     {
       name: "Pending Tasks",
-      value: "23",
+      value: maintenanceLoading ? "..." : pendingTasksCount.toString(),
       icon: Clock,
       change: "+2.1%",
       changeType: "positive",
