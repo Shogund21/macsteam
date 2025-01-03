@@ -1,7 +1,8 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import * as z from "zod";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface MaintenanceBasicInfoProps {
   form: UseFormReturn<any>;
@@ -10,6 +11,19 @@ interface MaintenanceBasicInfoProps {
 }
 
 const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasicInfoProps) => {
+  const { data: equipmentData } = useQuery({
+    queryKey: ['equipment'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('equipment')
+        .select('*')
+        .order('name');
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <FormField
@@ -25,7 +39,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                {equipment?.map((item) => (
+                {equipmentData?.map((item) => (
                   <SelectItem key={item.id} value={item.id}>
                     {item.name} - {item.location}
                   </SelectItem>
