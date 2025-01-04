@@ -1,40 +1,35 @@
-import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
-import StatusDropdown from "./StatusDropdown";
+import { Equipment } from "@/types/equipment";
+import { StatusDropdown } from "./StatusDropdown";
 import { useQueryClient } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface EquipmentItemProps {
-  equipment: {
-    id: string;
-    name: string;
-    location: string;
-    status: string;
-    model: string;
-    serialNumber: string;
-  };
+  equipment: Equipment;
 }
 
-const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
-  const { toast } = useToast();
+export const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const handleStatusChange = async (newStatus: string) => {
     try {
       const { error } = await supabase
-        .from('equipment')
+        .from("equipment")
         .update({ status: newStatus })
-        .eq('id', equipment.id);
+        .eq("id", equipment.id);
 
       if (error) throw error;
 
-      await queryClient.invalidateQueries({ queryKey: ['equipment'] });
+      // Invalidate and refetch
+      await queryClient.invalidateQueries({ queryKey: ["equipment"] });
 
       toast({
         title: "Status updated",
         description: `Equipment status has been updated to ${newStatus}`,
       });
     } catch (error) {
-      console.error('Error updating status:', error);
+      console.error("Error updating status:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -44,23 +39,37 @@ const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
   };
 
   return (
-    <div className="p-4 rounded-lg border border-border bg-card">
-      <div className="flex items-center justify-between flex-wrap gap-2">
+    <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
+      <div className="flex justify-between items-start mb-4">
         <div>
-          <h3 className="font-medium">{equipment.name}</h3>
-          <p className="text-sm text-muted-foreground">{equipment.location}</p>
+          <h3 className="text-lg font-semibold">{equipment.name}</h3>
+          <p className="text-sm text-muted-foreground">Model: {equipment.model}</p>
         </div>
-        <StatusDropdown
-          status={equipment.status}
+        <StatusDropdown 
+          status={equipment.status} 
           onStatusChange={handleStatusChange}
         />
       </div>
-      <div className="mt-2 space-y-1 text-sm text-muted-foreground">
-        <p>Model: {equipment.model}</p>
-        <p>Serial Number: {equipment.serialNumber}</p>
+      <div className="space-y-2">
+        <p className="text-sm">
+          <span className="font-medium">Serial Number:</span> {equipment.serialNumber}
+        </p>
+        <p className="text-sm">
+          <span className="font-medium">Location:</span> {equipment.location}
+        </p>
+        {equipment.lastMaintenance && (
+          <p className="text-sm">
+            <span className="font-medium">Last Maintenance:</span>{" "}
+            {new Date(equipment.lastMaintenance).toLocaleDateString()}
+          </p>
+        )}
+        {equipment.nextMaintenance && (
+          <p className="text-sm">
+            <span className="font-medium">Next Maintenance:</span>{" "}
+            {new Date(equipment.nextMaintenance).toLocaleDateString()}
+          </p>
+        )}
       </div>
     </div>
   );
 };
-
-export default EquipmentItem;
