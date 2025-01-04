@@ -2,7 +2,11 @@ import { NavLink } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, Wrench, Briefcase, Settings, Gauge } from "lucide-react";
 
-const Sidebar = () => {
+interface SidebarProps {
+  onClose?: () => void;
+}
+
+const Sidebar = ({ onClose }: SidebarProps) => {
   const links = [
     { name: "Dashboard", to: "/", icon: LayoutDashboard },
     { name: "Equipment", to: "/equipment", icon: Wrench },
@@ -11,8 +15,14 @@ const Sidebar = () => {
     { name: "Settings", to: "/settings", icon: Settings },
   ];
 
+  const handleLinkClick = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="pb-12 min-h-screen">
+    <div className="h-full w-64 bg-white shadow-lg">
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <div className="space-y-1">
@@ -22,6 +32,7 @@ const Sidebar = () => {
                 <NavLink
                   key={link.to}
                   to={link.to}
+                  onClick={handleLinkClick}
                   className={({ isActive }) =>
                     cn(
                       "text-sm group flex p-3 w-full justify-start font-medium cursor-pointer hover:text-primary hover:bg-primary/10 rounded-lg transition",
