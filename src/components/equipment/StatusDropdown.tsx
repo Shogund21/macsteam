@@ -21,12 +21,15 @@ export const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) 
           {status}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[150px] bg-white">
+      <DropdownMenuContent 
+        className="w-[150px] bg-white z-50"
+        align="end"
+      >
         {statuses.map((statusOption) => (
           <DropdownMenuItem
             key={statusOption}
             onClick={() => onStatusChange(statusOption)}
-            className="cursor-pointer"
+            className="cursor-pointer hover:bg-gray-100"
           >
             {statusOption}
           </DropdownMenuItem>
