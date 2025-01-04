@@ -27,7 +27,7 @@ const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
 
       if (error) throw error;
 
-      queryClient.invalidateQueries({ queryKey: ['equipment'] });
+      await queryClient.invalidateQueries({ queryKey: ['equipment'] });
 
       toast({
         title: "Status updated",

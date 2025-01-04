@@ -22,8 +22,8 @@ const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) => {
         <ChevronDown className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        align="end" 
-        className="z-50 w-[120px] bg-white border rounded-md shadow-md"
+        align="end"
+        className="bg-white border rounded-md shadow-md min-w-[120px] z-50"
         sideOffset={5}
       >
         {statusOptions.map((option) => (
