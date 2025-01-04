@@ -11,22 +11,24 @@ interface StatusDropdownProps {
   onStatusChange: (newStatus: string) => void;
 }
 
-const statusOptions = ["Working", "Offline"];
-
 const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) => {
+  const statusOptions = ["Working", "Offline"];
+
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center px-3 py-1 text-xs font-medium rounded-full bg-accent hover:bg-accent/80 transition-colors">
+      <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-accent hover:bg-accent/80 transition-colors">
+        <span className={`w-2 h-2 rounded-full ${status === 'Working' ? 'bg-green-500' : 'bg-red-500'}`} />
         {status}
-        <ChevronDown className="ml-1 h-3 w-3" />
+        <ChevronDown className="h-4 w-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="z-50 bg-background">
+      <DropdownMenuContent align="end">
         {statusOptions.map((option) => (
           <DropdownMenuItem
             key={option}
             onClick={() => onStatusChange(option)}
-            className="cursor-pointer hover:bg-accent"
+            className={`cursor-pointer ${status === option ? 'bg-accent' : ''}`}
           >
+            <span className={`w-2 h-2 rounded-full mr-2 ${option === 'Working' ? 'bg-green-500' : 'bg-red-500'}`} />
             {option}
           </DropdownMenuItem>
         ))}

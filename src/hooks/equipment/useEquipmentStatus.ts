@@ -19,7 +19,7 @@ export const useEquipmentStatus = () => {
       
       toast({
         title: "Status Updated",
-        description: `Equipment status has been updated to ${newStatus}.`,
+        description: `Equipment status has been updated to ${newStatus}`,
       });
     } catch (error) {
       console.error('Error updating status:', error);

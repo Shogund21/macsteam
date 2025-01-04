@@ -13,6 +13,10 @@ interface EquipmentItemProps {
 const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
   const { updateStatus } = useEquipmentStatus();
 
+  const handleStatusChange = (newStatus: string) => {
+    updateStatus(equipment.id, newStatus);
+  };
+
   return (
     <div className="p-4 rounded-lg border border-border">
       <div className="flex items-center justify-between flex-wrap gap-2">
@@ -22,7 +26,7 @@ const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
         </div>
         <StatusDropdown
           status={equipment.status}
-          onStatusChange={(newStatus) => updateStatus(equipment.id, newStatus)}
+          onStatusChange={handleStatusChange}
         />
       </div>
     </div>
