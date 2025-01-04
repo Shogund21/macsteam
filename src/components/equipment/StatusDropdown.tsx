@@ -11,12 +11,7 @@ interface StatusDropdownProps {
   onStatusChange: (newStatus: string) => void;
 }
 
-const statusOptions = [
-  "Operational",
-  "Under Maintenance",
-  "Out of Service",
-  "Needs Attention",
-];
+const statusOptions = ["Working", "Offline"];
 
 const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) => {
   return (
