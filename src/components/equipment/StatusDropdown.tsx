@@ -1,6 +1,10 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { ChevronDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface StatusDropdownProps {
   status: string;
@@ -8,27 +12,23 @@ interface StatusDropdownProps {
 }
 
 export const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) => {
-  const statusOptions = ["Active", "Inactive", "Maintenance"];
+  const statuses = ["Operational", "Under Maintenance", "Offline", "Critical"];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-[120px] justify-between">
+        <Button variant="outline" className="w-[150px] justify-between">
           {status}
-          <ChevronDown className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent 
-        align="end"
-        className="w-[120px] bg-white"
-      >
-        {statusOptions.map((option) => (
+      <DropdownMenuContent className="w-[150px] bg-white">
+        {statuses.map((statusOption) => (
           <DropdownMenuItem
-            key={option}
-            onClick={() => onStatusChange(option)}
+            key={statusOption}
+            onClick={() => onStatusChange(statusOption)}
             className="cursor-pointer"
           >
-            {option}
+            {statusOption}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
