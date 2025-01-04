@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import EquipmentItem from "@/components/equipment/EquipmentItem";
+import { EquipmentItem } from "@/components/equipment/EquipmentItem";
 
 const EquipmentOverview = () => {
   const { data: equipmentData, isLoading: equipmentLoading } = useQuery({
