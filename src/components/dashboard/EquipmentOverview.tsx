@@ -20,7 +20,7 @@ const EquipmentOverview = () => {
   });
 
   return (
-    <Card className="p-6 glass">
+    <Card className="p-6">
       <h2 className="text-lg font-semibold mb-4">Equipment Overview</h2>
       <div className="space-y-4">
         {equipmentLoading ? (

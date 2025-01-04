@@ -18,7 +18,7 @@ const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
   };
 
   return (
-    <div className="p-4 rounded-lg border border-border">
+    <div className="p-4 rounded-lg border border-border bg-background">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
           <p className="font-medium">{equipment.name}</p>
