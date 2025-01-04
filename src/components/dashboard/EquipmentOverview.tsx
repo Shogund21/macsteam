@@ -45,18 +45,19 @@ const EquipmentOverview = () => {
 
       if (error) throw error;
 
+      // Invalidate and refetch to get the latest data
       await queryClient.invalidateQueries({ queryKey: ['equipment'] });
       
       toast({
         title: "Status Updated",
-        description: "Equipment status has been successfully updated.",
+        description: `Equipment status has been updated to ${newStatus}.`,
       });
     } catch (error) {
       console.error('Error updating status:', error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to update equipment status.",
+        description: "Failed to update equipment status. Please try again.",
       });
     }
   };
