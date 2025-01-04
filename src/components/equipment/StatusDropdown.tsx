@@ -16,19 +16,19 @@ const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-background border border-input hover:bg-accent hover:text-accent-foreground transition-colors">
+      <DropdownMenuTrigger className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium rounded-full bg-white border border-input hover:bg-accent hover:text-accent-foreground transition-colors">
         <span className={`w-2 h-2 rounded-full ${status === 'Working' ? 'bg-green-500' : 'bg-red-500'}`} />
         {status}
         <ChevronDown className="h-4 w-4" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background border rounded-md shadow-md">
+      <DropdownMenuContent align="end" className="w-[120px] bg-white border rounded-md shadow-md">
         {statusOptions.map((option) => (
           <DropdownMenuItem
             key={option}
             onClick={() => onStatusChange(option)}
-            className={`cursor-pointer flex items-center px-3 py-2 hover:bg-accent ${status === option ? 'bg-accent/50' : ''}`}
+            className={`cursor-pointer flex items-center gap-2 px-3 py-2 hover:bg-accent ${status === option ? 'bg-accent/50' : ''}`}
           >
-            <span className={`w-2 h-2 rounded-full mr-2 ${option === 'Working' ? 'bg-green-500' : 'bg-red-500'}`} />
+            <span className={`w-2 h-2 rounded-full ${option === 'Working' ? 'bg-green-500' : 'bg-red-500'}`} />
             {option}
           </DropdownMenuItem>
         ))}

@@ -9,6 +9,8 @@ interface EquipmentItemProps {
     name: string;
     location: string;
     status: string;
+    model: string;
+    serialNumber: string;
   };
 }
 
@@ -25,7 +27,6 @@ const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
 
       if (error) throw error;
 
-      // Invalidate and refetch equipment data
       queryClient.invalidateQueries({ queryKey: ['equipment'] });
 
       toast({
@@ -43,16 +44,20 @@ const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
   };
 
   return (
-    <div className="p-4 rounded-lg border border-border bg-background">
+    <div className="p-4 rounded-lg border border-border bg-card">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <p className="font-medium">{equipment.name}</p>
+          <h3 className="font-medium">{equipment.name}</h3>
           <p className="text-sm text-muted-foreground">{equipment.location}</p>
         </div>
         <StatusDropdown
           status={equipment.status}
           onStatusChange={handleStatusChange}
         />
+      </div>
+      <div className="mt-2 space-y-1 text-sm text-muted-foreground">
+        <p>Model: {equipment.model}</p>
+        <p>Serial Number: {equipment.serialNumber}</p>
       </div>
     </div>
   );

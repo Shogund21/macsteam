@@ -9,7 +9,8 @@ const EquipmentOverview = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('equipment')
-        .select('*');
+        .select('*')
+        .order('name');
       
       if (error) {
         console.error('Error fetching equipment:', error);
