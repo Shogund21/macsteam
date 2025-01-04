@@ -1,5 +1,7 @@
-import { useEquipmentStatus } from "@/hooks/equipment/useEquipmentStatus";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 import StatusDropdown from "./StatusDropdown";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface EquipmentItemProps {
   equipment: {
@@ -11,10 +13,33 @@ interface EquipmentItemProps {
 }
 
 const EquipmentItem = ({ equipment }: EquipmentItemProps) => {
-  const { updateStatus } = useEquipmentStatus();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const handleStatusChange = (newStatus: string) => {
-    updateStatus(equipment.id, newStatus);
+  const handleStatusChange = async (newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from('equipment')
+        .update({ status: newStatus })
+        .eq('id', equipment.id);
+
+      if (error) throw error;
+
+      // Invalidate and refetch equipment data
+      queryClient.invalidateQueries({ queryKey: ['equipment'] });
+
+      toast({
+        title: "Status updated",
+        description: `Equipment status has been updated to ${newStatus}`,
+      });
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update equipment status",
+      });
+    }
   };
 
   return (
