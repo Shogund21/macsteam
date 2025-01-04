@@ -25,7 +25,7 @@ const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) => {
         {status}
         <ChevronDown className="ml-1 h-3 w-3" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="bg-background">
         {statusOptions.map((option) => (
           <DropdownMenuItem
             key={option}
