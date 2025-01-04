@@ -25,12 +25,12 @@ const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) => {
         {status}
         <ChevronDown className="ml-1 h-3 w-3" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-background">
+      <DropdownMenuContent align="end" className="z-50 bg-background">
         {statusOptions.map((option) => (
           <DropdownMenuItem
             key={option}
             onClick={() => onStatusChange(option)}
-            className="cursor-pointer"
+            className="cursor-pointer hover:bg-accent"
           >
             {option}
           </DropdownMenuItem>
