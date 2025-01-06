@@ -4,7 +4,7 @@ export interface Equipment {
   model: string;
   serialNumber: string;
   location: string;
-  lastMaintenance?: string;
-  nextMaintenance?: string;
+  lastMaintenance?: string | null;
+  nextMaintenance?: string | null;
   status: string;
 }
