@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { StatusDropdown } from "@/components/equipment/StatusDropdown";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,6 +39,31 @@ const Equipment = () => {
       return data;
     },
   });
+
+  const handleStatusChange = async (equipmentId: string, newStatus: string) => {
+    try {
+      const { error } = await supabase
+        .from("equipment")
+        .update({ status: newStatus })
+        .eq("id", equipmentId);
+
+      if (error) throw error;
+
+      queryClient.invalidateQueries({ queryKey: ['equipment'] });
+      
+      toast({
+        title: "Success",
+        description: `Equipment status has been updated to ${newStatus}`,
+      });
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to update equipment status",
+      });
+    }
+  };
 
   const handleDelete = async (id: string) => {
     try {
@@ -101,7 +127,15 @@ const Equipment = () => {
             {equipment.map((item) => (
               <Card key={item.id} className="p-4 md:p-6">
                 <div className="flex justify-between items-start">
-                  <h3 className="text-base md:text-lg font-semibold break-words flex-1 mr-2">{item.name}</h3>
+                  <div className="flex-1">
+                    <h3 className="text-base md:text-lg font-semibold break-words">{item.name}</h3>
+                    <div className="mt-2">
+                      <StatusDropdown 
+                        status={item.status} 
+                        onStatusChange={(newStatus) => handleStatusChange(item.id, newStatus)}
+                      />
+                    </div>
+                  </div>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button 
@@ -131,16 +165,10 @@ const Equipment = () => {
                     </AlertDialogContent>
                   </AlertDialog>
                 </div>
-                <div className="space-y-2 text-sm mt-2">
+                <div className="space-y-2 text-sm mt-4">
                   <p><span className="font-medium">Model:</span> {item.model}</p>
                   <p><span className="font-medium">Serial Number:</span> {item.serialNumber}</p>
                   <p><span className="font-medium">Location:</span> {item.location}</p>
-                  <p className="flex items-center gap-2">
-                    <span className="font-medium">Status:</span> 
-                    <span className="px-2 py-1 rounded-full text-xs font-medium bg-accent">
-                      {item.status}
-                    </span>
-                  </p>
                 </div>
               </Card>
             ))}
