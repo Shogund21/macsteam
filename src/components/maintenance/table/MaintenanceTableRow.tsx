@@ -1,4 +1,6 @@
-import { Badge } from "@/components/ui/badge";
+import { TableCell, TableRow } from "@/components/ui/table";
+import { MaintenanceCheck, MaintenanceCheckStatus } from "@/types/maintenance";
+import { format } from "date-fns";
 import {
   Select,
   SelectContent,
@@ -6,48 +8,42 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { TableCell, TableRow } from "@/components/ui/table";
-import { MaintenanceCheck, MaintenanceCheckStatus } from "@/types/maintenance";
-import { format } from "date-fns";
 
 interface MaintenanceTableRowProps {
   check: MaintenanceCheck;
   onStatusChange: (id: string, status: MaintenanceCheckStatus) => void;
 }
 
-export const MaintenanceTableRow = ({ check, onStatusChange }: MaintenanceTableRowProps) => {
+export const MaintenanceTableRow = ({
+  check,
+  onStatusChange,
+}: MaintenanceTableRowProps) => {
   return (
     <TableRow>
+      <TableCell>{format(new Date(check.check_date || ''), 'PPP')}</TableCell>
+      <TableCell>{check.equipment?.name || 'N/A'}</TableCell>
+      <TableCell>{check.equipment?.location || 'Not specified'}</TableCell>
       <TableCell>
-        {check.check_date && format(new Date(check.check_date), 'MMM d, yyyy HH:mm')}
-      </TableCell>
-      <TableCell>{check.equipment?.name}</TableCell>
-      <TableCell>{check.equipment?.location}</TableCell>
-      <TableCell>
-        {check.technician?.firstName} {check.technician?.lastName}
-      </TableCell>
-      <TableCell>
-        <Badge variant={check.status === 'completed' ? 'default' : 'destructive'}>
-          {check.status}
-        </Badge>
-      </TableCell>
-      <TableCell>
-        {(check.unusual_noise || check.vibration_observed) && (
-          <Badge variant="destructive">Issues Found</Badge>
-        )}
+        {check.technician ? 
+          `${check.technician.firstName} ${check.technician.lastName}` : 
+          'Unassigned'
+        }
       </TableCell>
       <TableCell>
         <Select
-          value={check.status || undefined}
-          onValueChange={(value: MaintenanceCheckStatus) => onStatusChange(check.id, value)}
+          value={check.status || 'pending'}
+          onValueChange={(value) => 
+            onStatusChange(check.id, value as MaintenanceCheckStatus)
+          }
         >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Update status" />
+          <SelectTrigger className="w-[130px]">
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="in_progress">In Progress</SelectItem>
             <SelectItem value="completed">Completed</SelectItem>
-            <SelectItem value="issue_found">Issue Found</SelectItem>
+            <SelectItem value="cancelled">Cancelled</SelectItem>
           </SelectContent>
         </Select>
       </TableCell>

@@ -1,8 +1,4 @@
-import {
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export const MaintenanceTableHeader = () => {
   return (
@@ -13,8 +9,6 @@ export const MaintenanceTableHeader = () => {
         <TableHead>Location</TableHead>
         <TableHead>Technician</TableHead>
         <TableHead>Status</TableHead>
-        <TableHead>Issues Found</TableHead>
-        <TableHead>Actions</TableHead>
       </TableRow>
     </TableHeader>
   );

@@ -12,16 +12,16 @@ export const ProjectDetails = ({
   enddate 
 }: ProjectDetailsProps) => {
   return (
-    <>
-      <p className="text-sm text-muted-foreground mt-2">
+    <div className="space-y-2">
+      <p className="text-sm text-muted-foreground">
         {description || "No description"}
       </p>
-      <div className="flex justify-between items-center mt-2">
+      <div className="flex justify-between items-center">
         <span className="text-sm font-medium">Location:</span>
         <span className="text-sm">{location || "Not specified"}</span>
       </div>
       {startdate && (
-        <div className="flex justify-between mt-2">
+        <div className="flex justify-between">
           <span className="text-sm font-medium">Start Date:</span>
           <span className="text-sm">
             {new Date(startdate).toLocaleDateString()}
@@ -29,13 +29,13 @@ export const ProjectDetails = ({
         </div>
       )}
       {enddate && (
-        <div className="flex justify-between mt-2">
+        <div className="flex justify-between">
           <span className="text-sm font-medium">End Date:</span>
           <span className="text-sm">
             {new Date(enddate).toLocaleDateString()}
           </span>
         </div>
       )}
-    </>
+    </div>
   );
 };
