@@ -107,8 +107,8 @@ const Projects = () => {
           description: values.description,
           status: values.status,
           priority: values.priority,
-          startdate: values.startdate,
-          enddate: values.enddate,
+          startdate: values.startdate ? values.startdate.toISOString() : null,
+          enddate: values.enddate ? values.enddate.toISOString() : null,
           updatedat: new Date().toISOString(),
         })
         .eq("id", id);
