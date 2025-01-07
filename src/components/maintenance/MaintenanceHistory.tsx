@@ -31,7 +31,7 @@ const MaintenanceHistory = () => {
     mutationFn: async ({ id, status }: { id: string, status: MaintenanceCheckStatus }) => {
       const { error } = await supabase
         .from('hvac_maintenance_checks')
-        .update({ status })  // Only update the status field
+        .update({ status })  // Only update the status field, let the trigger handle updated_at
         .eq('id', id);
 
       if (error) throw error;
