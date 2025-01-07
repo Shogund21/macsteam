@@ -25,6 +25,7 @@ export const AddProjectForm = () => {
       startdate: "",
       enddate: "",
       priority: "Medium",
+      location: "",
     },
   });
 
@@ -38,6 +39,7 @@ export const AddProjectForm = () => {
         startdate: values.startdate || null,
         enddate: values.enddate || null,
         priority: values.priority,
+        location: values.location,
       });
       
       if (error) throw error;

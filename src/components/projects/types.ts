@@ -7,6 +7,7 @@ export const projectFormSchema = z.object({
   startdate: z.string().optional(),
   enddate: z.string().optional(),
   priority: z.string().min(2, "Priority is required"),
+  location: z.string().min(2, "Location is required"),
 });
 
 export type ProjectFormValues = z.infer<typeof projectFormSchema>;
