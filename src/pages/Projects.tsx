@@ -3,13 +3,18 @@ import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ProjectList } from "@/components/projects/ProjectList";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Projects = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const { data: projects, isLoading, refetch } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
+      console.log("Fetching projects...");
       const { data, error } = await supabase
         .from("projects")
         .select("*")
@@ -19,12 +24,14 @@ const Projects = () => {
         console.error("Error fetching projects:", error);
         throw error;
       }
+      console.log("Projects fetched:", data);
       return data;
     },
   });
 
   const handleStatusChange = async (projectId: string, newStatus: string) => {
     try {
+      console.log("Updating status for project:", projectId, "to:", newStatus);
       const { error } = await supabase
         .from("projects")
         .update({ status: newStatus, updatedat: new Date().toISOString() })
@@ -49,6 +56,7 @@ const Projects = () => {
 
   const handlePriorityChange = async (projectId: string, newPriority: string) => {
     try {
+      console.log("Updating priority for project:", projectId, "to:", newPriority);
       const { error } = await supabase
         .from("projects")
         .update({ priority: newPriority, updatedat: new Date().toISOString() })
@@ -73,6 +81,7 @@ const Projects = () => {
 
   const handleDelete = async (projectId: string) => {
     try {
+      console.log("Deleting project:", projectId);
       const { error } = await supabase
         .from("projects")
         .delete()
@@ -100,6 +109,12 @@ const Projects = () => {
       <div className="container mx-auto py-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Projects</h1>
+          <Button
+            onClick={() => navigate("/add-project")}
+            className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white"
+          >
+            <Plus className="mr-2 h-4 w-4" /> Add Project
+          </Button>
         </div>
 
         {isLoading ? (

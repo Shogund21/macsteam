@@ -1,5 +1,4 @@
 import { Project } from "@/types/project";
-import { Card } from "@/components/ui/card";
 import { ProjectCard } from "./ProjectCard";
 
 interface ProjectListProps {
@@ -15,21 +14,22 @@ export const ProjectList = ({
   onPriorityChange,
   onDelete
 }: ProjectListProps) => {
+  console.log("Rendering ProjectList with projects:", projects);
+
   if (!projects?.length) {
-    return <div>No projects found.</div>;
+    return <div className="text-center text-gray-500">No projects found.</div>;
   }
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
       {projects.map((project) => (
-        <Card key={project.id} className="p-4 md:p-6">
-          <ProjectCard
-            project={project}
-            onStatusChange={onStatusChange}
-            onPriorityChange={onPriorityChange}
-            onDelete={onDelete}
-          />
-        </Card>
+        <ProjectCard
+          key={project.id}
+          project={project}
+          onStatusChange={onStatusChange}
+          onPriorityChange={onPriorityChange}
+          onDelete={onDelete}
+        />
       ))}
     </div>
   );
