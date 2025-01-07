@@ -41,9 +41,8 @@ export const MaintenanceTableRow = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="in_progress">In Progress</SelectItem>
             <SelectItem value="completed">Completed</SelectItem>
-            <SelectItem value="cancelled">Cancelled</SelectItem>
+            <SelectItem value="issue_found">Issue Found</SelectItem>
           </SelectContent>
         </Select>
       </TableCell>
