@@ -1,4 +1,4 @@
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { ProjectFormValues } from "../types";
@@ -31,6 +31,9 @@ export const ProjectBasicInfo = ({ form }: ProjectBasicInfoProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Description</FormLabel>
+            <FormDescription>
+              Provide a detailed description of the project's scope and objectives
+            </FormDescription>
             <FormControl>
               <Textarea placeholder="Enter project description" {...field} />
             </FormControl>
@@ -45,6 +48,9 @@ export const ProjectBasicInfo = ({ form }: ProjectBasicInfoProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Location</FormLabel>
+            <FormDescription>
+              Specify the physical location where the project will take place
+            </FormDescription>
             <FormControl>
               <Input placeholder="Enter project location" {...field} />
             </FormControl>
