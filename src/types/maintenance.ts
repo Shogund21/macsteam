@@ -2,6 +2,31 @@ import { Database } from "@/integrations/supabase/types";
 
 export type MaintenanceCheckStatus = Database["public"]["Enums"]["maintenance_check_status"];
 
+// Full Equipment type for forms
+export interface Equipment {
+  id: string;
+  name: string;
+  location: string;
+  model: string;
+  serialNumber: string;
+  lastMaintenance: string | null;
+  nextMaintenance: string | null;
+  status: string;
+}
+
+// Full Technician type for forms
+export interface Technician {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  specialization: string;
+  isAvailable: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 // Simplified Equipment type for maintenance checks
 export interface MaintenanceEquipment {
   name: string;
