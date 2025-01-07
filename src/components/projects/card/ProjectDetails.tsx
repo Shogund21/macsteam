@@ -18,7 +18,9 @@ export const ProjectDetails = ({
       </p>
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium">Location:</span>
-        <span className="text-sm">{location || "Not specified"}</span>
+        <span className="text-sm font-semibold text-muted-foreground">
+          {location || "Not specified"}
+        </span>
       </div>
       {startdate && (
         <div className="flex justify-between">
