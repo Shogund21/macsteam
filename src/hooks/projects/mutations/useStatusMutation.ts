@@ -11,16 +11,20 @@ export const useStatusMutation = (
   const handleStatusChange = async (projectId: string, newStatus: string) => {
     try {
       const timestamp = new Date().toISOString();
+      console.log("Updating project status:", { projectId, newStatus });
       
       const { error } = await supabase
         .from("projects")
         .update({ 
           status: newStatus,
-          updatedat: timestamp
+          updatedat: timestamp // Changed from updated_at to updatedat
         })
         .eq("id", projectId);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error updating project status:", error);
+        throw error;
+      }
 
       setProjects(projects.map(project => 
         project.id === projectId 
