@@ -2,7 +2,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { ProjectFormValues } from "../types";
-import LocationSelect from "@/components/equipment/LocationSelect";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ProjectBasicInfoProps {
   form: UseFormReturn<ProjectFormValues>;
@@ -32,14 +32,26 @@ export const ProjectBasicInfo = ({ form }: ProjectBasicInfoProps) => {
           <FormItem>
             <FormLabel>Description</FormLabel>
             <FormControl>
-              <Input placeholder="Enter project description" {...field} />
+              <Textarea placeholder="Enter project description" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
 
-      <LocationSelect form={form} />
+      <FormField
+        control={form.control}
+        name="location"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Location</FormLabel>
+            <FormControl>
+              <Input placeholder="Enter project location" {...field} />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
     </>
   );
 };
