@@ -75,7 +75,7 @@ export const ProjectCard = ({
             onValueChange={(value) => onPriorityChange(project.id, value)}
           />
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
           <span className="text-sm font-medium">Location:</span>
           <span className="text-sm">{project.location || "Not specified"}</span>
         </div>
