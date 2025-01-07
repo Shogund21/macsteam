@@ -40,6 +40,8 @@ export const AddProjectForm = () => {
         enddate: values.enddate || null,
         priority: values.priority,
         location: values.location,
+        createdat: new Date().toISOString(),
+        updatedat: new Date().toISOString(),
       });
       
       if (error) throw error;

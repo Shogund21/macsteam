@@ -15,7 +15,10 @@ const Projects = () => {
         .select("*")
         .order("createdat", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching projects:", error);
+        throw error;
+      }
       return data;
     },
   });
@@ -24,7 +27,7 @@ const Projects = () => {
     try {
       const { error } = await supabase
         .from("projects")
-        .update({ status: newStatus })
+        .update({ status: newStatus, updatedat: new Date().toISOString() })
         .eq("id", projectId);
 
       if (error) throw error;
@@ -48,7 +51,7 @@ const Projects = () => {
     try {
       const { error } = await supabase
         .from("projects")
-        .update({ priority: newPriority })
+        .update({ priority: newPriority, updatedat: new Date().toISOString() })
         .eq("id", projectId);
 
       if (error) throw error;
