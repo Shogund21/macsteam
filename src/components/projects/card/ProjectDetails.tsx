@@ -14,7 +14,7 @@ export const ProjectDetails = ({
   return (
     <div className="space-y-2">
       <p className="text-sm text-muted-foreground">
-        {description || "No description"}
+        {description || "No description provided"}
       </p>
       <div className="flex justify-between items-center">
         <span className="text-sm font-medium">Location:</span>

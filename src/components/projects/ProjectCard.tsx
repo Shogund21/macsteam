@@ -22,6 +22,10 @@ export const ProjectCard = ({
   const handleStatusChange = async (value: string) => {
     try {
       await onStatusChange(project.id, value);
+      toast({
+        title: "Success",
+        description: "Project status updated successfully",
+      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -34,6 +38,10 @@ export const ProjectCard = ({
   const handlePriorityChange = async (value: string) => {
     try {
       await onPriorityChange(project.id, value);
+      toast({
+        title: "Success",
+        description: "Project priority updated successfully",
+      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -46,6 +54,10 @@ export const ProjectCard = ({
   const handleDelete = async () => {
     try {
       await onDelete(project.id);
+      toast({
+        title: "Success",
+        description: "Project deleted successfully",
+      });
     } catch (error) {
       toast({
         variant: "destructive",
