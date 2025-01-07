@@ -7,21 +7,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { TableCell, TableRow } from "@/components/ui/table";
-import { Database } from "@/integrations/supabase/types";
+import { MaintenanceCheck, MaintenanceCheckStatus } from "@/types/maintenance";
 import { format } from "date-fns";
 
-type MaintenanceCheckStatus = Database["public"]["Enums"]["maintenance_check_status"];
-
 interface MaintenanceTableRowProps {
-  check: any;
+  check: MaintenanceCheck;
   onStatusChange: (id: string, status: MaintenanceCheckStatus) => void;
 }
 
 export const MaintenanceTableRow = ({ check, onStatusChange }: MaintenanceTableRowProps) => {
   return (
-    <TableRow key={check.id}>
+    <TableRow>
       <TableCell>
-        {format(new Date(check.check_date), 'MMM d, yyyy HH:mm')}
+        {check.check_date && format(new Date(check.check_date), 'MMM d, yyyy HH:mm')}
       </TableCell>
       <TableCell>{check.equipment?.name}</TableCell>
       <TableCell>{check.equipment?.location}</TableCell>
@@ -40,7 +38,7 @@ export const MaintenanceTableRow = ({ check, onStatusChange }: MaintenanceTableR
       </TableCell>
       <TableCell>
         <Select
-          value={check.status}
+          value={check.status || undefined}
           onValueChange={(value: MaintenanceCheckStatus) => onStatusChange(check.id, value)}
         >
           <SelectTrigger className="w-[180px]">

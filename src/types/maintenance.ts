@@ -2,30 +2,45 @@ import { Database } from "@/integrations/supabase/types";
 
 export type MaintenanceCheckStatus = Database["public"]["Enums"]["maintenance_check_status"];
 
+export interface Equipment {
+  id: string;
+  name: string;
+  location: string;
+  model: string;
+  serialNumber: string;
+  lastMaintenance: string | null;
+  nextMaintenance: string | null;
+  status: string;
+}
+
+export interface Technician {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  specialization: string;
+  isAvailable: boolean;
+}
+
 export interface MaintenanceCheck {
   id: string;
-  check_date: string;
-  equipment_id: string;
-  technician_id: string;
-  chiller_pressure_reading: number;
-  chiller_temperature_reading: number;
-  air_filter_status: string;
-  belt_condition: string;
-  refrigerant_level: string;
-  unusual_noise: boolean;
-  unusual_noise_description?: string;
-  vibration_observed: boolean;
-  vibration_description?: string;
-  oil_level_status: string;
-  condenser_condition: string;
-  notes?: string;
-  status: MaintenanceCheckStatus;
-  equipment?: {
-    name: string;
-    location: string;
-  };
-  technician?: {
-    firstName: string;
-    lastName: string;
-  };
+  check_date: string | null;
+  equipment_id: string | null;
+  technician_id: string | null;
+  chiller_pressure_reading: number | null;
+  chiller_temperature_reading: number | null;
+  air_filter_status: string | null;
+  belt_condition: string | null;
+  refrigerant_level: string | null;
+  unusual_noise: boolean | null;
+  unusual_noise_description: string | null;
+  vibration_observed: boolean | null;
+  vibration_description: string | null;
+  oil_level_status: string | null;
+  condenser_condition: string | null;
+  notes: string | null;
+  status: MaintenanceCheckStatus | null;
+  equipment?: Equipment;
+  technician?: Technician;
 }

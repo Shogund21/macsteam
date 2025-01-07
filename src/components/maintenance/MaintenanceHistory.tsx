@@ -2,11 +2,9 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Table, TableBody } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { Database } from "@/integrations/supabase/types";
+import { MaintenanceCheck, MaintenanceCheckStatus } from "@/types/maintenance";
 import { MaintenanceTableHeader } from "./table/MaintenanceTableHeader";
 import { MaintenanceTableRow } from "./table/MaintenanceTableRow";
-
-type MaintenanceCheckStatus = Database["public"]["Enums"]["maintenance_check_status"];
 
 const MaintenanceHistory = () => {
   const { toast } = useToast();
@@ -25,7 +23,7 @@ const MaintenanceHistory = () => {
         .order('check_date', { ascending: false });
       
       if (error) throw error;
-      return data;
+      return data as MaintenanceCheck[];
     },
   });
 
