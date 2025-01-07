@@ -17,7 +17,7 @@ export const useStatusMutation = (
         .from("projects")
         .update({ 
           status: newStatus,
-          updatedat: timestamp // Changed from updated_at to updatedat
+          updatedat: timestamp
         })
         .eq("id", projectId);
 

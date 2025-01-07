@@ -17,7 +17,7 @@ export const usePriorityMutation = (
         .from("projects")
         .update({ 
           priority: newPriority,
-          updatedat: timestamp // Changed from updated_at to updatedat
+          updatedat: timestamp
         })
         .eq("id", projectId);
 
