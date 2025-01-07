@@ -1,16 +1,13 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
+import { useQuery } from "@tanstack/react-query";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ProjectList } from "@/components/projects/ProjectList";
-import { EditProjectDialog } from "@/components/projects/EditProjectDialog";
 
 const Projects = () => {
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  const { data: projects, isLoading } = useQuery({
+  const { data: projects, isLoading, refetch } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -23,26 +20,6 @@ const Projects = () => {
     },
   });
 
-  const handleDelete = async (id: string) => {
-    try {
-      const { error } = await supabase.from("projects").delete().eq("id", id);
-      if (error) throw error;
-
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-      toast({
-        title: "Success",
-        description: "Project deleted successfully",
-      });
-    } catch (error) {
-      console.error("Error deleting project:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to delete project",
-      });
-    }
-  };
-
   const handleStatusChange = async (projectId: string, newStatus: string) => {
     try {
       const { error } = await supabase
@@ -51,8 +28,8 @@ const Projects = () => {
         .eq("id", projectId);
 
       if (error) throw error;
-
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      
+      await refetch();
       toast({
         title: "Success",
         description: "Project status updated successfully",
@@ -75,8 +52,8 @@ const Projects = () => {
         .eq("id", projectId);
 
       if (error) throw error;
-
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      
+      await refetch();
       toast({
         title: "Success",
         description: "Project priority updated successfully",
@@ -87,6 +64,30 @@ const Projects = () => {
         variant: "destructive",
         title: "Error",
         description: "Failed to update project priority",
+      });
+    }
+  };
+
+  const handleDelete = async (projectId: string) => {
+    try {
+      const { error } = await supabase
+        .from("projects")
+        .delete()
+        .eq("id", projectId);
+
+      if (error) throw error;
+      
+      await refetch();
+      toast({
+        title: "Success",
+        description: "Project deleted successfully",
+      });
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to delete project",
       });
     }
   };

@@ -2,7 +2,6 @@ import { Project } from "@/types/project";
 import { ProjectHeader } from "./card/ProjectHeader";
 import { ProjectDetails } from "./card/ProjectDetails";
 import { ProjectControls } from "./card/ProjectControls";
-import { useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 
 interface ProjectCardProps {
@@ -18,17 +17,11 @@ export const ProjectCard = ({
   onPriorityChange,
   onDelete
 }: ProjectCardProps) => {
-  const queryClient = useQueryClient();
   const { toast } = useToast();
 
   const handleStatusChange = async (value: string) => {
     try {
       await onStatusChange(project.id, value);
-      await queryClient.invalidateQueries({ queryKey: ['projects'] });
-      toast({
-        title: "Success",
-        description: "Project status updated successfully",
-      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -41,11 +34,6 @@ export const ProjectCard = ({
   const handlePriorityChange = async (value: string) => {
     try {
       await onPriorityChange(project.id, value);
-      await queryClient.invalidateQueries({ queryKey: ['projects'] });
-      toast({
-        title: "Success",
-        description: "Project priority updated successfully",
-      });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -58,11 +46,6 @@ export const ProjectCard = ({
   const handleDelete = async () => {
     try {
       await onDelete(project.id);
-      await queryClient.invalidateQueries({ queryKey: ['projects'] });
-      toast({
-        title: "Success",
-        description: "Project deleted successfully",
-      });
     } catch (error) {
       toast({
         variant: "destructive",
