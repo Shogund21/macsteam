@@ -32,8 +32,7 @@ const MaintenanceHistory = () => {
       const { error } = await supabase
         .from('hvac_maintenance_checks')
         .update({ status })
-        .eq('id', id)
-        .select();
+        .eq('id', id);
 
       if (error) throw error;
     },
