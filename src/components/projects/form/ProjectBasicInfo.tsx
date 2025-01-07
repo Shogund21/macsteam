@@ -1,8 +1,8 @@
-import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { ProjectFormValues } from "../types";
-import { LocationSelect } from "@/components/equipment/LocationSelect";
+import LocationSelect from "@/components/equipment/LocationSelect";
 
 interface ProjectBasicInfoProps {
   form: UseFormReturn<ProjectFormValues>;

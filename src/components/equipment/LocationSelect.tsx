@@ -24,7 +24,7 @@ const locations = [
 ];
 
 interface LocationSelectProps {
-  form: UseFormReturn<EquipmentFormValues>;
+  form: UseFormReturn<any>;
 }
 
 const LocationSelect = ({ form }: LocationSelectProps) => {
