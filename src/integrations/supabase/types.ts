@@ -133,6 +133,7 @@ export type Database = {
           description: string | null
           enddate: string | null
           id: string
+          location: string | null
           name: string
           priority: string
           startdate: string | null
@@ -144,6 +145,7 @@ export type Database = {
           description?: string | null
           enddate?: string | null
           id?: string
+          location?: string | null
           name: string
           priority: string
           startdate?: string | null
@@ -155,6 +157,7 @@ export type Database = {
           description?: string | null
           enddate?: string | null
           id?: string
+          location?: string | null
           name?: string
           priority?: string
           startdate?: string | null

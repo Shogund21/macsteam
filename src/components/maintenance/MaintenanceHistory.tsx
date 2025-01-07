@@ -33,7 +33,7 @@ const MaintenanceHistory = () => {
         .from('hvac_maintenance_checks')
         .select(`
           *,
-          equipment:equipment_id(name),
+          equipment:equipment_id(name, location),
           technician:technician_id(firstName, lastName)
         `)
         .order('check_date', { ascending: false });
@@ -81,6 +81,7 @@ const MaintenanceHistory = () => {
           <TableRow>
             <TableHead>Date</TableHead>
             <TableHead>Equipment</TableHead>
+            <TableHead>Location</TableHead>
             <TableHead>Technician</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Issues Found</TableHead>
@@ -94,6 +95,7 @@ const MaintenanceHistory = () => {
                 {format(new Date(check.check_date), 'MMM d, yyyy HH:mm')}
               </TableCell>
               <TableCell>{check.equipment?.name}</TableCell>
+              <TableCell>{check.equipment?.location}</TableCell>
               <TableCell>
                 {check.technician?.firstName} {check.technician?.lastName}
               </TableCell>

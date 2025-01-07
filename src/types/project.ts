@@ -8,4 +8,5 @@ export interface Project {
   priority: string;
   createdat: string | null;
   updatedat: string | null;
+  location: string | null;
 }
