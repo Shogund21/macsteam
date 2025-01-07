@@ -10,21 +10,17 @@ export const usePriorityMutation = (
 
   const handlePriorityChange = async (projectId: string, newPriority: string) => {
     try {
-      console.log("Updating project priority:", { projectId, newPriority });
       const timestamp = new Date().toISOString();
       
       const { error } = await supabase
         .from("projects")
         .update({ 
           priority: newPriority,
-          updatedat: timestamp // Changed from updated_at to updatedat
+          updatedat: timestamp
         })
         .eq("id", projectId);
 
-      if (error) {
-        console.error("Error updating project priority:", error);
-        throw error;
-      }
+      if (error) throw error;
 
       setProjects(projects.map(project => 
         project.id === projectId 
@@ -37,7 +33,7 @@ export const usePriorityMutation = (
         description: "Project priority updated successfully",
       });
     } catch (error) {
-      console.error("Error in handlePriorityChange:", error);
+      console.error("Error updating project priority:", error);
       toast({
         variant: "destructive",
         title: "Error",
