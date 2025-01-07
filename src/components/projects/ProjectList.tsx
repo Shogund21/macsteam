@@ -14,7 +14,7 @@ export const ProjectList = ({
   onPriorityChange,
   onDelete
 }: ProjectListProps) => {
-  console.log("Rendering ProjectList with projects:", projects);
+  console.log("ProjectList rendering with projects:", projects);
 
   if (!projects?.length) {
     return <div className="text-center text-gray-500">No projects found.</div>;
@@ -22,15 +22,18 @@ export const ProjectList = ({
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-      {projects.map((project) => (
-        <ProjectCard
-          key={project.id}
-          project={project}
-          onStatusChange={onStatusChange}
-          onPriorityChange={onPriorityChange}
-          onDelete={onDelete}
-        />
-      ))}
+      {projects.map((project) => {
+        console.log("Rendering project:", project);
+        return (
+          <ProjectCard
+            key={project.id}
+            project={project}
+            onStatusChange={onStatusChange}
+            onPriorityChange={onPriorityChange}
+            onDelete={onDelete}
+          />
+        );
+      })}
     </div>
   );
 };

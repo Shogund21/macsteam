@@ -14,38 +14,54 @@ const Projects = () => {
   const { data: projects, isLoading, refetch } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
-      console.log("Fetching projects...");
-      const { data, error } = await supabase
-        .from("projects")
-        .select("*")
-        .order("createdat", { ascending: false });
+      console.log("Fetching projects from Supabase...");
+      try {
+        const { data, error } = await supabase
+          .from("projects")
+          .select("*")
+          .order("createdat", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching projects:", error);
+        if (error) {
+          console.error("Supabase error fetching projects:", error);
+          throw error;
+        }
+
+        console.log("Successfully fetched projects:", data);
+        return data || [];
+      } catch (error) {
+        console.error("Error in queryFn:", error);
         throw error;
       }
-      console.log("Projects fetched:", data);
-      return data;
     },
+    refetchOnWindowFocus: true,
+    staleTime: 1000,
   });
 
   const handleStatusChange = async (projectId: string, newStatus: string) => {
     try {
-      console.log("Updating status for project:", projectId, "to:", newStatus);
+      console.log("Updating project status:", { projectId, newStatus });
       const { error } = await supabase
         .from("projects")
-        .update({ status: newStatus, updatedat: new Date().toISOString() })
+        .update({ 
+          status: newStatus, 
+          updatedat: new Date().toISOString() 
+        })
         .eq("id", projectId);
 
-      if (error) throw error;
-      
+      if (error) {
+        console.error("Error updating project status:", error);
+        throw error;
+      }
+
+      console.log("Status updated successfully");
       await refetch();
+      
       toast({
         title: "Success",
         description: "Project status updated successfully",
       });
     } catch (error) {
-      console.error("Error updating project status:", error);
+      console.error("Error in handleStatusChange:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -56,21 +72,29 @@ const Projects = () => {
 
   const handlePriorityChange = async (projectId: string, newPriority: string) => {
     try {
-      console.log("Updating priority for project:", projectId, "to:", newPriority);
+      console.log("Updating project priority:", { projectId, newPriority });
       const { error } = await supabase
         .from("projects")
-        .update({ priority: newPriority, updatedat: new Date().toISOString() })
+        .update({ 
+          priority: newPriority, 
+          updatedat: new Date().toISOString() 
+        })
         .eq("id", projectId);
 
-      if (error) throw error;
-      
+      if (error) {
+        console.error("Error updating project priority:", error);
+        throw error;
+      }
+
+      console.log("Priority updated successfully");
       await refetch();
+      
       toast({
         title: "Success",
         description: "Project priority updated successfully",
       });
     } catch (error) {
-      console.error("Error updating project priority:", error);
+      console.error("Error in handlePriorityChange:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -87,15 +111,20 @@ const Projects = () => {
         .delete()
         .eq("id", projectId);
 
-      if (error) throw error;
-      
+      if (error) {
+        console.error("Error deleting project:", error);
+        throw error;
+      }
+
+      console.log("Project deleted successfully");
       await refetch();
+      
       toast({
         title: "Success",
         description: "Project deleted successfully",
       });
     } catch (error) {
-      console.error("Error deleting project:", error);
+      console.error("Error in handleDelete:", error);
       toast({
         variant: "destructive",
         title: "Error",
