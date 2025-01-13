@@ -31,12 +31,12 @@ export const MaintenanceTableRow = ({
       </TableCell>
       <TableCell>
         <Select
-          defaultValue={check.status || 'pending'}
+          value={check.status || 'pending'}
           onValueChange={(value) => 
             onStatusChange(check.id, value as MaintenanceCheckStatus)
           }
         >
-          <SelectTrigger className="w-[130px] bg-white">
+          <SelectTrigger className="w-[130px]">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

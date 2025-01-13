@@ -34,10 +34,7 @@ const MaintenanceHistory = () => {
         .update({ status })
         .eq('id', id);
 
-      if (error) {
-        console.error('Update error:', error);
-        throw error;
-      }
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['maintenance-checks'] });
