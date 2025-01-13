@@ -8,6 +8,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { Eye } from "lucide-react";
+import { useState } from "react";
+import MaintenanceCheckDetails from "../MaintenanceCheckDetails";
 
 interface MaintenanceTableRowProps {
   check: MaintenanceCheck;
@@ -18,20 +22,22 @@ export const MaintenanceTableRow = ({
   check,
   onStatusChange,
 }: MaintenanceTableRowProps) => {
+  const [showDetails, setShowDetails] = useState(false);
+
   return (
     <TableRow>
-      <TableCell>{format(new Date(check.check_date || ''), 'PPP')}</TableCell>
-      <TableCell>{check.equipment?.name || 'N/A'}</TableCell>
-      <TableCell>{check.equipment?.location || 'Not specified'}</TableCell>
+      <TableCell>{format(new Date(check.check_date || ""), "PPP")}</TableCell>
+      <TableCell>{check.equipment?.name || "N/A"}</TableCell>
+      <TableCell>{check.equipment?.location || "Not specified"}</TableCell>
       <TableCell>
         {check.technician ? 
           `${check.technician.firstName} ${check.technician.lastName}` : 
-          'Unassigned'
+          "Unassigned"
         }
       </TableCell>
       <TableCell>
         <Select
-          value={check.status || 'pending'}
+          value={check.status || "pending"}
           onValueChange={(value) => 
             onStatusChange(check.id, value as MaintenanceCheckStatus)
           }
@@ -45,6 +51,22 @@ export const MaintenanceTableRow = ({
             <SelectItem value="issue_found">Issue Found</SelectItem>
           </SelectContent>
         </Select>
+      </TableCell>
+      <TableCell>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setShowDetails(true)}
+          className="flex items-center gap-2"
+        >
+          <Eye className="h-4 w-4" />
+          View
+        </Button>
+        <MaintenanceCheckDetails
+          check={check}
+          open={showDetails}
+          onOpenChange={setShowDetails}
+        />
       </TableCell>
     </TableRow>
   );
