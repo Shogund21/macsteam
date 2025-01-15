@@ -47,7 +47,7 @@ const MaintenanceTableRow = ({
             onStatusChange(check.id, value as MaintenanceCheckStatus)
           }
         >
-          <SelectTrigger className="h-8">
+          <SelectTrigger className="w-[140px] h-10 bg-white">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
