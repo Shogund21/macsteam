@@ -23,15 +23,19 @@ export const ProjectCard = ({
   const { toast } = useToast();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
   const [description, setDescription] = useState(project.description);
+  const [currentStatus, setCurrentStatus] = useState(project.status);
 
   const handleStatusChange = async (value: string) => {
     try {
       await onStatusChange(project.id, value);
+      setCurrentStatus(value);
       toast({
         title: "Success",
         description: "Project status updated successfully",
       });
     } catch (error) {
+      // Revert the status if there's an error
+      setCurrentStatus(project.status);
       toast({
         variant: "destructive",
         title: "Error",
@@ -98,7 +102,7 @@ export const ProjectCard = ({
       />
       <div className="mt-4 space-y-2">
         <ProjectControls
-          status={project.status}
+          status={currentStatus}
           priority={project.priority}
           onStatusChange={handleStatusChange}
           onPriorityChange={handlePriorityChange}
