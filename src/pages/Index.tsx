@@ -3,7 +3,7 @@ import Stats from "@/components/dashboard/Stats";
 import RecentActivities from "@/components/dashboard/RecentActivities";
 import EquipmentOverview from "@/components/dashboard/EquipmentOverview";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Printer } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
@@ -20,6 +20,12 @@ const Index = () => {
             </p>
           </div>
           <div className="flex gap-4">
+            <Button 
+              onClick={() => navigate("/print")}
+              className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
+            >
+              <Printer className="mr-2 h-4 w-4" /> Print Lists
+            </Button>
             <Button 
               onClick={() => navigate("/add-equipment")}
               className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
