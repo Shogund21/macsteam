@@ -4,7 +4,7 @@
 The equipment management system allows you to track and maintain HVAC equipment details and status.
 
 ## Features
-- Password-protected equipment section (Password: MACYS0405)
+- Password-protected equipment section
 - Add and manage HVAC equipment
 - Track equipment details including:
   - Model numbers
@@ -17,7 +17,7 @@ The equipment management system allows you to track and maintain HVAC equipment 
 
 ## How to Use
 1. Navigate to the Equipment section
-2. Enter the password: MACYS0405
+2. Enter the required password
 3. Add new equipment or manage existing ones
 4. Update equipment status using the dropdown menu
 
