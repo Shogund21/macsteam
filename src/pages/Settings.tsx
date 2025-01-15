@@ -2,12 +2,14 @@ import Layout from "@/components/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TechnicianManagement from "@/components/settings/TechnicianManagement";
+import DocumentationViewer from "@/components/settings/DocumentationViewer";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { FileText, BookOpen, Info } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
 const Settings = () => {
   const isMobile = useIsMobile();
+  const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
 
   const documentationLinks = [
     {
@@ -77,21 +79,33 @@ const Settings = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid gap-4 md:grid-cols-2">
-                  {documentationLinks.map((doc) => (
-                    <Link
-                      key={doc.title}
-                      to={doc.path}
-                      className="block p-4 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors"
+                {selectedDoc ? (
+                  <div className="space-y-4">
+                    <button
+                      onClick={() => setSelectedDoc(null)}
+                      className="text-sm text-primary hover:underline mb-4"
                     >
-                      <div className="flex items-center gap-3 mb-2">
-                        <doc.icon className="h-5 w-5 text-primary" />
-                        <h3 className="font-semibold">{doc.title}</h3>
-                      </div>
-                      <p className="text-sm text-muted-foreground">{doc.description}</p>
-                    </Link>
-                  ))}
-                </div>
+                      ← Back to documentation list
+                    </button>
+                    <DocumentationViewer path={selectedDoc} />
+                  </div>
+                ) : (
+                  <div className="grid gap-4 md:grid-cols-2">
+                    {documentationLinks.map((doc) => (
+                      <button
+                        key={doc.title}
+                        onClick={() => setSelectedDoc(doc.path)}
+                        className="block p-4 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors text-left w-full"
+                      >
+                        <div className="flex items-center gap-3 mb-2">
+                          <doc.icon className="h-5 w-5 text-primary" />
+                          <h3 className="font-semibold">{doc.title}</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">{doc.description}</p>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
