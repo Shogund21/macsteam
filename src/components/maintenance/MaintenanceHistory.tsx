@@ -11,8 +11,12 @@ const MaintenanceHistory = () => {
 
   const fetchMaintenanceChecks = async () => {
     const { data, error } = await supabase
-      .from("maintenance_checks")
-      .select("*")
+      .from("hvac_maintenance_checks")
+      .select(`
+        *,
+        equipment:equipment_id(name, location),
+        technician:technician_id(firstName, lastName)
+      `)
       .order("check_date", { ascending: false });
 
     if (error) {
@@ -22,13 +26,13 @@ const MaintenanceHistory = () => {
         variant: "destructive",
       });
     } else {
-      setChecks(data);
+      setChecks(data as MaintenanceCheck[]);
     }
   };
 
   const handleStatusChange = async (id: string, status: MaintenanceCheckStatus) => {
     const { error } = await supabase
-      .from("maintenance_checks")
+      .from("hvac_maintenance_checks")
       .update({ status })
       .eq("id", id);
 
