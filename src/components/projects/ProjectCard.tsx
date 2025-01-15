@@ -2,10 +2,9 @@ import { Project } from "@/types/project";
 import { ProjectHeader } from "./card/ProjectHeader";
 import { ProjectDetails } from "./card/ProjectDetails";
 import { ProjectControls } from "./card/ProjectControls";
-import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { EditDescriptionDialog } from "./EditDescriptionDialog";
-import { supabase } from "@/integrations/supabase/client";
+import { useProjectCard } from "@/hooks/projects/useProjectCard";
 
 interface ProjectCardProps {
   project: Project;
@@ -20,85 +19,20 @@ export const ProjectCard = ({
   onPriorityChange,
   onDelete
 }: ProjectCardProps) => {
-  const { toast } = useToast();
   const [isEditingDescription, setIsEditingDescription] = useState(false);
-  const [description, setDescription] = useState(project.description);
-  const [currentStatus, setCurrentStatus] = useState(project.status);
-
-  const handleStatusChange = async (value: string) => {
-    try {
-      await onStatusChange(project.id, value);
-      setCurrentStatus(value);
-      toast({
-        title: "Success",
-        description: "Project status updated successfully",
-      });
-    } catch (error) {
-      // Revert the status if there's an error
-      setCurrentStatus(project.status);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to update project status",
-      });
-    }
-  };
-
-  const handlePriorityChange = async (value: string) => {
-    try {
-      await onPriorityChange(project.id, value);
-      toast({
-        title: "Success",
-        description: "Project priority updated successfully",
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to update project priority",
-      });
-    }
-  };
-
-  const handleDelete = async () => {
-    try {
-      await onDelete(project.id);
-      toast({
-        title: "Success",
-        description: "Project deleted successfully",
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to delete project",
-      });
-    }
-  };
-
-  const handleDescriptionUpdate = async (newDescription: string) => {
-    try {
-      const { error } = await supabase
-        .from("projects")
-        .update({ 
-          description: newDescription,
-          updatedat: new Date().toISOString()
-        })
-        .eq("id", project.id);
-
-      if (error) throw error;
-      setDescription(newDescription);
-    } catch (error) {
-      console.error("Error updating description:", error);
-      throw error;
-    }
-  };
+  const {
+    currentStatus,
+    description,
+    handleStatusChange,
+    handlePriorityChange,
+    handleDescriptionUpdate,
+  } = useProjectCard(project);
 
   return (
     <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
       <ProjectHeader 
         name={project.name}
-        onDelete={handleDelete}
+        onDelete={onDelete}
       />
       <div className="mt-4 space-y-2">
         <ProjectControls
