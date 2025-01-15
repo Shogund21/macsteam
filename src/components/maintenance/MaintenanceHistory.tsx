@@ -4,7 +4,7 @@ import { Table, TableBody } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { MaintenanceCheck, MaintenanceCheckStatus } from "@/types/maintenance";
 import { MaintenanceTableHeader } from "./table/MaintenanceTableHeader";
-import { MaintenanceTableRow } from "./table/MaintenanceTableRow";
+import MaintenanceTableRow from "./table/MaintenanceTableRow";
 
 const MaintenanceHistory = () => {
   const { toast } = useToast();
