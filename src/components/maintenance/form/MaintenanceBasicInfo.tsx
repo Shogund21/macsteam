@@ -27,22 +27,26 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
   });
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="space-y-6">
       <FormField
         control={form.control}
         name="equipment_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Equipment</FormLabel>
+            <FormLabel className="text-base font-semibold">Equipment</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="w-full bg-white border-gray-200 h-12">
                   <SelectValue placeholder="Select equipment" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
                 {equipmentData?.map((item) => (
-                  <SelectItem key={item.id} value={item.id}>
+                  <SelectItem 
+                    key={item.id} 
+                    value={item.id}
+                    className="py-3 text-sm"
+                  >
                     {item.name} - {item.location}
                   </SelectItem>
                 ))}
@@ -58,16 +62,20 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
         name="technician_id"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Technician</FormLabel>
+            <FormLabel className="text-base font-semibold">Technician</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="w-full bg-white border-gray-200 h-12">
                   <SelectValue placeholder="Select technician" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
                 {technicians?.map((tech) => (
-                  <SelectItem key={tech.id} value={tech.id}>
+                  <SelectItem 
+                    key={tech.id} 
+                    value={tech.id}
+                    className="py-3 text-sm"
+                  >
                     {tech.firstName} {tech.lastName}
                   </SelectItem>
                 ))}
