@@ -43,11 +43,11 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
               <FormLabel>Fan Belt Condition</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-white border-gray-200">
                     <SelectValue placeholder="Select condition" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-white z-[100]">
                   <SelectItem value="good">Good</SelectItem>
                   <SelectItem value="fair">Fair</SelectItem>
                   <SelectItem value="needs_replacement">Needs Replacement</SelectItem>
@@ -86,11 +86,11 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
               <FormLabel>Fan Noise Level</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-white border-gray-200">
                     <SelectValue placeholder="Select noise level" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-white z-[100]">
                   <SelectItem value="normal">Normal</SelectItem>
                   <SelectItem value="slight">Slight Noise</SelectItem>
                   <SelectItem value="concerning">Concerning Noise</SelectItem>
@@ -110,11 +110,11 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
               <FormLabel>Dampers Operation</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-white border-gray-200">
                     <SelectValue placeholder="Select operation status" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-white z-[100]">
                   <SelectItem value="normal">Normal</SelectItem>
                   <SelectItem value="restricted">Restricted</SelectItem>
                   <SelectItem value="faulty">Faulty</SelectItem>
@@ -134,11 +134,11 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
               <FormLabel>Coils Condition</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-white border-gray-200">
                     <SelectValue placeholder="Select condition" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-white z-[100]">
                   <SelectItem value="clean">Clean</SelectItem>
                   <SelectItem value="needs_cleaning">Needs Cleaning</SelectItem>
                   <SelectItem value="damaged">Damaged</SelectItem>
@@ -158,11 +158,11 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
               <FormLabel>Sensors Operation</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-white border-gray-200">
                     <SelectValue placeholder="Select operation status" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-white z-[100]">
                   <SelectItem value="normal">Normal</SelectItem>
                   <SelectItem value="needs_calibration">Needs Calibration</SelectItem>
                   <SelectItem value="faulty">Faulty</SelectItem>
@@ -183,11 +183,11 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
               <FormLabel>Motor Condition</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-white border-gray-200">
                     <SelectValue placeholder="Select condition" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-white z-[100]">
                   <SelectItem value="normal">Normal</SelectItem>
                   <SelectItem value="overheating">Overheating</SelectItem>
                   <SelectItem value="needs_service">Needs Service</SelectItem>
@@ -207,11 +207,11 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
               <FormLabel>Drain Pan Status</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-white border-gray-200">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-white z-[100]">
                   <SelectItem value="clear">Clear</SelectItem>
                   <SelectItem value="partially_blocked">Partially Blocked</SelectItem>
                   <SelectItem value="blocked">Blocked</SelectItem>
@@ -246,11 +246,11 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
               <FormLabel>Airflow Unit</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="bg-white">
+                  <SelectTrigger className="bg-white border-gray-200">
                     <SelectValue placeholder="Select unit" />
                   </SelectTrigger>
                 </FormControl>
-                <SelectContent>
+                <SelectContent position="popper" className="bg-white z-[100]">
                   <SelectItem value="cfm">CFM</SelectItem>
                   <SelectItem value="m3/h">m³/h</SelectItem>
                 </SelectContent>
