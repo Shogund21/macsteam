@@ -64,7 +64,11 @@ export const EditDescriptionDialog = ({
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
-          <Button onClick={handleSave} disabled={isSaving}>
+          <Button 
+            onClick={handleSave} 
+            disabled={isSaving}
+            className="bg-blue-500 text-black hover:bg-blue-600 hover:text-black"
+          >
             {isSaving ? "Saving..." : "Save"}
           </Button>
         </div>
