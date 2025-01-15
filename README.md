@@ -1,8 +1,75 @@
-# Welcome to your Lovable project
+# Mac's Facilities Maintenance System
+
+A comprehensive facility management system built with modern web technologies.
+
+## Features
+
+### Dashboard
+- Real-time statistics showing equipment count, active projects, pending tasks, and available technicians
+- Recent activities feed showing latest project and maintenance updates
+- Equipment overview with quick status updates
+- Responsive design for all device sizes
+
+### Equipment Management
+- Password-protected equipment section (Password: MACYS0405)
+- Add and manage HVAC equipment
+- Track equipment details including:
+  - Model numbers
+  - Serial numbers
+  - Location information
+  - Maintenance schedules
+  - Current status
+- Quick status updates via dropdown
+- Equipment history tracking
+
+### Project Management
+- Create and manage maintenance projects
+- Project tracking with:
+  - Priority levels (High, Medium, Low)
+  - Status updates (Not Started, In Progress, On Hold, Completed)
+  - Start and end dates
+  - Location information
+- Real-time project updates
+- Project filtering and sorting
+- Description editing capabilities
+
+### Maintenance Checks
+- Comprehensive HVAC maintenance check system
+- Track various parameters:
+  - Chiller pressure and temperature readings
+  - Air filter status
+  - Belt condition
+  - Refrigerant levels
+  - Unusual noise detection
+  - Vibration monitoring
+  - Oil level status
+  - Condenser condition
+- Maintenance history tracking
+- Technician assignment system
+
+### Settings & Administration
+- Technician management
+  - Add/remove technicians
+  - Track specializations
+  - Monitor availability
+  - Contact information management
+- Appearance customization options
+- Notification preferences
 
 ## Project info
 
 **URL**: https://lovable.dev/projects/504bf57f-2335-4e76-894e-5b151c1fbbad
+
+## Technologies Used
+
+This project is built with:
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+- Supabase (Backend & Database)
 
 ## How can I edit this code?
 
@@ -49,16 +116,6 @@ npm run dev
 - Select the "Codespaces" tab.
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with .
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
 
 ## How can I deploy this project?
 
