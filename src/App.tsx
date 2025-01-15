@@ -6,6 +6,7 @@ import Settings from "@/pages/Settings";
 import AddEquipment from "@/pages/AddEquipment";
 import AddProject from "@/pages/AddProject";
 import MaintenanceChecks from "@/pages/MaintenanceChecks";
+import PrintView from "@/pages/PrintView";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/add-equipment" element={<AddEquipment />} />
           <Route path="/add-project" element={<AddProject />} />
           <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
+          <Route path="/print" element={<PrintView />} />
         </Routes>
         <Toaster />
       </BrowserRouter>
