@@ -34,7 +34,10 @@ const MaintenanceHistory = () => {
   const handleStatusChange = async (id: string, status: MaintenanceCheckStatus) => {
     const { error } = await supabase
       .from("hvac_maintenance_checks")
-      .update({ status })
+      .update({ 
+        status,
+        updated_at: new Date().toISOString()
+      })
       .eq("id", id);
 
     if (error) {
@@ -44,6 +47,10 @@ const MaintenanceHistory = () => {
         variant: "destructive",
       });
     } else {
+      toast({
+        title: "Status updated",
+        description: "The maintenance check status has been updated successfully.",
+      });
       fetchMaintenanceChecks();
     }
   };
