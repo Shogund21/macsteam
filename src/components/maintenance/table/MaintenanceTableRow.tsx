@@ -18,10 +18,10 @@ interface MaintenanceTableRowProps {
   onStatusChange: (id: string, status: MaintenanceCheckStatus) => void;
 }
 
-const MaintenanceTableRow = ({
+export default function MaintenanceTableRow({
   check,
   onStatusChange,
-}: MaintenanceTableRowProps) => {
+}: MaintenanceTableRowProps) {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
@@ -70,6 +70,4 @@ const MaintenanceTableRow = ({
       </TableCell>
     </TableRow>
   );
-};
-
-export default MaintenanceTableRow;
+}

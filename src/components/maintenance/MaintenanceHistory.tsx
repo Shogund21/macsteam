@@ -1,78 +1,66 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Table, TableBody } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
 import { MaintenanceCheck, MaintenanceCheckStatus } from "@/types/maintenance";
 import { MaintenanceTableHeader } from "./table/MaintenanceTableHeader";
 import MaintenanceTableRow from "./table/MaintenanceTableRow";
+import { useEffect, useState } from "react";
 
 const MaintenanceHistory = () => {
+  const [checks, setChecks] = useState<MaintenanceCheck[]>([]);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  const { data: checks, isLoading } = useQuery({
-    queryKey: ['maintenance-checks'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('hvac_maintenance_checks')
-        .select(`
-          *,
-          equipment:equipment_id(name, location),
-          technician:technician_id(firstName, lastName)
-        `)
-        .order('check_date', { ascending: false });
-      
-      if (error) throw error;
-      return data as MaintenanceCheck[];
-    },
-  });
+  const fetchMaintenanceChecks = async () => {
+    const { data, error } = await supabase
+      .from("maintenance_checks")
+      .select("*")
+      .order("check_date", { ascending: false });
 
-  const updateStatusMutation = useMutation({
-    mutationFn: async ({ id, status }: { id: string, status: MaintenanceCheckStatus }) => {
-      const { error } = await supabase
-        .from('hvac_maintenance_checks')
-        .update({ status })
-        .eq('id', id);
-
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['maintenance-checks'] });
+    if (error) {
       toast({
-        title: "Success",
-        description: "Maintenance check status updated successfully",
-      });
-    },
-    onError: (error) => {
-      console.error('Error updating status:', error);
-      toast({
+        title: "Error fetching maintenance checks",
+        description: error.message,
         variant: "destructive",
-        title: "Error",
-        description: "Failed to update maintenance check status. Please try again.",
       });
-    },
-  });
-
-  const handleStatusChange = (id: string, newStatus: MaintenanceCheckStatus) => {
-    updateStatusMutation.mutate({ id, status: newStatus });
+    } else {
+      setChecks(data);
+    }
   };
 
-  if (isLoading) return <div>Loading maintenance history...</div>;
+  const handleStatusChange = async (id: string, status: MaintenanceCheckStatus) => {
+    const { error } = await supabase
+      .from("maintenance_checks")
+      .update({ status })
+      .eq("id", id);
+
+    if (error) {
+      toast({
+        title: "Error updating status",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      fetchMaintenanceChecks();
+    }
+  };
+
+  useEffect(() => {
+    fetchMaintenanceChecks();
+  }, []);
 
   return (
-    <div className="bg-white rounded-lg shadow">
-      <Table>
-        <MaintenanceTableHeader />
-        <TableBody>
-          {checks?.map((check) => (
+    <div className="overflow-hidden rounded-md border border-gray-200">
+      <MaintenanceTableHeader />
+      <table className="min-w-full divide-y divide-gray-200">
+        <tbody className="divide-y divide-gray-200">
+          {checks.map((check) => (
             <MaintenanceTableRow
               key={check.id}
               check={check}
               onStatusChange={handleStatusChange}
             />
           ))}
-        </TableBody>
-      </Table>
+        </tbody>
+      </table>
     </div>
   );
 };
