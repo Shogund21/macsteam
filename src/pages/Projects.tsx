@@ -47,8 +47,7 @@ const Projects = () => {
           status: newStatus,
           updatedat: new Date().toISOString()
         })
-        .eq("id", projectId)
-        .select();
+        .eq("id", projectId);
 
       if (error) {
         console.error("Error updating project status:", error);
@@ -81,8 +80,7 @@ const Projects = () => {
           priority: newPriority,
           updatedat: new Date().toISOString()
         })
-        .eq("id", projectId)
-        .select();
+        .eq("id", projectId);
 
       if (error) {
         console.error("Error updating project priority:", error);
