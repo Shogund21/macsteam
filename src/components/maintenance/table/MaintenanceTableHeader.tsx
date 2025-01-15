@@ -4,12 +4,12 @@ export const MaintenanceTableHeader = () => {
   return (
     <TableHeader>
       <TableRow>
-        <TableHead>Date</TableHead>
-        <TableHead>Equipment</TableHead>
-        <TableHead>Location</TableHead>
-        <TableHead>Technician</TableHead>
-        <TableHead>Status</TableHead>
-        <TableHead className="text-right">Actions</TableHead>
+        <TableHead className="w-[150px]">Date</TableHead>
+        <TableHead className="w-[200px]">Equipment</TableHead>
+        <TableHead className="w-[200px]">Location</TableHead>
+        <TableHead className="w-[200px]">Technician</TableHead>
+        <TableHead className="w-[150px]">Status</TableHead>
+        <TableHead className="w-[120px] text-right">Actions</TableHead>
       </TableRow>
     </TableHeader>
   );

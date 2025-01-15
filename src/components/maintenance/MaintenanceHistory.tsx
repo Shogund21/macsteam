@@ -4,6 +4,7 @@ import { MaintenanceCheck, MaintenanceCheckStatus } from "@/types/maintenance";
 import { MaintenanceTableHeader } from "./table/MaintenanceTableHeader";
 import MaintenanceTableRow from "./table/MaintenanceTableRow";
 import { useEffect, useState } from "react";
+import { Table, TableBody } from "@/components/ui/table";
 
 const MaintenanceHistory = () => {
   const [checks, setChecks] = useState<MaintenanceCheck[]>([]);
@@ -53,9 +54,9 @@ const MaintenanceHistory = () => {
 
   return (
     <div className="overflow-hidden rounded-md border border-gray-200">
-      <MaintenanceTableHeader />
-      <table className="min-w-full divide-y divide-gray-200">
-        <tbody className="divide-y divide-gray-200">
+      <Table>
+        <MaintenanceTableHeader />
+        <TableBody>
           {checks.map((check) => (
             <MaintenanceTableRow
               key={check.id}
@@ -63,8 +64,8 @@ const MaintenanceHistory = () => {
               onStatusChange={handleStatusChange}
             />
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };

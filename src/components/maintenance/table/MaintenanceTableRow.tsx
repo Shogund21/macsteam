@@ -26,19 +26,24 @@ const MaintenanceTableRow = ({
 
   return (
     <TableRow>
-      <TableCell>{format(new Date(check.check_date || ""), "PPP")}</TableCell>
-      <TableCell>{check.equipment?.name || "N/A"}</TableCell>
-      <TableCell>{check.equipment?.location || "Not specified"}</TableCell>
-      <TableCell>
-        {check.technician ? 
-          `${check.technician.firstName} ${check.technician.lastName}` : 
-          "Unassigned"
-        }
+      <TableCell className="w-[150px]">
+        {format(new Date(check.check_date || ""), "PPP")}
       </TableCell>
-      <TableCell>
+      <TableCell className="w-[200px]">
+        {check.equipment?.name || "N/A"}
+      </TableCell>
+      <TableCell className="w-[200px]">
+        {check.equipment?.location || "Not specified"}
+      </TableCell>
+      <TableCell className="w-[200px]">
+        {check.technician
+          ? `${check.technician.firstName} ${check.technician.lastName}`
+          : "Unassigned"}
+      </TableCell>
+      <TableCell className="w-[150px]">
         <Select
           value={check.status || "pending"}
-          onValueChange={(value) => 
+          onValueChange={(value) =>
             onStatusChange(check.id, value as MaintenanceCheckStatus)
           }
         >
@@ -52,7 +57,7 @@ const MaintenanceTableRow = ({
           </SelectContent>
         </Select>
       </TableCell>
-      <TableCell className="text-right">
+      <TableCell className="w-[120px] text-right">
         <Button
           variant="outline"
           size="sm"
