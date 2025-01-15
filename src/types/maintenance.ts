@@ -44,6 +44,8 @@ export interface MaintenanceCheck {
   check_date: string | null;
   equipment_id: string | null;
   technician_id: string | null;
+  equipment_type: string | null;
+  // Standard HVAC fields
   chiller_pressure_reading: number | null;
   chiller_temperature_reading: number | null;
   air_filter_status: string | null;
@@ -57,6 +59,22 @@ export interface MaintenanceCheck {
   condenser_condition: string | null;
   notes: string | null;
   status: MaintenanceCheckStatus | null;
+  // AHU specific fields
+  air_filter_cleaned: boolean | null;
+  fan_belt_condition: string | null;
+  fan_bearings_lubricated: boolean | null;
+  fan_noise_level: string | null;
+  dampers_operation: string | null;
+  coils_condition: string | null;
+  sensors_operation: string | null;
+  motor_condition: string | null;
+  drain_pan_status: string | null;
+  airflow_reading: number | null;
+  airflow_unit: string | null;
+  troubleshooting_notes: string | null;
+  corrective_actions: string | null;
+  maintenance_recommendations: string | null;
+  images: string[] | null;
   equipment?: MaintenanceEquipment;
   technician?: MaintenanceTechnician;
 }

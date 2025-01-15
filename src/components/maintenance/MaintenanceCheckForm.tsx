@@ -10,10 +10,12 @@ import MaintenanceBasicInfo from "./form/MaintenanceBasicInfo";
 import MaintenanceReadings from "./form/MaintenanceReadings";
 import MaintenanceStatus from "./form/MaintenanceStatus";
 import MaintenanceObservations from "./form/MaintenanceObservations";
+import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
 
 const formSchema = z.object({
   equipment_id: z.string().min(1, "Equipment is required"),
   technician_id: z.string().min(1, "Technician is required"),
+  equipment_type: z.string().optional(),
   chiller_pressure_reading: z.string().min(1, "Pressure reading is required"),
   chiller_temperature_reading: z.string().min(1, "Temperature reading is required"),
   air_filter_status: z.string().min(1, "Air filter status is required"),
@@ -26,6 +28,22 @@ const formSchema = z.object({
   oil_level_status: z.string().min(1, "Oil level status is required"),
   condenser_condition: z.string().min(1, "Condenser condition is required"),
   notes: z.string().optional(),
+  // AHU specific fields
+  air_filter_cleaned: z.boolean().optional(),
+  fan_belt_condition: z.string().optional(),
+  fan_bearings_lubricated: z.boolean().optional(),
+  fan_noise_level: z.string().optional(),
+  dampers_operation: z.string().optional(),
+  coils_condition: z.string().optional(),
+  sensors_operation: z.string().optional(),
+  motor_condition: z.string().optional(),
+  drain_pan_status: z.string().optional(),
+  airflow_reading: z.string().optional(),
+  airflow_unit: z.string().optional(),
+  troubleshooting_notes: z.string().optional(),
+  corrective_actions: z.string().optional(),
+  maintenance_recommendations: z.string().optional(),
+  images: z.array(z.string()).optional(),
 });
 
 interface MaintenanceCheckFormProps {
@@ -39,6 +57,8 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     defaultValues: {
       unusual_noise: false,
       vibration_observed: false,
+      air_filter_cleaned: false,
+      fan_bearings_lubricated: false,
     },
   });
 
@@ -68,15 +88,25 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     },
   });
 
+  const selectedEquipment = equipment?.find(
+    (eq) => eq.id === form.watch('equipment_id')
+  );
+
+  const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      const submissionData = {
+        ...values,
+        equipment_type: isAHU ? 'ahu' : 'general',
+        chiller_pressure_reading: parseFloat(values.chiller_pressure_reading),
+        chiller_temperature_reading: parseFloat(values.chiller_temperature_reading),
+        airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
+      };
+
       const { error } = await supabase
         .from('hvac_maintenance_checks')
-        .insert({
-          ...values,
-          chiller_pressure_reading: parseFloat(values.chiller_pressure_reading),
-          chiller_temperature_reading: parseFloat(values.chiller_temperature_reading),
-        });
+        .insert(submissionData);
 
       if (error) throw error;
 
@@ -99,9 +129,16 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 bg-white p-6 rounded-lg shadow">
         <MaintenanceBasicInfo form={form} equipment={equipment || []} technicians={technicians || []} />
-        <MaintenanceReadings form={form} />
-        <MaintenanceStatus form={form} />
-        <MaintenanceObservations form={form} />
+        
+        {isAHU ? (
+          <AHUMaintenanceFields form={form} />
+        ) : (
+          <>
+            <MaintenanceReadings form={form} />
+            <MaintenanceStatus form={form} />
+            <MaintenanceObservations form={form} />
+          </>
+        )}
 
         <div className="flex justify-end space-x-4">
           <Button
@@ -113,7 +150,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           </Button>
           <Button 
             type="submit"
-            className="bg-blue-500 text-black hover:bg-blue-600"
+            className="bg-blue-500 text-white hover:bg-blue-600"
           >
             Submit Check
           </Button>

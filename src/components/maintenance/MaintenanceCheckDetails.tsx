@@ -28,11 +28,15 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
     </div>
   );
 
+  const isAHU = check.equipment_type === 'ahu';
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Maintenance Check Details</DialogTitle>
+          <DialogTitle>
+            {isAHU ? "AHU Maintenance Check Details" : "Maintenance Check Details"}
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-2">
           {renderField("Date", new Date(check.check_date || ""))}
@@ -44,17 +48,41 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
             "Unassigned"
           )}
           {renderField("Status", check.status)}
-          {renderField("Chiller Pressure (PSI)", check.chiller_pressure_reading)}
-          {renderField("Chiller Temperature (°F)", check.chiller_temperature_reading)}
-          {renderField("Air Filter Status", check.air_filter_status)}
-          {renderField("Belt Condition", check.belt_condition)}
-          {renderField("Refrigerant Level", check.refrigerant_level)}
-          {renderField("Unusual Noise", check.unusual_noise)}
-          {check.unusual_noise && renderField("Noise Description", check.unusual_noise_description)}
-          {renderField("Vibration Observed", check.vibration_observed)}
-          {check.vibration_observed && renderField("Vibration Description", check.vibration_description)}
-          {renderField("Oil Level Status", check.oil_level_status)}
-          {renderField("Condenser Condition", check.condenser_condition)}
+
+          {isAHU ? (
+            // AHU-specific fields
+            <>
+              {renderField("Air Filter Cleaned", check.air_filter_cleaned)}
+              {renderField("Fan Belt Condition", check.fan_belt_condition)}
+              {renderField("Fan Bearings Lubricated", check.fan_bearings_lubricated)}
+              {renderField("Fan Noise Level", check.fan_noise_level)}
+              {renderField("Dampers Operation", check.dampers_operation)}
+              {renderField("Coils Condition", check.coils_condition)}
+              {renderField("Sensors Operation", check.sensors_operation)}
+              {renderField("Motor Condition", check.motor_condition)}
+              {renderField("Drain Pan Status", check.drain_pan_status)}
+              {check.airflow_reading && renderField("Airflow Reading", `${check.airflow_reading} ${check.airflow_unit}`)}
+              {check.troubleshooting_notes && renderField("Troubleshooting Notes", check.troubleshooting_notes)}
+              {check.corrective_actions && renderField("Corrective Actions", check.corrective_actions)}
+              {check.maintenance_recommendations && renderField("Maintenance Recommendations", check.maintenance_recommendations)}
+            </>
+          ) : (
+            // Standard HVAC fields
+            <>
+              {renderField("Chiller Pressure (PSI)", check.chiller_pressure_reading)}
+              {renderField("Chiller Temperature (°F)", check.chiller_temperature_reading)}
+              {renderField("Air Filter Status", check.air_filter_status)}
+              {renderField("Belt Condition", check.belt_condition)}
+              {renderField("Refrigerant Level", check.refrigerant_level)}
+              {renderField("Unusual Noise", check.unusual_noise)}
+              {check.unusual_noise && renderField("Noise Description", check.unusual_noise_description)}
+              {renderField("Vibration Observed", check.vibration_observed)}
+              {check.vibration_observed && renderField("Vibration Description", check.vibration_description)}
+              {renderField("Oil Level Status", check.oil_level_status)}
+              {renderField("Condenser Condition", check.condenser_condition)}
+            </>
+          )}
+          
           {renderField("Additional Notes", check.notes)}
         </div>
       </DialogContent>

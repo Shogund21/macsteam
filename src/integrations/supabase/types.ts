@@ -44,20 +44,36 @@ export type Database = {
       }
       hvac_maintenance_checks: {
         Row: {
+          air_filter_cleaned: boolean | null
           air_filter_status: string | null
+          airflow_reading: number | null
+          airflow_unit: string | null
           belt_condition: string | null
           check_date: string | null
           chiller_pressure_reading: number | null
           chiller_temperature_reading: number | null
+          coils_condition: string | null
           condenser_condition: string | null
+          corrective_actions: string | null
           created_at: string | null
+          dampers_operation: string | null
+          drain_pan_status: string | null
           equipment_id: string | null
+          equipment_type: string | null
+          fan_bearings_lubricated: boolean | null
+          fan_belt_condition: string | null
+          fan_noise_level: string | null
           id: string
+          images: string[] | null
+          maintenance_recommendations: string | null
+          motor_condition: string | null
           notes: string | null
           oil_level_status: string | null
           refrigerant_level: string | null
+          sensors_operation: string | null
           status: Database["public"]["Enums"]["maintenance_check_status"] | null
           technician_id: string | null
+          troubleshooting_notes: string | null
           unusual_noise: boolean | null
           unusual_noise_description: string | null
           updated_at: string | null
@@ -65,22 +81,38 @@ export type Database = {
           vibration_observed: boolean | null
         }
         Insert: {
+          air_filter_cleaned?: boolean | null
           air_filter_status?: string | null
+          airflow_reading?: number | null
+          airflow_unit?: string | null
           belt_condition?: string | null
           check_date?: string | null
           chiller_pressure_reading?: number | null
           chiller_temperature_reading?: number | null
+          coils_condition?: string | null
           condenser_condition?: string | null
+          corrective_actions?: string | null
           created_at?: string | null
+          dampers_operation?: string | null
+          drain_pan_status?: string | null
           equipment_id?: string | null
+          equipment_type?: string | null
+          fan_bearings_lubricated?: boolean | null
+          fan_belt_condition?: string | null
+          fan_noise_level?: string | null
           id?: string
+          images?: string[] | null
+          maintenance_recommendations?: string | null
+          motor_condition?: string | null
           notes?: string | null
           oil_level_status?: string | null
           refrigerant_level?: string | null
+          sensors_operation?: string | null
           status?:
             | Database["public"]["Enums"]["maintenance_check_status"]
             | null
           technician_id?: string | null
+          troubleshooting_notes?: string | null
           unusual_noise?: boolean | null
           unusual_noise_description?: string | null
           updated_at?: string | null
@@ -88,22 +120,38 @@ export type Database = {
           vibration_observed?: boolean | null
         }
         Update: {
+          air_filter_cleaned?: boolean | null
           air_filter_status?: string | null
+          airflow_reading?: number | null
+          airflow_unit?: string | null
           belt_condition?: string | null
           check_date?: string | null
           chiller_pressure_reading?: number | null
           chiller_temperature_reading?: number | null
+          coils_condition?: string | null
           condenser_condition?: string | null
+          corrective_actions?: string | null
           created_at?: string | null
+          dampers_operation?: string | null
+          drain_pan_status?: string | null
           equipment_id?: string | null
+          equipment_type?: string | null
+          fan_bearings_lubricated?: boolean | null
+          fan_belt_condition?: string | null
+          fan_noise_level?: string | null
           id?: string
+          images?: string[] | null
+          maintenance_recommendations?: string | null
+          motor_condition?: string | null
           notes?: string | null
           oil_level_status?: string | null
           refrigerant_level?: string | null
+          sensors_operation?: string | null
           status?:
             | Database["public"]["Enums"]["maintenance_check_status"]
             | null
           technician_id?: string | null
+          troubleshooting_notes?: string | null
           unusual_noise?: boolean | null
           unusual_noise_description?: string | null
           updated_at?: string | null
