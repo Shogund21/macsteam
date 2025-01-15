@@ -71,3 +71,5 @@ export const MaintenanceTableRow = ({
     </TableRow>
   );
 };
+
+export default MaintenanceTableRow;
