@@ -166,6 +166,7 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
                   <SelectItem value="normal">Normal</SelectItem>
                   <SelectItem value="needs_calibration">Needs Calibration</SelectItem>
                   <SelectItem value="faulty">Faulty</SelectItem>
+                  <SelectItem value="na">N/A</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
