@@ -25,17 +25,17 @@ const MaintenanceTableRow = ({
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <TableRow>
-      <TableCell className="w-[150px]">
+    <TableRow className="border-b">
+      <TableCell className="w-[180px] whitespace-nowrap">
         {format(new Date(check.check_date || ""), "PPP")}
       </TableCell>
-      <TableCell className="w-[200px]">
+      <TableCell className="w-[180px] whitespace-nowrap">
         {check.equipment?.name || "N/A"}
       </TableCell>
-      <TableCell className="w-[200px]">
+      <TableCell className="w-[180px] whitespace-nowrap">
         {check.equipment?.location || "Not specified"}
       </TableCell>
-      <TableCell className="w-[200px]">
+      <TableCell className="w-[200px] whitespace-nowrap">
         {check.technician
           ? `${check.technician.firstName} ${check.technician.lastName}`
           : "Unassigned"}
@@ -47,7 +47,7 @@ const MaintenanceTableRow = ({
             onStatusChange(check.id, value as MaintenanceCheckStatus)
           }
         >
-          <SelectTrigger className="w-[130px]">
+          <SelectTrigger className="h-8">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -57,12 +57,12 @@ const MaintenanceTableRow = ({
           </SelectContent>
         </Select>
       </TableCell>
-      <TableCell className="w-[120px] text-right">
+      <TableCell className="w-[100px] text-right">
         <Button
           variant="outline"
           size="sm"
           onClick={() => setShowDetails(true)}
-          className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 shadow-sm font-medium text-gray-700"
+          className="inline-flex items-center gap-2"
         >
           <Eye className="h-4 w-4" />
           <span>View</span>

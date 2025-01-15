@@ -53,19 +53,21 @@ const MaintenanceHistory = () => {
   }, []);
 
   return (
-    <div className="overflow-hidden rounded-md border border-gray-200">
-      <Table>
-        <MaintenanceTableHeader />
-        <TableBody>
-          {checks.map((check) => (
-            <MaintenanceTableRow
-              key={check.id}
-              check={check}
-              onStatusChange={handleStatusChange}
-            />
-          ))}
-        </TableBody>
-      </Table>
+    <div className="w-full overflow-hidden rounded-md border">
+      <div className="w-full overflow-auto">
+        <Table>
+          <MaintenanceTableHeader />
+          <TableBody>
+            {checks.map((check) => (
+              <MaintenanceTableRow
+                key={check.id}
+                check={check}
+                onStatusChange={handleStatusChange}
+              />
+            ))}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 };
