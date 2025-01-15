@@ -40,22 +40,21 @@ const Projects = () => {
   const handleStatusChange = async (projectId: string, newStatus: string) => {
     try {
       console.log("Updating project status:", { projectId, newStatus });
-      const timestamp = new Date().toISOString();
       
       const { error } = await supabase
         .from("projects")
         .update({ 
-          status: newStatus, 
-          updatedat: timestamp // Using updatedat to match the database column name
+          status: newStatus,
+          updatedat: new Date().toISOString()
         })
-        .eq("id", projectId);
+        .eq("id", projectId)
+        .select();
 
       if (error) {
         console.error("Error updating project status:", error);
         throw error;
       }
 
-      console.log("Status updated successfully");
       await refetch();
       
       toast({
@@ -75,22 +74,21 @@ const Projects = () => {
   const handlePriorityChange = async (projectId: string, newPriority: string) => {
     try {
       console.log("Updating project priority:", { projectId, newPriority });
-      const timestamp = new Date().toISOString();
       
       const { error } = await supabase
         .from("projects")
         .update({ 
-          priority: newPriority, 
-          updatedat: timestamp // Using updatedat to match the database column name
+          priority: newPriority,
+          updatedat: new Date().toISOString()
         })
-        .eq("id", projectId);
+        .eq("id", projectId)
+        .select();
 
       if (error) {
         console.error("Error updating project priority:", error);
         throw error;
       }
 
-      console.log("Priority updated successfully");
       await refetch();
       
       toast({
@@ -120,7 +118,6 @@ const Projects = () => {
         throw error;
       }
 
-      console.log("Project deleted successfully");
       await refetch();
       
       toast({
