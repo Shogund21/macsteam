@@ -44,7 +44,41 @@ export const PrintView = () => {
   });
 
   const handlePrint = () => {
-    window.print();
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    // Get the current view's content
+    const content = document.querySelector('.print-content');
+    if (!content) return;
+
+    // Create the print document
+    printWindow.document.write(`
+      <html>
+        <head>
+          <title>Print View</title>
+          <style>
+            body { font-family: Arial, sans-serif; }
+            table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+            th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+            th { background-color: #f5f5f5; }
+            h2 { margin-bottom: 20px; }
+            @media print {
+              body { padding: 20px; }
+            }
+          </style>
+        </head>
+        <body>
+          ${content.innerHTML}
+        </body>
+      </html>
+    `);
+
+    // Print and close the window
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
   };
 
   return (
@@ -75,71 +109,73 @@ export const PrintView = () => {
         </Button>
       </div>
 
-      {view === "equipment" && (
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Equipment List</h2>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Model</TableHead>
-                <TableHead>Serial Number</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {equipmentData?.map((equipment: Equipment) => (
-                <TableRow key={equipment.id}>
-                  <TableCell>{equipment.name}</TableCell>
-                  <TableCell>{equipment.model}</TableCell>
-                  <TableCell>{equipment.serialNumber}</TableCell>
-                  <TableCell>{equipment.location}</TableCell>
-                  <TableCell>{equipment.status}</TableCell>
+      <div className="print-content">
+        {view === "equipment" && (
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Equipment List</h2>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Model</TableHead>
+                  <TableHead>Serial Number</TableHead>
+                  <TableHead>Location</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+              </TableHeader>
+              <TableBody>
+                {equipmentData?.map((equipment: Equipment) => (
+                  <TableRow key={equipment.id}>
+                    <TableCell>{equipment.name}</TableCell>
+                    <TableCell>{equipment.model}</TableCell>
+                    <TableCell>{equipment.serialNumber}</TableCell>
+                    <TableCell>{equipment.location}</TableCell>
+                    <TableCell>{equipment.status}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
 
-      {view === "projects" && (
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Projects List</h2>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Start Date</TableHead>
-                <TableHead>End Date</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {projectsData?.map((project: Project) => (
-                <TableRow key={project.id}>
-                  <TableCell>{project.name}</TableCell>
-                  <TableCell>{project.status}</TableCell>
-                  <TableCell>{project.priority}</TableCell>
-                  <TableCell>{project.location}</TableCell>
-                  <TableCell>
-                    {project.startdate
-                      ? new Date(project.startdate).toLocaleDateString()
-                      : "Not set"}
-                  </TableCell>
-                  <TableCell>
-                    {project.enddate
-                      ? new Date(project.enddate).toLocaleDateString()
-                      : "Not set"}
-                  </TableCell>
+        {view === "projects" && (
+          <div>
+            <h2 className="text-2xl font-bold mb-4">Projects List</h2>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Priority</TableHead>
+                  <TableHead>Location</TableHead>
+                  <TableHead>Start Date</TableHead>
+                  <TableHead>End Date</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+              </TableHeader>
+              <TableBody>
+                {projectsData?.map((project: Project) => (
+                  <TableRow key={project.id}>
+                    <TableCell>{project.name}</TableCell>
+                    <TableCell>{project.status}</TableCell>
+                    <TableCell>{project.priority}</TableCell>
+                    <TableCell>{project.location}</TableCell>
+                    <TableCell>
+                      {project.startdate
+                        ? new Date(project.startdate).toLocaleDateString()
+                        : "Not set"}
+                    </TableCell>
+                    <TableCell>
+                      {project.enddate
+                        ? new Date(project.enddate).toLocaleDateString()
+                        : "Not set"}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
