@@ -3,7 +3,17 @@ import { Project } from "@/types/project";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
-export const useProjectCard = (project: Project) => {
+interface UseProjectCardProps {
+  project: Project;
+  onStatusChange: (projectId: string, newStatus: string) => Promise<void>;
+  onPriorityChange: (projectId: string, newPriority: string) => Promise<void>;
+}
+
+export const useProjectCard = ({ 
+  project,
+  onStatusChange,
+  onPriorityChange 
+}: UseProjectCardProps) => {
   const { toast } = useToast();
   const [currentStatus, setCurrentStatus] = useState(project.status);
   const [description, setDescription] = useState(project.description);

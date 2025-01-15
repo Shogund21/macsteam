@@ -26,13 +26,17 @@ export const ProjectCard = ({
     handleStatusChange,
     handlePriorityChange,
     handleDescriptionUpdate,
-  } = useProjectCard(project);
+  } = useProjectCard({
+    project,
+    onStatusChange,
+    onPriorityChange
+  });
 
   return (
     <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
       <ProjectHeader 
         name={project.name}
-        onDelete={onDelete}
+        onDelete={() => onDelete(project.id)}
       />
       <div className="mt-4 space-y-2">
         <ProjectControls
