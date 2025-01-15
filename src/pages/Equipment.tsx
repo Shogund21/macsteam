@@ -7,6 +7,8 @@ import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { StatusDropdown } from "@/components/equipment/StatusDropdown";
+import PasswordProtectionModal from "@/components/equipment/PasswordProtectionModal";
+import { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,6 +25,24 @@ const Equipment = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const [showPasswordModal, setShowPasswordModal] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    // Check if user was previously authenticated
+    const wasAuthenticated = sessionStorage.getItem("equipment-authenticated");
+    if (wasAuthenticated === "true") {
+      setIsAuthenticated(true);
+      setShowPasswordModal(false);
+    }
+  }, []);
+
+  const handlePasswordSuccess = () => {
+    setIsAuthenticated(true);
+    setShowPasswordModal(false);
+    // Store authentication state in session storage
+    sessionStorage.setItem("equipment-authenticated", "true");
+  };
 
   const { data: equipment, isLoading } = useQuery({
     queryKey: ['equipment'],
@@ -38,6 +58,7 @@ const Equipment = () => {
       }
       return data;
     },
+    enabled: isAuthenticated, // Only fetch data when authenticated
   });
 
   const handleStatusChange = async (equipmentId: string, newStatus: string) => {
@@ -101,6 +122,18 @@ const Equipment = () => {
       });
     }
   };
+
+  if (!isAuthenticated) {
+    return (
+      <Layout>
+        <PasswordProtectionModal
+          isOpen={showPasswordModal}
+          onClose={() => navigate("/")}
+          onSuccess={handlePasswordSuccess}
+        />
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
