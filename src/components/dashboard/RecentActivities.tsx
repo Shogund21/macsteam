@@ -118,7 +118,7 @@ const RecentActivities = () => {
   };
 
   const getMaintenanceIcon = (status: string) => {
-    switch (status.toLowerCase()) {
+    switch (status?.toLowerCase()) {
       case 'completed':
         return CheckCircle2;
       case 'pending':
