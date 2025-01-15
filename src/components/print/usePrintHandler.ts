@@ -3,54 +3,72 @@ export const usePrintHandler = () => {
     const printContent = document.querySelector('.print-content');
     if (!printContent) return;
 
-    // Store the original styles
-    const originalStyles = {
-      background: document.body.style.background,
-      margin: document.body.style.margin,
-      padding: document.body.style.padding
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    // Get the current document's stylesheets
+    const styles = Array.from(document.styleSheets)
+      .map(styleSheet => {
+        try {
+          return Array.from(styleSheet.cssRules)
+            .map(rule => rule.cssText)
+            .join('\n');
+        } catch (e) {
+          return '';
+        }
+      })
+      .join('\n');
+
+    // Create the print window content
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Print View</title>
+          <style>
+            ${styles}
+            @media print {
+              body { 
+                padding: 20px;
+                margin: 0;
+                background: white;
+              }
+              table { 
+                width: 100%;
+                border-collapse: collapse;
+                margin-bottom: 20px;
+              }
+              th, td { 
+                border: 1px solid #ddd;
+                padding: 8px;
+                text-align: left;
+              }
+              th { 
+                background-color: #f5f5f5;
+              }
+              h2 { 
+                margin-bottom: 20px;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          ${printContent.innerHTML}
+        </body>
+      </html>
+    `);
+
+    // Wait for content to load then print
+    printWindow.document.close();
+    printWindow.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+      // Close the print window after printing
+      printWindow.onafterprint = () => {
+        printWindow.close();
+      };
     };
-
-    // Create a new style element for print
-    const style = document.createElement('style');
-    style.textContent = `
-      @media print {
-        body { background: white; margin: 0; padding: 20px; }
-        .print-content { display: block !important; }
-        .print-content table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .print-content th, .print-content td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        .print-content th { background-color: #f5f5f5; }
-        .print-content h2 { margin-bottom: 20px; }
-        @page { margin: 20px; }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Hide all other elements except print content
-    const elements = document.body.children;
-    const hiddenElements = Array.from(elements).map(element => {
-      const wasHidden = (element as HTMLElement).style.display === 'none';
-      if (!printContent.contains(element)) {
-        (element as HTMLElement).style.display = 'none';
-      }
-      return { element, wasHidden };
-    });
-
-    // Trigger print
-    window.print();
-
-    // Cleanup: Remove the style element
-    document.head.removeChild(style);
-
-    // Restore original styles and visibility
-    document.body.style.background = originalStyles.background;
-    document.body.style.margin = originalStyles.margin;
-    document.body.style.padding = originalStyles.padding;
-
-    hiddenElements.forEach(({ element, wasHidden }) => {
-      if (!wasHidden) {
-        (element as HTMLElement).style.display = '';
-      }
-    });
   };
 
   return { handlePrint };

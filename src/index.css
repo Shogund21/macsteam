@@ -75,17 +75,45 @@
   }
 }
 
+/* Print styles */
 @media print {
-  aside, nav, button {
-    display: none !important;
-  }
-  
-  main {
-    margin-left: 0 !important;
-    padding: 0 !important;
+  .print-content {
+    display: block !important;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
   }
 
-  @page {
-    margin: 2cm;
+  .print-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+
+  .print-content th,
+  .print-content td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+
+  .print-content th {
+    background-color: #f5f5f5;
+  }
+
+  .print-content h2 {
+    margin-bottom: 20px;
+  }
+
+  aside, 
+  nav, 
+  button, 
+  .print:hidden {
+    display: none !important;
+  }
+
+  main {
+    margin: 0 !important;
+    padding: 20px !important;
   }
 }
