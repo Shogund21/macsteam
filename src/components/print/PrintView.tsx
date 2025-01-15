@@ -72,9 +72,9 @@ export const PrintView = () => {
     // Hide all other elements except print content
     const elements = document.body.children;
     const hiddenElements = Array.from(elements).map(element => {
-      const wasHidden = element.style.display === 'none';
+      const wasHidden = (element as HTMLElement).style.display === 'none';
       if (!printContent.contains(element)) {
-        element.style.display = 'none';
+        (element as HTMLElement).style.display = 'none';
       }
       return { element, wasHidden };
     });
@@ -92,7 +92,7 @@ export const PrintView = () => {
 
     hiddenElements.forEach(({ element, wasHidden }) => {
       if (!wasHidden) {
-        element.style.display = '';
+        (element as HTMLElement).style.display = '';
       }
     });
   };
