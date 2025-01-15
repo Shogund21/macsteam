@@ -17,7 +17,7 @@ export const useStatusMutation = (
         .from("projects")
         .update({ 
           status: newStatus,
-          updatedat: timestamp // Using updatedat to match the database column name
+          updatedat: timestamp
         })
         .eq("id", projectId);
 
