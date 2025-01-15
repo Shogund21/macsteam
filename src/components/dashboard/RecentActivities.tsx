@@ -26,7 +26,7 @@ const RecentActivities = () => {
         const { data: projects } = await supabase
           .from("projects")
           .select("*")
-          .order("updated_at", { ascending: false })
+          .order("updatedat", { ascending: false })
           .limit(2);
 
         const { data: maintenanceChecks } = await supabase
@@ -46,7 +46,7 @@ const RecentActivities = () => {
             id: `project-${project.id}`,
             title: project.name,
             status: project.status,
-            timestamp: formatTimestamp(project.updated_at),
+            timestamp: formatTimestamp(project.updatedat),
             icon: getStatusIcon(project.status),
           });
         });
