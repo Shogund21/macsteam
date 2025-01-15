@@ -54,17 +54,22 @@ export const PrintView = () => {
           <Button
             variant={view === "equipment" ? "default" : "outline"}
             onClick={() => setView("equipment")}
+            className={view === "equipment" ? "bg-[#1EAEDB] text-black hover:bg-[#33C3F0]" : ""}
           >
             Equipment List
           </Button>
           <Button
             variant={view === "projects" ? "default" : "outline"}
             onClick={() => setView("projects")}
+            className={view === "projects" ? "bg-[#1EAEDB] text-black hover:bg-[#33C3F0]" : ""}
           >
             Projects List
           </Button>
         </div>
-        <Button onClick={handlePrint}>
+        <Button 
+          onClick={handlePrint}
+          className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
+        >
           <Printer className="mr-2 h-4 w-4" />
           Print
         </Button>
