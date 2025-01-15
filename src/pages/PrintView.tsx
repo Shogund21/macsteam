@@ -1,7 +1,45 @@
 import Layout from "@/components/Layout";
 import { PrintView as PrintViewComponent } from "@/components/print/PrintView";
+import { useState, useEffect } from "react";
+import PasswordProtectionModal from "@/components/equipment/PasswordProtectionModal";
+import { useNavigate } from "react-router-dom";
 
 const PrintView = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showPasswordModal, setShowPasswordModal] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const authStatus = sessionStorage.getItem("printViewAuth");
+    if (authStatus === "true") {
+      setIsAuthenticated(true);
+      setShowPasswordModal(false);
+    }
+  }, []);
+
+  const handlePasswordSuccess = () => {
+    setIsAuthenticated(true);
+    setShowPasswordModal(false);
+    sessionStorage.setItem("printViewAuth", "true");
+  };
+
+  const handlePasswordModalClose = () => {
+    if (!isAuthenticated) {
+      navigate("/");
+    }
+    setShowPasswordModal(false);
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <PasswordProtectionModal
+        isOpen={showPasswordModal}
+        onClose={handlePasswordModalClose}
+        onSuccess={handlePasswordSuccess}
+      />
+    );
+  }
+
   return (
     <Layout>
       <div className="animate-fade-in">
