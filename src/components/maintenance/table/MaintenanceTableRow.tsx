@@ -57,10 +57,10 @@ export const MaintenanceTableRow = ({
           variant="outline"
           size="sm"
           onClick={() => setShowDetails(true)}
-          className="inline-flex items-center gap-2 bg-white hover:bg-gray-100"
+          className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 shadow-sm"
         >
           <Eye className="h-4 w-4" />
-          View
+          <span className="font-medium">View</span>
         </Button>
         <MaintenanceCheckDetails
           check={check}
