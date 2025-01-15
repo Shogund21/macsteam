@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Index from "@/pages/Index";
 import Equipment from "@/pages/Equipment";
@@ -21,21 +22,23 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/equipment" element={<Equipment />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/settings" element={<Settings />} />
-          <Route path="/add-equipment" element={<AddEquipment />} />
-          <Route path="/add-project" element={<AddProject />} />
-          <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
-          <Route path="/print" element={<PrintView />} />
-        </Routes>
-        <Toaster />
-      </BrowserRouter>
-    </QueryClientProvider>
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/equipment" element={<Equipment />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/add-equipment" element={<AddEquipment />} />
+            <Route path="/add-project" element={<AddProject />} />
+            <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
+            <Route path="/print" element={<PrintView />} />
+          </Routes>
+          <Toaster />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </React.StrictMode>
   );
 }
 
