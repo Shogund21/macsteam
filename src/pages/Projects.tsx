@@ -40,11 +40,13 @@ const Projects = () => {
   const handleStatusChange = async (projectId: string, newStatus: string) => {
     try {
       console.log("Updating project status:", { projectId, newStatus });
+      const timestamp = new Date().toISOString();
+      
       const { error } = await supabase
         .from("projects")
         .update({ 
           status: newStatus, 
-          updatedat: new Date().toISOString() 
+          updatedat: timestamp // Using updatedat to match the database column name
         })
         .eq("id", projectId);
 
@@ -73,11 +75,13 @@ const Projects = () => {
   const handlePriorityChange = async (projectId: string, newPriority: string) => {
     try {
       console.log("Updating project priority:", { projectId, newPriority });
+      const timestamp = new Date().toISOString();
+      
       const { error } = await supabase
         .from("projects")
         .update({ 
           priority: newPriority, 
-          updatedat: new Date().toISOString() 
+          updatedat: timestamp // Using updatedat to match the database column name
         })
         .eq("id", projectId);
 
