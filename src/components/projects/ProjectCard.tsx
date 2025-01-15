@@ -3,6 +3,9 @@ import { ProjectHeader } from "./card/ProjectHeader";
 import { ProjectDetails } from "./card/ProjectDetails";
 import { ProjectControls } from "./card/ProjectControls";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { EditDescriptionDialog } from "./EditDescriptionDialog";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ProjectCardProps {
   project: Project;
@@ -18,6 +21,8 @@ export const ProjectCard = ({
   onDelete
 }: ProjectCardProps) => {
   const { toast } = useToast();
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [description, setDescription] = useState(project.description);
 
   const handleStatusChange = async (value: string) => {
     try {
@@ -67,6 +72,24 @@ export const ProjectCard = ({
     }
   };
 
+  const handleDescriptionUpdate = async (newDescription: string) => {
+    try {
+      const { error } = await supabase
+        .from("projects")
+        .update({ 
+          description: newDescription,
+          updatedat: new Date().toISOString()
+        })
+        .eq("id", project.id);
+
+      if (error) throw error;
+      setDescription(newDescription);
+    } catch (error) {
+      console.error("Error updating description:", error);
+      throw error;
+    }
+  };
+
   return (
     <div className="p-6 rounded-lg border bg-card text-card-foreground shadow-sm">
       <ProjectHeader 
@@ -81,12 +104,19 @@ export const ProjectCard = ({
           onPriorityChange={handlePriorityChange}
         />
         <ProjectDetails
-          description={project.description}
+          description={description}
           location={project.location}
           startdate={project.startdate}
           enddate={project.enddate}
+          onEditDescription={() => setIsEditingDescription(true)}
         />
       </div>
+      <EditDescriptionDialog
+        isOpen={isEditingDescription}
+        onClose={() => setIsEditingDescription(false)}
+        currentDescription={description}
+        onSave={handleDescriptionUpdate}
+      />
     </div>
   );
 };
