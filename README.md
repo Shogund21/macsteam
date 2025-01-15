@@ -35,10 +35,20 @@ A comprehensive facility management system built with modern web technologies.
 
 ### Maintenance Checks
 - Comprehensive HVAC maintenance check system
+- Dynamic maintenance forms:
+  - Standard HVAC checks
+  - AHU-specific daily preventative maintenance
 - Track various parameters:
   - Chiller pressure and temperature readings
-  - Air filter status
-  - Belt condition
+  - Air filter status and cleaning
+  - Belt condition and tension
+  - Fan bearings lubrication
+  - Dampers operation
+  - Coils condition
+  - Sensors operation
+  - Motor condition
+  - Drain pan status
+  - Airflow measurements
   - Refrigerant levels
   - Unusual noise detection
   - Vibration monitoring
@@ -46,6 +56,11 @@ A comprehensive facility management system built with modern web technologies.
   - Condenser condition
 - Maintenance history tracking
 - Technician assignment system
+- Detailed reporting with:
+  - Troubleshooting notes
+  - Corrective actions
+  - Maintenance recommendations
+  - Image attachments
 
 ### Settings & Administration
 - Technician management
@@ -55,6 +70,37 @@ A comprehensive facility management system built with modern web technologies.
   - Contact information management
 - Appearance customization options
 - Notification preferences
+
+## How to Use
+
+### Equipment Management
+1. Navigate to the Equipment section
+2. Enter the password: MACYS0405
+3. Add new equipment or manage existing ones
+4. Update equipment status using the dropdown menu
+
+### Maintenance Checks
+1. Go to Maintenance Checks
+2. Click "New Check"
+3. Select equipment from the dropdown
+   - For AHU equipment, the form will automatically show AHU-specific checks
+   - For standard HVAC equipment, general maintenance fields will be displayed
+4. Complete all required fields
+5. Add any relevant notes or images
+6. Submit the check
+
+### Project Management
+1. Access the Projects section
+2. Create new projects or manage existing ones
+3. Update project status and priority as needed
+4. Edit project descriptions through the inline editor
+5. Track progress and completion dates
+
+### Technician Management
+1. Go to Settings
+2. Access the Technician Management section
+3. Add or update technician information
+4. Manage availability and specializations
 
 ## Project info
 
@@ -71,56 +117,15 @@ This project is built with:
 - Tailwind CSS
 - Supabase (Backend & Database)
 
-## How can I edit this code?
+## Development Setup
 
-There are several ways of editing your application.
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Start development server: `npm run dev`
+4. Access the application at `http://localhost:5173`
 
-**Use Lovable**
+## Deployment
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/504bf57f-2335-4e76-894e-5b151c1fbbad) and start prompting.
+The application can be deployed through the Lovable platform or manually using services like Netlify.
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
-
-**Edit a file directly in GitHub**
-
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
-
-**Use GitHub Codespaces**
-
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/504bf57f-2335-4e76-894e-5b151c1fbbad) and click on Share -> Publish.
-
-## I want to use a custom domain - is that possible?
-
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+For more information, visit our [documentation](https://docs.lovable.dev/).
