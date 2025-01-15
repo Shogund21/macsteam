@@ -18,10 +18,10 @@ interface MaintenanceTableRowProps {
   onStatusChange: (id: string, status: MaintenanceCheckStatus) => void;
 }
 
-export default function MaintenanceTableRow({
+const MaintenanceTableRow = ({
   check,
   onStatusChange,
-}: MaintenanceTableRowProps) {
+}: MaintenanceTableRowProps) => {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
@@ -57,7 +57,7 @@ export default function MaintenanceTableRow({
           variant="outline"
           size="sm"
           onClick={() => setShowDetails(true)}
-          className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 shadow-sm font-medium"
+          className="inline-flex items-center gap-2 bg-white hover:bg-gray-100 border border-gray-300 shadow-sm font-medium text-gray-700"
         >
           <Eye className="h-4 w-4" />
           <span>View</span>
@@ -70,4 +70,6 @@ export default function MaintenanceTableRow({
       </TableCell>
     </TableRow>
   );
-}
+};
+
+export default MaintenanceTableRow;

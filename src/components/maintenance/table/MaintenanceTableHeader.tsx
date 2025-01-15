@@ -9,7 +9,7 @@ export const MaintenanceTableHeader = () => {
         <TableHead>Location</TableHead>
         <TableHead>Technician</TableHead>
         <TableHead>Status</TableHead>
-        <TableHead>Actions</TableHead>
+        <TableHead className="text-right">Actions</TableHead>
       </TableRow>
     </TableHeader>
   );
