@@ -56,7 +56,12 @@ const PasswordProtectionModal = ({
             <Button variant="outline" type="button" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Submit</Button>
+            <Button 
+              type="submit"
+              className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
+            >
+              Submit
+            </Button>
           </div>
         </form>
       </DialogContent>
