@@ -29,7 +29,6 @@ const Equipment = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Check if user was previously authenticated
     const wasAuthenticated = sessionStorage.getItem("equipment-authenticated");
     if (wasAuthenticated === "true") {
       setIsAuthenticated(true);
@@ -40,7 +39,6 @@ const Equipment = () => {
   const handlePasswordSuccess = () => {
     setIsAuthenticated(true);
     setShowPasswordModal(false);
-    // Store authentication state in session storage
     sessionStorage.setItem("equipment-authenticated", "true");
   };
 
@@ -50,6 +48,7 @@ const Equipment = () => {
       const { data, error } = await supabase
         .from('equipment')
         .select('*')
+        .order('location', { ascending: true })
         .order('name');
       
       if (error) {
@@ -58,7 +57,7 @@ const Equipment = () => {
       }
       return data;
     },
-    enabled: isAuthenticated, // Only fetch data when authenticated
+    enabled: isAuthenticated,
   });
 
   const handleStatusChange = async (equipmentId: string, newStatus: string) => {
@@ -162,6 +161,7 @@ const Equipment = () => {
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <h3 className="text-base md:text-lg font-semibold break-words">{item.name}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{item.location}</p>
                     <div className="mt-2">
                       <StatusDropdown 
                         status={item.status} 
@@ -201,7 +201,6 @@ const Equipment = () => {
                 <div className="space-y-2 text-sm mt-4">
                   <p><span className="font-medium">Model:</span> {item.model}</p>
                   <p><span className="font-medium">Serial Number:</span> {item.serialNumber}</p>
-                  <p><span className="font-medium">Location:</span> {item.location}</p>
                 </div>
               </Card>
             ))}
