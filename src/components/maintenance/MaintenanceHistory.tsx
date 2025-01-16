@@ -5,6 +5,7 @@ import { MaintenanceTableHeader } from "./table/MaintenanceTableHeader";
 import MaintenanceTableRow from "./table/MaintenanceTableRow";
 import { useEffect, useState } from "react";
 import { Table, TableBody } from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
 
 const MaintenanceHistory = () => {
   const [checks, setChecks] = useState<MaintenanceCheck[]>([]);
@@ -61,22 +62,30 @@ const MaintenanceHistory = () => {
   }, []);
 
   return (
-    <div className="w-full overflow-hidden rounded-md border">
+    <Card className="overflow-hidden border rounded-lg bg-white shadow-sm">
       <div className="w-full overflow-auto">
         <Table>
           <MaintenanceTableHeader />
           <TableBody>
-            {checks.map((check) => (
-              <MaintenanceTableRow
-                key={check.id}
-                check={check}
-                onStatusChange={handleStatusChange}
-              />
-            ))}
+            {checks.length === 0 ? (
+              <tr>
+                <td colSpan={6} className="py-8 text-center text-muted-foreground">
+                  No maintenance checks found
+                </td>
+              </tr>
+            ) : (
+              checks.map((check) => (
+                <MaintenanceTableRow
+                  key={check.id}
+                  check={check}
+                  onStatusChange={handleStatusChange}
+                />
+              ))
+            )}
           </TableBody>
         </Table>
       </div>
-    </div>
+    </Card>
   );
 };
 

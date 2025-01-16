@@ -24,30 +24,45 @@ const MaintenanceTableRow = ({
 }: MaintenanceTableRowProps) => {
   const [showDetails, setShowDetails] = useState(false);
 
+  const getStatusColor = (status: MaintenanceCheckStatus) => {
+    switch (status) {
+      case "completed":
+        return "bg-green-50 text-green-700 border-green-200";
+      case "issue_found":
+        return "bg-red-50 text-red-700 border-red-200";
+      default:
+        return "bg-yellow-50 text-yellow-700 border-yellow-200";
+    }
+  };
+
   return (
-    <TableRow className="border-b">
-      <TableCell className="w-[180px] whitespace-nowrap">
+    <TableRow className="border-b hover:bg-gray-50/50 transition-colors">
+      <TableCell className="font-medium">
         {format(new Date(check.check_date || ""), "PPP")}
       </TableCell>
-      <TableCell className="w-[180px] whitespace-nowrap">
-        {check.equipment?.name || "N/A"}
+      <TableCell>
+        <span className="font-medium">{check.equipment?.name || "N/A"}</span>
       </TableCell>
-      <TableCell className="w-[180px] whitespace-nowrap">
-        {check.equipment?.location || "Not specified"}
+      <TableCell>
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700">
+          {check.equipment?.location || "Not specified"}
+        </span>
       </TableCell>
-      <TableCell className="w-[200px] whitespace-nowrap">
+      <TableCell>
         {check.technician
           ? `${check.technician.firstName} ${check.technician.lastName}`
           : "Unassigned"}
       </TableCell>
-      <TableCell className="w-[150px]">
+      <TableCell>
         <Select
           value={check.status || "pending"}
           onValueChange={(value) =>
             onStatusChange(check.id, value as MaintenanceCheckStatus)
           }
         >
-          <SelectTrigger className="w-[140px] h-10 bg-white">
+          <SelectTrigger 
+            className={`w-[140px] h-9 ${getStatusColor(check.status as MaintenanceCheckStatus)}`}
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
@@ -57,12 +72,12 @@ const MaintenanceTableRow = ({
           </SelectContent>
         </Select>
       </TableCell>
-      <TableCell className="w-[100px] text-right">
+      <TableCell className="text-right">
         <Button
           variant="outline"
           size="sm"
           onClick={() => setShowDetails(true)}
-          className="inline-flex items-center gap-2"
+          className="inline-flex items-center gap-2 hover:bg-gray-50"
         >
           <Eye className="h-4 w-4" />
           <span>View</span>
