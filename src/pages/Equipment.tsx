@@ -1,25 +1,13 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import Layout from "@/components/Layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { StatusDropdown } from "@/components/equipment/StatusDropdown";
 import PasswordProtectionModal from "@/components/equipment/PasswordProtectionModal";
 import { useEffect, useState } from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { EquipmentList } from "@/components/equipment/EquipmentList";
 
 const Equipment = () => {
   const navigate = useNavigate();
@@ -87,7 +75,6 @@ const Equipment = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      // First, delete all maintenance checks associated with this equipment
       const { error: maintenanceDeleteError } = await supabase
         .from('hvac_maintenance_checks')
         .delete()
@@ -98,7 +85,6 @@ const Equipment = () => {
         throw maintenanceDeleteError;
       }
 
-      // Then delete the equipment
       const { error: equipmentDeleteError } = await supabase
         .from('equipment')
         .delete()
@@ -154,59 +140,12 @@ const Equipment = () => {
 
         {isLoading ? (
           <p className="text-center py-4">Loading equipment...</p>
-        ) : equipment && equipment.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-            {equipment.map((item) => (
-              <Card key={item.id} className="p-4 md:p-6">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <h3 className="text-base md:text-lg font-semibold break-words">{item.name}</h3>
-                    <p className="text-sm text-muted-foreground mt-1">{item.location}</p>
-                    <div className="mt-2">
-                      <StatusDropdown 
-                        status={item.status} 
-                        onStatusChange={(newStatus) => handleStatusChange(item.id, newStatus)}
-                      />
-                    </div>
-                  </div>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent className="bg-white max-w-[90vw] w-[400px] rounded-lg">
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Equipment</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This will delete the equipment and all associated maintenance checks. This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter className="flex flex-col sm:flex-row gap-2">
-                        <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
-                        <AlertDialogAction 
-                          onClick={() => handleDelete(item.id)}
-                          className="w-full sm:w-auto bg-red-500 hover:bg-red-600 text-white"
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-                <div className="space-y-2 text-sm mt-4">
-                  <p><span className="font-medium">Model:</span> {item.model}</p>
-                  <p><span className="font-medium">Serial Number:</span> {item.serialNumber}</p>
-                </div>
-              </Card>
-            ))}
-          </div>
         ) : (
-          <p className="text-center py-4">No equipment found. Add some equipment to get started.</p>
+          <EquipmentList 
+            equipment={equipment || []}
+            onStatusChange={handleStatusChange}
+            onDelete={handleDelete}
+          />
         )}
       </div>
     </Layout>
