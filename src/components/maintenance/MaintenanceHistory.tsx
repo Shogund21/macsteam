@@ -18,6 +18,7 @@ const MaintenanceHistory = () => {
         equipment:equipment_id(name, location),
         technician:technician_id(firstName, lastName)
       `)
+      .order("equipment(location)", { ascending: true })
       .order("check_date", { ascending: false });
 
     if (error) {

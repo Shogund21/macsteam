@@ -10,6 +10,7 @@ const EquipmentOverview = () => {
       const { data, error } = await supabase
         .from('equipment')
         .select('*')
+        .order('location', { ascending: true })
         .order('name');
       
       if (error) {
