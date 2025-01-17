@@ -186,6 +186,7 @@ export type Database = {
           file_type: string
           id: string
           maintenance_check_id: string | null
+          project_id: string | null
           tags: string[] | null
           uploaded_at: string | null
           uploaded_by: string | null
@@ -200,6 +201,7 @@ export type Database = {
           file_type: string
           id?: string
           maintenance_check_id?: string | null
+          project_id?: string | null
           tags?: string[] | null
           uploaded_at?: string | null
           uploaded_by?: string | null
@@ -214,6 +216,7 @@ export type Database = {
           file_type?: string
           id?: string
           maintenance_check_id?: string | null
+          project_id?: string | null
           tags?: string[] | null
           uploaded_at?: string | null
           uploaded_by?: string | null
@@ -231,6 +234,13 @@ export type Database = {
             columns: ["maintenance_check_id"]
             isOneToOne: false
             referencedRelation: "hvac_maintenance_checks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_documents_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]

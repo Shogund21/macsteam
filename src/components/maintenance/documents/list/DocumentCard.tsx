@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { File, Download, Trash2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   Card,
   CardContent,
@@ -8,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useToast } from "@/hooks/use-toast";
 
 interface Document {
   id: string;
@@ -21,11 +23,69 @@ interface Document {
 
 interface DocumentCardProps {
   document: Document;
-  onDownload: (doc: Document) => void;
-  onDelete: (doc: Document) => void;
 }
 
-const DocumentCard = ({ document, onDownload, onDelete }: DocumentCardProps) => {
+const DocumentCard = ({ document }: DocumentCardProps) => {
+  const { toast } = useToast();
+
+  const handleDownload = async () => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('maintenance_docs')
+        .download(document.file_path);
+
+      if (error) throw error;
+
+      // Create a download link
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = document.file_name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to download the document",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      // Delete from storage
+      const { error: storageError } = await supabase.storage
+        .from('maintenance_docs')
+        .remove([document.file_path]);
+
+      if (storageError) throw storageError;
+
+      // Delete from database
+      const { error: dbError } = await supabase
+        .from('maintenance_documents')
+        .delete()
+        .eq('id', document.id);
+
+      if (dbError) throw dbError;
+
+      toast({
+        title: "Success",
+        description: "Document deleted successfully",
+      });
+    } catch (error) {
+      console.error('Delete error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete the document",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <Card>
       <CardHeader>
@@ -43,7 +103,7 @@ const DocumentCard = ({ document, onDownload, onDelete }: DocumentCardProps) => 
             <Button
               variant="outline"
               size="icon"
-              onClick={() => onDownload(document)}
+              onClick={handleDownload}
               className="bg-blue-500 text-white hover:bg-blue-600"
             >
               <Download className="h-4 w-4" />
@@ -51,7 +111,7 @@ const DocumentCard = ({ document, onDownload, onDelete }: DocumentCardProps) => 
             <Button
               variant="outline"
               size="icon"
-              onClick={() => onDelete(document)}
+              onClick={handleDelete}
               className="bg-red-500 text-white hover:bg-red-600"
             >
               <Trash2 className="h-4 w-4" />
