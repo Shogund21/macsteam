@@ -3,7 +3,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UseFormReturn } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import LocationSelect from "@/components/equipment/LocationSelect";
+</lov-replace>
+
+<lov-search>
+      <LocationSelect form={form} />
+</lov-search>
+<lov-replace>
 import { Equipment, Technician } from "@/types/maintenance";
 
 interface MaintenanceBasicInfoProps {
