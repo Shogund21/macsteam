@@ -8,23 +8,81 @@ interface MaintenanceStatusProps {
 
 const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="space-y-4">
+      <FormField
+        control={form.control}
+        name="air_filter_status"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-base font-semibold">Air Filter Status</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
+                  <SelectValue placeholder="Select air filter status" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+                sideOffset={5}
+              >
+                <SelectItem value="clean" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Clean</SelectItem>
+                <SelectItem value="needs_cleaning" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Needs Cleaning</SelectItem>
+                <SelectItem value="needs_replacement" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Needs Replacement</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={form.control}
+        name="belt_condition"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-base font-semibold">Belt Condition</FormLabel>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
+                  <SelectValue placeholder="Select belt condition" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+                sideOffset={5}
+              >
+                <SelectItem value="good" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Good</SelectItem>
+                <SelectItem value="fair" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Fair</SelectItem>
+                <SelectItem value="needs_replacement" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Needs Replacement</SelectItem>
+              </SelectContent>
+            </Select>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
       <FormField
         control={form.control}
         name="refrigerant_level"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Refrigerant Level</FormLabel>
+            <FormLabel className="text-base font-semibold">Refrigerant Level</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
-                  <SelectValue placeholder="Select level" />
+                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
+                  <SelectValue placeholder="Select refrigerant level" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
-                <SelectItem value="optimal">Optimal</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
-                <SelectItem value="needs_refill">Needs Refill</SelectItem>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+                sideOffset={5}
+              >
+                <SelectItem value="optimal" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Optimal</SelectItem>
+                <SelectItem value="low" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Low</SelectItem>
+                <SelectItem value="needs_refill" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Needs Refill</SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />
@@ -37,17 +95,21 @@ const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
         name="oil_level_status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Oil Level Status</FormLabel>
+            <FormLabel className="text-base font-semibold">Oil Level Status</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
-                  <SelectValue placeholder="Select status" />
+                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
+                  <SelectValue placeholder="Select oil level status" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
-                <SelectItem value="optimal">Optimal</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
-                <SelectItem value="needs_refill">Needs Refill</SelectItem>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+                sideOffset={5}
+              >
+                <SelectItem value="optimal" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Optimal</SelectItem>
+                <SelectItem value="low" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Low</SelectItem>
+                <SelectItem value="needs_refill" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Needs Refill</SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />
@@ -60,17 +122,21 @@ const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
         name="condenser_condition"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Condenser Condition</FormLabel>
+            <FormLabel className="text-base font-semibold">Condenser Condition</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
-                  <SelectValue placeholder="Select condition" />
+                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
+                  <SelectValue placeholder="Select condenser condition" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
-                <SelectItem value="clean">Clean</SelectItem>
-                <SelectItem value="needs_cleaning">Needs Cleaning</SelectItem>
-                <SelectItem value="needs_service">Needs Service</SelectItem>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+                sideOffset={5}
+              >
+                <SelectItem value="clean" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Clean</SelectItem>
+                <SelectItem value="needs_cleaning" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Needs Cleaning</SelectItem>
+                <SelectItem value="damaged" className="py-3 text-sm hover:bg-gray-100 cursor-pointer">Damaged</SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />

@@ -35,16 +35,20 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold">Equipment</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="w-full bg-white border-gray-200 h-12">
+                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
                   <SelectValue placeholder="Select equipment" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+                sideOffset={5}
+              >
                 {equipmentData?.map((item) => (
                   <SelectItem 
                     key={item.id} 
                     value={item.id}
-                    className="py-3 text-sm"
+                    className="py-3 text-sm hover:bg-gray-100 cursor-pointer"
                   >
                     {item.name} - {item.location}
                   </SelectItem>
@@ -64,16 +68,20 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold">Technician</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="w-full bg-white border-gray-200 h-12">
+                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
                   <SelectValue placeholder="Select technician" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+                sideOffset={5}
+              >
                 {technicians?.map((tech) => (
                   <SelectItem 
                     key={tech.id} 
                     value={tech.id}
-                    className="py-3 text-sm"
+                    className="py-3 text-sm hover:bg-gray-100 cursor-pointer"
                   >
                     {tech.firstName} {tech.lastName}
                   </SelectItem>
