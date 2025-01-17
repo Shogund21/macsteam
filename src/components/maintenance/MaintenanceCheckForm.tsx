@@ -22,7 +22,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const { data: equipment = [], isLoading: isLoadingEquipment, error: equipmentError } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
-      console.log('Fetching equipment...');
+      console.log('Starting equipment fetch...');
       const { data, error } = await supabase
         .from('equipment')
         .select('*')
@@ -34,7 +34,11 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         throw error;
       }
       
-      console.log('Fetched equipment data:', data);
+      console.log('Equipment fetch successful. Data:', data);
+      if (!data || data.length === 0) {
+        console.log('No equipment found or empty data array returned');
+      }
+      
       return data || [];
     },
   });
@@ -42,7 +46,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const { data: technicians = [], isLoading: isLoadingTechnicians, error: techniciansError } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
-      console.log('Fetching technicians...');
+      console.log('Starting technicians fetch...');
       const { data, error } = await supabase
         .from('technicians')
         .select('*')
@@ -54,25 +58,27 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         throw error;
       }
       
-      console.log('Fetched technicians data:', data);
+      console.log('Technicians fetch successful. Data:', data);
       return data || [];
     },
   });
 
-  // Handle query errors
+  // Handle query errors with toasts
   if (equipmentError) {
+    console.error('Equipment query error:', equipmentError);
     toast({
       variant: "destructive",
-      title: "Error",
-      description: "Failed to load equipment. Please try again.",
+      title: "Error Loading Equipment",
+      description: "Failed to load equipment list. Please try again.",
     });
   }
 
   if (techniciansError) {
+    console.error('Technicians query error:', techniciansError);
     toast({
       variant: "destructive",
-      title: "Error",
-      description: "Failed to load technicians. Please try again.",
+      title: "Error Loading Technicians",
+      description: "Failed to load technicians list. Please try again.",
     });
   }
 
@@ -80,10 +86,15 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     (eq) => eq.id === form.watch('equipment_id')
   );
 
+  console.log('Current form values:', form.getValues());
+  console.log('Selected equipment:', selectedEquipment);
+  console.log('Equipment list length:', equipment?.length);
+
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
 
   const onSubmit = async (values: any) => {
     try {
+      console.log('Submitting form with values:', values);
       const submissionData = {
         ...values,
         equipment_type: isAHU ? 'ahu' : 'general',
