@@ -1,17 +1,9 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { Upload, File } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import UploadZone from "./upload/UploadZone";
+import FileList from "./upload/FileList";
+import UploadForm from "./upload/UploadForm";
 
 const ALLOWED_FILE_TYPES = [
   "application/pdf",
@@ -40,17 +32,6 @@ const DocumentUpload = ({
   const [tags, setTags] = useState<string>("");
   const [isUploading, setIsUploading] = useState(false);
   const { toast } = useToast();
-
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const droppedFiles = e.dataTransfer.files;
-    validateAndSetFiles(droppedFiles);
-  };
-
-  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = e.target.files;
-    validateAndSetFiles(selectedFiles);
-  };
 
   const validateAndSetFiles = (fileList: FileList | null) => {
     if (!fileList) return;
@@ -135,79 +116,24 @@ const DocumentUpload = ({
 
   return (
     <div className="space-y-6">
-      <div
-        onDrop={handleDrop}
-        onDragOver={(e) => e.preventDefault()}
-        className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-blue-500 transition-colors"
-      >
-        <Upload className="mx-auto h-12 w-12 text-gray-400" />
-        <div className="mt-4">
-          <p className="text-sm text-gray-600">
-            Drag and drop files here, or click to select files
-          </p>
-          <p className="text-xs text-gray-500 mt-1">
-            Supported formats: PDF, JPG, PNG, DOCX, XLSX (Max 10MB)
-          </p>
-        </div>
-        <Input
-          type="file"
-          multiple
-          accept={ALLOWED_FILE_TYPES.join(",")}
-          onChange={handleFileInput}
-          className="hidden"
-          id="file-upload"
-        />
-        <Button
-          variant="outline"
-          className="mt-4"
-          onClick={() => document.getElementById('file-upload')?.click()}
-        >
-          Select Files
-        </Button>
-      </div>
+      <UploadZone 
+        onFileSelect={validateAndSetFiles}
+        allowedFileTypes={ALLOWED_FILE_TYPES}
+      />
+      
+      <FileList files={files} />
 
-      {files && Array.from(files).map((file, index) => (
-        <div key={index} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
-          <File className="h-4 w-4" />
-          <span className="text-sm">{file.name}</span>
-        </div>
-      ))}
-
-      <div className="space-y-4">
-        <Select value={category} onValueChange={setCategory}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="manual">Manual</SelectItem>
-            <SelectItem value="service_record">Service Record</SelectItem>
-            <SelectItem value="invoice">Invoice</SelectItem>
-            <SelectItem value="inspection">Inspection Report</SelectItem>
-            <SelectItem value="compliance">Compliance Document</SelectItem>
-            <SelectItem value="warranty">Warranty</SelectItem>
-          </SelectContent>
-        </Select>
-
-        <Input
-          placeholder="Tags (comma-separated)"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-        />
-
-        <Textarea
-          placeholder="Comments"
-          value={comments}
-          onChange={(e) => setComments(e.target.value)}
-        />
-
-        <Button
-          onClick={uploadFiles}
-          disabled={!files || isUploading}
-          className="w-full bg-blue-500 text-white hover:bg-blue-600"
-        >
-          {isUploading ? "Uploading..." : "Upload Documents"}
-        </Button>
-      </div>
+      <UploadForm
+        category={category}
+        setCategory={setCategory}
+        tags={tags}
+        setTags={setTags}
+        comments={comments}
+        setComments={setComments}
+        onUpload={uploadFiles}
+        isUploading={isUploading}
+        hasFiles={!!files}
+      />
     </div>
   );
 };
