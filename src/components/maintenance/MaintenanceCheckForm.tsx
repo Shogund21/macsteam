@@ -11,6 +11,7 @@ import MaintenanceReadings from "./form/MaintenanceReadings";
 import MaintenanceStatus from "./form/MaintenanceStatus";
 import MaintenanceObservations from "./form/MaintenanceObservations";
 import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
+import DocumentManager from "./documents/DocumentManager";
 
 const formSchema = z.object({
   equipment_id: z.string().min(1, "Equipment is required"),
@@ -104,9 +105,11 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
       };
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('hvac_maintenance_checks')
-        .insert(submissionData);
+        .insert(submissionData)
+        .select()
+        .single();
 
       if (error) throw error;
 
@@ -139,6 +142,8 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
             <MaintenanceObservations form={form} />
           </>
         )}
+
+        <DocumentManager equipmentId={form.watch('equipment_id')} />
 
         <div className="flex justify-end space-x-4">
           <Button

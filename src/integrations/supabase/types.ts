@@ -175,6 +175,66 @@ export type Database = {
           },
         ]
       }
+      maintenance_documents: {
+        Row: {
+          category: string
+          comments: string | null
+          equipment_id: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+          maintenance_check_id: string | null
+          tags: string[] | null
+          uploaded_at: string | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          category: string
+          comments?: string | null
+          equipment_id?: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+          maintenance_check_id?: string | null
+          tags?: string[] | null
+          uploaded_at?: string | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          category?: string
+          comments?: string | null
+          equipment_id?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+          maintenance_check_id?: string | null
+          tags?: string[] | null
+          uploaded_at?: string | null
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "maintenance_documents_equipment_id_fkey"
+            columns: ["equipment_id"]
+            isOneToOne: false
+            referencedRelation: "equipment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_documents_maintenance_check_id_fkey"
+            columns: ["maintenance_check_id"]
+            isOneToOne: false
+            referencedRelation: "hvac_maintenance_checks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           createdat: string | null
