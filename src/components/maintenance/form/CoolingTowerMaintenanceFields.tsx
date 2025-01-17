@@ -25,13 +25,21 @@ const CoolingTowerMaintenanceFields = ({ form }: CoolingTowerMaintenanceFieldsPr
           <FormLabel className="text-sm font-medium">{label}</FormLabel>
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
-              <SelectTrigger className="w-full bg-white border-gray-200">
+              <SelectTrigger className="w-full bg-white border border-gray-200 shadow-sm">
                 <SelectValue placeholder={`Select ${label.toLowerCase()} status`} />
               </SelectTrigger>
             </FormControl>
-            <SelectContent>
+            <SelectContent 
+              className="bg-white border border-gray-200 shadow-lg z-[100]"
+              position="popper"
+              sideOffset={5}
+            >
               {conditionOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <SelectItem 
+                  key={option.value} 
+                  value={option.value}
+                  className="hover:bg-gray-100 cursor-pointer"
+                >
                   {option.label}
                 </SelectItem>
               ))}
@@ -53,7 +61,7 @@ const CoolingTowerMaintenanceFields = ({ form }: CoolingTowerMaintenanceFieldsPr
           <FormControl>
             <Textarea
               placeholder={`Enter ${label.toLowerCase()} notes here...`}
-              className="min-h-[80px] resize-none"
+              className="min-h-[80px] resize-none bg-white border-gray-200"
               {...field}
             />
           </FormControl>
