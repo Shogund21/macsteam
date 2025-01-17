@@ -24,21 +24,33 @@ export const useFormValidation = (
 
     // Equipment-specific validation
     if (isAHU) {
-      if (!values.air_filter_status || !values.fan_belt_condition || 
-          !values.dampers_operation || !values.coils_condition) {
-        console.log("AHU validation failed - missing required fields");
-        return false;
-      }
-      return true;
+      const ahuValid = !!(
+        values.air_filter_status &&
+        values.fan_belt_condition &&
+        values.dampers_operation &&
+        values.coils_condition
+      );
+      console.log("AHU validation result:", ahuValid, {
+        air_filter_status: values.air_filter_status,
+        fan_belt_condition: values.fan_belt_condition,
+        dampers_operation: values.dampers_operation,
+        coils_condition: values.coils_condition
+      });
+      return ahuValid;
     } 
     
     if (isCoolingTower) {
-      if (!values.water_system_status || !values.fill_media_condition || 
-          !values.fan_assembly_status) {
-        console.log("Cooling Tower validation failed - missing required fields");
-        return false;
-      }
-      return true;
+      const coolingTowerValid = !!(
+        values.water_system_status &&
+        values.fill_media_condition &&
+        values.fan_assembly_status
+      );
+      console.log("Cooling Tower validation result:", coolingTowerValid, {
+        water_system_status: values.water_system_status,
+        fill_media_condition: values.fill_media_condition,
+        fan_assembly_status: values.fan_assembly_status
+      });
+      return coolingTowerValid;
     }
     
     // General equipment validation

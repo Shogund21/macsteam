@@ -7,15 +7,12 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
 
   const handleSubmit = async (values: MaintenanceFormValues, equipmentType: string) => {
     try {
-      console.log('Starting form submission with values:', values);
-
-      // Validate required fields based on equipment type
-      if (!values.equipment_id || !values.technician_id) {
-        console.error('Missing required fields:', { 
-          equipment_id: values.equipment_id, 
-          technician_id: values.technician_id 
-        });
-        throw new Error('Missing required fields');
+      console.log('Form submitted with values:', values);
+      
+      const selectedEquipment = values.equipment_id;
+      if (!selectedEquipment) {
+        console.error('No equipment selected');
+        return;
       }
 
       // Clean up undefined values and prepare data
@@ -27,7 +24,7 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
         )
       );
 
-      console.log('Cleaned values:', cleanedValues);
+      console.log('Cleaned values for submission:', cleanedValues);
 
       // Convert form values to the correct types
       const submissionData = {
@@ -50,7 +47,7 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
         fan_bearings_lubricated: Boolean(cleanedValues.fan_bearings_lubricated),
       };
 
-      console.log('Prepared submission data:', submissionData);
+      console.log('Final submission data:', submissionData);
 
       const { data, error } = await supabase
         .from('hvac_maintenance_checks')

@@ -13,8 +13,8 @@ const ValidationHandler = ({ form, isAHU, isCoolingTower, children }: Validation
   const { isFormValid } = useFormValidation(form, isAHU, isCoolingTower);
   const formIsValid = isFormValid();
   
-  console.log('Form validity:', formIsValid);
-  console.log('Form errors:', form.formState.errors);
+  console.log("Form validity:", formIsValid);
+  console.log("Form errors:", form.formState.errors);
 
   return <>{children(formIsValid)}</>;
 };

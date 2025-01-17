@@ -6,21 +6,22 @@ interface FormActionsProps {
 }
 
 const FormActions = ({ onCancel, isValid }: FormActionsProps) => {
-  console.log('Form actions render with isValid:', isValid);
+  console.log("Form actions render with isValid:", isValid);
   
   return (
-    <div className="flex justify-end space-x-4">
+    <div className="flex justify-end space-x-4 mt-6">
       <Button
         type="button"
         variant="outline"
         onClick={onCancel}
+        className="bg-white hover:bg-gray-50"
       >
         Cancel
       </Button>
       <Button 
         type="submit"
-        className={`${isValid ? 'bg-blue-500 hover:bg-blue-600' : 'bg-gray-400'} text-white`}
         disabled={!isValid}
+        className="bg-blue-500 text-white hover:bg-blue-600"
       >
         Submit Check
       </Button>
