@@ -74,7 +74,9 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
       const a = document.createElement('a');
       a.href = url;
       a.download = document.file_name;
+      document.body.appendChild(a);
       a.click();
+      document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
       toast({
@@ -135,6 +137,7 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
                   variant="outline"
                   size="icon"
                   onClick={() => handleDownload(document)}
+                  className="bg-blue-500 text-white hover:bg-blue-600"
                 >
                   <Download className="h-4 w-4" />
                 </Button>
@@ -142,6 +145,7 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
                   variant="outline"
                   size="icon"
                   onClick={() => handleDelete(document)}
+                  className="bg-red-500 text-white hover:bg-red-600"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -150,11 +154,13 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <Badge>{document.category}</Badge>
+              <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                {document.category}
+              </Badge>
               {document.tags && document.tags.length > 0 && (
                 <div className="flex gap-2 flex-wrap">
                   {document.tags.map((tag, index) => (
-                    <Badge key={index} variant="secondary">
+                    <Badge key={index} variant="outline">
                       {tag}
                     </Badge>
                   ))}
