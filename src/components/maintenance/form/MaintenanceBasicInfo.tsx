@@ -24,7 +24,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                 field.onChange(value);
                 form.clearErrors('equipment_id');
               }}
-              value={field.value}
+              value={field.value || ""}
             >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border-gray-200 h-12">
@@ -59,7 +59,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                 field.onChange(value);
                 form.clearErrors('technician_id');
               }}
-              value={field.value}
+              value={field.value || ""}
             >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border-gray-200 h-12">
