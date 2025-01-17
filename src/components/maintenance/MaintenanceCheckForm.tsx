@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
@@ -53,14 +54,16 @@ const ahuSchema = baseSchema.extend({
   maintenance_recommendations: z.string().optional(),
 });
 
+type FormValues = z.infer<typeof standardHVACSchema> & z.infer<typeof ahuSchema>;
+
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
 }
 
 const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const { toast } = useToast();
-  const form = useForm({
-    resolver: zodResolver(standardHVACSchema), // Default to standard HVAC schema
+  const form = useForm<FormValues>({
+    resolver: zodResolver(standardHVACSchema),
     defaultValues: {
       unusual_noise: false,
       vibration_observed: false,
@@ -96,22 +99,19 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   });
 
   const selectedEquipment = equipment?.find(
-    (eq) => eq.id === form.watch('equipment_id')
+    (eq) => eq.id === form.getValues('equipment_id')
   );
 
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
 
-  // Update form validation schema when equipment type changes
   React.useEffect(() => {
-    form.clearErrors();
     if (isAHU) {
-      form.setResolver(zodResolver(ahuSchema));
-    } else {
-      form.setResolver(zodResolver(standardHVACSchema));
+      form.clearErrors();
+      form.reset({}, { keepDefaultValues: true });
     }
   }, [isAHU, form]);
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: FormValues) => {
     console.log("Form submitted with values:", values);
     try {
       const submissionData = {
@@ -176,7 +176,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           </>
         )}
 
-        <DocumentManager equipmentId={form.watch('equipment_id')} />
+        <DocumentManager equipmentId={form.getValues('equipment_id')} />
 
         <div className="flex justify-end space-x-4">
           <Button
