@@ -49,10 +49,15 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   const onSubmit = async (values: any) => {
     try {
+      console.log('Form values before submission:', values);
+
       const submissionData = {
         ...values,
         equipment_type: isAHU ? 'ahu' : isCoolingTower ? 'cooling_tower' : 'general',
         check_date: new Date().toISOString(),
+        chiller_pressure_reading: values.chiller_pressure_reading ? parseFloat(values.chiller_pressure_reading) : null,
+        chiller_temperature_reading: values.chiller_temperature_reading ? parseFloat(values.chiller_temperature_reading) : null,
+        airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
       };
 
       console.log('Submitting maintenance check:', submissionData);
