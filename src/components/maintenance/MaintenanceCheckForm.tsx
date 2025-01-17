@@ -112,7 +112,6 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   }, [isAHU, form]);
 
   const onSubmit = async (values: FormValues) => {
-    console.log("Form submitted with values:", values);
     try {
       const submissionData = {
         ...values,
