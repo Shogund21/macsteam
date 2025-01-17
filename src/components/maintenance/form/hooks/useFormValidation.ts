@@ -47,7 +47,9 @@ export const useFormValidation = (
       values.chiller_temperature_reading &&
       values.air_filter_status &&
       values.belt_condition &&
-      values.refrigerant_level
+      values.refrigerant_level &&
+      values.oil_level_status &&
+      values.condenser_condition
     );
 
     console.log("General equipment validation result:", generalValid, {
@@ -55,7 +57,9 @@ export const useFormValidation = (
       chiller_temperature_reading: values.chiller_temperature_reading,
       air_filter_status: values.air_filter_status,
       belt_condition: values.belt_condition,
-      refrigerant_level: values.refrigerant_level
+      refrigerant_level: values.refrigerant_level,
+      oil_level_status: values.oil_level_status,
+      condenser_condition: values.condenser_condition
     });
 
     return generalValid;

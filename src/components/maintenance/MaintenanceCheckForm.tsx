@@ -22,12 +22,19 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     try {
       console.log('Form submitted with values:', values);
       
-      if (!equipment?.find((eq) => eq.id === values.equipment_id)) {
+      const selectedEquipment = equipment?.find((eq) => eq.id === values.equipment_id);
+      if (!selectedEquipment) {
         console.error('No equipment selected');
         return;
       }
 
-      await handleSubmit(values);
+      const equipmentType = selectedEquipment.name.toLowerCase().includes('ahu') 
+        ? 'ahu' 
+        : selectedEquipment.name.toLowerCase().includes('cooling tower')
+          ? 'cooling_tower'
+          : 'general';
+
+      await handleSubmit(values, equipmentType);
     } catch (error) {
       console.error('Error in form submission:', error);
     }
