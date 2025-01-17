@@ -46,9 +46,12 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className="max-h-[300px] overflow-y-auto bg-white shadow-md z-50"
+              className="bg-white border border-gray-200 rounded-md shadow-lg"
               position="popper"
-              sideOffset={5}
+              align="start"
+              side="bottom"
+              sideOffset={8}
+              style={{ zIndex: 50, maxHeight: '300px', overflowY: 'auto' }}
             >
               {locations.map((location, index) => (
                 <SelectItem 
