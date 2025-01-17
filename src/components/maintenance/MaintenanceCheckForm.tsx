@@ -19,39 +19,39 @@ const baseSchema = z.object({
   equipment_id: z.string().min(1, "Equipment is required"),
   technician_id: z.string().min(1, "Technician is required"),
   equipment_type: z.string().optional(),
-  notes: z.string().optional(),
-  unusual_noise: z.boolean().default(false),
-  unusual_noise_description: z.string().optional(),
-  vibration_observed: z.boolean().default(false),
-  vibration_description: z.string().optional(),
-  images: z.array(z.string()).optional(),
+  notes: z.string().optional().nullable(),
+  unusual_noise: z.boolean().optional().nullable(),
+  unusual_noise_description: z.string().optional().nullable(),
+  vibration_observed: z.boolean().optional().nullable(),
+  vibration_description: z.string().optional().nullable(),
+  images: z.array(z.string()).optional().nullable(),
 });
 
 const standardHVACSchema = baseSchema.extend({
-  chiller_pressure_reading: z.string().optional(),
-  chiller_temperature_reading: z.string().optional(),
-  air_filter_status: z.string().optional(),
-  belt_condition: z.string().optional(),
-  refrigerant_level: z.string().optional(),
-  oil_level_status: z.string().optional(),
-  condenser_condition: z.string().optional(),
+  chiller_pressure_reading: z.string().optional().nullable(),
+  chiller_temperature_reading: z.string().optional().nullable(),
+  air_filter_status: z.string().optional().nullable(),
+  belt_condition: z.string().optional().nullable(),
+  refrigerant_level: z.string().optional().nullable(),
+  oil_level_status: z.string().optional().nullable(),
+  condenser_condition: z.string().optional().nullable(),
 });
 
 const ahuSchema = baseSchema.extend({
-  air_filter_cleaned: z.boolean().optional(),
-  fan_belt_condition: z.string().optional(),
-  fan_bearings_lubricated: z.boolean().optional(),
-  fan_noise_level: z.string().optional(),
-  dampers_operation: z.string().optional(),
-  coils_condition: z.string().optional(),
-  sensors_operation: z.string().optional(),
-  motor_condition: z.string().optional(),
-  drain_pan_status: z.string().optional(),
-  airflow_reading: z.string().optional(),
-  airflow_unit: z.string().optional(),
-  troubleshooting_notes: z.string().optional(),
-  corrective_actions: z.string().optional(),
-  maintenance_recommendations: z.string().optional(),
+  air_filter_cleaned: z.boolean().optional().nullable(),
+  fan_belt_condition: z.string().optional().nullable(),
+  fan_bearings_lubricated: z.boolean().optional().nullable(),
+  fan_noise_level: z.string().optional().nullable(),
+  dampers_operation: z.string().optional().nullable(),
+  coils_condition: z.string().optional().nullable(),
+  sensors_operation: z.string().optional().nullable(),
+  motor_condition: z.string().optional().nullable(),
+  drain_pan_status: z.string().optional().nullable(),
+  airflow_reading: z.string().optional().nullable(),
+  airflow_unit: z.string().optional().nullable(),
+  troubleshooting_notes: z.string().optional().nullable(),
+  corrective_actions: z.string().optional().nullable(),
+  maintenance_recommendations: z.string().optional().nullable(),
 });
 
 type FormValues = z.infer<typeof standardHVACSchema> & z.infer<typeof ahuSchema>;
@@ -123,8 +123,6 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         status: 'pending' as MaintenanceCheckStatus
       };
 
-      console.log("Submitting data to Supabase:", submissionData);
-
       const { error } = await supabase
         .from('hvac_maintenance_checks')
         .insert(submissionData);
@@ -134,7 +132,6 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         throw error;
       }
 
-      console.log("Submission successful");
       toast({
         title: "Success",
         description: "Maintenance check recorded successfully",
@@ -153,14 +150,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   return (
     <Form {...form}>
       <form 
-        onSubmit={form.handleSubmit(onSubmit, (errors) => {
-          console.log("Form validation errors:", errors);
-          toast({
-            variant: "destructive",
-            title: "Validation Error",
-            description: "Please select equipment and technician.",
-          });
-        })} 
+        onSubmit={form.handleSubmit(onSubmit)} 
         className="space-y-6 bg-white p-6 rounded-lg shadow"
       >
         <MaintenanceBasicInfo form={form} equipment={equipment || []} technicians={technicians || []} />
