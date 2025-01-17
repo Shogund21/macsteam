@@ -10,6 +10,10 @@ interface MaintenanceBasicInfoProps {
 }
 
 const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasicInfoProps) => {
+  // Watch the current values to ensure re-rendering on changes
+  const selectedEquipmentId = form.watch("equipment_id");
+  const selectedTechnicianId = form.watch("technician_id");
+
   return (
     <div className="space-y-6">
       <FormField
@@ -18,7 +22,10 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
         render={({ field }) => (
           <FormItem>
             <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              onValueChange={(value) => field.onChange(value)}
+              value={field.value ? String(field.value) : ""}
+            >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                   <SelectValue 
@@ -32,7 +39,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                   equipment.map((item) => (
                     <SelectItem 
                       key={item.id} 
-                      value={item.id}
+                      value={String(item.id)} // Ensure value is a string
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
                       <span className="font-medium">{item.name}</span>
@@ -40,7 +47,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem value="no-equipment" disabled>
+                  <SelectItem value="" disabled>
                     No equipment available
                   </SelectItem>
                 )}
@@ -57,7 +64,10 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
         render={({ field }) => (
           <FormItem>
             <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
+            <Select
+              onValueChange={(value) => field.onChange(value)}
+              value={field.value ? String(field.value) : ""}
+            >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                   <SelectValue 
@@ -71,7 +81,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                   technicians.map((tech) => (
                     <SelectItem 
                       key={tech.id} 
-                      value={tech.id}
+                      value={String(tech.id)} // Ensure value is a string
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
                       <span className="font-medium">{tech.firstName} {tech.lastName}</span>
@@ -79,7 +89,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem value="no-technician" disabled>
+                  <SelectItem value="" disabled>
                     No technicians available
                   </SelectItem>
                 )}
