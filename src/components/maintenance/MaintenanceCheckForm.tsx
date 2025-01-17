@@ -97,6 +97,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("Form submitted with values:", values);
     try {
       const submissionData = {
         ...values,
@@ -108,12 +109,18 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         status: 'pending' as MaintenanceCheckStatus
       };
 
+      console.log("Submitting data to Supabase:", submissionData);
+
       const { error } = await supabase
         .from('hvac_maintenance_checks')
         .insert(submissionData);
 
-      if (error) throw error;
+      if (error) {
+        console.error("Supabase error:", error);
+        throw error;
+      }
 
+      console.log("Submission successful");
       toast({
         title: "Success",
         description: "Maintenance check recorded successfully",
@@ -131,7 +138,17 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 bg-white p-6 rounded-lg shadow">
+      <form 
+        onSubmit={form.handleSubmit(onSubmit, (errors) => {
+          console.log("Form validation errors:", errors);
+          toast({
+            variant: "destructive",
+            title: "Validation Error",
+            description: "Please fill in all required fields correctly.",
+          });
+        })} 
+        className="space-y-6 bg-white p-6 rounded-lg shadow"
+      >
         <MaintenanceBasicInfo form={form} equipment={equipment || []} technicians={technicians || []} />
         
         {isAHU ? (
