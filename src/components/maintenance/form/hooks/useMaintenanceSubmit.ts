@@ -22,6 +22,15 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
     try {
       console.log('Starting form submission with values:', values);
 
+      // Validate required fields
+      if (!values.equipment_id || !values.technician_id) {
+        console.error('Missing required fields:', { 
+          equipment_id: values.equipment_id, 
+          technician_id: values.technician_id 
+        });
+        throw new Error('Missing required fields');
+      }
+
       // Clean up undefined values and prepare data
       const cleanedValues = Object.fromEntries(
         Object.entries(values).filter(([_, value]) => 
@@ -74,10 +83,23 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
       onComplete();
     } catch (error: any) {
       console.error('Error submitting maintenance check:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Failed to submit maintenance check. ';
+      if (error.message.includes('Missing required fields')) {
+        errorMessage += 'Please fill in all required fields.';
+      } else if (error.code === '23502') { // NOT NULL violation
+        errorMessage += 'Some required fields are missing.';
+      } else if (error.code === '23503') { // Foreign key violation
+        errorMessage += 'Invalid equipment or technician selected.';
+      } else {
+        errorMessage += error.message;
+      }
+
       toast({
         variant: "destructive",
         title: "Error",
-        description: `Failed to submit maintenance check: ${error.message}`,
+        description: errorMessage,
       });
     }
   };
