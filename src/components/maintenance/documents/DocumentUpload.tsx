@@ -203,7 +203,7 @@ const DocumentUpload = ({
         <Button
           onClick={uploadFiles}
           disabled={!files || isUploading}
-          className="w-full"
+          className="w-full bg-blue-500 text-white hover:bg-blue-600"
         >
           {isUploading ? "Uploading..." : "Upload Documents"}
         </Button>
