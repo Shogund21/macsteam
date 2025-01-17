@@ -62,18 +62,18 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
     fetchDocuments();
   }, [equipmentId, maintenanceCheckId]);
 
-  const handleDownload = async (document: MaintenanceDocument) => {
+  const handleDownload = async (doc: MaintenanceDocument) => {
     try {
       const { data, error } = await supabase.storage
         .from('maintenance_docs')
-        .download(document.file_path);
+        .download(doc.file_path);
 
       if (error) throw error;
 
       const url = URL.createObjectURL(data);
       const a = document.createElement('a');
       a.href = url;
-      a.download = document.file_name;
+      a.download = doc.file_name;
       a.click();
       URL.revokeObjectURL(url);
     } catch (error) {
@@ -85,18 +85,18 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
     }
   };
 
-  const handleDelete = async (document: MaintenanceDocument) => {
+  const handleDelete = async (doc: MaintenanceDocument) => {
     try {
       const { error: storageError } = await supabase.storage
         .from('maintenance_docs')
-        .remove([document.file_path]);
+        .remove([doc.file_path]);
 
       if (storageError) throw storageError;
 
       const { error: dbError } = await supabase
         .from('maintenance_documents')
         .delete()
-        .eq('id', document.id);
+        .eq('id', doc.id);
 
       if (dbError) throw dbError;
 
