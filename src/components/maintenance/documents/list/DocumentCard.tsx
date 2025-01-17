@@ -11,7 +11,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 
-interface Document {
+interface MaintenanceDocument {
   id: string;
   file_name: string;
   file_path: string;
@@ -22,7 +22,7 @@ interface Document {
 }
 
 interface DocumentCardProps {
-  document: Document;
+  document: MaintenanceDocument;
 }
 
 const DocumentCard = ({ document }: DocumentCardProps) => {
