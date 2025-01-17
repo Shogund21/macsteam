@@ -3,7 +3,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UseFormReturn } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import LocationSelect from "@/components/equipment/LocationSelect";
 import { Equipment, Technician } from "@/types/maintenance";
 
 interface MaintenanceBasicInfoProps {
@@ -85,8 +84,6 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
           </FormItem>
         )}
       />
-
-      <LocationSelect form={form} />
     </div>
   );
 };
