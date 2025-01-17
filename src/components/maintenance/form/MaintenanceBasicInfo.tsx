@@ -20,7 +20,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="w-full bg-white border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                   <SelectValue 
                     placeholder="Select equipment" 
                     className="text-gray-600"
@@ -35,8 +35,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                       value={item.id}
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
-                      <span className="font-medium">{item.name}</span>
-                      <span className="text-gray-500 ml-2">- {item.model}</span>
+                      {item.name} - {item.model}
                     </SelectItem>
                   ))
                 ) : (
@@ -59,7 +58,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="w-full bg-white border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
                   <SelectValue 
                     placeholder="Select technician" 
                     className="text-gray-600"
@@ -67,16 +66,21 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                 </SelectTrigger>
               </FormControl>
               <SelectContent className="max-h-[300px] overflow-y-auto bg-white border border-gray-200 shadow-lg">
-                {technicians?.map((tech) => (
-                  <SelectItem 
-                    key={tech.id} 
-                    value={tech.id}
-                    className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
-                  >
-                    <span className="font-medium">{tech.firstName} {tech.lastName}</span>
-                    <span className="text-gray-500 ml-2">- {tech.specialization}</span>
+                {technicians && technicians.length > 0 ? (
+                  technicians.map((tech) => (
+                    <SelectItem 
+                      key={tech.id} 
+                      value={tech.id}
+                      className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+                    >
+                      {tech.firstName} {tech.lastName} - {tech.specialization}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="no-technician" disabled>
+                    No technicians available
                   </SelectItem>
-                ))}
+                )}
               </SelectContent>
             </Select>
             <FormMessage className="text-sm text-red-500" />

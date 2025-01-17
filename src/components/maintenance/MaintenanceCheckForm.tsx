@@ -19,7 +19,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const { toast } = useToast();
   const form = useMaintenanceForm();
 
-  const { data: equipment, isLoading: isLoadingEquipment } = useQuery({
+  const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -36,7 +36,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     },
   });
 
-  const { data: technicians, isLoading: isLoadingTechnicians } = useQuery({
+  const { data: technicians = [], isLoading: isLoadingTechnicians } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -99,8 +99,8 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 bg-white p-6 rounded-lg shadow">
         <MaintenanceBasicInfo 
           form={form} 
-          equipment={equipment || []} 
-          technicians={technicians || []} 
+          equipment={equipment} 
+          technicians={technicians} 
         />
         
         {isAHU ? (
