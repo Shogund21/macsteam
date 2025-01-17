@@ -118,7 +118,7 @@ const Stats = () => {
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <Card key={stat.name} className="p-6 glass">
+          <Card key={stat.name} className="p-6 bg-gradient-to-br from-white to-blue-50/80 backdrop-blur-sm shadow-md hover:shadow-lg transition-all duration-200">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">
@@ -126,8 +126,8 @@ const Stats = () => {
                 </p>
                 <p className="text-2xl font-semibold mt-2">{stat.value}</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-accent flex items-center justify-center">
-                <Icon className="h-6 w-6" />
+              <div className="h-12 w-12 rounded-full bg-[#1EAEDB]/10 flex items-center justify-center">
+                <Icon className="h-6 w-6 text-[#1EAEDB]" />
               </div>
             </div>
             <div className="mt-4">
