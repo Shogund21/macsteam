@@ -11,20 +11,26 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
 
       // Clean up undefined values and prepare data
       const cleanedValues = Object.fromEntries(
-        Object.entries(values).filter(([_, value]) => value !== undefined)
+        Object.entries(values).filter(([_, value]) => value !== undefined && value !== '')
       );
 
+      // Convert form values to the correct types
       const submissionData = {
         ...cleanedValues,
         equipment_type: equipmentType,
         check_date: new Date().toISOString(),
-        // Convert string values to numbers where needed
+        // Handle numeric fields
         chiller_pressure_reading: cleanedValues.chiller_pressure_reading ? 
-          parseFloat(cleanedValues.chiller_pressure_reading as string) : null,
+          parseFloat(String(cleanedValues.chiller_pressure_reading)) : null,
         chiller_temperature_reading: cleanedValues.chiller_temperature_reading ? 
-          parseFloat(cleanedValues.chiller_temperature_reading as string) : null,
+          parseFloat(String(cleanedValues.chiller_temperature_reading)) : null,
         airflow_reading: cleanedValues.airflow_reading ? 
-          parseFloat(cleanedValues.airflow_reading as string) : null,
+          parseFloat(String(cleanedValues.airflow_reading)) : null,
+        // Ensure boolean fields are properly set
+        unusual_noise: Boolean(cleanedValues.unusual_noise),
+        vibration_observed: Boolean(cleanedValues.vibration_observed),
+        air_filter_cleaned: Boolean(cleanedValues.air_filter_cleaned),
+        fan_bearings_lubricated: Boolean(cleanedValues.fan_bearings_lubricated),
       };
 
       console.log('Prepared submission data:', submissionData);
