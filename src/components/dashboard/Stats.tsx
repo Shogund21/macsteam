@@ -6,52 +6,75 @@ import { supabase } from "@/integrations/supabase/client";
 
 const Stats = () => {
   // Fetch equipment data
-  const { data: equipmentData, isLoading: equipmentLoading } = useQuery({
+  const { data: equipmentData, isLoading: equipmentLoading, error: equipmentError } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('equipment')
         .select('*');
       
-      if (error) {
-        console.error('Error fetching equipment:', error);
-        throw error;
-      }
-      return data;
+      if (error) throw error;
+      return data || [];
     },
   });
 
   // Fetch projects data
-  const { data: projectsData, isLoading: projectsLoading } = useQuery({
+  const { data: projectsData, isLoading: projectsLoading, error: projectsError } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('projects')
         .select('*');
       
-      if (error) {
-        console.error('Error fetching projects:', error);
-        throw error;
-      }
-      return data;
+      if (error) throw error;
+      return data || [];
     },
   });
 
   // Fetch maintenance checks data for pending tasks
-  const { data: maintenanceData, isLoading: maintenanceLoading } = useQuery({
+  const { data: maintenanceData, isLoading: maintenanceLoading, error: maintenanceError } = useQuery({
     queryKey: ['maintenance_checks'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('hvac_maintenance_checks')
         .select('*');
       
-      if (error) {
-        console.error('Error fetching maintenance checks:', error);
-        throw error;
-      }
-      return data;
+      if (error) throw error;
+      return data || [];
     },
   });
+
+  // Fetch technicians data
+  const { data: techniciansData, isLoading: techniciansLoading, error: techniciansError } = useQuery({
+    queryKey: ['technicians'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('technicians')
+        .select('*');
+      
+      if (error) throw error;
+      return data || [];
+    },
+  });
+
+  // Handle loading states
+  const isLoading = equipmentLoading || projectsLoading || maintenanceLoading || techniciansLoading;
+
+  // Handle errors
+  const hasError = equipmentError || projectsError || maintenanceError || techniciansError;
+  if (hasError) {
+    console.error('Error fetching data:', { equipmentError, projectsError, maintenanceError, techniciansError });
+    return (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="col-span-full p-6 bg-red-50">
+          <div className="flex items-center gap-2 text-red-600">
+            <AlertCircle className="h-5 w-5" />
+            <p>Error loading dashboard data. Please try again later.</p>
+          </div>
+        </Card>
+      </div>
+    );
+  }
 
   // Calculate active projects (those with status 'in_progress' or 'ongoing')
   const activeProjectsCount = projectsData?.filter(project => 
@@ -64,49 +87,33 @@ const Stats = () => {
     check.status === 'pending'
   ).length || 0;
 
-  // Fetch technicians data
-  const { data: techniciansData, isLoading: techniciansLoading } = useQuery({
-    queryKey: ['technicians'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('technicians')
-        .select('*');
-      
-      if (error) {
-        console.error('Error fetching technicians:', error);
-        throw error;
-      }
-      return data;
-    },
-  });
-
   const stats = [
     {
       name: "Total Equipment",
-      value: equipmentLoading ? "..." : equipmentData?.length.toString() || "0",
+      value: isLoading ? "..." : equipmentData?.length.toString() || "0",
       icon: Wrench,
       change: "+4.75%",
       changeType: "positive",
     },
     {
       name: "Active Projects",
-      value: projectsLoading ? "..." : activeProjectsCount.toString(),
+      value: isLoading ? "..." : activeProjectsCount.toString(),
       icon: Briefcase,
       change: "-0.5%",
       changeType: "negative",
     },
     {
       name: "Pending Tasks",
-      value: maintenanceLoading ? "..." : pendingTasksCount.toString(),
+      value: isLoading ? "..." : pendingTasksCount.toString(),
       icon: Clock,
       change: "+2.1%",
       changeType: "positive",
     },
     {
       name: "Available Technicians",
-      value: techniciansLoading 
+      value: isLoading 
         ? "..." 
-        : techniciansData?.filter(tech => tech.isAvailable).length.toString() || "0",
+        : (techniciansData?.filter(tech => tech.isAvailable).length || 0).toString(),
       icon: AlertCircle,
       change: "-1.5%",
       changeType: "positive",
