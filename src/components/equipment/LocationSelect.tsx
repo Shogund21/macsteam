@@ -35,7 +35,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
           <FormLabel className="text-base font-semibold">Location</FormLabel>
           <Select 
             onValueChange={field.onChange} 
-            value={field.value}
+            value={field.value || undefined}
           >
             <FormControl>
               <SelectTrigger className="w-full bg-white border-gray-200 h-12">
