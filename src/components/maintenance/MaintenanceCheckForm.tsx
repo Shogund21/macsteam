@@ -1,3 +1,4 @@
+import React from "react";
 import { Form } from "@/components/ui/form";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -85,6 +86,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   if (equipmentError || techniciansError) {
     console.error('Data fetching errors:', { equipmentError, techniciansError });
+    return <div>Error loading form data</div>;
   }
 
   return (
@@ -97,7 +99,6 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           isAHU={!!isAHU}
           isCoolingTower={!!isCoolingTower}
         />
-
         <FormActions 
           onCancel={onComplete}
           isValid={formIsValid}
