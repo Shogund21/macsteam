@@ -62,21 +62,21 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
     fetchDocuments();
   }, [equipmentId, maintenanceCheckId]);
 
-  const handleDownload = async (document: Document) => {
+  const handleDownload = async (doc: Document) => {
     try {
       const { data, error } = await supabase.storage
         .from('maintenance_docs')
-        .download(document.file_path);
+        .download(doc.file_path);
 
       if (error) throw error;
 
       const url = URL.createObjectURL(data);
-      const a = document.createElement('a');
+      const a = window.document.createElement('a');
       a.href = url;
-      a.download = document.file_name;
-      document.body.appendChild(a);
+      a.download = doc.file_name;
+      window.document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
+      window.document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
       toast({
