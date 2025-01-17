@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
-import { useMaintenanceSubmit } from "./form/hooks/useMaintenanceSubmit";
 import MaintenanceFormContent from "./form/MaintenanceFormContent";
 import { useToast } from "@/hooks/use-toast";
 
@@ -14,7 +13,6 @@ interface MaintenanceCheckFormProps {
 const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const form = useMaintenanceForm();
   const { toast } = useToast();
-  const handleSubmit = useMaintenanceSubmit(onComplete);
 
   const { data: equipment } = useQuery({
     queryKey: ['equipment'],
@@ -57,17 +55,23 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         check_date: new Date().toISOString(),
       };
 
+      console.log('Submitting maintenance check:', submissionData);
+
       const { error } = await supabase
         .from('hvac_maintenance_checks')
         .insert(submissionData);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       toast({
         title: "Success",
         description: "Maintenance check submitted successfully",
       });
       
+      form.reset();
       onComplete();
     } catch (error: any) {
       console.error('Error submitting maintenance check:', error);
