@@ -51,46 +51,6 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     try {
       console.log('Form values before submission:', values);
 
-      // Basic validation for required fields
-      if (!values.equipment_id || !values.technician_id) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Equipment and Technician are required fields",
-        });
-        return;
-      }
-
-      // Equipment-specific validation
-      if (isAHU) {
-        if (!values.air_filter_status || !values.fan_belt_condition) {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Please complete all required AHU fields",
-          });
-          return;
-        }
-      } else if (isCoolingTower) {
-        if (!values.water_system_status || !values.fill_media_condition) {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Please complete all required Cooling Tower fields",
-          });
-          return;
-        }
-      } else {
-        if (!values.chiller_pressure_reading || !values.chiller_temperature_reading) {
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: "Please complete all required readings",
-          });
-          return;
-        }
-      }
-
       const submissionData = {
         ...values,
         equipment_type: isAHU ? 'ahu' : isCoolingTower ? 'cooling_tower' : 'general',
@@ -131,17 +91,23 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   // Calculate form validity based on required fields
   const isFormValid = () => {
     const values = form.getValues();
-    const hasBasicFields = values.equipment_id && values.technician_id;
     
-    if (!hasBasicFields) return false;
-
-    if (isAHU) {
-      return values.air_filter_status && values.fan_belt_condition;
-    } else if (isCoolingTower) {
-      return values.water_system_status && values.fill_media_condition;
-    } else {
-      return values.chiller_pressure_reading && values.chiller_temperature_reading;
+    // Basic validation for required fields
+    if (!values.equipment_id || !values.technician_id) {
+      return false;
     }
+
+    // Equipment-specific validation
+    if (isAHU) {
+      return !!(values.air_filter_status && values.fan_belt_condition);
+    } 
+    
+    if (isCoolingTower) {
+      return !!(values.water_system_status && values.fill_media_condition);
+    }
+    
+    // General equipment validation
+    return !!(values.chiller_pressure_reading && values.chiller_temperature_reading);
   };
 
   return (
