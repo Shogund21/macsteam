@@ -18,7 +18,7 @@ import { MaintenanceCheckStatus } from "@/types/maintenance";
 const baseSchema = z.object({
   equipment_id: z.string().min(1, "Equipment is required"),
   technician_id: z.string().min(1, "Technician is required"),
-  equipment_type: z.string().optional(),
+  equipment_type: z.string().optional().nullable(),
   notes: z.string().optional().nullable(),
   unusual_noise: z.boolean().optional().nullable(),
   unusual_noise_description: z.string().optional().nullable(),
@@ -127,10 +127,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         .from('hvac_maintenance_checks')
         .insert(submissionData);
 
-      if (error) {
-        console.error("Supabase error:", error);
-        throw error;
-      }
+      if (error) throw error;
 
       toast({
         title: "Success",
