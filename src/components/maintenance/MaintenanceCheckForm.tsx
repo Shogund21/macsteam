@@ -159,7 +159,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           toast({
             variant: "destructive",
             title: "Validation Error",
-            description: "Please fill in all required fields correctly.",
+            description: "Please select equipment and technician.",
           });
         })} 
         className="space-y-6 bg-white p-6 rounded-lg shadow"
