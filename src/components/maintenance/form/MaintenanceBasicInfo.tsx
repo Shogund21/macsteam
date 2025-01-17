@@ -3,6 +3,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UseFormReturn } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import LocationSelect from "@/components/equipment/LocationSelect";
 import { Equipment, Technician } from "@/types/maintenance";
 
 interface MaintenanceBasicInfoProps {
@@ -35,20 +36,16 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold">Equipment</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
+                <SelectTrigger className="w-full bg-white border-gray-200 h-12">
                   <SelectValue placeholder="Select equipment" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent 
-                className="bg-white border border-gray-200 shadow-lg z-[100]"
-                position="popper"
-                sideOffset={5}
-              >
+              <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
                 {equipmentData?.map((item) => (
                   <SelectItem 
                     key={item.id} 
                     value={item.id}
-                    className="py-3 text-sm hover:bg-gray-100 cursor-pointer"
+                    className="py-3 text-sm"
                   >
                     {item.name} - {item.location}
                   </SelectItem>
@@ -68,20 +65,16 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold">Technician</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="w-full h-12 bg-white border border-gray-200 shadow-sm">
+                <SelectTrigger className="w-full bg-white border-gray-200 h-12">
                   <SelectValue placeholder="Select technician" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent 
-                className="bg-white border border-gray-200 shadow-lg z-[100]"
-                position="popper"
-                sideOffset={5}
-              >
+              <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
                 {technicians?.map((tech) => (
                   <SelectItem 
                     key={tech.id} 
                     value={tech.id}
-                    className="py-3 text-sm hover:bg-gray-100 cursor-pointer"
+                    className="py-3 text-sm"
                   >
                     {tech.firstName} {tech.lastName}
                   </SelectItem>
@@ -92,6 +85,8 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
           </FormItem>
         )}
       />
+
+      <LocationSelect form={form} />
     </div>
   );
 };

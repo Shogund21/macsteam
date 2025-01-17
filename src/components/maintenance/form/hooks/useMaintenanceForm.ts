@@ -34,23 +34,6 @@ export const maintenanceFormSchema = z.object({
   corrective_actions: z.string().optional(),
   maintenance_recommendations: z.string().optional(),
   images: z.array(z.string()).optional(),
-  // Cooling Tower specific fields
-  general_inspection: z.string().optional(),
-  water_system_status: z.string().optional(),
-  fill_media_condition: z.string().optional(),
-  drift_eliminators_condition: z.string().optional(),
-  fan_assembly_status: z.string().optional(),
-  motor_lubrication_status: z.string().optional(),
-  pump_seals_condition: z.string().optional(),
-  strainer_status: z.string().optional(),
-  sump_basin_condition: z.string().optional(),
-  drainage_system_status: z.string().optional(),
-  control_system_status: z.string().optional(),
-  sensor_status: z.string().optional(),
-  seasonal_preparation_status: z.string().optional(),
-  vibration_monitoring: z.string().optional(),
-  emergency_shutdown_status: z.string().optional(),
-  safety_features_status: z.string().optional(),
 });
 
 export type MaintenanceFormValues = z.infer<typeof maintenanceFormSchema>;

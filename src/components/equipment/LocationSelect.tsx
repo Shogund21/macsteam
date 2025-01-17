@@ -15,15 +15,13 @@ import {
 import { UseFormReturn } from "react-hook-form";
 
 const locations = [
-  { id: "776A", name: "776A - Main Building" },
+  { id: "778", name: "AHU 1 - 778" },
   { id: "776B", name: "Ahu 1,2,6,7,8,9 2nd floor chiller mech room - 776B" },
   { id: "776B", name: "Ahu 13,14,15 3rd floor house keeping office - 776B" },
   { id: "776B", name: "Ahu 16,17,18 Location 3rd floor engineering shop/mech room - 776B" },
-  { id: "776B", name: "Ahu 3,4,5,11,12 2nd floor luggage stock/mech room - 776B" },
-  { id: "777", name: "777 - East Wing" },
-  { id: "778", name: "AHU 1 - 778" },
   { id: "778", name: "AHU 2 - 778" },
   { id: "778", name: "AHU 3 - 778" },
+  { id: "776B", name: "Ahu 3,4,5,11,12 2nd floor luggage stock/mech room - 776B" },
   { id: "778", name: "AHU 4 - 778" },
   { id: "778", name: "AHU 5 - 778" },
   { id: "778", name: "AHU 6 - 778" },
@@ -47,29 +45,12 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                 <SelectValue placeholder="Select a location" />
               </SelectTrigger>
             </FormControl>
-            <SelectContent
-              ref={(ref) => {
-                if (ref) {
-                  ref.style.zIndex = '9999';
-                  ref.style.position = 'relative';
-                  ref.style.backgroundColor = 'white';
-                  ref.style.width = '100%';
-                  ref.style.minWidth = '300px';
-                  ref.style.maxHeight = '300px';
-                  ref.style.overflowY = 'auto';
-                }
-              }}
-              className="bg-white border border-gray-200 rounded-md shadow-lg"
-              position="popper"
-              side="bottom"
-              align="start"
-              sideOffset={5}
-            >
-              {locations.map((location, index) => (
-                <SelectItem
-                  key={`${location.id}-${index}`}
-                  value={location.name}
-                  className="py-3 text-sm cursor-pointer hover:bg-gray-100 px-4"
+            <SelectContent className="max-h-[300px] overflow-y-auto bg-white shadow-md z-50">
+              {locations.map((location) => (
+                <SelectItem 
+                  key={`${location.id}-${location.name}`} 
+                  value={location.id}
+                  className="py-3 text-sm cursor-pointer hover:bg-gray-100"
                 >
                   {location.name}
                 </SelectItem>

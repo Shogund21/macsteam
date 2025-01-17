@@ -61,18 +61,14 @@ const MaintenanceTableRow = ({
           }
         >
           <SelectTrigger 
-            className={`w-[140px] h-9 border shadow-sm ${getStatusColor(check.status as MaintenanceCheckStatus)}`}
+            className={`w-[140px] h-9 ${getStatusColor(check.status as MaintenanceCheckStatus)}`}
           >
             <SelectValue />
           </SelectTrigger>
-          <SelectContent
-            className="bg-white border border-gray-200 shadow-lg z-[100]"
-            position="popper"
-            sideOffset={5}
-          >
-            <SelectItem value="pending" className="py-2 text-sm hover:bg-gray-100 cursor-pointer">Pending</SelectItem>
-            <SelectItem value="completed" className="py-2 text-sm hover:bg-gray-100 cursor-pointer">Completed</SelectItem>
-            <SelectItem value="issue_found" className="py-2 text-sm hover:bg-gray-100 cursor-pointer">Issue Found</SelectItem>
+          <SelectContent>
+            <SelectItem value="pending">Pending</SelectItem>
+            <SelectItem value="completed">Completed</SelectItem>
+            <SelectItem value="issue_found">Issue Found</SelectItem>
           </SelectContent>
         </Select>
       </TableCell>
