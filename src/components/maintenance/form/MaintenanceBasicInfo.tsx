@@ -20,10 +20,13 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
             <Select
               onValueChange={field.onChange}
+              defaultValue={field.value}
               value={field.value}
             >
               <FormControl>
-                <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                <SelectTrigger 
+                  className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                >
                   <SelectValue 
                     placeholder="Select equipment" 
                     className="text-gray-600"
@@ -31,8 +34,8 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                 </SelectTrigger>
               </FormControl>
               <SelectContent 
-                position="popper"
-                className="bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto z-50"
+                position="popper" 
+                className="z-50 bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
               >
                 {equipment && equipment.length > 0 ? (
                   equipment.map((item) => (
@@ -65,10 +68,13 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
             <Select
               onValueChange={field.onChange}
+              defaultValue={field.value}
               value={field.value}
             >
               <FormControl>
-                <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
+                <SelectTrigger 
+                  className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                >
                   <SelectValue 
                     placeholder="Select technician" 
                     className="text-gray-600"
@@ -77,7 +83,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
               </FormControl>
               <SelectContent 
                 position="popper"
-                className="bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto z-50"
+                className="z-50 bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
               >
                 {technicians && technicians.length > 0 ? (
                   technicians.map((tech) => (
