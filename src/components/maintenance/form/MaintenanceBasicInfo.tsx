@@ -23,7 +23,8 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
             <Select
               onValueChange={field.onChange}
-              value={field.value || undefined}
+              value={field.value || ""}
+              defaultValue=""
             >
               <FormControl>
                 <SelectTrigger 
@@ -73,7 +74,8 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
             <Select
               onValueChange={field.onChange}
-              value={field.value || undefined}
+              value={field.value || ""}
+              defaultValue=""
             >
               <FormControl>
                 <SelectTrigger 

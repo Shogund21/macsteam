@@ -26,7 +26,6 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       const { data, error } = await supabase
         .from('equipment')
         .select('*')
-        .eq('status', 'active')
         .order('name');
       
       if (error) {
