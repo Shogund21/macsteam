@@ -25,14 +25,14 @@ interface DocumentCardProps {
   document: MaintenanceDocument;
 }
 
-const DocumentCard = ({ document }: DocumentCardProps) => {
+const DocumentCard = ({ document: doc }: DocumentCardProps) => {
   const { toast } = useToast();
 
   const handleDownload = async () => {
     try {
       const { data, error } = await supabase.storage
         .from('maintenance_docs')
-        .download(document.file_path);
+        .download(doc.file_path);
 
       if (error) throw error;
 
@@ -40,7 +40,7 @@ const DocumentCard = ({ document }: DocumentCardProps) => {
       const url = window.URL.createObjectURL(data);
       const link = document.createElement('a');
       link.href = url;
-      link.download = document.file_name;
+      link.download = doc.file_name;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -60,7 +60,7 @@ const DocumentCard = ({ document }: DocumentCardProps) => {
       // Delete from storage
       const { error: storageError } = await supabase.storage
         .from('maintenance_docs')
-        .remove([document.file_path]);
+        .remove([doc.file_path]);
 
       if (storageError) throw storageError;
 
@@ -68,7 +68,7 @@ const DocumentCard = ({ document }: DocumentCardProps) => {
       const { error: dbError } = await supabase
         .from('maintenance_documents')
         .delete()
-        .eq('id', document.id);
+        .eq('id', doc.id);
 
       if (dbError) throw dbError;
 
@@ -93,10 +93,10 @@ const DocumentCard = ({ document }: DocumentCardProps) => {
           <div>
             <CardTitle className="flex items-center gap-2">
               <File className="h-5 w-5" />
-              {document.file_name}
+              {doc.file_name}
             </CardTitle>
             <CardDescription>
-              Uploaded on {new Date(document.uploaded_at).toLocaleDateString()}
+              Uploaded on {new Date(doc.uploaded_at).toLocaleDateString()}
             </CardDescription>
           </div>
           <div className="flex gap-2">
@@ -122,19 +122,19 @@ const DocumentCard = ({ document }: DocumentCardProps) => {
       <CardContent>
         <div className="space-y-2">
           <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-            {document.category}
+            {doc.category}
           </Badge>
-          {document.tags && document.tags.length > 0 && (
+          {doc.tags && doc.tags.length > 0 && (
             <div className="flex gap-2 flex-wrap">
-              {document.tags.map((tag, index) => (
+              {doc.tags.map((tag, index) => (
                 <Badge key={index} variant="outline">
                   {tag}
                 </Badge>
               ))}
             </div>
           )}
-          {document.comments && (
-            <p className="text-sm text-gray-600">{document.comments}</p>
+          {doc.comments && (
+            <p className="text-sm text-gray-600">{doc.comments}</p>
           )}
         </div>
       </CardContent>
