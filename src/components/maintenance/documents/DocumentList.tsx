@@ -1,128 +1,50 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
 import DocumentCard from "./list/DocumentCard";
-
-interface Document {
-  id: string;
-  file_name: string;
-  file_path: string;
-  category: string;
-  uploaded_at: string;
-  tags: string[];
-  comments: string;
-}
 
 interface DocumentListProps {
   equipmentId?: string;
   maintenanceCheckId?: string;
+  projectId?: string;
 }
 
-const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) => {
-  const [documents, setDocuments] = useState<Document[]>([]);
-  const { toast } = useToast();
-
-  const fetchDocuments = async () => {
-    let query = supabase
-      .from('maintenance_documents')
-      .select('*')
-      .order('uploaded_at', { ascending: false });
-
-    if (equipmentId) {
-      query = query.eq('equipment_id', equipmentId);
-    }
-    if (maintenanceCheckId) {
-      query = query.eq('maintenance_check_id', maintenanceCheckId);
-    }
-
-    const { data, error } = await query;
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch documents",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setDocuments(data as Document[]);
-  };
-
-  useEffect(() => {
-    fetchDocuments();
-  }, [equipmentId, maintenanceCheckId]);
-
-  const handleDownload = async (doc: Document) => {
-    try {
-      const { data, error } = await supabase.storage
-        .from('maintenance_docs')
-        .download(doc.file_path);
-
-      if (error) throw error;
-
-      const url = URL.createObjectURL(data);
-      const a = window.document.createElement('a');
-      a.href = url;
-      a.download = doc.file_name;
-      window.document.body.appendChild(a);
-      a.click();
-      window.document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to download document",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const handleDelete = async (doc: Document) => {
-    try {
-      const { error: storageError } = await supabase.storage
-        .from('maintenance_docs')
-        .remove([doc.file_path]);
-
-      if (storageError) throw storageError;
-
-      const { error: dbError } = await supabase
+const DocumentList = ({ equipmentId, maintenanceCheckId, projectId }: DocumentListProps) => {
+  const { data: documents, isLoading } = useQuery({
+    queryKey: ['documents', equipmentId, maintenanceCheckId, projectId],
+    queryFn: async () => {
+      let query = supabase
         .from('maintenance_documents')
-        .delete()
-        .eq('id', doc.id);
+        .select('*');
 
-      if (dbError) throw dbError;
+      if (equipmentId) {
+        query = query.eq('equipment_id', equipmentId);
+      }
+      if (maintenanceCheckId) {
+        query = query.eq('maintenance_check_id', maintenanceCheckId);
+      }
+      if (projectId) {
+        query = query.eq('project_id', projectId);
+      }
 
-      toast({
-        title: "Success",
-        description: "Document deleted successfully",
-      });
+      const { data, error } = await query;
+      if (error) throw error;
+      return data;
+    },
+  });
 
-      fetchDocuments();
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete document",
-        variant: "destructive",
-      });
-    }
-  };
+  if (isLoading) {
+    return <div>Loading documents...</div>;
+  }
+
+  if (!documents?.length) {
+    return <div className="text-muted-foreground">No documents uploaded yet.</div>;
+  }
 
   return (
-    <div className="space-y-4">
+    <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {documents.map((document) => (
-        <DocumentCard
-          key={document.id}
-          document={document}
-          onDownload={handleDownload}
-          onDelete={handleDelete}
-        />
+        <DocumentCard key={document.id} document={document} />
       ))}
-      {documents.length === 0 && (
-        <div className="text-center py-8 text-gray-500">
-          No documents found
-        </div>
-      )}
     </div>
   );
 };

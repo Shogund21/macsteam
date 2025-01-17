@@ -10,11 +10,13 @@ import { ProjectStatusInfo } from "./form/ProjectStatusInfo";
 import { ProjectDates } from "./form/ProjectDates";
 import { FormActions } from "./form/FormActions";
 import { projectFormSchema, type ProjectFormValues } from "./types";
+import DocumentManager from "@/components/maintenance/documents/DocumentManager";
 
 export const AddProjectForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [projectId, setProjectId] = useState<string | null>(null);
 
   const form = useForm<ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
@@ -32,25 +34,35 @@ export const AddProjectForm = () => {
   const onSubmit = async (values: ProjectFormValues) => {
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from("projects").insert({
-        name: values.name,
-        description: values.description,
-        status: values.status,
-        startdate: values.startdate || null,
-        enddate: values.enddate || null,
-        priority: values.priority,
-        location: values.location,
-        createdat: new Date().toISOString(),
-        updatedat: new Date().toISOString(),
-      });
+      const { data, error } = await supabase
+        .from("projects")
+        .insert({
+          name: values.name,
+          description: values.description,
+          status: values.status,
+          startdate: values.startdate || null,
+          enddate: values.enddate || null,
+          priority: values.priority,
+          location: values.location,
+          createdat: new Date().toISOString(),
+          updatedat: new Date().toISOString(),
+        })
+        .select()
+        .single();
       
       if (error) throw error;
+      
+      setProjectId(data.id);
       
       toast({
         title: "Success",
         description: "Project added successfully",
       });
-      navigate("/projects");
+
+      // Don't navigate immediately to allow document upload
+      if (!data.id) {
+        navigate("/projects");
+      }
     } catch (error) {
       console.error("Error adding project:", error);
       toast({
@@ -69,7 +81,17 @@ export const AddProjectForm = () => {
         <ProjectBasicInfo form={form} />
         <ProjectStatusInfo form={form} />
         <ProjectDates form={form} />
-        <FormActions isSubmitting={isSubmitting} />
+        
+        {projectId && (
+          <div className="mt-8">
+            <DocumentManager projectId={projectId} />
+          </div>
+        )}
+        
+        <FormActions 
+          isSubmitting={isSubmitting} 
+          onCancel={() => navigate("/projects")}
+        />
       </form>
     </Form>
   );

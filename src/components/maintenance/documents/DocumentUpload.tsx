@@ -18,12 +18,14 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 interface DocumentUploadProps {
   equipmentId?: string;
   maintenanceCheckId?: string;
+  projectId?: string;
   onUploadComplete?: () => void;
 }
 
 const DocumentUpload = ({ 
   equipmentId, 
-  maintenanceCheckId, 
+  maintenanceCheckId,
+  projectId,
   onUploadComplete 
 }: DocumentUploadProps) => {
   const [files, setFiles] = useState<FileList | null>(null);
@@ -85,6 +87,7 @@ const DocumentUpload = ({
             category,
             equipment_id: equipmentId,
             maintenance_check_id: maintenanceCheckId,
+            project_id: projectId,
             comments,
             tags: tags.split(',').map(tag => tag.trim()).filter(tag => tag),
           });
