@@ -4,6 +4,7 @@ import MaintenanceReadings from "./MaintenanceReadings";
 import MaintenanceStatus from "./MaintenanceStatus";
 import MaintenanceObservations from "./MaintenanceObservations";
 import AHUMaintenanceFields from "./AHUMaintenanceFields";
+import CoolingTowerMaintenanceFields from "./CoolingTowerMaintenanceFields";
 import DocumentManager from "../documents/DocumentManager";
 import { Equipment, Technician } from "@/types/maintenance";
 
@@ -12,6 +13,7 @@ interface MaintenanceFormContentProps {
   equipment: Equipment[];
   technicians: Technician[];
   isAHU: boolean;
+  isCoolingTower: boolean;
 }
 
 const MaintenanceFormContent = ({
@@ -19,6 +21,7 @@ const MaintenanceFormContent = ({
   equipment,
   technicians,
   isAHU,
+  isCoolingTower,
 }: MaintenanceFormContentProps) => {
   return (
     <>
@@ -30,6 +33,8 @@ const MaintenanceFormContent = ({
       
       {isAHU ? (
         <AHUMaintenanceFields form={form} />
+      ) : isCoolingTower ? (
+        <CoolingTowerMaintenanceFields form={form} />
       ) : (
         <>
           <MaintenanceReadings form={form} />

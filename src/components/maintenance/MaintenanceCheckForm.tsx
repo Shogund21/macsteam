@@ -45,6 +45,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   );
 
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
+  const isCoolingTower = selectedEquipment?.name.toLowerCase().includes('cooling tower');
 
   return (
     <Form {...form}>
@@ -54,6 +55,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           equipment={equipment || []}
           technicians={technicians || []}
           isAHU={!!isAHU}
+          isCoolingTower={!!isCoolingTower}
         />
 
         <div className="flex justify-end space-x-4">
