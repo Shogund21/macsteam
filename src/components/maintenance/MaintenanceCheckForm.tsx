@@ -37,6 +37,11 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       console.log('Equipment fetch successful. Data:', data);
       if (!data || data.length === 0) {
         console.log('No equipment found or empty data array returned');
+        toast({
+          variant: "destructive",
+          title: "No Equipment Found",
+          description: "Please add equipment before creating a maintenance check.",
+        });
       }
       
       return data || [];
@@ -59,6 +64,15 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       }
       
       console.log('Technicians fetch successful. Data:', data);
+      if (!data || data.length === 0) {
+        console.log('No technicians found or empty data array returned');
+        toast({
+          variant: "destructive",
+          title: "No Technicians Found",
+          description: "Please add technicians before creating a maintenance check.",
+        });
+      }
+      
       return data || [];
     },
   });

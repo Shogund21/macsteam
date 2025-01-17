@@ -13,122 +13,106 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
   console.log('MaintenanceBasicInfo render - Equipment:', equipment);
   console.log('MaintenanceBasicInfo render - Technicians:', technicians);
   
-  // Watch the current values to ensure re-rendering on changes
-  const selectedEquipmentId = form.watch("equipment_id");
-  const selectedTechnicianId = form.watch("technician_id");
-  
-  console.log('Selected Equipment ID:', selectedEquipmentId);
-  console.log('Selected Technician ID:', selectedTechnicianId);
-
   return (
     <div className="space-y-6">
       <FormField
         control={form.control}
         name="equipment_id"
-        render={({ field }) => {
-          console.log('Equipment field value:', field.value);
-          return (
-            <FormItem>
-              <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                value={field.value}
-              >
-                <FormControl>
-                  <SelectTrigger 
-                    className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  >
-                    <SelectValue 
-                      placeholder="Select equipment" 
-                      className="text-gray-600"
-                    />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent 
-                  className="z-50 bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              value={field.value || undefined}
+            >
+              <FormControl>
+                <SelectTrigger 
+                  className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 >
-                  {equipment && equipment.length > 0 ? (
-                    equipment.map((item) => {
-                      console.log('Rendering equipment option:', item);
-                      return (
-                        <SelectItem 
-                          key={item.id} 
-                          value={item.id}
-                          className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
-                        >
-                          <span className="font-medium">{item.name}</span>
-                          <span className="text-gray-500 ml-2">- {item.model}</span>
-                        </SelectItem>
-                      );
-                    })
-                  ) : (
-                    <SelectItem value="no-equipment" disabled>
-                      No equipment available
+                  <SelectValue 
+                    placeholder="Select equipment" 
+                    className="text-gray-600"
+                  />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent 
+                className="z-[1000] bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+              >
+                {equipment && equipment.length > 0 ? (
+                  equipment.map((item) => (
+                    <SelectItem 
+                      key={item.id} 
+                      value={item.id}
+                      className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+                    >
+                      <span className="font-medium">{item.name}</span>
+                      <span className="text-gray-500 ml-2">- {item.model}</span>
                     </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
-              <FormMessage className="text-sm text-red-500" />
-            </FormItem>
-          );
-        }}
+                  ))
+                ) : (
+                  <SelectItem 
+                    value="no-equipment-available" 
+                    disabled 
+                    className="py-3 text-sm text-gray-500"
+                  >
+                    No equipment available
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+            <FormMessage className="text-sm text-red-500" />
+          </FormItem>
+        )}
       />
 
       <FormField
         control={form.control}
         name="technician_id"
-        render={({ field }) => {
-          console.log('Technician field value:', field.value);
-          return (
-            <FormItem>
-              <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
-              <Select
-                onValueChange={(value) => {
-                  console.log('Technician selection changed to:', value);
-                  field.onChange(value);
-                }}
-                value={field.value || undefined}
-              >
-                <FormControl>
-                  <SelectTrigger 
-                    className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  >
-                    <SelectValue 
-                      placeholder="Select technician" 
-                      className="text-gray-600"
-                    />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent 
-                  position="popper"
-                  className="z-50 bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
+            <Select
+              onValueChange={field.onChange}
+              value={field.value || undefined}
+            >
+              <FormControl>
+                <SelectTrigger 
+                  className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                 >
-                  {technicians && technicians.length > 0 ? (
-                    technicians.map((tech) => {
-                      console.log('Rendering technician option:', tech);
-                      return (
-                        <SelectItem 
-                          key={tech.id} 
-                          value={tech.id}
-                          className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
-                        >
-                          <span className="font-medium">{tech.firstName} {tech.lastName}</span>
-                          <span className="text-gray-500 ml-2">- {tech.specialization}</span>
-                        </SelectItem>
-                      );
-                    })
-                  ) : (
-                    <SelectItem value="no-technician" disabled>
-                      No technicians available
+                  <SelectValue 
+                    placeholder="Select technician" 
+                    className="text-gray-600"
+                  />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent 
+                className="z-[1000] bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+              >
+                {technicians && technicians.length > 0 ? (
+                  technicians.map((tech) => (
+                    <SelectItem 
+                      key={tech.id} 
+                      value={tech.id}
+                      className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+                    >
+                      <span className="font-medium">{tech.firstName} {tech.lastName}</span>
+                      <span className="text-gray-500 ml-2">- {tech.specialization}</span>
                     </SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
-              <FormMessage className="text-sm text-red-500" />
-            </FormItem>
-          );
-        }}
+                  ))
+                ) : (
+                  <SelectItem 
+                    value="no-technician-available" 
+                    disabled 
+                    className="py-3 text-sm text-gray-500"
+                  >
+                    No technicians available
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+            <FormMessage className="text-sm text-red-500" />
+          </FormItem>
+        )}
       />
     </div>
   );
