@@ -24,7 +24,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
             <Select
               onValueChange={(value) => field.onChange(value)}
-              value={field.value ? String(field.value) : ""}
+              value={field.value ? String(field.value) : undefined}
             >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
@@ -39,7 +39,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                   equipment.map((item) => (
                     <SelectItem 
                       key={item.id} 
-                      value={String(item.id)} // Ensure value is a string
+                      value={String(item.id)}
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
                       <span className="font-medium">{item.name}</span>
@@ -47,7 +47,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem value="" disabled>
+                  <SelectItem value="no-equipment-available" disabled>
                     No equipment available
                   </SelectItem>
                 )}
@@ -66,7 +66,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
             <Select
               onValueChange={(value) => field.onChange(value)}
-              value={field.value ? String(field.value) : ""}
+              value={field.value ? String(field.value) : undefined}
             >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
@@ -81,7 +81,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                   technicians.map((tech) => (
                     <SelectItem 
                       key={tech.id} 
-                      value={String(tech.id)} // Ensure value is a string
+                      value={String(tech.id)}
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
                       <span className="font-medium">{tech.firstName} {tech.lastName}</span>
@@ -89,7 +89,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem value="" disabled>
+                  <SelectItem value="no-technician-available" disabled>
                     No technicians available
                   </SelectItem>
                 )}
