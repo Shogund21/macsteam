@@ -28,16 +28,22 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                 </SelectTrigger>
               </FormControl>
               <SelectContent className="max-h-[300px] overflow-y-auto bg-white border border-gray-200 shadow-lg">
-                {equipment?.map((item) => (
-                  <SelectItem 
-                    key={item.id} 
-                    value={item.id}
-                    className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
-                  >
-                    <span className="font-medium">{item.name}</span>
-                    <span className="text-gray-500 ml-2">- {item.model}</span>
+                {equipment && equipment.length > 0 ? (
+                  equipment.map((item) => (
+                    <SelectItem 
+                      key={item.id} 
+                      value={item.id}
+                      className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+                    >
+                      <span className="font-medium">{item.name}</span>
+                      <span className="text-gray-500 ml-2">- {item.model}</span>
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="no-equipment" disabled>
+                    No equipment available
                   </SelectItem>
-                ))}
+                )}
               </SelectContent>
             </Select>
             <FormMessage className="text-sm text-red-500" />
