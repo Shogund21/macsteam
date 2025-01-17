@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-interface Document {
+interface MaintenanceDocument {
   id: string;
   file_name: string;
   file_path: string;
@@ -28,7 +28,7 @@ interface DocumentListProps {
 }
 
 const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) => {
-  const [documents, setDocuments] = useState<Document[]>([]);
+  const [documents, setDocuments] = useState<MaintenanceDocument[]>([]);
   const { toast } = useToast();
 
   const fetchDocuments = async () => {
@@ -55,14 +55,14 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
       return;
     }
 
-    setDocuments(data as Document[]);
+    setDocuments(data as MaintenanceDocument[]);
   };
 
   useEffect(() => {
     fetchDocuments();
   }, [equipmentId, maintenanceCheckId]);
 
-  const handleDownload = async (document: Document) => {
+  const handleDownload = async (document: MaintenanceDocument) => {
     try {
       const { data, error } = await supabase.storage
         .from('maintenance_docs')
@@ -85,7 +85,7 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
     }
   };
 
-  const handleDelete = async (document: Document) => {
+  const handleDelete = async (document: MaintenanceDocument) => {
     try {
       const { error: storageError } = await supabase.storage
         .from('maintenance_docs')
