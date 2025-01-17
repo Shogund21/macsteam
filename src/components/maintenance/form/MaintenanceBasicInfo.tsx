@@ -31,11 +31,9 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             <FormItem>
               <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
               <Select
-                onValueChange={(value) => {
-                  console.log('Equipment selection changed to:', value);
-                  field.onChange(value);
-                }}
-                value={field.value || undefined}
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                value={field.value}
               >
                 <FormControl>
                   <SelectTrigger 
@@ -48,7 +46,6 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent 
-                  position="popper" 
                   className="z-50 bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
                 >
                   {equipment && equipment.length > 0 ? (
