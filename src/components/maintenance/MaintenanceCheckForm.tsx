@@ -30,7 +30,12 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       
       if (error) {
         console.error('Error fetching equipment:', error);
-        throw error;
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to load equipment. Please try again.",
+        });
+        return [];
       }
       return data || [];
     },
@@ -47,7 +52,12 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       
       if (error) {
         console.error('Error fetching technicians:', error);
-        throw error;
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to load technicians. Please try again.",
+        });
+        return [];
       }
       return data || [];
     },

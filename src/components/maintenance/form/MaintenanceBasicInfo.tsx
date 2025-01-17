@@ -35,7 +35,8 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                       value={item.id}
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
-                      {item.name} - {item.model}
+                      <span className="font-medium">{item.name}</span>
+                      <span className="text-gray-500 ml-2">- {item.model}</span>
                     </SelectItem>
                   ))
                 ) : (
@@ -73,7 +74,8 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                       value={tech.id}
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
-                      {tech.firstName} {tech.lastName} - {tech.specialization}
+                      <span className="font-medium">{tech.firstName} {tech.lastName}</span>
+                      <span className="text-gray-500 ml-2">- {tech.specialization}</span>
                     </SelectItem>
                   ))
                 ) : (
