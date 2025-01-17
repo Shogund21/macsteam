@@ -19,9 +19,10 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const { toast } = useToast();
   const form = useMaintenanceForm();
 
-  const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
+  const { data: equipment = [], isLoading: isLoadingEquipment, error: equipmentError } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
+      console.log('Fetching equipment...');
       const { data, error } = await supabase
         .from('equipment')
         .select('*')
@@ -30,27 +31,18 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       
       if (error) {
         console.error('Error fetching equipment:', error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to load equipment. Please try again.",
-        });
-        return [];
+        throw error;
       }
       
-      if (!data || data.length === 0) {
-        console.log('No equipment found');
-        return [];
-      }
-
-      console.log('Fetched equipment:', data);
-      return data;
+      console.log('Fetched equipment data:', data);
+      return data || [];
     },
   });
 
-  const { data: technicians = [], isLoading: isLoadingTechnicians } = useQuery({
+  const { data: technicians = [], isLoading: isLoadingTechnicians, error: techniciansError } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
+      console.log('Fetching technicians...');
       const { data, error } = await supabase
         .from('technicians')
         .select('*')
@@ -59,16 +51,30 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       
       if (error) {
         console.error('Error fetching technicians:', error);
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to load technicians. Please try again.",
-        });
-        return [];
+        throw error;
       }
+      
+      console.log('Fetched technicians data:', data);
       return data || [];
     },
   });
+
+  // Handle query errors
+  if (equipmentError) {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: "Failed to load equipment. Please try again.",
+    });
+  }
+
+  if (techniciansError) {
+    toast({
+      variant: "destructive",
+      title: "Error",
+      description: "Failed to load technicians. Please try again.",
+    });
+  }
 
   const selectedEquipment = equipment?.find(
     (eq) => eq.id === form.watch('equipment_id')

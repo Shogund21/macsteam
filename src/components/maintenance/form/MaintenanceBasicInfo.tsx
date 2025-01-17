@@ -10,10 +10,6 @@ interface MaintenanceBasicInfoProps {
 }
 
 const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasicInfoProps) => {
-  // Watch the current values to ensure re-rendering on changes
-  const selectedEquipmentId = form.watch("equipment_id");
-  const selectedTechnicianId = form.watch("technician_id");
-
   return (
     <div className="space-y-6">
       <FormField
@@ -23,8 +19,8 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
           <FormItem>
             <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
             <Select
-              onValueChange={(value) => field.onChange(value)}
-              value={field.value ? String(field.value) : undefined}
+              onValueChange={field.onChange}
+              value={field.value}
             >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
@@ -34,12 +30,15 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                   />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent className="max-h-[300px] overflow-y-auto bg-white border border-gray-200 shadow-lg">
+              <SelectContent 
+                position="popper"
+                className="bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto z-50"
+              >
                 {equipment && equipment.length > 0 ? (
                   equipment.map((item) => (
                     <SelectItem 
                       key={item.id} 
-                      value={String(item.id)}
+                      value={item.id}
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
                       <span className="font-medium">{item.name}</span>
@@ -47,7 +46,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem value="no-equipment-available" disabled>
+                  <SelectItem value="no-equipment" disabled>
                     No equipment available
                   </SelectItem>
                 )}
@@ -65,8 +64,8 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
           <FormItem>
             <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
             <Select
-              onValueChange={(value) => field.onChange(value)}
-              value={field.value ? String(field.value) : undefined}
+              onValueChange={field.onChange}
+              value={field.value}
             >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors">
@@ -76,12 +75,15 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                   />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent className="max-h-[300px] overflow-y-auto bg-white border border-gray-200 shadow-lg">
+              <SelectContent 
+                position="popper"
+                className="bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto z-50"
+              >
                 {technicians && technicians.length > 0 ? (
                   technicians.map((tech) => (
                     <SelectItem 
                       key={tech.id} 
-                      value={String(tech.id)}
+                      value={tech.id}
                       className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
                       <span className="font-medium">{tech.firstName} {tech.lastName}</span>
@@ -89,7 +91,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem value="no-technician-available" disabled>
+                  <SelectItem value="no-technician" disabled>
                     No technicians available
                   </SelectItem>
                 )}
