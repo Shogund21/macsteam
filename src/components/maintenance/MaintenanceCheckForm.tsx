@@ -12,6 +12,7 @@ import MaintenanceStatus from "./form/MaintenanceStatus";
 import MaintenanceObservations from "./form/MaintenanceObservations";
 import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
 import DocumentManager from "./documents/DocumentManager";
+import { MaintenanceCheckStatus } from "@/types/maintenance";
 
 const formSchema = z.object({
   equipment_id: z.string().min(1, "Equipment is required"),
@@ -104,7 +105,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         chiller_pressure_reading: parseFloat(values.chiller_pressure_reading),
         chiller_temperature_reading: parseFloat(values.chiller_temperature_reading),
         airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
-        status: 'pending',
+        status: 'pending' as MaintenanceCheckStatus,
       };
 
       const { error } = await supabase
