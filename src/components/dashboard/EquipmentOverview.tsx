@@ -22,8 +22,8 @@ const EquipmentOverview = () => {
   });
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-white to-blue-50/80 backdrop-blur-sm shadow-md">
-      <h2 className="text-lg font-semibold mb-4 text-[#1EAEDB]">Equipment Overview</h2>
+    <Card className="p-6">
+      <h2 className="text-lg font-semibold mb-4">Equipment Overview</h2>
       <div className="space-y-4">
         {equipmentLoading ? (
           <p>Loading equipment data...</p>

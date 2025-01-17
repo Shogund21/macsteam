@@ -24,9 +24,7 @@ const DocumentManager = ({ equipmentId, maintenanceCheckId }: DocumentManagerPro
         <h2 className="text-2xl font-semibold">Documents</h2>
         <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-blue-500 text-white hover:bg-blue-600">
-              Upload Documents
-            </Button>
+            <Button>Upload Documents</Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>

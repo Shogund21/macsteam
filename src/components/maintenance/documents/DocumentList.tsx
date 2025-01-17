@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import DocumentCard from "./list/DocumentCard";
+import { File, Download, Trash2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface Document {
   id: string;
@@ -53,21 +62,19 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
     fetchDocuments();
   }, [equipmentId, maintenanceCheckId]);
 
-  const handleDownload = async (doc: Document) => {
+  const handleDownload = async (document: Document) => {
     try {
       const { data, error } = await supabase.storage
         .from('maintenance_docs')
-        .download(doc.file_path);
+        .download(document.file_path);
 
       if (error) throw error;
 
       const url = URL.createObjectURL(data);
-      const a = window.document.createElement('a');
+      const a = document.createElement('a');
       a.href = url;
-      a.download = doc.file_name;
-      window.document.body.appendChild(a);
+      a.download = document.file_name;
       a.click();
-      window.document.body.removeChild(a);
       URL.revokeObjectURL(url);
     } catch (error) {
       toast({
@@ -78,18 +85,18 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
     }
   };
 
-  const handleDelete = async (doc: Document) => {
+  const handleDelete = async (document: Document) => {
     try {
       const { error: storageError } = await supabase.storage
         .from('maintenance_docs')
-        .remove([doc.file_path]);
+        .remove([document.file_path]);
 
       if (storageError) throw storageError;
 
       const { error: dbError } = await supabase
         .from('maintenance_documents')
         .delete()
-        .eq('id', doc.id);
+        .eq('id', document.id);
 
       if (dbError) throw dbError;
 
@@ -111,12 +118,54 @@ const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) =>
   return (
     <div className="space-y-4">
       {documents.map((document) => (
-        <DocumentCard
-          key={document.id}
-          document={document}
-          onDownload={handleDownload}
-          onDelete={handleDelete}
-        />
+        <Card key={document.id}>
+          <CardHeader>
+            <div className="flex items-start justify-between">
+              <div>
+                <CardTitle className="flex items-center gap-2">
+                  <File className="h-5 w-5" />
+                  {document.file_name}
+                </CardTitle>
+                <CardDescription>
+                  Uploaded on {new Date(document.uploaded_at).toLocaleDateString()}
+                </CardDescription>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleDownload(document)}
+                >
+                  <Download className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => handleDelete(document)}
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <Badge>{document.category}</Badge>
+              {document.tags && document.tags.length > 0 && (
+                <div className="flex gap-2 flex-wrap">
+                  {document.tags.map((tag, index) => (
+                    <Badge key={index} variant="secondary">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              {document.comments && (
+                <p className="text-sm text-gray-600">{document.comments}</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       ))}
       {documents.length === 0 && (
         <div className="text-center py-8 text-gray-500">
