@@ -21,7 +21,7 @@ export const FormActions = ({ isSubmitting, onCancel }: FormActionsProps) => {
       <Button 
         type="submit" 
         disabled={isSubmitting}
-        className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
+        className="bg-[#1EAEDB] hover:bg-[#0FA0CE] text-white"
       >
         {isSubmitting ? "Saving..." : "Save"}
       </Button>
