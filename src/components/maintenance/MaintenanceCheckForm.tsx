@@ -62,6 +62,15 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   const onSubmit = async (values: MaintenanceFormValues) => {
     try {
+      if (!values.equipment_id || !values.technician_id) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Equipment and Technician selection are required.",
+        });
+        return;
+      }
+
       const submissionData = {
         ...values,
         equipment_type: isAHU ? 'ahu' : 'general',

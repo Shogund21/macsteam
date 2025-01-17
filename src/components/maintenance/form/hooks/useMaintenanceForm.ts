@@ -3,8 +3,12 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 const maintenanceFormSchema = z.object({
-  equipment_id: z.string({ required_error: "Equipment is required" }),
-  technician_id: z.string({ required_error: "Technician is required" }),
+  equipment_id: z.string({
+    required_error: "Equipment selection is required",
+  }),
+  technician_id: z.string({
+    required_error: "Technician selection is required",
+  }),
   equipment_type: z.string().nullable().optional(),
   chiller_pressure_reading: z.string().nullable().optional(),
   chiller_temperature_reading: z.string().nullable().optional(),
@@ -41,6 +45,8 @@ export const useMaintenanceForm = () => {
   return useForm<MaintenanceFormValues>({
     resolver: zodResolver(maintenanceFormSchema),
     defaultValues: {
+      equipment_id: "",
+      technician_id: "",
       unusual_noise: false,
       vibration_observed: false,
       air_filter_cleaned: false,
