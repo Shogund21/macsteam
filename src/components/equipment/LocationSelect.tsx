@@ -46,18 +46,23 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className="bg-white border border-gray-200 rounded-md shadow-lg"
+              className="bg-white border border-gray-200 rounded-md shadow-lg overflow-y-auto"
               position="popper"
               align="start"
               side="bottom"
               sideOffset={8}
-              style={{ zIndex: 50, maxHeight: '300px', overflowY: 'auto' }}
+              style={{ 
+                zIndex: 9999, 
+                maxHeight: '300px',
+                minWidth: '300px',
+                width: '100%'
+              }}
             >
               {locations.map((location, index) => (
                 <SelectItem 
                   key={`${location.id}-${index}`} 
                   value={location.name}
-                  className="py-3 text-sm cursor-pointer hover:bg-gray-100"
+                  className="py-3 text-sm cursor-pointer hover:bg-gray-100 px-4"
                 >
                   {location.name}
                 </SelectItem>
