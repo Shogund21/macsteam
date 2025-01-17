@@ -44,16 +44,22 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const selectedEquipment = equipment?.find(
     (eq) => eq.id === form.watch('equipment_id')
   );
+  console.log('Selected equipment:', selectedEquipment);
 
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
   const isCoolingTower = selectedEquipment?.name.toLowerCase().includes('cooling tower');
+  console.log('Equipment type:', { isAHU, isCoolingTower });
   
   const { isFormValid } = useFormValidation(form, !!isAHU, !!isCoolingTower);
 
   const onSubmit = async (values: any) => {
+    console.log('Form submitted with values:', values);
     const equipmentType = isAHU ? 'ahu' : isCoolingTower ? 'cooling_tower' : 'general';
     await handleSubmit(values, equipmentType);
   };
+
+  const formIsValid = isFormValid();
+  console.log('Form validity:', formIsValid);
 
   return (
     <Form {...form}>
@@ -68,7 +74,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
         <FormActions 
           onCancel={onComplete}
-          isValid={isFormValid()}
+          isValid={formIsValid}
         />
       </form>
     </Form>

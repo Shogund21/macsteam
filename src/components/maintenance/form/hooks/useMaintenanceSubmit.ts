@@ -7,7 +7,7 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
 
   const handleSubmit = async (values: MaintenanceFormValues, equipmentType: string) => {
     try {
-      console.log('Form values before submission:', values);
+      console.log('Starting form submission with values:', values);
 
       const submissionData = {
         ...values,
@@ -18,16 +18,20 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
         airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
       };
 
-      console.log('Submitting maintenance check:', submissionData);
+      console.log('Prepared submission data:', submissionData);
 
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('hvac_maintenance_checks')
-        .insert(submissionData);
+        .insert(submissionData)
+        .select()
+        .single();
 
       if (error) {
         console.error('Supabase error:', error);
         throw error;
       }
+
+      console.log('Successfully submitted maintenance check:', data);
 
       toast({
         title: "Success",
@@ -40,7 +44,7 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to submit maintenance check: " + error.message,
+        description: `Failed to submit maintenance check: ${error.message}`,
       });
     }
   };
