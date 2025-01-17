@@ -54,31 +54,47 @@ export type Database = {
           chiller_temperature_reading: number | null
           coils_condition: string | null
           condenser_condition: string | null
+          control_system_status: string | null
           corrective_actions: string | null
           created_at: string | null
           dampers_operation: string | null
           drain_pan_status: string | null
+          drainage_system_status: string | null
+          drift_eliminators_condition: string | null
+          emergency_shutdown_status: string | null
           equipment_id: string | null
           equipment_type: string | null
+          fan_assembly_status: string | null
           fan_bearings_lubricated: boolean | null
           fan_belt_condition: string | null
           fan_noise_level: string | null
+          fill_media_condition: string | null
+          general_inspection: string | null
           id: string
           images: string[] | null
           maintenance_recommendations: string | null
           motor_condition: string | null
+          motor_lubrication_status: string | null
           notes: string | null
           oil_level_status: string | null
+          pump_seals_condition: string | null
           refrigerant_level: string | null
+          safety_features_status: string | null
+          seasonal_preparation_status: string | null
+          sensor_status: string | null
           sensors_operation: string | null
           status: Database["public"]["Enums"]["maintenance_check_status"] | null
+          strainer_status: string | null
+          sump_basin_condition: string | null
           technician_id: string | null
           troubleshooting_notes: string | null
           unusual_noise: boolean | null
           unusual_noise_description: string | null
           updated_at: string | null
           vibration_description: string | null
+          vibration_monitoring: string | null
           vibration_observed: boolean | null
+          water_system_status: string | null
         }
         Insert: {
           air_filter_cleaned?: boolean | null
@@ -91,33 +107,49 @@ export type Database = {
           chiller_temperature_reading?: number | null
           coils_condition?: string | null
           condenser_condition?: string | null
+          control_system_status?: string | null
           corrective_actions?: string | null
           created_at?: string | null
           dampers_operation?: string | null
           drain_pan_status?: string | null
+          drainage_system_status?: string | null
+          drift_eliminators_condition?: string | null
+          emergency_shutdown_status?: string | null
           equipment_id?: string | null
           equipment_type?: string | null
+          fan_assembly_status?: string | null
           fan_bearings_lubricated?: boolean | null
           fan_belt_condition?: string | null
           fan_noise_level?: string | null
+          fill_media_condition?: string | null
+          general_inspection?: string | null
           id?: string
           images?: string[] | null
           maintenance_recommendations?: string | null
           motor_condition?: string | null
+          motor_lubrication_status?: string | null
           notes?: string | null
           oil_level_status?: string | null
+          pump_seals_condition?: string | null
           refrigerant_level?: string | null
+          safety_features_status?: string | null
+          seasonal_preparation_status?: string | null
+          sensor_status?: string | null
           sensors_operation?: string | null
           status?:
             | Database["public"]["Enums"]["maintenance_check_status"]
             | null
+          strainer_status?: string | null
+          sump_basin_condition?: string | null
           technician_id?: string | null
           troubleshooting_notes?: string | null
           unusual_noise?: boolean | null
           unusual_noise_description?: string | null
           updated_at?: string | null
           vibration_description?: string | null
+          vibration_monitoring?: string | null
           vibration_observed?: boolean | null
+          water_system_status?: string | null
         }
         Update: {
           air_filter_cleaned?: boolean | null
@@ -130,33 +162,49 @@ export type Database = {
           chiller_temperature_reading?: number | null
           coils_condition?: string | null
           condenser_condition?: string | null
+          control_system_status?: string | null
           corrective_actions?: string | null
           created_at?: string | null
           dampers_operation?: string | null
           drain_pan_status?: string | null
+          drainage_system_status?: string | null
+          drift_eliminators_condition?: string | null
+          emergency_shutdown_status?: string | null
           equipment_id?: string | null
           equipment_type?: string | null
+          fan_assembly_status?: string | null
           fan_bearings_lubricated?: boolean | null
           fan_belt_condition?: string | null
           fan_noise_level?: string | null
+          fill_media_condition?: string | null
+          general_inspection?: string | null
           id?: string
           images?: string[] | null
           maintenance_recommendations?: string | null
           motor_condition?: string | null
+          motor_lubrication_status?: string | null
           notes?: string | null
           oil_level_status?: string | null
+          pump_seals_condition?: string | null
           refrigerant_level?: string | null
+          safety_features_status?: string | null
+          seasonal_preparation_status?: string | null
+          sensor_status?: string | null
           sensors_operation?: string | null
           status?:
             | Database["public"]["Enums"]["maintenance_check_status"]
             | null
+          strainer_status?: string | null
+          sump_basin_condition?: string | null
           technician_id?: string | null
           troubleshooting_notes?: string | null
           unusual_noise?: boolean | null
           unusual_noise_description?: string | null
           updated_at?: string | null
           vibration_description?: string | null
+          vibration_monitoring?: string | null
           vibration_observed?: boolean | null
+          water_system_status?: string | null
         }
         Relationships: [
           {
@@ -186,6 +234,7 @@ export type Database = {
           file_type: string
           id: string
           maintenance_check_id: string | null
+          project_id: string | null
           tags: string[] | null
           uploaded_at: string | null
           uploaded_by: string | null
@@ -200,6 +249,7 @@ export type Database = {
           file_type: string
           id?: string
           maintenance_check_id?: string | null
+          project_id?: string | null
           tags?: string[] | null
           uploaded_at?: string | null
           uploaded_by?: string | null
@@ -214,6 +264,7 @@ export type Database = {
           file_type?: string
           id?: string
           maintenance_check_id?: string | null
+          project_id?: string | null
           tags?: string[] | null
           uploaded_at?: string | null
           uploaded_by?: string | null
@@ -231,6 +282,13 @@ export type Database = {
             columns: ["maintenance_check_id"]
             isOneToOne: false
             referencedRelation: "hvac_maintenance_checks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "maintenance_documents_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
             referencedColumns: ["id"]
           },
         ]
