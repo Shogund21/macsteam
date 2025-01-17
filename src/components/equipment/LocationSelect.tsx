@@ -46,7 +46,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               {locations.map((location) => (
                 <SelectItem 
                   key={location.id} 
-                  value={location.id || "default"}
+                  value={location.id}
                   className="py-3 text-sm"
                 >
                   {location.name}
