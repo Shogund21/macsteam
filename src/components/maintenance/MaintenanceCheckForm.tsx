@@ -76,7 +76,10 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         .from('hvac_maintenance_checks')
         .insert(submissionData);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       toast({
         title: "Success",
@@ -124,8 +127,9 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           <Button 
             type="submit"
             className="bg-blue-500 text-white hover:bg-blue-600"
+            disabled={form.formState.isSubmitting}
           >
-            Submit Check
+            {form.formState.isSubmitting ? "Submitting..." : "Submit Check"}
           </Button>
         </div>
       </form>
