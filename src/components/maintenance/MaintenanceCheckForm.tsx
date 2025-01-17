@@ -51,6 +51,35 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     try {
       console.log('Form values before submission:', values);
 
+      // Validate required fields based on equipment type
+      if (!values.equipment_id || !values.technician_id) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Equipment and Technician are required fields",
+        });
+        return;
+      }
+
+      // Additional validation for specific equipment types
+      if (isAHU && (!values.air_filter_status || !values.fan_belt_condition)) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Please complete all required AHU fields",
+        });
+        return;
+      }
+
+      if (!isAHU && !isCoolingTower && (!values.chiller_pressure_reading || !values.chiller_temperature_reading)) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Please complete all required readings",
+        });
+        return;
+      }
+
       const submissionData = {
         ...values,
         equipment_type: isAHU ? 'ahu' : isCoolingTower ? 'cooling_tower' : 'general',
@@ -110,6 +139,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           <Button 
             type="submit"
             className="bg-blue-500 text-white hover:bg-blue-600"
+            disabled={!form.formState.isValid}
           >
             Submit Check
           </Button>
