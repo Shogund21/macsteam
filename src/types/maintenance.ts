@@ -75,6 +75,23 @@ export interface MaintenanceCheck {
   corrective_actions: string | null;
   maintenance_recommendations: string | null;
   images: string[] | null;
+  // Cooling Tower specific fields
+  general_inspection: string | null;
+  water_system_status: string | null;
+  fill_media_condition: string | null;
+  drift_eliminators_condition: string | null;
+  fan_assembly_status: string | null;
+  motor_lubrication_status: string | null;
+  pump_seals_condition: string | null;
+  strainer_status: string | null;
+  sump_basin_condition: string | null;
+  drainage_system_status: string | null;
+  control_system_status: string | null;
+  sensor_status: string | null;
+  seasonal_preparation_status: string | null;
+  vibration_monitoring: string | null;
+  emergency_shutdown_status: string | null;
+  safety_features_status: string | null;
   equipment?: MaintenanceEquipment;
   technician?: MaintenanceTechnician;
 }
