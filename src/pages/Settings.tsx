@@ -3,9 +3,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TechnicianManagement from "@/components/settings/TechnicianManagement";
 import DocumentationViewer from "@/components/settings/DocumentationViewer";
-import LocationManagement from "@/components/settings/LocationManagement";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { FileText, BookOpen, Info, MapPin } from "lucide-react";
+import { FileText, BookOpen, Info } from "lucide-react";
 import { useState } from "react";
 
 const Settings = () => {
@@ -52,7 +51,6 @@ const Settings = () => {
         <Tabs defaultValue="general" className="space-y-4">
           <TabsList className={`${isMobile ? 'flex flex-wrap gap-2' : ''}`}>
             <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="locations">Locations</TabsTrigger>
             <TabsTrigger value="documentation">Documentation</TabsTrigger>
             <TabsTrigger value="appearance">Appearance</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
@@ -68,20 +66,6 @@ const Settings = () => {
               </CardHeader>
               <CardContent>
                 <TechnicianManagement />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="locations" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-xl md:text-2xl">Location Management</CardTitle>
-                <CardDescription className="text-sm md:text-base">
-                  Add and manage locations for equipment and maintenance checks.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <LocationManagement />
               </CardContent>
             </Card>
           </TabsContent>

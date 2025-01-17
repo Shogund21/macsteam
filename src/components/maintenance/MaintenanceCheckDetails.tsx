@@ -30,16 +30,13 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
   );
 
   const isAHU = check.equipment_type === 'ahu';
-  const isCoolingTower = check.equipment_type === 'cooling_tower';
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-            {isAHU ? "AHU Maintenance Check Details" : 
-             isCoolingTower ? "Cooling Tower Maintenance Check Details" : 
-             "Maintenance Check Details"}
+            {isAHU ? "AHU Maintenance Check Details" : "Maintenance Check Details"}
           </DialogTitle>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh] px-1">
@@ -69,25 +66,6 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
                 {check.troubleshooting_notes && renderField("Troubleshooting Notes", check.troubleshooting_notes)}
                 {check.corrective_actions && renderField("Corrective Actions", check.corrective_actions)}
                 {check.maintenance_recommendations && renderField("Maintenance Recommendations", check.maintenance_recommendations)}
-              </>
-            ) : isCoolingTower ? (
-              <>
-                {renderField("General Inspection", check.general_inspection)}
-                {renderField("Water System Status", check.water_system_status)}
-                {renderField("Fill Media Condition", check.fill_media_condition)}
-                {renderField("Drift Eliminators Condition", check.drift_eliminators_condition)}
-                {renderField("Fan Assembly Status", check.fan_assembly_status)}
-                {renderField("Motor Lubrication Status", check.motor_lubrication_status)}
-                {renderField("Pump Seals Condition", check.pump_seals_condition)}
-                {renderField("Strainer Status", check.strainer_status)}
-                {renderField("Sump Basin Condition", check.sump_basin_condition)}
-                {renderField("Drainage System Status", check.drainage_system_status)}
-                {renderField("Control System Status", check.control_system_status)}
-                {renderField("Sensor Status", check.sensor_status)}
-                {renderField("Seasonal Preparation Status", check.seasonal_preparation_status)}
-                {renderField("Vibration Monitoring", check.vibration_monitoring)}
-                {renderField("Emergency Shutdown Status", check.emergency_shutdown_status)}
-                {renderField("Safety Features Status", check.safety_features_status)}
               </>
             ) : (
               <>

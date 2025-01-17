@@ -36,7 +36,7 @@ export const ProjectDates = ({ form }: ProjectDatesProps) => {
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "w-full pl-3 text-left font-normal bg-white border-gray-200",
+                      "w-full pl-3 text-left font-normal",
                       !field.value && "text-muted-foreground"
                     )}
                   >
@@ -49,7 +49,7 @@ export const ProjectDates = ({ form }: ProjectDatesProps) => {
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white shadow-md z-50" align="start">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={field.value || undefined}
@@ -77,7 +77,7 @@ export const ProjectDates = ({ form }: ProjectDatesProps) => {
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "w-full pl-3 text-left font-normal bg-white border-gray-200",
+                      "w-full pl-3 text-left font-normal",
                       !field.value && "text-muted-foreground"
                     )}
                   >
@@ -90,7 +90,7 @@ export const ProjectDates = ({ form }: ProjectDatesProps) => {
                   </Button>
                 </FormControl>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0 bg-white shadow-md z-50" align="start">
+              <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
                   selected={field.value || undefined}

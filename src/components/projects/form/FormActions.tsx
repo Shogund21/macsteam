@@ -9,20 +9,11 @@ export const FormActions = ({ isSubmitting, onCancel }: FormActionsProps) => {
   return (
     <div className="flex justify-end space-x-2">
       {onCancel && (
-        <Button 
-          type="button" 
-          variant="outline"
-          className="border-gray-200 hover:bg-gray-100"
-          onClick={onCancel}
-        >
+        <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
       )}
-      <Button 
-        type="submit" 
-        disabled={isSubmitting}
-        className="bg-[#1EAEDB] hover:bg-[#0FA0CE] text-white"
-      >
+      <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Saving..." : "Save"}
       </Button>
     </div>

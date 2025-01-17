@@ -20,16 +20,12 @@ const PROJECT_PRIORITIES = [
 export const PrioritySelect = ({ value, onValueChange }: PrioritySelectProps) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="w-[180px] bg-white">
+      <SelectTrigger className="w-[180px]">
         <SelectValue placeholder="Select priority" />
       </SelectTrigger>
-      <SelectContent className="bg-white shadow-md z-50">
+      <SelectContent>
         {PROJECT_PRIORITIES.map((priority) => (
-          <SelectItem 
-            key={priority} 
-            value={priority}
-            className="cursor-pointer hover:bg-gray-100"
-          >
+          <SelectItem key={priority} value={priority}>
             {priority}
           </SelectItem>
         ))}
