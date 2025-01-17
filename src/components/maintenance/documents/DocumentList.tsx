@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import DocumentCard from "./list/DocumentCard";
+import { MaintenanceDocument } from "@/types/document";
 
 interface DocumentListProps {
   equipmentId?: string;
@@ -9,7 +10,7 @@ interface DocumentListProps {
 }
 
 const DocumentList = ({ equipmentId, maintenanceCheckId, projectId }: DocumentListProps) => {
-  const { data: documents, isLoading } = useQuery({
+  const { data: documents, isLoading, refetch } = useQuery({
     queryKey: ['documents', equipmentId, maintenanceCheckId, projectId],
     queryFn: async () => {
       let query = supabase
@@ -28,7 +29,7 @@ const DocumentList = ({ equipmentId, maintenanceCheckId, projectId }: DocumentLi
 
       const { data, error } = await query;
       if (error) throw error;
-      return data;
+      return data as MaintenanceDocument[];
     },
   });
 
@@ -43,7 +44,11 @@ const DocumentList = ({ equipmentId, maintenanceCheckId, projectId }: DocumentLi
   return (
     <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {documents.map((document) => (
-        <DocumentCard key={document.id} document={document} />
+        <DocumentCard 
+          key={document.id} 
+          document={document} 
+          onDelete={() => refetch()}
+        />
       ))}
     </div>
   );
