@@ -100,16 +100,16 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       const submissionData = {
         ...values,
         equipment_type: isAHU ? 'ahu' : 'general',
+        check_date: new Date().toISOString(),
         chiller_pressure_reading: parseFloat(values.chiller_pressure_reading),
         chiller_temperature_reading: parseFloat(values.chiller_temperature_reading),
         airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
+        status: 'pending',
       };
 
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('hvac_maintenance_checks')
-        .insert(submissionData)
-        .select()
-        .single();
+        .insert(submissionData);
 
       if (error) throw error;
 
@@ -117,6 +117,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         title: "Success",
         description: "Maintenance check recorded successfully",
       });
+      
       onComplete();
     } catch (error) {
       console.error('Error submitting maintenance check:', error);
