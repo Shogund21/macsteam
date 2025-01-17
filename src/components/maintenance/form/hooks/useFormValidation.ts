@@ -24,33 +24,21 @@ export const useFormValidation = (
 
     // Equipment-specific validation
     if (isAHU) {
-      const ahuValid = !!(
-        values.air_filter_status &&
-        values.fan_belt_condition &&
-        values.dampers_operation &&
-        values.coils_condition
-      );
-      console.log("AHU validation result:", ahuValid, {
-        air_filter_status: values.air_filter_status,
-        fan_belt_condition: values.fan_belt_condition,
-        dampers_operation: values.dampers_operation,
-        coils_condition: values.coils_condition
-      });
-      return ahuValid;
+      if (!values.air_filter_status || !values.fan_belt_condition || 
+          !values.dampers_operation || !values.coils_condition) {
+        console.log("AHU validation failed - missing required fields");
+        return false;
+      }
+      return true;
     } 
     
     if (isCoolingTower) {
-      const coolingTowerValid = !!(
-        values.water_system_status &&
-        values.fill_media_condition &&
-        values.fan_assembly_status
-      );
-      console.log("Cooling Tower validation result:", coolingTowerValid, {
-        water_system_status: values.water_system_status,
-        fill_media_condition: values.fill_media_condition,
-        fan_assembly_status: values.fan_assembly_status
-      });
-      return coolingTowerValid;
+      if (!values.water_system_status || !values.fill_media_condition || 
+          !values.fan_assembly_status) {
+        console.log("Cooling Tower validation failed - missing required fields");
+        return false;
+      }
+      return true;
     }
     
     // General equipment validation
@@ -58,14 +46,18 @@ export const useFormValidation = (
       values.chiller_pressure_reading &&
       values.chiller_temperature_reading &&
       values.air_filter_status &&
-      values.belt_condition
+      values.belt_condition &&
+      values.refrigerant_level
     );
+
     console.log("General equipment validation result:", generalValid, {
       chiller_pressure_reading: values.chiller_pressure_reading,
       chiller_temperature_reading: values.chiller_temperature_reading,
       air_filter_status: values.air_filter_status,
-      belt_condition: values.belt_condition
+      belt_condition: values.belt_condition,
+      refrigerant_level: values.refrigerant_level
     });
+
     return generalValid;
   };
 
