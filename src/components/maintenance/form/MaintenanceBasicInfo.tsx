@@ -20,9 +20,11 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
           <FormItem>
             <FormLabel className="text-base font-semibold">Equipment*</FormLabel>
             <Select 
-              onValueChange={field.onChange} 
-              defaultValue={field.value}
-              value={field.value || undefined}
+              onValueChange={(value) => {
+                field.onChange(value);
+                form.clearErrors('equipment_id');
+              }}
+              value={field.value}
             >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border-gray-200 h-12">
@@ -53,9 +55,11 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
           <FormItem>
             <FormLabel className="text-base font-semibold">Technician*</FormLabel>
             <Select 
-              onValueChange={field.onChange} 
-              defaultValue={field.value}
-              value={field.value || undefined}
+              onValueChange={(value) => {
+                field.onChange(value);
+                form.clearErrors('technician_id');
+              }}
+              value={field.value}
             >
               <FormControl>
                 <SelectTrigger className="w-full bg-white border-gray-200 h-12">
