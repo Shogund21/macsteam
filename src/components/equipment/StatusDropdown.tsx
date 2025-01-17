@@ -17,12 +17,12 @@ export const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-[150px] justify-between">
+        <Button variant="outline" className="w-[150px] justify-between bg-white">
           {status}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        className="w-[150px] bg-white z-50"
+        className="w-[150px] bg-white shadow-md z-50"
         align="end"
       >
         {statuses.map((statusOption) => (

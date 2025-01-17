@@ -45,12 +45,12 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                 <SelectValue placeholder="Select a location" />
               </SelectTrigger>
             </FormControl>
-            <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
+            <SelectContent className="max-h-[300px] overflow-y-auto bg-white shadow-md z-50">
               {locations.map((location) => (
                 <SelectItem 
                   key={`${location.id}-${location.name}`} 
                   value={location.id}
-                  className="py-3 text-sm"
+                  className="py-3 text-sm cursor-pointer hover:bg-gray-100"
                 >
                   {location.name}
                 </SelectItem>

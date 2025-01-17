@@ -22,12 +22,16 @@ const PROJECT_STATUSES = [
 export const StatusSelect = ({ value, onValueChange }: StatusSelectProps) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-[180px] bg-white">
         <SelectValue placeholder="Select status" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-white shadow-md z-50">
         {PROJECT_STATUSES.map((status) => (
-          <SelectItem key={status} value={status}>
+          <SelectItem 
+            key={status} 
+            value={status}
+            className="cursor-pointer hover:bg-gray-100"
+          >
             {status}
           </SelectItem>
         ))}
