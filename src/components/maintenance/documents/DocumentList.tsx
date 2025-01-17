@@ -1,79 +1,128 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 import DocumentCard from "./list/DocumentCard";
-import { MaintenanceDocument } from "@/types/document";
-import { DocumentSearch, DocumentFilters } from "./list/DocumentSearch";
-import { useState } from "react";
+
+interface Document {
+  id: string;
+  file_name: string;
+  file_path: string;
+  category: string;
+  uploaded_at: string;
+  tags: string[];
+  comments: string;
+}
 
 interface DocumentListProps {
   equipmentId?: string;
   maintenanceCheckId?: string;
-  projectId?: string;
 }
 
-const DocumentList = ({ equipmentId, maintenanceCheckId, projectId }: DocumentListProps) => {
-  const [filters, setFilters] = useState<DocumentFilters>({
-    keyword: "",
-  });
+const DocumentList = ({ equipmentId, maintenanceCheckId }: DocumentListProps) => {
+  const [documents, setDocuments] = useState<Document[]>([]);
+  const { toast } = useToast();
 
-  const { data: documents, isLoading, refetch } = useQuery({
-    queryKey: ['documents', equipmentId, maintenanceCheckId, projectId, filters],
-    queryFn: async () => {
-      let query = supabase
-        .from('maintenance_documents')
-        .select('*');
+  const fetchDocuments = async () => {
+    let query = supabase
+      .from('maintenance_documents')
+      .select('*')
+      .order('uploaded_at', { ascending: false });
 
-      if (equipmentId) {
-        query = query.eq('equipment_id', equipmentId);
-      }
-      if (maintenanceCheckId) {
-        query = query.eq('maintenance_check_id', maintenanceCheckId);
-      }
-      if (projectId) {
-        query = query.eq('project_id', projectId);
-      }
-      
-      // Apply filters
-      if (filters.keyword) {
-        query = query.or(`file_name.ilike.%${filters.keyword}%,comments.ilike.%${filters.keyword}%`);
-      }
-      if (filters.category) {
-        query = query.eq('category', filters.category);
-      }
-      if (filters.startDate) {
-        query = query.gte('uploaded_at', filters.startDate.toISOString());
-      }
-      if (filters.endDate) {
-        query = query.lte('uploaded_at', filters.endDate.toISOString());
-      }
+    if (equipmentId) {
+      query = query.eq('equipment_id', equipmentId);
+    }
+    if (maintenanceCheckId) {
+      query = query.eq('maintenance_check_id', maintenanceCheckId);
+    }
 
-      const { data, error } = await query;
+    const { data, error } = await query;
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch documents",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setDocuments(data as Document[]);
+  };
+
+  useEffect(() => {
+    fetchDocuments();
+  }, [equipmentId, maintenanceCheckId]);
+
+  const handleDownload = async (doc: Document) => {
+    try {
+      const { data, error } = await supabase.storage
+        .from('maintenance_docs')
+        .download(doc.file_path);
+
       if (error) throw error;
-      return data as MaintenanceDocument[];
-    },
-  });
 
-  if (isLoading) {
-    return <div>Loading documents...</div>;
-  }
+      const url = URL.createObjectURL(data);
+      const a = window.document.createElement('a');
+      a.href = url;
+      a.download = doc.file_name;
+      window.document.body.appendChild(a);
+      a.click();
+      window.document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to download document",
+        variant: "destructive",
+      });
+    }
+  };
 
-  if (!documents?.length) {
-    return <div className="text-muted-foreground">No documents uploaded yet.</div>;
-  }
+  const handleDelete = async (doc: Document) => {
+    try {
+      const { error: storageError } = await supabase.storage
+        .from('maintenance_docs')
+        .remove([doc.file_path]);
+
+      if (storageError) throw storageError;
+
+      const { error: dbError } = await supabase
+        .from('maintenance_documents')
+        .delete()
+        .eq('id', doc.id);
+
+      if (dbError) throw dbError;
+
+      toast({
+        title: "Success",
+        description: "Document deleted successfully",
+      });
+
+      fetchDocuments();
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete document",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      <DocumentSearch onSearch={setFilters} />
-      
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {documents.map((document) => (
-          <DocumentCard 
-            key={document.id} 
-            document={document} 
-            onDelete={() => refetch()}
-          />
-        ))}
-      </div>
+    <div className="space-y-4">
+      {documents.map((document) => (
+        <DocumentCard
+          key={document.id}
+          document={document}
+          onDownload={handleDownload}
+          onDelete={handleDelete}
+        />
+      ))}
+      {documents.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          No documents found
+        </div>
+      )}
     </div>
   );
 };

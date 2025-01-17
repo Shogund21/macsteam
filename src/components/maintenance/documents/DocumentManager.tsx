@@ -13,10 +13,9 @@ import {
 interface DocumentManagerProps {
   equipmentId?: string;
   maintenanceCheckId?: string;
-  projectId?: string;
 }
 
-const DocumentManager = ({ equipmentId, maintenanceCheckId, projectId }: DocumentManagerProps) => {
+const DocumentManager = ({ equipmentId, maintenanceCheckId }: DocumentManagerProps) => {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
 
   return (
@@ -31,12 +30,11 @@ const DocumentManager = ({ equipmentId, maintenanceCheckId, projectId }: Documen
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Upload Project Documents</DialogTitle>
+              <DialogTitle>Upload Maintenance Documents</DialogTitle>
             </DialogHeader>
             <DocumentUpload
               equipmentId={equipmentId}
               maintenanceCheckId={maintenanceCheckId}
-              projectId={projectId}
               onUploadComplete={() => setIsUploadOpen(false)}
             />
           </DialogContent>
@@ -46,7 +44,6 @@ const DocumentManager = ({ equipmentId, maintenanceCheckId, projectId }: Documen
       <DocumentList
         equipmentId={equipmentId}
         maintenanceCheckId={maintenanceCheckId}
-        projectId={projectId}
       />
     </div>
   );
