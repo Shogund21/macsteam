@@ -16,9 +16,21 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Chiller Pressure Reading (PSI)</FormLabel>
-            <FormControl>
-              <Input type="number" step="0.1" {...field} className="bg-white" />
-            </FormControl>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="bg-white">
+                  <SelectValue placeholder="Enter pressure or select NA" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="NA">Not Applicable</SelectItem>
+                {[...Array(100)].map((_, i) => (
+                  <SelectItem key={i} value={String(i)}>
+                    {i} PSI
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <FormMessage />
           </FormItem>
         )}
@@ -30,9 +42,21 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         render={({ field }) => (
           <FormItem>
             <FormLabel>Chiller Temperature Reading (°F)</FormLabel>
-            <FormControl>
-              <Input type="number" step="0.1" {...field} className="bg-white" />
-            </FormControl>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <FormControl>
+                <SelectTrigger className="bg-white">
+                  <SelectValue placeholder="Enter temperature or select NA" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                <SelectItem value="NA">Not Applicable</SelectItem>
+                {[...Array(150)].map((_, i) => (
+                  <SelectItem key={i} value={String(i)}>
+                    {i}°F
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <FormMessage />
           </FormItem>
         )}
@@ -51,6 +75,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
+                <SelectItem value="NA">Not Applicable</SelectItem>
                 <SelectItem value="clean">Clean</SelectItem>
                 <SelectItem value="needs_cleaning">Needs Cleaning</SelectItem>
                 <SelectItem value="needs_replacement">Needs Replacement</SelectItem>
@@ -74,6 +99,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
+                <SelectItem value="NA">Not Applicable</SelectItem>
                 <SelectItem value="good">Good</SelectItem>
                 <SelectItem value="fair">Fair</SelectItem>
                 <SelectItem value="needs_replacement">Needs Replacement</SelectItem>

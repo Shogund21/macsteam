@@ -2,34 +2,60 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
+const naString = z.union([z.string(), z.literal("NA")]);
+const naNumber = z.union([z.number(), z.literal("NA")]);
+
 export const maintenanceFormSchema = z.object({
   equipment_id: z.string().min(1, "Equipment is required"),
   technician_id: z.string().min(1, "Technician is required"),
   equipment_type: z.string().optional(),
-  chiller_pressure_reading: z.string().min(1, "Pressure reading is required"),
-  chiller_temperature_reading: z.string().min(1, "Temperature reading is required"),
-  air_filter_status: z.string().min(1, "Air filter status is required"),
-  belt_condition: z.string().min(1, "Belt condition is required"),
-  refrigerant_level: z.string().min(1, "Refrigerant level is required"),
+  
+  // Standard HVAC fields
+  chiller_pressure_reading: naString.optional(),
+  chiller_temperature_reading: naString.optional(),
+  air_filter_status: naString.optional(),
+  belt_condition: naString.optional(),
+  refrigerant_level: naString.optional(),
   unusual_noise: z.boolean().default(false),
   unusual_noise_description: z.string().optional(),
   vibration_observed: z.boolean().default(false),
   vibration_description: z.string().optional(),
-  oil_level_status: z.string().min(1, "Oil level status is required"),
-  condenser_condition: z.string().min(1, "Condenser condition is required"),
+  oil_level_status: naString.optional(),
+  condenser_condition: naString.optional(),
   notes: z.string().optional(),
+  
   // AHU specific fields
   air_filter_cleaned: z.boolean().optional(),
-  fan_belt_condition: z.string().optional(),
+  fan_belt_condition: naString.optional(),
   fan_bearings_lubricated: z.boolean().optional(),
-  fan_noise_level: z.string().optional(),
-  dampers_operation: z.string().optional(),
-  coils_condition: z.string().optional(),
-  sensors_operation: z.string().optional(),
-  motor_condition: z.string().optional(),
-  drain_pan_status: z.string().optional(),
-  airflow_reading: z.string().optional(),
+  fan_noise_level: naString.optional(),
+  dampers_operation: naString.optional(),
+  coils_condition: naString.optional(),
+  sensors_operation: naString.optional(),
+  motor_condition: naString.optional(),
+  drain_pan_status: naString.optional(),
+  airflow_reading: naString.optional(),
   airflow_unit: z.string().optional(),
+  
+  // Cooling Tower specific fields
+  general_inspection: naString.optional(),
+  water_system_status: naString.optional(),
+  fill_media_condition: naString.optional(),
+  drift_eliminators_condition: naString.optional(),
+  fan_assembly_status: naString.optional(),
+  motor_lubrication_status: naString.optional(),
+  pump_seals_condition: naString.optional(),
+  strainer_status: naString.optional(),
+  sump_basin_condition: naString.optional(),
+  drainage_system_status: naString.optional(),
+  control_system_status: naString.optional(),
+  sensor_status: naString.optional(),
+  seasonal_preparation_status: naString.optional(),
+  vibration_monitoring: naString.optional(),
+  emergency_shutdown_status: naString.optional(),
+  safety_features_status: naString.optional(),
+  
+  // Common fields
   troubleshooting_notes: z.string().optional(),
   corrective_actions: z.string().optional(),
   maintenance_recommendations: z.string().optional(),

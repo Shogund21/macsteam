@@ -8,6 +8,7 @@ import MaintenanceReadings from "./form/MaintenanceReadings";
 import MaintenanceStatus from "./form/MaintenanceStatus";
 import MaintenanceObservations from "./form/MaintenanceObservations";
 import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
+import CoolingTowerFields from "./form/CoolingTowerFields";
 import DocumentManager from "./documents/DocumentManager";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
 
@@ -19,7 +20,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const { toast } = useToast();
   const form = useMaintenanceForm();
 
-  const { data: equipment = [], isLoading: isLoadingEquipment, error: equipmentError } = useQuery({
+  const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
       console.log('Starting equipment fetch...');
@@ -33,21 +34,11 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         throw error;
       }
       
-      console.log('Equipment fetch successful. Data:', data);
-      if (!data || data.length === 0) {
-        console.log('No equipment found or empty data array returned');
-        toast({
-          variant: "destructive",
-          title: "No Equipment Found",
-          description: "Please add equipment before creating a maintenance check.",
-        });
-      }
-      
       return data || [];
     },
   });
 
-  const { data: technicians = [], isLoading: isLoadingTechnicians, error: techniciansError } = useQuery({
+  const { data: technicians = [], isLoading: isLoadingTechnicians } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
       console.log('Starting technicians fetch...');
@@ -62,58 +53,34 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         throw error;
       }
       
-      console.log('Technicians fetch successful. Data:', data);
-      if (!data || data.length === 0) {
-        console.log('No technicians found or empty data array returned');
-        toast({
-          variant: "destructive",
-          title: "No Technicians Found",
-          description: "Please add technicians before creating a maintenance check.",
-        });
-      }
-      
       return data || [];
     },
   });
-
-  // Handle query errors with toasts
-  if (equipmentError) {
-    console.error('Equipment query error:', equipmentError);
-    toast({
-      variant: "destructive",
-      title: "Error Loading Equipment",
-      description: "Failed to load equipment list. Please try again.",
-    });
-  }
-
-  if (techniciansError) {
-    console.error('Technicians query error:', techniciansError);
-    toast({
-      variant: "destructive",
-      title: "Error Loading Technicians",
-      description: "Failed to load technicians list. Please try again.",
-    });
-  }
 
   const selectedEquipment = equipment?.find(
     (eq) => eq.id === form.watch('equipment_id')
   );
 
-  console.log('Current form values:', form.getValues());
-  console.log('Selected equipment:', selectedEquipment);
-  console.log('Equipment list length:', equipment?.length);
+  const getEquipmentType = () => {
+    if (!selectedEquipment) return null;
+    const name = selectedEquipment.name.toLowerCase();
+    if (name.includes('ahu') || name.includes('air handler')) return 'ahu';
+    if (name.includes('chiller')) return 'chiller';
+    if (name.includes('cooling tower')) return 'cooling_tower';
+    return 'general';
+  };
 
-  const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
+  const equipmentType = getEquipmentType();
 
   const onSubmit = async (values: any) => {
     try {
       console.log('Submitting form with values:', values);
       const submissionData = {
         ...values,
-        equipment_type: isAHU ? 'ahu' : 'general',
-        chiller_pressure_reading: parseFloat(values.chiller_pressure_reading),
-        chiller_temperature_reading: parseFloat(values.chiller_temperature_reading),
-        airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
+        equipment_type: equipmentType,
+        chiller_pressure_reading: values.chiller_pressure_reading === "NA" ? null : parseFloat(values.chiller_pressure_reading),
+        chiller_temperature_reading: values.chiller_temperature_reading === "NA" ? null : parseFloat(values.chiller_temperature_reading),
+        airflow_reading: values.airflow_reading === "NA" ? null : parseFloat(values.airflow_reading),
       };
 
       const { error } = await supabase
@@ -141,6 +108,31 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     return <div className="p-4 text-center">Loading...</div>;
   }
 
+  const renderMaintenanceFields = () => {
+    switch (equipmentType) {
+      case 'ahu':
+        return <AHUMaintenanceFields form={form} />;
+      case 'cooling_tower':
+        return <CoolingTowerFields form={form} />;
+      case 'chiller':
+        return (
+          <>
+            <MaintenanceReadings form={form} />
+            <MaintenanceStatus form={form} />
+            <MaintenanceObservations form={form} />
+          </>
+        );
+      default:
+        return (
+          <>
+            <MaintenanceReadings form={form} />
+            <MaintenanceStatus form={form} />
+            <MaintenanceObservations form={form} />
+          </>
+        );
+    }
+  };
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 bg-white p-6 rounded-lg shadow">
@@ -150,15 +142,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           technicians={technicians} 
         />
         
-        {isAHU ? (
-          <AHUMaintenanceFields form={form} />
-        ) : (
-          <>
-            <MaintenanceReadings form={form} />
-            <MaintenanceStatus form={form} />
-            <MaintenanceObservations form={form} />
-          </>
-        )}
+        {renderMaintenanceFields()}
 
         <DocumentManager equipmentId={form.watch('equipment_id')} />
 
