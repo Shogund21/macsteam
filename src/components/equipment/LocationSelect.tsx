@@ -33,7 +33,10 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       render={({ field }) => (
         <FormItem className="w-full">
           <FormLabel className="text-base font-semibold">Location</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select 
+            onValueChange={field.onChange} 
+            defaultValue={field.value || undefined}
+          >
             <FormControl>
               <SelectTrigger className="w-full bg-white border-gray-200 h-12">
                 <SelectValue placeholder="Select a location" />
@@ -43,7 +46,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               {locations.map((location) => (
                 <SelectItem 
                   key={location.id} 
-                  value={location.id}
+                  value={location.id || "default"}
                   className="py-3 text-sm"
                 >
                   {location.name}
