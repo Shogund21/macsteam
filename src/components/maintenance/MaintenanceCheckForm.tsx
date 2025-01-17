@@ -1,10 +1,11 @@
 import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
+import { useMaintenanceSubmit } from "./form/hooks/useMaintenanceSubmit";
+import { useFormValidation } from "./form/hooks/useFormValidation";
 import MaintenanceFormContent from "./form/MaintenanceFormContent";
-import { useToast } from "@/hooks/use-toast";
+import FormActions from "./form/FormActions";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -12,7 +13,7 @@ interface MaintenanceCheckFormProps {
 
 const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const form = useMaintenanceForm();
-  const { toast } = useToast();
+  const handleSubmit = useMaintenanceSubmit(onComplete);
 
   const { data: equipment } = useQuery({
     queryKey: ['equipment'],
@@ -46,68 +47,12 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
   const isCoolingTower = selectedEquipment?.name.toLowerCase().includes('cooling tower');
+  
+  const { isFormValid } = useFormValidation(form, !!isAHU, !!isCoolingTower);
 
   const onSubmit = async (values: any) => {
-    try {
-      console.log('Form values before submission:', values);
-
-      const submissionData = {
-        ...values,
-        equipment_type: isAHU ? 'ahu' : isCoolingTower ? 'cooling_tower' : 'general',
-        check_date: new Date().toISOString(),
-        chiller_pressure_reading: values.chiller_pressure_reading ? parseFloat(values.chiller_pressure_reading) : null,
-        chiller_temperature_reading: values.chiller_temperature_reading ? parseFloat(values.chiller_temperature_reading) : null,
-        airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
-      };
-
-      console.log('Submitting maintenance check:', submissionData);
-
-      const { error } = await supabase
-        .from('hvac_maintenance_checks')
-        .insert(submissionData);
-
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
-      }
-
-      toast({
-        title: "Success",
-        description: "Maintenance check submitted successfully",
-      });
-      
-      form.reset();
-      onComplete();
-    } catch (error: any) {
-      console.error('Error submitting maintenance check:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Failed to submit maintenance check: " + error.message,
-      });
-    }
-  };
-
-  // Calculate form validity based on required fields
-  const isFormValid = () => {
-    const values = form.getValues();
-    
-    // Basic validation for required fields
-    if (!values.equipment_id || !values.technician_id) {
-      return false;
-    }
-
-    // Equipment-specific validation
-    if (isAHU) {
-      return !!(values.air_filter_status && values.fan_belt_condition);
-    } 
-    
-    if (isCoolingTower) {
-      return !!(values.water_system_status && values.fill_media_condition);
-    }
-    
-    // General equipment validation
-    return !!(values.chiller_pressure_reading && values.chiller_temperature_reading);
+    const equipmentType = isAHU ? 'ahu' : isCoolingTower ? 'cooling_tower' : 'general';
+    await handleSubmit(values, equipmentType);
   };
 
   return (
@@ -121,22 +66,10 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           isCoolingTower={!!isCoolingTower}
         />
 
-        <div className="flex justify-end space-x-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onComplete}
-          >
-            Cancel
-          </Button>
-          <Button 
-            type="submit"
-            className="bg-blue-500 text-white hover:bg-blue-600"
-            disabled={!isFormValid()}
-          >
-            Submit Check
-          </Button>
-        </div>
+        <FormActions 
+          onCancel={onComplete}
+          isValid={isFormValid()}
+        />
       </form>
     </Form>
   );

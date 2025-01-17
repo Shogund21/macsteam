@@ -5,35 +5,42 @@ import { MaintenanceFormValues } from "./useMaintenanceForm";
 export const useMaintenanceSubmit = (onComplete: () => void) => {
   const { toast } = useToast();
 
-  const handleSubmit = async (values: MaintenanceFormValues) => {
+  const handleSubmit = async (values: MaintenanceFormValues, equipmentType: string) => {
     try {
+      console.log('Form values before submission:', values);
+
       const submissionData = {
         ...values,
-        equipment_type: values.equipment_type || 'general',
-        chiller_pressure_reading: parseFloat(values.chiller_pressure_reading),
-        chiller_temperature_reading: parseFloat(values.chiller_temperature_reading),
+        equipment_type: equipmentType,
+        check_date: new Date().toISOString(),
+        chiller_pressure_reading: values.chiller_pressure_reading ? parseFloat(values.chiller_pressure_reading) : null,
+        chiller_temperature_reading: values.chiller_temperature_reading ? parseFloat(values.chiller_temperature_reading) : null,
         airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
       };
 
-      const { data, error } = await supabase
-        .from('hvac_maintenance_checks')
-        .insert(submissionData)
-        .select()
-        .single();
+      console.log('Submitting maintenance check:', submissionData);
 
-      if (error) throw error;
+      const { error } = await supabase
+        .from('hvac_maintenance_checks')
+        .insert(submissionData);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
 
       toast({
         title: "Success",
-        description: "Maintenance check recorded successfully",
+        description: "Maintenance check submitted successfully",
       });
+      
       onComplete();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting maintenance check:', error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to submit maintenance check. Please try again.",
+        description: "Failed to submit maintenance check: " + error.message,
       });
     }
   };
