@@ -1,12 +1,12 @@
 import React from "react";
 import { Form } from "@/components/ui/form";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
 import { useMaintenanceSubmit } from "./form/hooks/useMaintenanceSubmit";
 import { useFormValidation } from "./form/hooks/useFormValidation";
+import { useMaintenanceData } from "./form/hooks/useMaintenanceData";
 import MaintenanceFormContent from "./form/MaintenanceFormContent";
 import FormActions from "./form/FormActions";
+import ErrorState from "./form/ErrorState";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -15,40 +15,7 @@ interface MaintenanceCheckFormProps {
 const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const form = useMaintenanceForm();
   const handleSubmit = useMaintenanceSubmit(onComplete);
-
-  const { data: equipment, error: equipmentError } = useQuery({
-    queryKey: ['equipment'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('equipment')
-        .select('*')
-        .eq('status', 'active');
-      
-      if (error) {
-        console.error('Error fetching equipment:', error);
-        throw error;
-      }
-      console.log('Fetched equipment:', data);
-      return data;
-    },
-  });
-
-  const { data: technicians, error: techniciansError } = useQuery({
-    queryKey: ['technicians'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('technicians')
-        .select('*')
-        .eq('isAvailable', true);
-      
-      if (error) {
-        console.error('Error fetching technicians:', error);
-        throw error;
-      }
-      console.log('Fetched technicians:', data);
-      return data;
-    },
-  });
+  const { equipment, technicians, error } = useMaintenanceData();
 
   const selectedEquipment = equipment?.find(
     (eq) => eq.id === form.watch('equipment_id')
@@ -84,9 +51,8 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   console.log('Form validity:', formIsValid);
   console.log('Form errors:', form.formState.errors);
 
-  if (equipmentError || techniciansError) {
-    console.error('Data fetching errors:', { equipmentError, techniciansError });
-    return <div>Error loading form data</div>;
+  if (error) {
+    return <ErrorState />;
   }
 
   return (
