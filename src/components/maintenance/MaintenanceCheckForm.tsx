@@ -14,38 +14,43 @@ import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
 import DocumentManager from "./documents/DocumentManager";
 import { MaintenanceCheckStatus } from "@/types/maintenance";
 
-const formSchema = z.object({
+const baseSchema = z.object({
   equipment_id: z.string().min(1, "Equipment is required"),
   technician_id: z.string().min(1, "Technician is required"),
   equipment_type: z.string().optional(),
+  notes: z.string().optional(),
+  unusual_noise: z.boolean().default(false),
+  unusual_noise_description: z.string().optional(),
+  vibration_observed: z.boolean().default(false),
+  vibration_description: z.string().optional(),
+  images: z.array(z.string()).optional(),
+});
+
+const standardHVACSchema = baseSchema.extend({
   chiller_pressure_reading: z.string().min(1, "Chiller pressure reading is required"),
   chiller_temperature_reading: z.string().min(1, "Chiller temperature reading is required"),
   air_filter_status: z.string().min(1, "Air filter status is required"),
   belt_condition: z.string().min(1, "Belt condition is required"),
   refrigerant_level: z.string().min(1, "Refrigerant level is required"),
-  unusual_noise: z.boolean().default(false),
-  unusual_noise_description: z.string().optional(),
-  vibration_observed: z.boolean().default(false),
-  vibration_description: z.string().optional(),
   oil_level_status: z.string().min(1, "Oil level status is required"),
   condenser_condition: z.string().min(1, "Condenser condition is required"),
-  notes: z.string().optional(),
-  // AHU specific fields
+});
+
+const ahuSchema = baseSchema.extend({
   air_filter_cleaned: z.boolean().optional(),
-  fan_belt_condition: z.string().optional(),
+  fan_belt_condition: z.string().min(1, "Fan belt condition is required"),
   fan_bearings_lubricated: z.boolean().optional(),
-  fan_noise_level: z.string().optional(),
-  dampers_operation: z.string().optional(),
-  coils_condition: z.string().optional(),
-  sensors_operation: z.string().optional(),
-  motor_condition: z.string().optional(),
-  drain_pan_status: z.string().optional(),
+  fan_noise_level: z.string().min(1, "Fan noise level is required"),
+  dampers_operation: z.string().min(1, "Dampers operation is required"),
+  coils_condition: z.string().min(1, "Coils condition is required"),
+  sensors_operation: z.string().min(1, "Sensors operation is required"),
+  motor_condition: z.string().min(1, "Motor condition is required"),
+  drain_pan_status: z.string().min(1, "Drain pan status is required"),
   airflow_reading: z.string().optional(),
   airflow_unit: z.string().optional(),
   troubleshooting_notes: z.string().optional(),
   corrective_actions: z.string().optional(),
   maintenance_recommendations: z.string().optional(),
-  images: z.array(z.string()).optional(),
 });
 
 interface MaintenanceCheckFormProps {
@@ -54,8 +59,8 @@ interface MaintenanceCheckFormProps {
 
 const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm({
+    resolver: zodResolver(standardHVACSchema), // Default to standard HVAC schema
     defaultValues: {
       unusual_noise: false,
       vibration_observed: false,
@@ -96,15 +101,25 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  // Update form validation schema when equipment type changes
+  React.useEffect(() => {
+    form.clearErrors();
+    if (isAHU) {
+      form.setResolver(zodResolver(ahuSchema));
+    } else {
+      form.setResolver(zodResolver(standardHVACSchema));
+    }
+  }, [isAHU, form]);
+
+  const onSubmit = async (values: any) => {
     console.log("Form submitted with values:", values);
     try {
       const submissionData = {
         ...values,
         equipment_type: isAHU ? 'ahu' : 'general',
         check_date: new Date().toISOString(),
-        chiller_pressure_reading: parseFloat(values.chiller_pressure_reading),
-        chiller_temperature_reading: parseFloat(values.chiller_temperature_reading),
+        chiller_pressure_reading: values.chiller_pressure_reading ? parseFloat(values.chiller_pressure_reading) : null,
+        chiller_temperature_reading: values.chiller_temperature_reading ? parseFloat(values.chiller_temperature_reading) : null,
         airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
         status: 'pending' as MaintenanceCheckStatus
       };
