@@ -18,6 +18,7 @@ const locations = [
   { id: "776A", name: "776A" },
   { id: "776B", name: "776B" },
   { id: "777", name: "777" },
+  { id: "778", name: "778" },
 ];
 
 interface LocationSelectProps {
