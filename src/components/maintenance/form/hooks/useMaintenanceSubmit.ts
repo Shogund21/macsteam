@@ -9,13 +9,22 @@ export const useMaintenanceSubmit = (onComplete: () => void) => {
     try {
       console.log('Starting form submission with values:', values);
 
+      // Clean up undefined values and prepare data
+      const cleanedValues = Object.fromEntries(
+        Object.entries(values).filter(([_, value]) => value !== undefined)
+      );
+
       const submissionData = {
-        ...values,
+        ...cleanedValues,
         equipment_type: equipmentType,
         check_date: new Date().toISOString(),
-        chiller_pressure_reading: values.chiller_pressure_reading ? parseFloat(values.chiller_pressure_reading) : null,
-        chiller_temperature_reading: values.chiller_temperature_reading ? parseFloat(values.chiller_temperature_reading) : null,
-        airflow_reading: values.airflow_reading ? parseFloat(values.airflow_reading) : null,
+        // Convert string values to numbers where needed
+        chiller_pressure_reading: cleanedValues.chiller_pressure_reading ? 
+          parseFloat(cleanedValues.chiller_pressure_reading as string) : null,
+        chiller_temperature_reading: cleanedValues.chiller_temperature_reading ? 
+          parseFloat(cleanedValues.chiller_temperature_reading as string) : null,
+        airflow_reading: cleanedValues.airflow_reading ? 
+          parseFloat(cleanedValues.airflow_reading as string) : null,
       };
 
       console.log('Prepared submission data:', submissionData);
