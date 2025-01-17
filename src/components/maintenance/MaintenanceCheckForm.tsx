@@ -37,7 +37,14 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         });
         return [];
       }
-      return data || [];
+      
+      if (!data || data.length === 0) {
+        console.log('No equipment found');
+        return [];
+      }
+
+      console.log('Fetched equipment:', data);
+      return data;
     },
   });
 
