@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus } from "lucide-react";
+import { Plus, Pencil } from "lucide-react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
 interface Location {
   id: string;
@@ -34,13 +34,16 @@ const LocationManagement = () => {
 
   const [newLocationId, setNewLocationId] = useState('');
   const [newLocationName, setNewLocationName] = useState('');
+  const [editingLocation, setEditingLocation] = useState<Location | null>(null);
+  const [editLocationId, setEditLocationId] = useState('');
+  const [editLocationName, setEditLocationName] = useState('');
   const { toast } = useToast();
 
   const handleAddLocation = () => {
-    if (!newLocationId || !newLocationName) {
+    if (!newLocationId) {
       toast({
         title: "Error",
-        description: "Please fill in both location ID and name",
+        description: "Please fill in the location ID",
         variant: "destructive",
       });
       return;
@@ -48,7 +51,7 @@ const LocationManagement = () => {
 
     const newLocation = {
       id: newLocationId,
-      name: newLocationName,
+      name: newLocationName || newLocationId, // Use ID as name if name is not provided
     };
 
     setLocations([...locations, newLocation]);
@@ -58,6 +61,40 @@ const LocationManagement = () => {
     toast({
       title: "Success",
       description: "Location added successfully",
+    });
+  };
+
+  const handleEditClick = (location: Location) => {
+    setEditingLocation(location);
+    setEditLocationId(location.id);
+    setEditLocationName(location.name);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editLocationId) {
+      toast({
+        title: "Error",
+        description: "Location ID is required",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const updatedLocations = locations.map(loc => 
+      loc === editingLocation 
+        ? { 
+            id: editLocationId, 
+            name: editLocationName || editLocationId // Use ID as name if name is not provided
+          }
+        : loc
+    );
+
+    setLocations(updatedLocations);
+    setEditingLocation(null);
+    
+    toast({
+      title: "Success",
+      description: "Location updated successfully",
     });
   };
 
@@ -74,7 +111,7 @@ const LocationManagement = () => {
         </div>
         <div>
           <Input
-            placeholder="Location Name"
+            placeholder="Location Name (optional)"
             value={newLocationName}
             onChange={(e) => setNewLocationName(e.target.value)}
             className="w-full"
@@ -95,10 +132,53 @@ const LocationManagement = () => {
           {locations.map((location, index) => (
             <div
               key={`${location.id}-${index}`}
-              className="p-3 bg-gray-50 rounded-lg border border-gray-200"
+              className="p-3 bg-gray-50 rounded-lg border border-gray-200 flex justify-between items-center"
             >
-              <p className="font-medium">{location.name}</p>
-              <p className="text-sm text-gray-500">ID: {location.id}</p>
+              <div>
+                <p className="font-medium">{location.name}</p>
+                <p className="text-sm text-gray-500">ID: {location.id}</p>
+              </div>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleEditClick(location)}
+                  >
+                    <Pencil className="w-4 h-4 mr-2" />
+                    Edit
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Edit Location</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <div>
+                      <Input
+                        placeholder="Location ID"
+                        value={editLocationId}
+                        onChange={(e) => setEditLocationId(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                    <div>
+                      <Input
+                        placeholder="Location Name (optional)"
+                        value={editLocationName}
+                        onChange={(e) => setEditLocationName(e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                    <Button
+                      onClick={handleSaveEdit}
+                      className="w-full"
+                    >
+                      Save Changes
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
           ))}
         </div>
