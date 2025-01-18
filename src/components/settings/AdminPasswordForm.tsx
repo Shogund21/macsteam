@@ -8,7 +8,7 @@ export const AdminPasswordForm = () => {
     password,
     setPassword,
     isLoading,
-    isAuthenticated,
+    isAdmin,
     handleSubmit,
   } = useAdminPassword();
 
@@ -19,11 +19,11 @@ export const AdminPasswordForm = () => {
           <AdminPasswordInput
             value={password}
             onChange={setPassword}
-            disabled={isLoading || !isAuthenticated}
+            disabled={isLoading}
           />
           <Button 
             type="submit" 
-            disabled={isLoading || !isAuthenticated}
+            disabled={isLoading || !password}
             className="w-full"
           >
             {isLoading ? "Submitting..." : "Submit"}
@@ -31,10 +31,10 @@ export const AdminPasswordForm = () => {
         </div>
       </form>
       
-      {!isAuthenticated && (
-        <Alert variant="destructive">
+      {isAdmin && (
+        <Alert>
           <AlertDescription>
-            You must be logged in to set admin privileges.
+            You have admin privileges and can manage locations.
           </AlertDescription>
         </Alert>
       )}
