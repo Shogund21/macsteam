@@ -44,6 +44,11 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
     );
   };
 
+  const getTechnicianName = () => {
+    if (!check.technician) return "Unassigned";
+    return `${check.technician.firstName} ${check.technician.lastName}`;
+  };
+
   const isAHU = check.equipment_type === 'ahu';
 
   return (
@@ -52,12 +57,12 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
         <DialogHeader className="space-y-4">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold">
-              {check.equipment?.name}
+              {check.equipment?.name || 'Equipment Name Not Available'}
             </DialogTitle>
             {getStatusBadge(check.status)}
           </div>
           <div className="text-sm text-gray-600">
-            Location: {check.equipment?.location}
+            Location: {check.equipment?.location || 'Location Not Available'}
           </div>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh] px-1">
@@ -66,11 +71,7 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
               <h3 className="font-medium text-gray-900 mb-3">Basic Information</h3>
               <div className="space-y-1">
                 {renderField("Date", new Date(check.check_date || ""))}
-                {renderField("Technician", 
-                  check.technician ? 
-                  `${check.technician.firstName} ${check.technician.lastName}` : 
-                  "Unassigned"
-                )}
+                {renderField("Technician", getTechnicianName())}
               </div>
             </div>
 
