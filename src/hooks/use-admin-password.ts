@@ -32,7 +32,7 @@ export const useAdminPassword = () => {
             uid: user.id,
             claim: 'role',
             value: 'admin'
-          });
+          } as { uid: string; claim: string; value: string });
 
           if (updateError) throw updateError;
 
