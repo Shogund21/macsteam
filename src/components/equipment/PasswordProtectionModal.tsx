@@ -25,7 +25,7 @@ const PasswordProtectionModal = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "MACYS0405") {
+    if (password === "mac0405") {
       onSuccess();
       setPassword("");
     } else {
