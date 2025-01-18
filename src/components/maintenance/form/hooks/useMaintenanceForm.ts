@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { MaintenanceCheck } from "@/types/maintenance";
 
 const naString = z.union([z.string(), z.literal("NA")]);
 const naNumber = z.union([z.number(), z.literal("NA")]);
@@ -64,10 +65,10 @@ export const maintenanceFormSchema = z.object({
 
 export type MaintenanceFormValues = z.infer<typeof maintenanceFormSchema>;
 
-export const useMaintenanceForm = () => {
+export const useMaintenanceForm = (initialData?: MaintenanceCheck) => {
   return useForm<MaintenanceFormValues>({
     resolver: zodResolver(maintenanceFormSchema),
-    defaultValues: {
+    defaultValues: initialData || {
       unusual_noise: false,
       vibration_observed: false,
       air_filter_cleaned: false,

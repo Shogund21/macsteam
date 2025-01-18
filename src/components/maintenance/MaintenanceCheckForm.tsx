@@ -11,14 +11,16 @@ import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
 import CoolingTowerFields from "./form/CoolingTowerFields";
 import DocumentManager from "./documents/DocumentManager";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
+import { MaintenanceCheck } from "@/types/maintenance";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
+  initialData?: MaintenanceCheck;
 }
 
-const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
+const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormProps) => {
   const { toast } = useToast();
-  const form = useMaintenanceForm();
+  const form = useMaintenanceForm(initialData);
 
   const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
@@ -83,15 +85,20 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         airflow_reading: values.airflow_reading === "NA" ? null : parseFloat(values.airflow_reading),
       };
 
-      const { error } = await supabase
-        .from('hvac_maintenance_checks')
-        .insert(submissionData);
+      const { error } = initialData 
+        ? await supabase
+            .from('hvac_maintenance_checks')
+            .update(submissionData)
+            .eq('id', initialData.id)
+        : await supabase
+            .from('hvac_maintenance_checks')
+            .insert(submissionData);
 
       if (error) throw error;
 
       toast({
         title: "Success",
-        description: "Maintenance check recorded successfully",
+        description: `Maintenance check ${initialData ? 'updated' : 'recorded'} successfully`,
       });
       onComplete();
     } catch (error) {
@@ -99,7 +106,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to submit maintenance check. Please try again.",
+        description: `Failed to ${initialData ? 'update' : 'submit'} maintenance check. Please try again.`,
       });
     }
   };
@@ -158,7 +165,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
             type="submit"
             className="bg-blue-500 text-white hover:bg-blue-600"
           >
-            Submit Check
+            {initialData ? 'Update Check' : 'Submit Check'}
           </Button>
         </div>
       </form>
