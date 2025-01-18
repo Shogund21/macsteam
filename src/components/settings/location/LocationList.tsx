@@ -43,7 +43,9 @@ export const LocationList = () => {
     <div className="space-y-4">
       <Dialog>
         <DialogTrigger asChild>
-          <Button>Add New Location</Button>
+          <Button className="bg-primary text-white hover:bg-primary/90">
+            Add New Location
+          </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
