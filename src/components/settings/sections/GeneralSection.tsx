@@ -9,7 +9,7 @@ export const GeneralSection = () => {
         <CardHeader>
           <CardTitle className="text-xl md:text-2xl">Admin Access</CardTitle>
           <CardDescription className="text-sm md:text-base">
-            Enter the admin password to gain access to location management.
+            Enter the admin password to gain administrative privileges.
           </CardDescription>
         </CardHeader>
         <CardContent>

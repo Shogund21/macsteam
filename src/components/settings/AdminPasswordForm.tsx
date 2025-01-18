@@ -24,7 +24,7 @@ export const AdminPasswordForm = () => {
           <Button 
             type="submit" 
             disabled={isLoading}
-            className="w-full"
+            className="w-full bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
           >
             {isLoading ? "Submitting..." : "Submit"}
           </Button>
@@ -34,7 +34,7 @@ export const AdminPasswordForm = () => {
       {isAdmin && (
         <Alert>
           <AlertDescription>
-            You have admin privileges and can manage locations.
+            You have admin privileges.
           </AlertDescription>
         </Alert>
       )}
