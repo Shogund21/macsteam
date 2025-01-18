@@ -12,24 +12,27 @@ export const AdminPasswordForm = () => {
     handleSubmit,
   } = useAdminPassword();
 
+  if (!isAuthenticated) {
+    return (
+      <Alert variant="destructive" className="mb-4">
+        <AlertDescription>
+          You must be logged in to set admin privileges.
+        </AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <div className="w-full">
-      {!isAuthenticated && (
-        <Alert variant="destructive" className="mb-4">
-          <AlertDescription>
-            You must be logged in to set admin privileges.
-          </AlertDescription>
-        </Alert>
-      )}
       <form onSubmit={handleSubmit} className="space-y-4">
         <AdminPasswordInput
           value={password}
           onChange={setPassword}
-          disabled={isLoading || !isAuthenticated}
+          disabled={isLoading}
         />
         <Button 
           type="submit" 
-          disabled={isLoading || !isAuthenticated} 
+          disabled={isLoading} 
           className="w-full"
         >
           {isLoading ? "Submitting..." : "Submit"}

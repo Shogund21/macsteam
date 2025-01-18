@@ -10,6 +10,13 @@ export const useAdminPassword = () => {
 
   useEffect(() => {
     checkAuthStatus();
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(() => {
+      checkAuthStatus();
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   const checkAuthStatus = async () => {
