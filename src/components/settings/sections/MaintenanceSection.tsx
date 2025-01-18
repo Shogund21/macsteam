@@ -32,7 +32,6 @@ export const MaintenanceSection = () => {
 
       if (error) throw error;
       
-      // Transform the data to match MaintenanceCheck type
       return data.map(check => ({
         ...check,
         equipment: check.equipment ? {
@@ -164,7 +163,6 @@ export const MaintenanceSection = () => {
           isOpen={isPasswordModalOpen}
           onClose={() => setIsPasswordModalOpen(false)}
           onSuccess={handlePasswordSuccess}
-          password="mac0405"
         />
 
         {selectedCheck && actionType === 'edit' && (
