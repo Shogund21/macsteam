@@ -103,7 +103,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
 
         <Button 
           type="submit"
-          className="bg-primary text-white hover:bg-primary/90"
+          className="bg-blue-600 text-white hover:bg-blue-700"
         >
           {initialData ? "Update Location" : "Add Location"}
         </Button>
