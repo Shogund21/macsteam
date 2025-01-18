@@ -25,6 +25,8 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
 
   const basicFields = [
     { label: "Date", value: new Date(check.check_date || "") },
+    { label: "Equipment", value: check.equipment?.name || "Equipment Not Available" },
+    { label: "Location", value: check.equipment?.location || "Location Not Available" },
     { label: "Technician", value: getTechnicianName() },
   ];
 
@@ -99,6 +101,9 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
               <>
                 <MaintenanceDetailsSection title="Equipment Readings" fields={standardFields} />
                 <MaintenanceDetailsSection title="Observations" fields={observationFields} />
+                {notesFields.length > 0 && (
+                  <MaintenanceDetailsSection title="Notes and Recommendations" fields={notesFields} />
+                )}
               </>
             )}
             

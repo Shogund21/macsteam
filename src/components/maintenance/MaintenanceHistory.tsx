@@ -14,7 +14,17 @@ const MaintenanceHistory = () => {
     try {
       const { data, error } = await supabase
         .from("hvac_maintenance_checks")
-        .select("*")
+        .select(`
+          *,
+          equipment:equipment_id (
+            name,
+            location
+          ),
+          technician:technician_id (
+            firstName,
+            lastName
+          )
+        `)
         .order("check_date", { ascending: false });
 
       if (error) throw error;

@@ -37,22 +37,31 @@ const MaintenanceTableRow = ({
     }
   };
 
+  const getTechnicianName = () => {
+    if (!check.technician) return "Unassigned";
+    return `${check.technician.firstName} ${check.technician.lastName}`;
+  };
+
   return (
     <>
       <div className="border rounded-lg p-4 space-y-4 bg-white">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
+          <div className="space-y-2">
             <h3 className="font-semibold">
-              Check Date: {format(new Date(check.check_date || ''), "PPP")}
+              {check.equipment?.name || "Equipment Not Available"}
             </h3>
-            <p className="text-sm text-muted-foreground">ID: {check.id}</p>
+            <div className="text-sm text-gray-600 space-y-1">
+              <p>Date: {format(new Date(check.check_date || ""), "PPP")}</p>
+              <p>Location: {check.equipment?.location || "Location Not Available"}</p>
+              <p>Technician: {getTechnicianName()}</p>
+            </div>
           </div>
           <div className="flex items-center gap-2">
-            <Badge className={getStatusColor(check.status || '')}>
+            <Badge className={getStatusColor(check.status || "")}>
               {check.status?.replace("_", " ").toUpperCase()}
             </Badge>
             <Select
-              defaultValue={check.status || ''}
+              defaultValue={check.status || ""}
               onValueChange={(value: "completed" | "pending" | "issue_found") =>
                 onStatusChange(check.id, value)
               }
