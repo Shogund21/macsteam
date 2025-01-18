@@ -38,24 +38,6 @@ export const maintenanceFormSchema = z.object({
   airflow_reading: naString.optional(),
   airflow_unit: z.string().optional(),
   
-  // Cooling Tower specific fields
-  general_inspection: naString.optional(),
-  water_system_status: naString.optional(),
-  fill_media_condition: naString.optional(),
-  drift_eliminators_condition: naString.optional(),
-  fan_assembly_status: naString.optional(),
-  motor_lubrication_status: naString.optional(),
-  pump_seals_condition: naString.optional(),
-  strainer_status: naString.optional(),
-  sump_basin_condition: naString.optional(),
-  drainage_system_status: naString.optional(),
-  control_system_status: naString.optional(),
-  sensor_status: naString.optional(),
-  seasonal_preparation_status: naString.optional(),
-  vibration_monitoring: naString.optional(),
-  emergency_shutdown_status: naString.optional(),
-  safety_features_status: naString.optional(),
-  
   // Common fields
   troubleshooting_notes: z.string().optional(),
   corrective_actions: z.string().optional(),
@@ -66,13 +48,22 @@ export const maintenanceFormSchema = z.object({
 export type MaintenanceFormValues = z.infer<typeof maintenanceFormSchema>;
 
 export const useMaintenanceForm = (initialData?: MaintenanceCheck) => {
+  const defaultValues = initialData
+    ? {
+        ...initialData,
+        chiller_pressure_reading: initialData.chiller_pressure_reading?.toString() || "NA",
+        chiller_temperature_reading: initialData.chiller_temperature_reading?.toString() || "NA",
+        airflow_reading: initialData.airflow_reading?.toString() || "NA",
+      }
+    : {
+        unusual_noise: false,
+        vibration_observed: false,
+        air_filter_cleaned: false,
+        fan_bearings_lubricated: false,
+      };
+
   return useForm<MaintenanceFormValues>({
     resolver: zodResolver(maintenanceFormSchema),
-    defaultValues: initialData || {
-      unusual_noise: false,
-      vibration_observed: false,
-      air_filter_cleaned: false,
-      fan_bearings_lubricated: false,
-    },
+    defaultValues,
   });
 };

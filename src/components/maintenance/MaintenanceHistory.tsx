@@ -57,6 +57,27 @@ const MaintenanceHistory = () => {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    const { error } = await supabase
+      .from("hvac_maintenance_checks")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      toast({
+        title: "Error deleting maintenance check",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Maintenance check deleted",
+        description: "The maintenance check has been deleted successfully.",
+      });
+      fetchMaintenanceChecks();
+    }
+  };
+
   useEffect(() => {
     fetchMaintenanceChecks();
   }, []);
@@ -79,6 +100,7 @@ const MaintenanceHistory = () => {
                   key={check.id}
                   check={check}
                   onStatusChange={handleStatusChange}
+                  onDelete={handleDelete}
                 />
               ))
             )}
