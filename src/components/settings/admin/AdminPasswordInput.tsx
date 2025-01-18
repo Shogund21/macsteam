@@ -1,4 +1,5 @@
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface AdminPasswordInputProps {
   value: string;
@@ -8,10 +9,10 @@ interface AdminPasswordInputProps {
 
 export const AdminPasswordInput = ({ value, onChange, disabled }: AdminPasswordInputProps) => {
   return (
-    <div className="space-y-2">
-      <label htmlFor="admin-password" className="text-sm font-medium">
+    <div className="space-y-2 w-full">
+      <Label htmlFor="admin-password" className="text-sm font-medium">
         Admin Password
-      </label>
+      </Label>
       <Input
         id="admin-password"
         type="password"
