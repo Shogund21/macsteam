@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Card, CardContent } from "@/components/ui/card";
 
 export const AdminPasswordForm = () => {
   const [password, setPassword] = useState("");
@@ -92,15 +93,20 @@ export const AdminPasswordForm = () => {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div className="space-y-2">
+        <label htmlFor="admin-password" className="text-sm font-medium">
+          Admin Password
+        </label>
         <Input
+          id="admin-password"
           type="password"
           placeholder="Enter admin password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           disabled={isLoading}
+          className="w-full"
         />
       </div>
-      <Button type="submit" disabled={isLoading}>
+      <Button type="submit" disabled={isLoading} className="w-full">
         {isLoading ? "Submitting..." : "Submit"}
       </Button>
     </form>
