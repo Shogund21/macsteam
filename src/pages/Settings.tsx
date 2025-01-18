@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TechnicianManagement from "@/components/settings/TechnicianManagement";
 import DocumentationViewer from "@/components/settings/DocumentationViewer";
 import { LocationList } from "@/components/settings/location/LocationList";
+import { AdminPasswordForm } from "@/components/settings/AdminPasswordForm";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { FileText, BookOpen, Info } from "lucide-react";
 import { useState } from "react";
@@ -59,6 +60,18 @@ const Settings = () => {
           </TabsList>
 
           <TabsContent value="general" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl md:text-2xl">Admin Access</CardTitle>
+                <CardDescription className="text-sm md:text-base">
+                  Enter the admin password to gain access to location management.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <AdminPasswordForm />
+              </CardContent>
+            </Card>
+
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl md:text-2xl">Technician Management</CardTitle>
