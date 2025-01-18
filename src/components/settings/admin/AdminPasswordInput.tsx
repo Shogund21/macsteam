@@ -9,7 +9,7 @@ interface AdminPasswordInputProps {
 
 export const AdminPasswordInput = ({ value, onChange, disabled }: AdminPasswordInputProps) => {
   return (
-    <div className="space-y-2 w-full">
+    <div className="space-y-2">
       <Label htmlFor="admin-password" className="text-sm font-medium">
         Admin Password
       </Label>

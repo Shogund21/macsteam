@@ -12,7 +12,7 @@ export const GeneralSection = () => {
             Enter the admin password to gain access to location management.
           </CardDescription>
         </CardHeader>
-        <CardContent className="block">
+        <CardContent>
           <AdminPasswordForm />
         </CardContent>
       </Card>

@@ -13,23 +13,26 @@ export const AdminPasswordForm = () => {
   } = useAdminPassword();
 
   return (
-    <div className="w-full">
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <AdminPasswordInput
-          value={password}
-          onChange={setPassword}
-          disabled={isLoading}
-        />
-        <Button 
-          type="submit" 
-          disabled={isLoading} 
-          className="w-full"
-        >
-          {isLoading ? "Submitting..." : "Submit"}
-        </Button>
+    <div className="w-full space-y-4">
+      <form onSubmit={handleSubmit}>
+        <div className="space-y-4">
+          <AdminPasswordInput
+            value={password}
+            onChange={setPassword}
+            disabled={isLoading || !isAuthenticated}
+          />
+          <Button 
+            type="submit" 
+            disabled={isLoading || !isAuthenticated}
+            className="w-full"
+          >
+            {isLoading ? "Submitting..." : "Submit"}
+          </Button>
+        </div>
       </form>
+      
       {!isAuthenticated && (
-        <Alert variant="destructive" className="mt-4">
+        <Alert variant="destructive">
           <AlertDescription>
             You must be logged in to set admin privileges.
           </AlertDescription>
