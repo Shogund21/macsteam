@@ -23,7 +23,7 @@ export const AdminPasswordForm = () => {
           />
           <Button 
             type="submit" 
-            disabled={isLoading || !password}
+            disabled={isLoading}
             className="w-full"
           >
             {isLoading ? "Submitting..." : "Submit"}
