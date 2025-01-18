@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
 
 const locationSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -25,6 +26,25 @@ interface LocationFormProps {
 
 export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
   const { toast } = useToast();
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: adminData } = await supabase
+          .from('admin_users')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single();
+        
+        setIsAdmin(adminData?.is_admin || false);
+      }
+    };
+
+    checkAdminStatus();
+  }, []);
+
   const form = useForm<LocationFormValues>({
     resolver: zodResolver(locationSchema),
     defaultValues: {
@@ -35,6 +55,15 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
 
   const onSubmit = async (values: LocationFormValues) => {
     try {
+      if (!isAdmin) {
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "You don't have permission to modify locations.",
+        });
+        return;
+      }
+
       if (initialData?.id) {
         const { error } = await supabase
           .from("locations")
@@ -68,6 +97,14 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       });
     }
   };
+
+  if (!isAdmin) {
+    return (
+      <div className="p-4 text-center">
+        <p className="text-red-500">You don't have permission to modify locations.</p>
+      </div>
+    );
+  }
 
   return (
     <Form {...form}>
