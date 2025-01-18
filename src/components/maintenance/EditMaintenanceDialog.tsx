@@ -17,19 +17,21 @@ interface EditMaintenanceDialogProps {
 const EditMaintenanceDialog = ({ check, open, onOpenChange, onComplete }: EditMaintenanceDialogProps) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl">
-        <DialogHeader>
+      <DialogContent className="max-w-5xl max-h-[90vh] overflow-hidden flex flex-col">
+        <DialogHeader className="px-6 py-4 border-b">
           <DialogTitle className="text-xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
             Edit Maintenance Check
           </DialogTitle>
         </DialogHeader>
-        <MaintenanceCheckForm 
-          initialData={check}
-          onComplete={() => {
-            onComplete();
-            onOpenChange(false);
-          }} 
-        />
+        <div className="flex-1 overflow-y-auto px-6 py-4">
+          <MaintenanceCheckForm 
+            initialData={check}
+            onComplete={() => {
+              onComplete();
+              onOpenChange(false);
+            }} 
+          />
+        </div>
       </DialogContent>
     </Dialog>
   );

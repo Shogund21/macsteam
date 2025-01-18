@@ -142,31 +142,37 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 bg-white p-6 rounded-lg shadow">
-        <MaintenanceBasicInfo 
-          form={form} 
-          equipment={equipment} 
-          technicians={technicians} 
-        />
-        
-        {renderMaintenanceFields()}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="grid gap-6">
+          <MaintenanceBasicInfo 
+            form={form} 
+            equipment={equipment} 
+            technicians={technicians} 
+          />
+          
+          <div className="bg-gray-50 p-6 rounded-lg">
+            {renderMaintenanceFields()}
+          </div>
 
-        <DocumentManager equipmentId={form.watch('equipment_id')} />
+          <div className="bg-gray-50 p-6 rounded-lg">
+            <DocumentManager equipmentId={form.watch('equipment_id')} />
+          </div>
 
-        <div className="flex justify-end space-x-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onComplete}
-          >
-            Cancel
-          </Button>
-          <Button 
-            type="submit"
-            className="bg-blue-500 text-white hover:bg-blue-600"
-          >
-            {initialData ? 'Update Check' : 'Submit Check'}
-          </Button>
+          <div className="flex justify-end space-x-4 sticky bottom-0 bg-white p-4 border-t">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onComplete}
+            >
+              Cancel
+            </Button>
+            <Button 
+              type="submit"
+              className="bg-blue-500 text-white hover:bg-blue-600"
+            >
+              {initialData ? 'Update Check' : 'Submit Check'}
+            </Button>
+          </div>
         </div>
       </form>
     </Form>
