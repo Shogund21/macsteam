@@ -1,8 +1,7 @@
-import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
+import { MaintenanceCheck } from "@/types/maintenance";
 import MaintenanceBasicInfo from "./form/MaintenanceBasicInfo";
 import MaintenanceReadings from "./form/MaintenanceReadings";
 import MaintenanceStatus from "./form/MaintenanceStatus";
@@ -11,7 +10,9 @@ import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
 import CoolingTowerFields from "./form/CoolingTowerFields";
 import DocumentManager from "./documents/DocumentManager";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
-import { MaintenanceCheck } from "@/types/maintenance";
+import { useMaintenanceFormSubmit } from "./form/hooks/useMaintenanceFormSubmit";
+import FormSection from "./form/FormSection";
+import FormActions from "./form/FormActions";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -19,8 +20,8 @@ interface MaintenanceCheckFormProps {
 }
 
 const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormProps) => {
-  const { toast } = useToast();
   const form = useMaintenanceForm(initialData);
+  const handleSubmit = useMaintenanceFormSubmit(onComplete, initialData);
 
   const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
@@ -74,47 +75,6 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
 
   const equipmentType = getEquipmentType();
 
-  const onSubmit = async (values: any) => {
-    try {
-      console.log('Submitting form with values:', values);
-      const submissionData = {
-        ...values,
-        equipment_type: equipmentType,
-        chiller_pressure_reading: values.chiller_pressure_reading === "NA" ? null : parseFloat(values.chiller_pressure_reading),
-        chiller_temperature_reading: values.chiller_temperature_reading === "NA" ? null : parseFloat(values.chiller_temperature_reading),
-        airflow_reading: values.airflow_reading === "NA" ? null : parseFloat(values.airflow_reading),
-      };
-
-      const { error } = initialData 
-        ? await supabase
-            .from('hvac_maintenance_checks')
-            .update(submissionData)
-            .eq('id', initialData.id)
-        : await supabase
-            .from('hvac_maintenance_checks')
-            .insert(submissionData);
-
-      if (error) throw error;
-
-      toast({
-        title: "Success",
-        description: `Maintenance check ${initialData ? 'updated' : 'recorded'} successfully`,
-      });
-      onComplete();
-    } catch (error) {
-      console.error('Error submitting maintenance check:', error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: `Failed to ${initialData ? 'update' : 'submit'} maintenance check. Please try again.`,
-      });
-    }
-  };
-
-  if (isLoadingEquipment || isLoadingTechnicians) {
-    return <div className="p-4 text-center">Loading...</div>;
-  }
-
   const renderMaintenanceFields = () => {
     switch (equipmentType) {
       case 'ahu':
@@ -122,13 +82,6 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
       case 'cooling_tower':
         return <CoolingTowerFields form={form} />;
       case 'chiller':
-        return (
-          <>
-            <MaintenanceReadings form={form} />
-            <MaintenanceStatus form={form} />
-            <MaintenanceObservations form={form} />
-          </>
-        );
       default:
         return (
           <>
@@ -140,39 +93,34 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
     }
   };
 
+  if (isLoadingEquipment || isLoadingTechnicians) {
+    return <div className="p-4 text-center">Loading...</div>;
+  }
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="grid gap-6">
-          <MaintenanceBasicInfo 
-            form={form} 
-            equipment={equipment} 
-            technicians={technicians} 
-          />
+          <FormSection>
+            <MaintenanceBasicInfo 
+              form={form} 
+              equipment={equipment} 
+              technicians={technicians} 
+            />
+          </FormSection>
           
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <FormSection>
             {renderMaintenanceFields()}
-          </div>
+          </FormSection>
 
-          <div className="bg-gray-50 p-6 rounded-lg">
+          <FormSection>
             <DocumentManager equipmentId={form.watch('equipment_id')} />
-          </div>
+          </FormSection>
 
-          <div className="flex justify-end space-x-4 sticky bottom-0 bg-white p-4 border-t">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={onComplete}
-            >
-              Cancel
-            </Button>
-            <Button 
-              type="submit"
-              className="bg-blue-500 text-white hover:bg-blue-600"
-            >
-              {initialData ? 'Update Check' : 'Submit Check'}
-            </Button>
-          </div>
+          <FormActions 
+            onCancel={onComplete}
+            isEditing={!!initialData}
+          />
         </div>
       </form>
     </Form>
