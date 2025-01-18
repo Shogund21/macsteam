@@ -11,14 +11,6 @@ export const AdminPasswordForm = () => {
     handleSubmit,
   } = useAdminPassword();
 
-  if (!isAuthenticated) {
-    return (
-      <div className="text-sm text-muted-foreground">
-        Please log in to access admin features.
-      </div>
-    );
-  }
-
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <AdminPasswordInput
