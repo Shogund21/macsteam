@@ -16,44 +16,45 @@ export const useAdminPassword = () => {
       if (password === "mac2024") {
         const { data: { user } } = await supabase.auth.getUser();
         
-        if (user) {
-          // First update the admin_users table
-          const { error: adminError } = await supabase
-            .from('admin_users')
-            .upsert({ 
-              id: user.id,
-              is_admin: true 
-            });
-
-          if (adminError) throw adminError;
-
-          // Then update the user's JWT claims to include the admin role
-          const { error: updateError } = await supabase.rpc('set_claim', {
-            uid: user.id,
-            claim: 'role',
-            value: 'admin'
-          });
-
-          if (updateError) throw updateError;
-
-          // Refresh the session to get the new JWT with admin claims
-          const { error: refreshError } = await supabase.auth.refreshSession();
-          if (refreshError) throw refreshError;
-
-          setIsAdmin(true);
-          toast({
-            title: "Success",
-            description: "Admin privileges granted. You can now manage locations.",
-          });
-          
-          setPassword("");
-        } else {
+        if (!user) {
           toast({
             variant: "destructive",
             title: "Error",
             description: "You must be logged in to set admin privileges.",
           });
+          return;
         }
+
+        // First update the admin_users table
+        const { error: adminError } = await supabase
+          .from('admin_users')
+          .upsert({ 
+            id: user.id,
+            is_admin: true 
+          });
+
+        if (adminError) throw adminError;
+
+        // Then update the user's JWT claims to include the admin role
+        const { error: updateError } = await supabase.rpc('set_claim', {
+          uid: user.id,
+          claim: 'role',
+          value: 'admin'
+        });
+
+        if (updateError) throw updateError;
+
+        // Refresh the session to get the new JWT with admin claims
+        const { error: refreshError } = await supabase.auth.refreshSession();
+        if (refreshError) throw refreshError;
+
+        setIsAdmin(true);
+        toast({
+          title: "Success",
+          description: "Admin privileges granted. You can now manage locations.",
+        });
+        
+        setPassword("");
       } else {
         toast({
           variant: "destructive",
