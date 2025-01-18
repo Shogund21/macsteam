@@ -32,7 +32,7 @@ export const useAdminPassword = () => {
             uid: user.id,
             claim: 'role',
             value: 'admin'
-          } as { uid: string; claim: string; value: string });
+          });
 
           if (updateError) throw updateError;
 
@@ -47,6 +47,12 @@ export const useAdminPassword = () => {
           });
           
           setPassword("");
+        } else {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "You must be logged in to set admin privileges.",
+          });
         }
       } else {
         toast({
