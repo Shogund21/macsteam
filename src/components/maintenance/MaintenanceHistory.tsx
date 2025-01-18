@@ -1,80 +1,62 @@
+import { useEffect, useState } from "react";
+import { MaintenanceCheck } from "@/types/maintenance";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { MaintenanceCheck, MaintenanceCheckStatus } from "@/types/maintenance";
-import { MaintenanceTableHeader } from "./table/MaintenanceTableHeader";
 import MaintenanceTableRow from "./table/MaintenanceTableRow";
-import { useEffect, useState } from "react";
-import { Table, TableBody } from "@/components/ui/table";
-import { Card } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const MaintenanceHistory = () => {
-  const [checks, setChecks] = useState<MaintenanceCheck[]>([]);
+  const [maintenanceChecks, setMaintenanceChecks] = useState<MaintenanceCheck[]>([]);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   const fetchMaintenanceChecks = async () => {
-    const { data, error } = await supabase
-      .from("hvac_maintenance_checks")
-      .select(`
-        *,
-        equipment:equipment_id(name, location),
-        technician:technician_id(firstName, lastName)
-      `)
-      .order("equipment(location)", { ascending: true })
-      .order("check_date", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("hvac_maintenance_checks")
+        .select("*")
+        .order("check_date", { ascending: false });
 
-    if (error) {
+      if (error) throw error;
+
+      setMaintenanceChecks(data || []);
+    } catch (error) {
+      console.error("Error fetching maintenance checks:", error);
       toast({
         title: "Error fetching maintenance checks",
-        description: error.message,
+        description: "Please try again later.",
         variant: "destructive",
       });
-    } else {
-      setChecks(data as MaintenanceCheck[]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleStatusChange = async (id: string, status: MaintenanceCheckStatus) => {
-    const { error } = await supabase
-      .from("hvac_maintenance_checks")
-      .update({ 
-        status,
-        updated_at: new Date().toISOString()
-      })
-      .eq("id", id);
+  const handleStatusChange = async (
+    id: string,
+    status: "completed" | "pending" | "issue_found"
+  ) => {
+    try {
+      const { error } = await supabase
+        .from("hvac_maintenance_checks")
+        .update({ status })
+        .eq("id", id);
 
-    if (error) {
-      toast({
-        title: "Error updating status",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
+      if (error) throw error;
+
       toast({
         title: "Status updated",
-        description: "The maintenance check status has been updated successfully.",
+        description: "Maintenance check status has been updated successfully.",
       });
+
       fetchMaintenanceChecks();
-    }
-  };
-
-  const handleDelete = async (id: string) => {
-    const { error } = await supabase
-      .from("hvac_maintenance_checks")
-      .delete()
-      .eq("id", id);
-
-    if (error) {
+    } catch (error) {
+      console.error("Error updating status:", error);
       toast({
-        title: "Error deleting maintenance check",
-        description: error.message,
+        title: "Error updating status",
+        description: "Please try again later.",
         variant: "destructive",
       });
-    } else {
-      toast({
-        title: "Maintenance check deleted",
-        description: "The maintenance check has been deleted successfully.",
-      });
-      fetchMaintenanceChecks();
     }
   };
 
@@ -83,31 +65,26 @@ const MaintenanceHistory = () => {
   }, []);
 
   return (
-    <Card className="overflow-hidden border rounded-lg bg-white shadow-sm">
-      <div className="w-full overflow-auto">
-        <Table>
-          <MaintenanceTableHeader />
-          <TableBody>
-            {checks.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="py-8 text-center text-muted-foreground">
-                  No maintenance checks found
-                </td>
-              </tr>
-            ) : (
-              checks.map((check) => (
-                <MaintenanceTableRow
-                  key={check.id}
-                  check={check}
-                  onStatusChange={handleStatusChange}
-                  onDelete={handleDelete}
-                />
-              ))
-            )}
-          </TableBody>
-        </Table>
+    <div className="space-y-4">
+      <h2 className="text-2xl font-bold">Maintenance History</h2>
+      <div className="space-y-4">
+        {loading ? (
+          Array.from({ length: 3 }).map((_, index) => (
+            <Skeleton key={index} className="h-24 w-full" />
+          ))
+        ) : maintenanceChecks.length === 0 ? (
+          <p className="text-muted-foreground">No maintenance checks found.</p>
+        ) : (
+          maintenanceChecks.map((check) => (
+            <MaintenanceTableRow
+              key={check.id}
+              check={check}
+              onStatusChange={handleStatusChange}
+            />
+          ))
+        )}
       </div>
-    </Card>
+    </div>
   );
 };
 

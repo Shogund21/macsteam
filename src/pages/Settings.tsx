@@ -6,6 +6,7 @@ import { LocationsSection } from "@/components/settings/sections/LocationsSectio
 import { DocumentationSection } from "@/components/settings/sections/DocumentationSection";
 import { AppearanceSection } from "@/components/settings/sections/AppearanceSection";
 import { NotificationsSection } from "@/components/settings/sections/NotificationsSection";
+import { MaintenanceSection } from "@/components/settings/sections/MaintenanceSection";
 
 const Settings = () => {
   const isMobile = useIsMobile();
@@ -27,6 +28,7 @@ const Settings = () => {
             <TabsTrigger value="documentation">Documentation</TabsTrigger>
             <TabsTrigger value="appearance">Appearance</TabsTrigger>
             <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
           </TabsList>
 
           <TabsContent value="general">
@@ -47,6 +49,10 @@ const Settings = () => {
 
           <TabsContent value="notifications">
             <NotificationsSection />
+          </TabsContent>
+
+          <TabsContent value="maintenance">
+            <MaintenanceSection />
           </TabsContent>
         </Tabs>
       </div>
