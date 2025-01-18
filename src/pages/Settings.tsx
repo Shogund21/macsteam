@@ -62,8 +62,8 @@ const Settings = () => {
           <TabsContent value="general" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Admin Access</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl md:text-2xl">Admin Access</CardTitle>
+                <CardDescription className="text-sm md:text-base">
                   Enter the admin password to gain access to location management.
                 </CardDescription>
               </CardHeader>
@@ -74,8 +74,8 @@ const Settings = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Technician Management</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl md:text-2xl">Technician Management</CardTitle>
+                <CardDescription className="text-sm md:text-base">
                   Add, remove, and manage technicians in your organization.
                 </CardDescription>
               </CardHeader>
@@ -88,8 +88,8 @@ const Settings = () => {
           <TabsContent value="locations" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Location Management</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl md:text-2xl">Location Management</CardTitle>
+                <CardDescription className="text-sm md:text-base">
                   Add, edit, and manage locations in your organization.
                 </CardDescription>
               </CardHeader>
@@ -102,8 +102,8 @@ const Settings = () => {
           <TabsContent value="documentation" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Documentation</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl md:text-2xl">Documentation</CardTitle>
+                <CardDescription className="text-sm md:text-base">
                   Access guides and documentation for system features.
                 </CardDescription>
               </CardHeader>
@@ -142,8 +142,8 @@ const Settings = () => {
           <TabsContent value="appearance" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Appearance</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl md:text-2xl">Appearance</CardTitle>
+                <CardDescription className="text-sm md:text-base">
                   Customize the look and feel of the application.
                 </CardDescription>
               </CardHeader>
@@ -158,8 +158,8 @@ const Settings = () => {
           <TabsContent value="notifications" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Notifications</CardTitle>
-                <CardDescription>
+                <CardTitle className="text-xl md:text-2xl">Notifications</CardTitle>
+                <CardDescription className="text-sm md:text-base">
                   Manage your notification preferences.
                 </CardDescription>
               </CardHeader>
