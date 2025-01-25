@@ -13,25 +13,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-
-const locations = [
-  { id: "778", name: "AHU 1 - 778" },
-  { id: "776B", name: "Ahu 1,2,6,7,8,9 2nd floor chiller mech room - 776B" },
-  { id: "776B", name: "Ahu 13,14,15 3rd floor house keeping office - 776B" },
-  { id: "776B", name: "Ahu 16,17,18 Location 3rd floor engineering shop/mech room - 776B" },
-  { id: "778", name: "AHU 2 - 778" },
-  { id: "778", name: "AHU 3 - 778" },
-  { id: "776B", name: "Ahu 3,4,5,11,12 2nd floor luggage stock/mech room - 776B" },
-  { id: "778", name: "AHU 4 - 778" },
-  { id: "778", name: "AHU 5 - 778" },
-  { id: "778", name: "AHU 6 - 778" },
-];
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LocationSelectProps {
   form: UseFormReturn<any>;
 }
 
 const LocationSelect = ({ form }: LocationSelectProps) => {
+  const { data: locations } = useQuery({
+    queryKey: ["locations"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("locations")
+        .select("*")
+        .order("name");
+      
+      if (error) throw error;
+      return data;
+    },
+  });
+
   return (
     <FormField
       control={form.control}
@@ -46,10 +48,10 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
-              {locations.map((location) => (
+              {locations?.map((location) => (
                 <SelectItem 
-                  key={`${location.id}-${location.name}`} 
-                  value={location.id}
+                  key={location.id} 
+                  value={location.name}
                   className="py-3 text-sm"
                 >
                   {location.name}
