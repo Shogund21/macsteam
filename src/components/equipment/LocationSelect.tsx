@@ -41,7 +41,11 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       render={({ field }) => (
         <FormItem className="w-full">
           <FormLabel className="text-base font-semibold">Location</FormLabel>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
+          <Select 
+            onValueChange={field.onChange} 
+            value={field.value}
+            defaultValue={field.value}
+          >
             <FormControl>
               <SelectTrigger className="w-full bg-white border-gray-200 h-12">
                 <SelectValue placeholder="Select a location" />
