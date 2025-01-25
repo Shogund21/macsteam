@@ -52,9 +52,13 @@ const FormFields = ({ form }: FormFieldsProps) => {
                   <SelectValue placeholder="Select equipment type" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent className="bg-white">
                 {EQUIPMENT_TYPES.map((type) => (
-                  <SelectItem key={type} value={type}>
+                  <SelectItem 
+                    key={type} 
+                    value={type}
+                    className="cursor-pointer hover:bg-gray-100"
+                  >
                     {type}
                   </SelectItem>
                 ))}
