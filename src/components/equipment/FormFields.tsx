@@ -8,10 +8,30 @@ import {
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 import { EquipmentFormValues } from "./types";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface FormFieldsProps {
   form: UseFormReturn<EquipmentFormValues>;
 }
+
+const EQUIPMENT_TYPES = [
+  "Air Handling Unit (AHU)",
+  "Chiller",
+  "Cooling Tower",
+  "Boiler",
+  "Fan Coil Unit",
+  "Heat Pump",
+  "Package Unit",
+  "Split System",
+  "VAV Box",
+  "VRF System",
+];
 
 const FormFields = ({ form }: FormFieldsProps) => {
   return (
@@ -21,10 +41,25 @@ const FormFields = ({ form }: FormFieldsProps) => {
         name="name"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Equipment Name</FormLabel>
-            <FormControl>
-              <Input placeholder="Enter equipment name" {...field} />
-            </FormControl>
+            <FormLabel>Equipment Type</FormLabel>
+            <Select 
+              onValueChange={field.onChange} 
+              value={field.value}
+              defaultValue={field.value}
+            >
+              <FormControl>
+                <SelectTrigger className="w-full bg-white border-gray-200 h-12">
+                  <SelectValue placeholder="Select equipment type" />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent>
+                {EQUIPMENT_TYPES.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <FormMessage />
           </FormItem>
         )}
