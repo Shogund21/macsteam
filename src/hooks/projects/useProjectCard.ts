@@ -60,7 +60,7 @@ export const useProjectCard = ({
         .from("projects")
         .update({ 
           description: newDescription,
-          updatedat: new Date().toISOString()
+          updatedat: new Date().toISOString() // Changed from updated_at to updatedat
         })
         .eq("id", project.id);
 
