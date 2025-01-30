@@ -36,6 +36,7 @@ export const EditDescriptionDialog = ({
       });
       onClose();
     } catch (error) {
+      console.error("Error saving description:", error);
       toast({
         variant: "destructive",
         title: "Error",
@@ -67,7 +68,6 @@ export const EditDescriptionDialog = ({
           <Button 
             onClick={handleSave} 
             disabled={isSaving}
-            className="bg-blue-500 text-black hover:bg-blue-600 hover:text-black"
           >
             {isSaving ? "Saving..." : "Save"}
           </Button>

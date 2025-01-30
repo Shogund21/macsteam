@@ -63,7 +63,9 @@ export const useProjectCard = ({
         .eq("id", project.id);
 
       if (error) throw error;
+      
       setDescription(newDescription);
+      return Promise.resolve();
     } catch (error) {
       console.error("Error updating description:", error);
       throw error;
