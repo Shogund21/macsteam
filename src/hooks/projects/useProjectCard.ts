@@ -54,11 +54,13 @@ export const useProjectCard = ({
 
   const handleDescriptionUpdate = async (newDescription: string) => {
     try {
+      console.log("Updating project description:", { projectId: project.id, newDescription });
+      
       const { error } = await supabase
         .from("projects")
         .update({ 
           description: newDescription,
-          updatedat: new Date().toISOString()
+          updatedat: new Date().toISOString() // Changed from updated_at to updatedat
         })
         .eq("id", project.id);
 
