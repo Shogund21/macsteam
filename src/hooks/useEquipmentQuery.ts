@@ -32,7 +32,7 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('Location data:', locationData);
 
-      // Fetch all equipment without any initial filtering
+      // Fetch all equipment without filtering
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
@@ -50,11 +50,12 @@ export const useEquipmentQuery = (locationId: string) => {
       const filteredEquipment = equipment?.filter(item => {
         const normalizedItemLocation = normalizeString(item.location);
         const isMatch = normalizedItemLocation === normalizedStoreNumber;
-        console.log(`Comparing locations - Item: ${item.location} (${normalizedItemLocation}) with Store: ${locationData.store_number} (${normalizedStoreNumber}) = ${isMatch}`);
+        console.log(`Equipment: ${item.name} - Location comparison: ${item.location} (${normalizedItemLocation}) with Store: ${locationData.store_number} (${normalizedStoreNumber}) = ${isMatch}`);
         return isMatch;
       });
 
       console.log('Filtered equipment:', filteredEquipment);
+      console.log('Equipment count:', filteredEquipment?.length);
 
       return filteredEquipment || [];
     },
