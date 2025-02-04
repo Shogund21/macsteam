@@ -9,9 +9,11 @@ export const matchesLocation = (equipLocation: string, storeNumber: string): boo
 
   console.log('Matching locations:', {
     equipLocation: normalizedEquipLocation,
-    storeNumber: normalizedStoreNumber
+    storeNumber: normalizedStoreNumber,
+    locationId: storeNumber // Log the original ID for debugging
   });
 
-  // Simple contains check for now to debug the matching issue
-  return normalizedEquipLocation.includes(normalizedStoreNumber);
+  // For now, return true to show all equipment while we debug
+  // This will help us see what equipment is available
+  return true;
 };

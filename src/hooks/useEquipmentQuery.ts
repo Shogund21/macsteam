@@ -46,22 +46,8 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('All equipment:', equipment);
 
-      // Filter equipment by location
-      const filteredEquipment = equipment?.filter(eq => 
-        matchesLocation(eq.location, locationData.store_number)
-      );
-
-      console.log('Filtered equipment:', {
-        locationStoreNumber: locationData.store_number,
-        totalEquipment: equipment?.length,
-        filteredCount: filteredEquipment?.length,
-        matches: filteredEquipment?.map(e => ({
-          name: e.name,
-          location: e.location
-        }))
-      });
-
-      return filteredEquipment || [];
+      // For now, return all equipment to debug the issue
+      return equipment || [];
     },
     enabled: !!locationId,
   });
