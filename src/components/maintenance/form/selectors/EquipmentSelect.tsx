@@ -35,7 +35,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
       
       console.log('Location data:', locationData);
 
-      // Fetch equipment for this location
+      // Fetch all active equipment
       const { data: equipment, error } = await supabase
         .from('equipment')
         .select('*')
@@ -47,24 +47,44 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         throw error;
       }
 
-      // Filter equipment based on location name or store number
+      // Normalize location strings for comparison
+      const normalizeLocation = (loc: string) => {
+        return loc.toLowerCase()
+          .replace(/[^a-z0-9]/g, '') // Remove special characters
+          .trim();
+      };
+
+      const locationName = normalizeLocation(locationData.name || '');
+      const storeNumber = normalizeLocation(locationData.store_number || '');
+      
+      console.log('Normalized location:', { locationName, storeNumber });
+
+      // Filter equipment based on normalized location matching
       const filteredEquipment = equipment.filter(eq => {
         if (!eq.location) return false;
         
-        const equipLocation = eq.location.toLowerCase();
-        const locationName = locationData.name?.toLowerCase() || '';
-        const storeNumber = locationData.store_number?.toLowerCase() || '';
+        const equipLocation = normalizeLocation(eq.location);
+        console.log('Checking equipment location:', equipLocation);
         
         // Check various location format matches
-        return (
-          equipLocation.includes(locationName) ||
-          equipLocation.includes(storeNumber) ||
-          equipLocation.includes(`store ${storeNumber}`) ||
-          equipLocation.includes(`store#${storeNumber}`) ||
-          equipLocation.includes(`building ${storeNumber}`) ||
-          equipLocation === locationName ||
-          equipLocation === storeNumber
-        );
+        const matches = [
+          equipLocation.includes(locationName),
+          equipLocation.includes(storeNumber),
+          equipLocation.includes(`store${storeNumber}`),
+          equipLocation.includes(`building${storeNumber}`),
+          equipLocation === locationName,
+          equipLocation === storeNumber,
+          // Add fuzzy matching for store numbers
+          equipLocation.includes(`loc${storeNumber}`),
+          equipLocation.includes(`location${storeNumber}`),
+          equipLocation.includes(`site${storeNumber}`)
+        ].some(match => match);
+
+        if (matches) {
+          console.log('Match found for equipment:', eq.name);
+        }
+
+        return matches;
       });
 
       console.log('Filtered equipment:', filteredEquipment);
