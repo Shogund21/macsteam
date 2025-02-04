@@ -27,13 +27,35 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
         throw error;
       }
       
+      console.log('Locations fetched:', data);
+      return data || [];
+    },
+  });
+
+  const { data: equipmentList = [], isLoading: isLoadingEquipment } = useQuery({
+    queryKey: ['equipment', form.watch('location_id')],
+    queryFn: async () => {
+      console.log('Starting equipment fetch...');
+      const { data, error } = await supabase
+        .from('equipment')
+        .select('*')
+        .order('name');
+      
+      if (error) {
+        console.error('Error fetching equipment:', error);
+        throw error;
+      }
+      
+      console.log('Equipment fetched:', data);
       return data || [];
     },
   });
 
   const filteredEquipment = form.watch('location_id') 
-    ? equipment.filter(eq => eq.location === locations.find(loc => loc.id === form.watch('location_id'))?.name)
-    : equipment;
+    ? equipmentList.filter(eq => eq.location === locations.find(loc => loc.id === form.watch('location_id'))?.name)
+    : equipmentList;
+
+  console.log('Filtered equipment:', filteredEquipment);
 
   return (
     <div className="space-y-6">
