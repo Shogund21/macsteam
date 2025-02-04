@@ -11,6 +11,8 @@ export const useEquipmentQuery = (locationId: string) => {
         return [];
       }
 
+      console.log('Fetching equipment for location:', locationId);
+
       // Get location data
       const { data: locationData, error: locationError } = await supabase
         .from('locations')
@@ -28,6 +30,8 @@ export const useEquipmentQuery = (locationId: string) => {
         return [];
       }
 
+      console.log('Location data:', locationData);
+
       // Fetch equipment
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
@@ -40,19 +44,17 @@ export const useEquipmentQuery = (locationId: string) => {
         throw equipmentError;
       }
 
+      console.log('All equipment:', equipment);
+
       // Filter equipment by location
       const filteredEquipment = equipment?.filter(eq => 
         matchesLocation(eq.location, locationData.store_number)
       );
 
-      console.log('Equipment query results:', {
-        locationData: {
-          id: locationData.id,
-          name: locationData.name,
-          storeNumber: locationData.store_number
-        },
+      console.log('Filtered equipment:', {
+        locationStoreNumber: locationData.store_number,
         totalEquipment: equipment?.length,
-        filteredEquipment: filteredEquipment?.length,
+        filteredCount: filteredEquipment?.length,
         matches: filteredEquipment?.map(e => ({
           name: e.name,
           location: e.location

@@ -11,6 +11,12 @@ interface EquipmentSelectProps {
 const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   const { data: equipmentList = [], isLoading } = useEquipmentQuery(locationId);
 
+  console.log('Equipment Select Render:', {
+    locationId,
+    equipmentCount: equipmentList?.length,
+    equipment: equipmentList
+  });
+
   return (
     <FormField
       control={form.control}
@@ -28,7 +34,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                 className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               >
                 <SelectValue 
-                  placeholder="Select equipment" 
+                  placeholder={locationId ? "Select equipment" : "Please select a location first"}
                   className="text-gray-600"
                 />
               </SelectTrigger>
