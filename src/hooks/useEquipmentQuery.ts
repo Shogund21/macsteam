@@ -25,25 +25,6 @@ export const useEquipmentQuery = (locationId: string) => {
         throw locationError;
       }
 
-      if (!locationData) {
-        console.log('Location not found for ID:', locationId);
-        // If no location found, fetch all equipment
-        const { data: allEquipment, error: allEquipmentError } = await supabase
-          .from('equipment')
-          .select('*')
-          .order('name');
-        
-        if (allEquipmentError) {
-          console.error('Equipment fetch error:', allEquipmentError);
-          throw allEquipmentError;
-        }
-
-        console.log('No location found, returning all equipment:', allEquipment);
-        return allEquipment || [];
-      }
-
-      console.log('Location data:', locationData);
-
       // Fetch all equipment
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
@@ -55,45 +36,45 @@ export const useEquipmentQuery = (locationId: string) => {
         throw equipmentError;
       }
 
-      // Log all equipment for debugging
-      console.log('All equipment before filtering:', equipment?.map(e => ({
-        id: e.id,
-        name: e.name,
-        location: e.location
-      })));
+      if (!locationData) {
+        console.log('Location not found, returning all equipment:', equipment);
+        return equipment || [];
+      }
 
-      // Filter equipment based on location match
+      console.log('Location data:', locationData);
+      console.log('All equipment before filtering:', equipment);
+
+      // Filter equipment based on location or name containing store number
       const matchedEquipment = equipment?.filter(e => {
         const normalizedLocation = normalizeString(e.location);
         const normalizedStoreNumber = normalizeString(locationData.store_number);
-        const isMatch = normalizedLocation.includes(normalizedStoreNumber);
+        const normalizedName = normalizeString(e.name);
         
-        console.log('Equipment location check:', {
+        // Match if location contains store number OR name contains store number
+        const isMatch = normalizedLocation.includes(normalizedStoreNumber) || 
+                       normalizedName.includes(normalizedStoreNumber) ||
+                       normalizedLocation.includes('dadeland home');
+
+        console.log('Equipment match check:', {
           equipmentName: e.name,
           equipmentLocation: e.location,
           storeNumber: locationData.store_number,
           normalizedLocation,
           normalizedStoreNumber,
+          normalizedName,
           isMatch
         });
 
         return isMatch;
       });
 
-      // If no equipment matches the location, return all equipment
       if (!matchedEquipment?.length) {
-        console.log('No equipment matches location, returning all equipment:', equipment);
+        console.log('No equipment matches found, returning all equipment:', equipment);
         return equipment || [];
       }
 
-      console.log('Matched equipment:', matchedEquipment?.map(e => ({
-        id: e.id,
-        name: e.name,
-        location: e.location,
-        store_number: locationData.store_number
-      })));
-
-      return matchedEquipment || [];
+      console.log('Matched equipment:', matchedEquipment);
+      return matchedEquipment;
     },
     enabled: !!locationId,
   });
