@@ -13,8 +13,8 @@ interface MaintenanceBasicInfoProps {
 const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasicInfoProps) => {
   return (
     <div className="space-y-6">
-      <LocationSelect form={form} />
       <EquipmentSelect form={form} locationId={form.watch('location_id')} />
+      <LocationSelect form={form} />
       <TechnicianSelect form={form} technicians={technicians} />
     </div>
   );
