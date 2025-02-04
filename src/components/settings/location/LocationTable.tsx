@@ -11,7 +11,6 @@ import { LocationActions } from "./LocationActions";
 interface LocationTableProps {
   locations: Array<{
     id: string;
-    name: string;
     store_number: string;
   }>;
   onEdit: (location: any) => void;
@@ -24,7 +23,6 @@ export const LocationTable = ({ locations, onEdit, onDelete, onSuccess }: Locati
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
           <TableHead>Store Number</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
@@ -32,7 +30,6 @@ export const LocationTable = ({ locations, onEdit, onDelete, onSuccess }: Locati
       <TableBody>
         {locations?.map((location) => (
           <TableRow key={location.id}>
-            <TableCell>{location.name}</TableCell>
             <TableCell>{location.store_number}</TableCell>
             <TableCell>
               <LocationActions

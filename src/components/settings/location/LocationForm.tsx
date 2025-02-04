@@ -8,7 +8,6 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 const locationSchema = z.object({
-  name: z.string().min(1, "Name is required"),
   store_number: z.string().min(1, "Store number is required"),
 });
 
@@ -18,7 +17,6 @@ interface LocationFormProps {
   onSuccess?: () => void;
   initialData?: {
     id: string;
-    name: string;
     store_number: string;
   };
 }
@@ -29,7 +27,6 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
   const form = useForm<LocationFormValues>({
     resolver: zodResolver(locationSchema),
     defaultValues: {
-      name: initialData?.name || "",
       store_number: initialData?.store_number || "",
     },
   });
@@ -40,7 +37,6 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
         const { error } = await supabase
           .from("locations")
           .update({
-            name: values.name,
             store_number: values.store_number,
             updated_at: new Date().toISOString(),
           })
@@ -50,7 +46,6 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
         toast({ title: "Success", description: "Location updated successfully" });
       } else {
         const { error } = await supabase.from("locations").insert({
-          name: values.name,
           store_number: values.store_number,
         });
 
@@ -73,20 +68,6 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter location name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <FormField
           control={form.control}
           name="store_number"

@@ -6,7 +6,6 @@ import { LocationForm } from "./LocationForm";
 interface LocationActionsProps {
   location: {
     id: string;
-    name: string;
     store_number: string;
   };
   onEdit: (location: any) => void;
