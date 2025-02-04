@@ -16,21 +16,27 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     queryFn: async () => {
       console.log('Fetching equipment for location:', locationId);
       
-      // First get the location data for the selected location ID
-      let locationData = null;
-      if (locationId) {
-        const { data } = await supabase
-          .from('locations')
-          .select('name, store_number')
-          .eq('id', locationId)
-          .maybeSingle();
-        
-        locationData = data;
-        console.log('Location data:', locationData);
+      if (!locationId) {
+        console.log('No location selected, returning empty list');
+        return [];
       }
 
-      // Then fetch all active equipment
-      const { data: allEquipment, error } = await supabase
+      // First get the location data
+      const { data: locationData } = await supabase
+        .from('locations')
+        .select('name, store_number')
+        .eq('id', locationId)
+        .maybeSingle();
+      
+      if (!locationData) {
+        console.log('Location not found:', locationId);
+        return [];
+      }
+      
+      console.log('Location data:', locationData);
+
+      // Fetch equipment for this location
+      const { data: equipment, error } = await supabase
         .from('equipment')
         .select('*')
         .eq('status', 'active')
@@ -41,27 +47,30 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         throw error;
       }
 
-      // If we have a location selected, filter equipment by location name or store number
-      let filteredEquipment = allEquipment;
-      if (locationData) {
-        filteredEquipment = allEquipment.filter(eq => {
-          const equipLocation = eq.location?.toLowerCase();
-          const locationName = locationData.name?.toLowerCase();
-          const storeNumber = locationData.store_number?.toLowerCase();
-          
-          return equipLocation && (
-            equipLocation.includes(locationName) || 
-            equipLocation.includes(storeNumber) ||
-            equipLocation.includes(`store ${storeNumber}`) ||
-            equipLocation.includes(`building ${storeNumber}`)
-          );
-        });
-      }
-      
+      // Filter equipment based on location name or store number
+      const filteredEquipment = equipment.filter(eq => {
+        if (!eq.location) return false;
+        
+        const equipLocation = eq.location.toLowerCase();
+        const locationName = locationData.name?.toLowerCase() || '';
+        const storeNumber = locationData.store_number?.toLowerCase() || '';
+        
+        // Check various location format matches
+        return (
+          equipLocation.includes(locationName) ||
+          equipLocation.includes(storeNumber) ||
+          equipLocation.includes(`store ${storeNumber}`) ||
+          equipLocation.includes(`store#${storeNumber}`) ||
+          equipLocation.includes(`building ${storeNumber}`) ||
+          equipLocation === locationName ||
+          equipLocation === storeNumber
+        );
+      });
+
       console.log('Filtered equipment:', filteredEquipment);
-      return filteredEquipment || [];
+      return filteredEquipment;
     },
-    enabled: true,
+    enabled: !!locationId,
   });
 
   return (
@@ -111,7 +120,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                     disabled 
                     className="py-3 text-sm text-gray-500"
                   >
-                    {locationId ? "No equipment in this location" : "No equipment available"}
+                    {locationId ? "No equipment in this location" : "Please select a location first"}
                   </SelectItem>
                 )
               ) : (
