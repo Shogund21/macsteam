@@ -1,9 +1,7 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { Equipment } from "@/types/maintenance";
+import { useEquipmentQuery } from "@/hooks/useEquipmentQuery";
 
 interface EquipmentSelectProps {
   form: UseFormReturn<any>;
@@ -11,105 +9,7 @@ interface EquipmentSelectProps {
 }
 
 const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
-  const { data: equipmentList = [], isLoading } = useQuery({
-    queryKey: ['equipment', locationId],
-    queryFn: async () => {
-      console.log('Starting equipment fetch for location:', locationId);
-      
-      if (!locationId) {
-        console.log('No location ID provided');
-        return [];
-      }
-
-      // Get location data
-      const { data: locationData, error: locationError } = await supabase
-        .from('locations')
-        .select('*')
-        .eq('id', locationId)
-        .maybeSingle();
-      
-      if (locationError) {
-        console.error('Location fetch error:', locationError);
-        throw locationError;
-      }
-
-      if (!locationData) {
-        console.log('Location not found for ID:', locationId);
-        return [];
-      }
-
-      // Enhanced location data logging
-      console.log('Location data:', {
-        id: locationData.id,
-        name: locationData.name,
-        storeNumber: locationData.store_number,
-        normalizedName: locationData.name?.toLowerCase(),
-        normalizedStoreNumber: locationData.store_number?.toLowerCase()
-      });
-
-      // Fetch equipment with server-side filtering if possible
-      const { data: equipment, error: equipmentError } = await supabase
-        .from('equipment')
-        .select('*')
-        .eq('status', 'active')
-        .order('name');
-      
-      if (equipmentError) {
-        console.error('Equipment fetch error:', equipmentError);
-        throw equipmentError;
-      }
-
-      // Log raw equipment data
-      console.log('Raw equipment data:', equipment?.map(eq => ({
-        id: eq.id,
-        name: eq.name,
-        location: eq.location,
-        normalizedLocation: eq.location?.toLowerCase()
-      })));
-
-      // Simplified matching logic focusing on store number
-      const filteredEquipment = equipment?.filter(eq => {
-        const storeNumber = locationData.store_number?.toLowerCase() || '';
-        const equipLocation = eq.location?.toLowerCase() || '';
-        
-        // Test each matching condition separately and log results
-        const matchConditions = {
-          exactMatch: equipLocation === storeNumber,
-          includesStoreNumber: equipLocation.includes(storeNumber),
-          includesStorePrefix: equipLocation.includes(`store ${storeNumber}`),
-          includesLocationPrefix: equipLocation.includes(`location ${storeNumber}`)
-        };
-
-        console.log(`Matching conditions for ${eq.name}:`, {
-          equipmentLocation: equipLocation,
-          storeNumber: storeNumber,
-          conditions: matchConditions
-        });
-
-        // For testing, we'll use a simple includes check
-        const matches = equipLocation.includes(storeNumber);
-
-        console.log(`Final match result for ${eq.name}:`, {
-          equipment: eq.name,
-          location: eq.location,
-          matches: matches
-        });
-
-        return matches;
-      });
-
-      console.log('Filtered equipment results:', {
-        total: filteredEquipment?.length,
-        items: filteredEquipment?.map(e => ({
-          name: e.name,
-          location: e.location
-        }))
-      });
-
-      return filteredEquipment || [];
-    },
-    enabled: !!locationId,
-  });
+  const { data: equipmentList = [], isLoading } = useEquipmentQuery(locationId);
 
   return (
     <FormField
