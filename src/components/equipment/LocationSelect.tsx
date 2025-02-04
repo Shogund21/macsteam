@@ -21,7 +21,7 @@ interface LocationSelectProps {
 }
 
 const LocationSelect = ({ form }: LocationSelectProps) => {
-  const { data: locations } = useQuery({
+  const { data: locations, isLoading } = useQuery({
     queryKey: ["locations"],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -56,9 +56,9 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                 <SelectItem 
                   key={location.id} 
                   value={location.name}
-                  className="py-3 text-sm"
+                  className="py-3 text-sm cursor-pointer hover:bg-gray-100"
                 >
-                  {location.name}
+                  {location.name} - {location.store_number}
                 </SelectItem>
               ))}
             </SelectContent>
