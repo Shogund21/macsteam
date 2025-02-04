@@ -32,11 +32,11 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('Location data:', locationData);
 
-      // Fetch equipment directly matching the location's store number
+      // Fetch equipment matching the location's store number (case-insensitive)
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
-        .ilike('location', locationData.store_number)
+        .ilike('location', `%${locationData.store_number}%`)
         .order('name');
       
       if (equipmentError) {
@@ -44,11 +44,14 @@ export const useEquipmentQuery = (locationId: string) => {
         throw equipmentError;
       }
 
+      // Log detailed equipment information for debugging
       console.log('Equipment found:', equipment?.length);
-      console.log('Equipment list:', equipment?.map(e => ({
+      console.log('Equipment details:', equipment?.map(e => ({
+        id: e.id,
         name: e.name,
         location: e.location,
-        store: locationData.store_number
+        store_number: locationData.store_number,
+        match: e.location?.toLowerCase().includes(locationData.store_number.toLowerCase())
       })));
 
       return equipment || [];
