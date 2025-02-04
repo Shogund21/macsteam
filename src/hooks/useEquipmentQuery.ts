@@ -27,12 +27,24 @@ export const useEquipmentQuery = (locationId: string) => {
 
       if (!locationData) {
         console.log('Location not found for ID:', locationId);
-        return [];
+        // If no location found, fetch all equipment
+        const { data: allEquipment, error: allEquipmentError } = await supabase
+          .from('equipment')
+          .select('*')
+          .order('name');
+        
+        if (allEquipmentError) {
+          console.error('Equipment fetch error:', allEquipmentError);
+          throw allEquipmentError;
+        }
+
+        console.log('No location found, returning all equipment:', allEquipment);
+        return allEquipment || [];
       }
 
       console.log('Location data:', locationData);
 
-      // Fetch all equipment and filter by location
+      // Fetch all equipment
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
@@ -43,7 +55,7 @@ export const useEquipmentQuery = (locationId: string) => {
         throw equipmentError;
       }
 
-      // Log detailed equipment information for debugging
+      // Log all equipment for debugging
       console.log('All equipment before filtering:', equipment?.map(e => ({
         id: e.id,
         name: e.name,
@@ -51,7 +63,7 @@ export const useEquipmentQuery = (locationId: string) => {
       })));
 
       // Filter equipment based on location match
-      const filteredEquipment = equipment?.filter(e => {
+      const matchedEquipment = equipment?.filter(e => {
         const normalizedLocation = normalizeString(e.location);
         const normalizedStoreNumber = normalizeString(locationData.store_number);
         const isMatch = normalizedLocation.includes(normalizedStoreNumber);
@@ -68,14 +80,20 @@ export const useEquipmentQuery = (locationId: string) => {
         return isMatch;
       });
 
-      console.log('Filtered equipment:', filteredEquipment?.map(e => ({
+      // If no equipment matches the location, return all equipment
+      if (!matchedEquipment?.length) {
+        console.log('No equipment matches location, returning all equipment:', equipment);
+        return equipment || [];
+      }
+
+      console.log('Matched equipment:', matchedEquipment?.map(e => ({
         id: e.id,
         name: e.name,
         location: e.location,
         store_number: locationData.store_number
       })));
 
-      return filteredEquipment || [];
+      return matchedEquipment || [];
     },
     enabled: !!locationId,
   });
