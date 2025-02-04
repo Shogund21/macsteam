@@ -39,6 +39,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
       const { data, error } = await supabase
         .from('equipment')
         .select('*')
+        .eq('status', 'active')
         .order('name');
       
       if (error) {
