@@ -32,7 +32,7 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('Location data:', locationData);
 
-      // Fetch all equipment
+      // Fetch all equipment without any initial filtering
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
@@ -45,11 +45,13 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('All equipment before filtering:', equipment);
 
-      // Filter equipment based on normalized location match
+      // Filter equipment based on exact location match after normalization
       const normalizedStoreNumber = normalizeString(locationData.store_number);
       const filteredEquipment = equipment?.filter(item => {
         const normalizedItemLocation = normalizeString(item.location);
-        return normalizedItemLocation === normalizedStoreNumber;
+        const isMatch = normalizedItemLocation === normalizedStoreNumber;
+        console.log(`Comparing locations - Item: ${item.location} (${normalizedItemLocation}) with Store: ${locationData.store_number} (${normalizedStoreNumber}) = ${isMatch}`);
+        return isMatch;
       });
 
       console.log('Filtered equipment:', filteredEquipment);
