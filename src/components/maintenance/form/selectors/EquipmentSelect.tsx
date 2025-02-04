@@ -14,7 +14,6 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   const { data: equipmentList = [], isLoading } = useQuery({
     queryKey: ['equipment', locationId],
     queryFn: async () => {
-      console.log('Starting equipment fetch...');
       const { data, error } = await supabase
         .from('equipment')
         .select('*')
@@ -26,7 +25,6 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         throw error;
       }
       
-      console.log('Equipment fetched:', data);
       return data || [];
     },
   });
@@ -73,7 +71,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
             <SelectContent 
               className="bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
             >
-              {filteredEquipment && filteredEquipment.length > 0 ? (
+              {!isLoading && filteredEquipment && filteredEquipment.length > 0 ? (
                 filteredEquipment.map((item) => (
                   <SelectItem 
                     key={item.id} 
@@ -94,7 +92,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                   disabled 
                   className="py-3 text-sm text-gray-500"
                 >
-                  {locationId ? "No equipment in this location" : "No equipment available"}
+                  {isLoading ? "Loading equipment..." : locationId ? "No equipment in this location" : "No equipment available"}
                 </SelectItem>
               )}
             </SelectContent>
