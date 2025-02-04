@@ -21,7 +21,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         return [];
       }
 
-      // First get the location data with detailed logging
+      // First get the location data
       const { data: locationData, error: locationError } = await supabase
         .from('locations')
         .select('*')
@@ -29,7 +29,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         .maybeSingle();
       
       if (locationError) {
-        console.error('Error fetching location:', locationError);
+        console.error('Location fetch error:', locationError);
         throw locationError;
       }
 
@@ -38,14 +38,14 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         return [];
       }
       
-      console.log('Location data found:', {
+      console.log('Location data:', {
         id: locationData.id,
         name: locationData.name,
         storeNumber: locationData.store_number,
         isActive: locationData.is_active
       });
 
-      // Fetch all active equipment with detailed logging
+      // Fetch equipment
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
@@ -53,25 +53,24 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         .order('name');
       
       if (equipmentError) {
-        console.error('Error fetching equipment:', equipmentError);
+        console.error('Equipment fetch error:', equipmentError);
         throw equipmentError;
       }
 
-      console.log('All active equipment:', equipment?.slice(0, 2));
+      console.log('Equipment data sample:', equipment?.slice(0, 2));
 
-      // More flexible location string normalization
+      // More flexible location string normalization that preserves spaces and basic punctuation
       const normalizeLocation = (loc: string) => {
         if (!loc) return '';
-        // Convert to lowercase but keep spaces and basic punctuation
         return loc.toLowerCase()
-          .replace(/[^a-z0-9\s-]/g, '') // Keep spaces and hyphens
+          .replace(/[^a-z0-9\s\-]/g, '') // Keep letters, numbers, spaces, and hyphens
           .trim();
       };
 
       const locationName = locationData.name ? normalizeLocation(locationData.name) : '';
-      const storeNumber = locationData.store_number ? normalizeLocation(locationData.store_number) : '';
+      const storeNumber = locationData.store_number ? locationData.store_number.trim() : '';
       
-      console.log('Normalized location identifiers:', {
+      console.log('Location identifiers:', {
         locationName,
         storeNumber,
         originalName: locationData.name,
@@ -86,35 +85,40 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         }
         
         const equipLocation = normalizeLocation(eq.location);
-        console.log(`Checking equipment: ${eq.name}, Location: ${eq.location}, Normalized: ${equipLocation}`);
+        console.log(`Checking equipment location match:`, {
+          equipmentName: eq.name,
+          originalLocation: eq.location,
+          normalizedLocation: equipLocation,
+          matchingAgainst: {
+            locationName,
+            storeNumber
+          }
+        });
 
-        // More flexible matching patterns
-        const patterns = [
+        // More precise matching patterns that preserve spacing
+        const matches = [
           equipLocation.includes(locationName),
           equipLocation.includes(storeNumber),
           equipLocation.includes(`store ${storeNumber}`),
+          equipLocation.includes(`location ${storeNumber}`),
           equipLocation.includes(`building ${storeNumber}`),
           equipLocation === locationName,
-          equipLocation === storeNumber,
-          // Additional patterns with spaces preserved
-          equipLocation.includes(`location ${storeNumber}`),
-          equipLocation.includes(`site ${storeNumber}`),
-          // Match with or without spaces
-          equipLocation.replace(/\s/g, '').includes(storeNumber.replace(/\s/g, '')),
-          equipLocation.replace(/\s/g, '').includes(locationName.replace(/\s/g, ''))
-        ];
+          equipLocation === storeNumber
+        ].some(match => match);
 
-        const matches = patterns.some(match => match);
         if (matches) {
-          console.log(`Match found for equipment: ${eq.name} with location: ${eq.location}`);
+          console.log(`Match found for equipment: ${eq.name}`);
         }
 
         return matches;
       });
 
-      console.log('Filtered equipment results:', {
+      console.log('Final filtered equipment:', {
         total: filteredEquipment?.length,
-        items: filteredEquipment
+        items: filteredEquipment?.map(e => ({
+          name: e.name,
+          location: e.location
+        }))
       });
 
       return filteredEquipment || [];
