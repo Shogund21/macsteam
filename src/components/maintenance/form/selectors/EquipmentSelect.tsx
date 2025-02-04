@@ -58,7 +58,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
           <Select
             onValueChange={field.onChange}
             value={field.value || ""}
-            defaultValue=""
+            defaultValue={field.value || ""}
           >
             <FormControl>
               <SelectTrigger 
@@ -71,7 +71,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+              className="bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
             >
               {filteredEquipment && filteredEquipment.length > 0 ? (
                 filteredEquipment.map((item) => (
