@@ -13,7 +13,7 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('Fetching equipment for location:', locationId);
 
-      // Get location data
+      // Get location data first
       const { data: locationData, error: locationError } = await supabase
         .from('locations')
         .select('*')
@@ -32,7 +32,7 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('Location data:', locationData);
 
-      // Fetch all equipment without status filter
+      // Fetch all equipment
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
@@ -43,10 +43,17 @@ export const useEquipmentQuery = (locationId: string) => {
         throw equipmentError;
       }
 
-      console.log('All equipment:', equipment);
+      console.log('All equipment before filtering:', equipment);
 
-      // For now, return all equipment to debug the issue
-      return equipment || [];
+      // Filter equipment based on location
+      const filteredEquipment = equipment?.filter(item => 
+        item.location.toLowerCase().includes(locationData.store_number.toLowerCase()) ||
+        locationData.name?.toLowerCase().includes(item.location.toLowerCase())
+      );
+
+      console.log('Filtered equipment:', filteredEquipment);
+
+      return filteredEquipment || [];
     },
     enabled: !!locationId,
   });
