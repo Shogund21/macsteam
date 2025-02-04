@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { normalizeString } from "@/utils/locationMatching";
 
 export const useEquipmentQuery = (locationId: string) => {
   return useQuery({
@@ -44,10 +45,12 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('All equipment before filtering:', equipment);
 
-      // Filter equipment based on exact location match
-      const filteredEquipment = equipment?.filter(item => 
-        item.location === locationData.store_number
-      );
+      // Filter equipment based on normalized location match
+      const normalizedStoreNumber = normalizeString(locationData.store_number);
+      const filteredEquipment = equipment?.filter(item => {
+        const normalizedItemLocation = normalizeString(item.location);
+        return normalizedItemLocation === normalizedStoreNumber;
+      });
 
       console.log('Filtered equipment:', filteredEquipment);
 
