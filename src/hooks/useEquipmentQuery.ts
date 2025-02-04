@@ -32,11 +32,10 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('Location data:', locationData);
 
-      // Fetch all active equipment
+      // Fetch all equipment without status filter
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
-        .eq('status', 'active')
         .order('name');
       
       if (equipmentError) {
