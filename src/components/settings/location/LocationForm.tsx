@@ -38,6 +38,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
           .from("locations")
           .update({
             store_number: values.store_number,
+            name: values.store_number, // Use store_number as name for consistency
             updated_at: new Date().toISOString(),
           })
           .eq("id", initialData.id);
@@ -47,6 +48,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       } else {
         const { error } = await supabase.from("locations").insert({
           store_number: values.store_number,
+          name: values.store_number, // Use store_number as name for consistency
         });
 
         if (error) throw error;
