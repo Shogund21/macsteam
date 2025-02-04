@@ -32,31 +32,31 @@ export type Database = {
           id: string
           lastMaintenance: string | null
           location: string
-          model: string
+          model: string | null
           name: string
           nextMaintenance: string | null
-          serialNumber: string
-          status: string
+          serialNumber: string | null
+          status: string | null
         }
         Insert: {
           id?: string
           lastMaintenance?: string | null
           location: string
-          model: string
+          model?: string | null
           name: string
           nextMaintenance?: string | null
-          serialNumber: string
-          status: string
+          serialNumber?: string | null
+          status?: string | null
         }
         Update: {
           id?: string
           lastMaintenance?: string | null
           location?: string
-          model?: string
+          model?: string | null
           name?: string
           nextMaintenance?: string | null
-          serialNumber?: string
-          status?: string
+          serialNumber?: string | null
+          status?: string | null
         }
         Relationships: []
       }

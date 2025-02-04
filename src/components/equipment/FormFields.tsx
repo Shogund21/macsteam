@@ -74,7 +74,7 @@ const FormFields = ({ form }: FormFieldsProps) => {
         name="model"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Model</FormLabel>
+            <FormLabel className="text-gray-600">Model (Optional)</FormLabel>
             <FormControl>
               <Input placeholder="Enter model" {...field} />
             </FormControl>
@@ -88,7 +88,7 @@ const FormFields = ({ form }: FormFieldsProps) => {
         name="serialNumber"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Serial Number</FormLabel>
+            <FormLabel className="text-gray-600">Serial Number (Optional)</FormLabel>
             <FormControl>
               <Input placeholder="Enter serial number" {...field} />
             </FormControl>
@@ -102,7 +102,7 @@ const FormFields = ({ form }: FormFieldsProps) => {
         name="status"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Status</FormLabel>
+            <FormLabel className="text-gray-600">Status (Optional)</FormLabel>
             <FormControl>
               <Input placeholder="Enter status" {...field} />
             </FormControl>
