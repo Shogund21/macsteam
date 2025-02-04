@@ -32,11 +32,10 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('Location data:', locationData);
 
-      // Fetch all equipment where location contains the store number
+      // Fetch all equipment and filter by location
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
-        .ilike('location', `%${locationData.store_number}%`)
         .order('name');
       
       if (equipmentError) {
@@ -45,17 +44,38 @@ export const useEquipmentQuery = (locationId: string) => {
       }
 
       // Log detailed equipment information for debugging
-      console.log('Equipment found:', equipment?.length);
-      console.log('Equipment details:', equipment?.map(e => ({
+      console.log('All equipment before filtering:', equipment?.map(e => ({
+        id: e.id,
+        name: e.name,
+        location: e.location
+      })));
+
+      // Filter equipment based on location match
+      const filteredEquipment = equipment?.filter(e => {
+        const normalizedLocation = normalizeString(e.location);
+        const normalizedStoreNumber = normalizeString(locationData.store_number);
+        const isMatch = normalizedLocation.includes(normalizedStoreNumber);
+        
+        console.log('Equipment location check:', {
+          equipmentName: e.name,
+          equipmentLocation: e.location,
+          storeNumber: locationData.store_number,
+          normalizedLocation,
+          normalizedStoreNumber,
+          isMatch
+        });
+
+        return isMatch;
+      });
+
+      console.log('Filtered equipment:', filteredEquipment?.map(e => ({
         id: e.id,
         name: e.name,
         location: e.location,
-        store_number: locationData.store_number,
-        match: normalizeString(e.location).includes(normalizeString(locationData.store_number))
+        store_number: locationData.store_number
       })));
 
-      // Return all equipment that matches the location
-      return equipment || [];
+      return filteredEquipment || [];
     },
     enabled: !!locationId,
   });
