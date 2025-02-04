@@ -32,7 +32,7 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('Location data:', locationData);
 
-      // Fetch equipment matching the location's store number (case-insensitive)
+      // Fetch all equipment where location contains the store number
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
@@ -51,9 +51,10 @@ export const useEquipmentQuery = (locationId: string) => {
         name: e.name,
         location: e.location,
         store_number: locationData.store_number,
-        match: e.location?.toLowerCase().includes(locationData.store_number.toLowerCase())
+        match: normalizeString(e.location).includes(normalizeString(locationData.store_number))
       })));
 
+      // Return all equipment that matches the location
       return equipment || [];
     },
     enabled: !!locationId,
