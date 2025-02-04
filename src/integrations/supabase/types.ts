@@ -377,6 +377,42 @@ export type Database = {
         }
         Relationships: []
       }
+      refactoring_rules: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          file_pattern: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          pattern: string
+          replacement: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          file_pattern?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          pattern: string
+          replacement: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          file_pattern?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          pattern?: string
+          replacement?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       technicians: {
         Row: {
           createdAt: string | null
