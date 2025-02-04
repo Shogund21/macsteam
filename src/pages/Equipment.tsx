@@ -36,8 +36,7 @@ const Equipment = () => {
       const { data, error } = await supabase
         .from('equipment')
         .select('*')
-        .order('location', { ascending: true })
-        .order('name');
+        .order('name', { ascending: true }); // Sort by name (equipment type) alphabetically
       
       if (error) {
         console.error('Error fetching equipment:', error);
