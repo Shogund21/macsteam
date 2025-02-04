@@ -15,10 +15,32 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     queryKey: ['equipment', locationId],
     queryFn: async () => {
       console.log('Fetching equipment for location:', locationId);
-      const { data, error } = await supabase
+      
+      // First get the location name for the selected location ID
+      let locationName = '';
+      if (locationId) {
+        const { data: locationData } = await supabase
+          .from('locations')
+          .select('name')
+          .eq('id', locationId)
+          .single();
+        
+        if (locationData) {
+          locationName = locationData.name;
+        }
+      }
+
+      // Then fetch equipment, filtering by location name if we have one
+      const query = supabase
         .from('equipment')
         .select('*')
         .eq('status', 'active');
+      
+      if (locationName) {
+        query.eq('location', locationName);
+      }
+      
+      const { data, error } = await query;
       
       if (error) {
         console.error('Error fetching equipment:', error);
@@ -28,29 +50,15 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
       console.log('Equipment data:', data);
       return data || [];
     },
-    enabled: true, // Always fetch equipment
-  });
-
-  const { data: locations = [] } = useQuery({
-    queryKey: ['locations'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('locations')
-        .select('*')
-        .eq('is_active', true);
-      
-      if (error) throw error;
-      return data || [];
-    },
+    enabled: true,
   });
 
   // Filter equipment based on selected location
   const filteredEquipment = locationId 
-    ? equipmentList.filter(eq => eq.location === locations.find(loc => loc.id === locationId)?.name)
+    ? equipmentList
     : equipmentList;
 
   console.log('Filtered equipment:', filteredEquipment);
-  console.log('Selected location:', locationId);
 
   return (
     <FormField
