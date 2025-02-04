@@ -45,17 +45,24 @@ export const useEquipmentQuery = (locationId: string) => {
 
       console.log('All equipment before filtering:', equipment);
 
-      // Filter equipment based on exact location match after normalization
+      // Filter equipment based on store number match
       const normalizedStoreNumber = normalizeString(locationData.store_number);
       const filteredEquipment = equipment?.filter(item => {
-        const normalizedItemLocation = normalizeString(item.location);
+        // Clean up and normalize the location string
+        const itemLocation = item.location?.trim() || '';
+        const normalizedItemLocation = normalizeString(itemLocation);
+        
+        // Check for exact match after normalization
         const isMatch = normalizedItemLocation === normalizedStoreNumber;
-        console.log(`Equipment: ${item.name} - Location comparison: ${item.location} (${normalizedItemLocation}) with Store: ${locationData.store_number} (${normalizedStoreNumber}) = ${isMatch}`);
+        
+        console.log(`Equipment: ${item.name} - Location: ${itemLocation} - Normalized: ${normalizedItemLocation} - Store: ${locationData.store_number} (${normalizedStoreNumber}) - Match: ${isMatch}`);
+        
         return isMatch;
       });
 
       console.log('Filtered equipment:', filteredEquipment);
       console.log('Equipment count:', filteredEquipment?.length);
+      console.log('Equipment types:', filteredEquipment?.map(e => e.name).join(', '));
 
       return filteredEquipment || [];
     },
