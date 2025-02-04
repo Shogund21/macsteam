@@ -7,7 +7,5 @@ export const matchesLocation = (equipLocation: string, storeNumber: string): boo
   const normalizedEquipLocation = normalizeString(equipLocation);
   const normalizedStoreNumber = normalizeString(storeNumber);
 
-  // More flexible matching logic
-  return normalizedEquipLocation.includes(normalizedStoreNumber) || 
-         normalizedStoreNumber.includes(normalizedEquipLocation);
+  return normalizedEquipLocation === normalizedStoreNumber;
 };
