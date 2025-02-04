@@ -37,6 +37,7 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
         throw error;
       }
       
+      console.log('Equipment fetched:', data);
       return data || [];
     },
   });
