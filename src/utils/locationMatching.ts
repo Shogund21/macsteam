@@ -7,16 +7,11 @@ export const matchesLocation = (equipLocation: string, storeNumber: string): boo
   const normalizedEquipLocation = normalizeString(equipLocation);
   const normalizedStoreNumber = normalizeString(storeNumber);
 
-  if (!normalizedEquipLocation || !normalizedStoreNumber) {
-    return false;
-  }
+  console.log('Matching locations:', {
+    equipLocation: normalizedEquipLocation,
+    storeNumber: normalizedStoreNumber
+  });
 
-  const matchConditions = [
-    normalizedEquipLocation === normalizedStoreNumber,
-    normalizedEquipLocation.includes(normalizedStoreNumber),
-    normalizedEquipLocation.includes(`store ${normalizedStoreNumber}`),
-    normalizedEquipLocation.includes(`location ${normalizedStoreNumber}`)
-  ];
-
-  return matchConditions.some(condition => condition);
+  // Simple contains check for now to debug the matching issue
+  return normalizedEquipLocation.includes(normalizedStoreNumber);
 };
