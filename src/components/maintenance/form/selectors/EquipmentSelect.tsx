@@ -14,81 +14,110 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   const { data: equipmentList = [], isLoading } = useQuery({
     queryKey: ['equipment', locationId],
     queryFn: async () => {
-      console.log('Fetching equipment for location:', locationId);
+      console.log('Starting equipment fetch for location:', locationId);
       
       if (!locationId) {
-        console.log('No location selected, returning empty list');
+        console.log('No location ID provided');
         return [];
       }
 
-      // First get the location data
-      const { data: locationData } = await supabase
+      // First get the location data with detailed logging
+      const { data: locationData, error: locationError } = await supabase
         .from('locations')
-        .select('name, store_number')
+        .select('*')
         .eq('id', locationId)
         .maybeSingle();
       
+      if (locationError) {
+        console.error('Error fetching location:', locationError);
+        throw locationError;
+      }
+
       if (!locationData) {
-        console.log('Location not found:', locationId);
+        console.log('Location not found for ID:', locationId);
         return [];
       }
       
-      console.log('Location data:', locationData);
+      console.log('Location data found:', {
+        id: locationData.id,
+        name: locationData.name,
+        storeNumber: locationData.store_number,
+        isActive: locationData.is_active
+      });
 
-      // Fetch all active equipment
-      const { data: equipment, error } = await supabase
+      // Fetch all active equipment with detailed logging
+      const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
         .eq('status', 'active')
         .order('name');
       
-      if (error) {
-        console.error('Error fetching equipment:', error);
-        throw error;
+      if (equipmentError) {
+        console.error('Error fetching equipment:', equipmentError);
+        throw equipmentError;
       }
 
-      // Normalize location strings for comparison
+      console.log('All active equipment:', equipment?.slice(0, 2));
+
+      // More flexible location string normalization
       const normalizeLocation = (loc: string) => {
+        if (!loc) return '';
+        // Convert to lowercase but keep spaces and basic punctuation
         return loc.toLowerCase()
-          .replace(/[^a-z0-9]/g, '') // Remove special characters
+          .replace(/[^a-z0-9\s-]/g, '') // Keep spaces and hyphens
           .trim();
       };
 
-      const locationName = normalizeLocation(locationData.name || '');
-      const storeNumber = normalizeLocation(locationData.store_number || '');
+      const locationName = locationData.name ? normalizeLocation(locationData.name) : '';
+      const storeNumber = locationData.store_number ? normalizeLocation(locationData.store_number) : '';
       
-      console.log('Normalized location:', { locationName, storeNumber });
+      console.log('Normalized location identifiers:', {
+        locationName,
+        storeNumber,
+        originalName: locationData.name,
+        originalStoreNumber: locationData.store_number
+      });
 
-      // Filter equipment based on normalized location matching
-      const filteredEquipment = equipment.filter(eq => {
-        if (!eq.location) return false;
+      // Filter equipment with more flexible matching
+      const filteredEquipment = equipment?.filter(eq => {
+        if (!eq.location) {
+          console.log(`Equipment ${eq.name} has no location set`);
+          return false;
+        }
         
         const equipLocation = normalizeLocation(eq.location);
-        console.log('Checking equipment location:', equipLocation);
-        
-        // Check various location format matches
-        const matches = [
+        console.log(`Checking equipment: ${eq.name}, Location: ${eq.location}, Normalized: ${equipLocation}`);
+
+        // More flexible matching patterns
+        const patterns = [
           equipLocation.includes(locationName),
           equipLocation.includes(storeNumber),
-          equipLocation.includes(`store${storeNumber}`),
-          equipLocation.includes(`building${storeNumber}`),
+          equipLocation.includes(`store ${storeNumber}`),
+          equipLocation.includes(`building ${storeNumber}`),
           equipLocation === locationName,
           equipLocation === storeNumber,
-          // Add fuzzy matching for store numbers
-          equipLocation.includes(`loc${storeNumber}`),
-          equipLocation.includes(`location${storeNumber}`),
-          equipLocation.includes(`site${storeNumber}`)
-        ].some(match => match);
+          // Additional patterns with spaces preserved
+          equipLocation.includes(`location ${storeNumber}`),
+          equipLocation.includes(`site ${storeNumber}`),
+          // Match with or without spaces
+          equipLocation.replace(/\s/g, '').includes(storeNumber.replace(/\s/g, '')),
+          equipLocation.replace(/\s/g, '').includes(locationName.replace(/\s/g, ''))
+        ];
 
+        const matches = patterns.some(match => match);
         if (matches) {
-          console.log('Match found for equipment:', eq.name);
+          console.log(`Match found for equipment: ${eq.name} with location: ${eq.location}`);
         }
 
         return matches;
       });
 
-      console.log('Filtered equipment:', filteredEquipment);
-      return filteredEquipment;
+      console.log('Filtered equipment results:', {
+        total: filteredEquipment?.length,
+        items: filteredEquipment
+      });
+
+      return filteredEquipment || [];
     },
     enabled: !!locationId,
   });
@@ -140,7 +169,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                     disabled 
                     className="py-3 text-sm text-gray-500"
                   >
-                    {locationId ? "No equipment in this location" : "Please select a location first"}
+                    {locationId ? "No equipment found for this location" : "Please select a location first"}
                   </SelectItem>
                 )
               ) : (
