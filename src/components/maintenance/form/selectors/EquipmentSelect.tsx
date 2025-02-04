@@ -37,11 +37,17 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         console.log('Location not found for ID:', locationId);
         return [];
       }
-      
-      // Log location data for debugging
-      console.log('Location data:', locationData);
 
-      // Fetch equipment
+      // Enhanced location data logging
+      console.log('Location data:', {
+        id: locationData.id,
+        name: locationData.name,
+        storeNumber: locationData.store_number,
+        normalizedName: locationData.name?.toLowerCase(),
+        normalizedStoreNumber: locationData.store_number?.toLowerCase()
+      });
+
+      // Fetch equipment with server-side filtering if possible
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
@@ -53,39 +59,53 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         throw equipmentError;
       }
 
-      // Log equipment data for debugging
-      console.log('Equipment data:', equipment);
+      // Log raw equipment data
+      console.log('Raw equipment data:', equipment?.map(eq => ({
+        id: eq.id,
+        name: eq.name,
+        location: eq.location,
+        normalizedLocation: eq.location?.toLowerCase()
+      })));
 
-      // Simple location matching function
-      const matchesLocation = (equipLocation: string, locationData: any) => {
-        if (!equipLocation) return false;
-        
-        const equipLoc = equipLocation.toLowerCase();
-        const locationName = locationData.name?.toLowerCase() || '';
-        const storeNum = locationData.store_number || '';
-        
-        return (
-          equipLoc.includes(locationName) ||
-          equipLoc.includes(storeNum) ||
-          equipLoc.includes(`store ${storeNum}`) ||
-          equipLoc.includes(`location ${storeNum}`) ||
-          equipLoc === locationName ||
-          equipLoc === storeNum
-        );
-      };
-
-      // Filter equipment by location
+      // Simplified matching logic focusing on store number
       const filteredEquipment = equipment?.filter(eq => {
-        const matches = matchesLocation(eq.location, locationData);
-        console.log(`Equipment ${eq.name} location match:`, {
+        const storeNumber = locationData.store_number?.toLowerCase() || '';
+        const equipLocation = eq.location?.toLowerCase() || '';
+        
+        // Test each matching condition separately and log results
+        const matchConditions = {
+          exactMatch: equipLocation === storeNumber,
+          includesStoreNumber: equipLocation.includes(storeNumber),
+          includesStorePrefix: equipLocation.includes(`store ${storeNumber}`),
+          includesLocationPrefix: equipLocation.includes(`location ${storeNumber}`)
+        };
+
+        console.log(`Matching conditions for ${eq.name}:`, {
+          equipmentLocation: equipLocation,
+          storeNumber: storeNumber,
+          conditions: matchConditions
+        });
+
+        // For testing, we'll use a simple includes check
+        const matches = equipLocation.includes(storeNumber);
+
+        console.log(`Final match result for ${eq.name}:`, {
           equipment: eq.name,
           location: eq.location,
-          matches
+          matches: matches
         });
+
         return matches;
       });
 
-      console.log('Filtered equipment:', filteredEquipment);
+      console.log('Filtered equipment results:', {
+        total: filteredEquipment?.length,
+        items: filteredEquipment?.map(e => ({
+          name: e.name,
+          location: e.location
+        }))
+      });
+
       return filteredEquipment || [];
     },
     enabled: !!locationId,
