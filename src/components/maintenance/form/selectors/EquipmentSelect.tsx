@@ -21,7 +21,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         return [];
       }
 
-      // First get the location data
+      // Get location data
       const { data: locationData, error: locationError } = await supabase
         .from('locations')
         .select('*')
@@ -38,12 +38,8 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         return [];
       }
       
-      console.log('Location data:', {
-        id: locationData.id,
-        name: locationData.name,
-        storeNumber: locationData.store_number,
-        isActive: locationData.is_active
-      });
+      // Log location data for debugging
+      console.log('Location data:', locationData);
 
       // Fetch equipment
       const { data: equipment, error: equipmentError } = await supabase
@@ -57,70 +53,39 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         throw equipmentError;
       }
 
-      console.log('Equipment data sample:', equipment?.slice(0, 2));
+      // Log equipment data for debugging
+      console.log('Equipment data:', equipment);
 
-      // More flexible location string normalization that preserves spaces and basic punctuation
-      const normalizeLocation = (loc: string) => {
-        if (!loc) return '';
-        return loc.toLowerCase()
-          .replace(/[^a-z0-9\s\-]/g, '') // Keep letters, numbers, spaces, and hyphens
-          .trim();
+      // Simple location matching function
+      const matchesLocation = (equipLocation: string, locationData: any) => {
+        if (!equipLocation) return false;
+        
+        const equipLoc = equipLocation.toLowerCase();
+        const locationName = locationData.name?.toLowerCase() || '';
+        const storeNum = locationData.store_number || '';
+        
+        return (
+          equipLoc.includes(locationName) ||
+          equipLoc.includes(storeNum) ||
+          equipLoc.includes(`store ${storeNum}`) ||
+          equipLoc.includes(`location ${storeNum}`) ||
+          equipLoc === locationName ||
+          equipLoc === storeNum
+        );
       };
 
-      const locationName = locationData.name ? normalizeLocation(locationData.name) : '';
-      const storeNumber = locationData.store_number ? locationData.store_number.trim() : '';
-      
-      console.log('Location identifiers:', {
-        locationName,
-        storeNumber,
-        originalName: locationData.name,
-        originalStoreNumber: locationData.store_number
-      });
-
-      // Filter equipment with more flexible matching
+      // Filter equipment by location
       const filteredEquipment = equipment?.filter(eq => {
-        if (!eq.location) {
-          console.log(`Equipment ${eq.name} has no location set`);
-          return false;
-        }
-        
-        const equipLocation = normalizeLocation(eq.location);
-        console.log(`Checking equipment location match:`, {
-          equipmentName: eq.name,
-          originalLocation: eq.location,
-          normalizedLocation: equipLocation,
-          matchingAgainst: {
-            locationName,
-            storeNumber
-          }
+        const matches = matchesLocation(eq.location, locationData);
+        console.log(`Equipment ${eq.name} location match:`, {
+          equipment: eq.name,
+          location: eq.location,
+          matches
         });
-
-        // More precise matching patterns that preserve spacing
-        const matches = [
-          equipLocation.includes(locationName),
-          equipLocation.includes(storeNumber),
-          equipLocation.includes(`store ${storeNumber}`),
-          equipLocation.includes(`location ${storeNumber}`),
-          equipLocation.includes(`building ${storeNumber}`),
-          equipLocation === locationName,
-          equipLocation === storeNumber
-        ].some(match => match);
-
-        if (matches) {
-          console.log(`Match found for equipment: ${eq.name}`);
-        }
-
         return matches;
       });
 
-      console.log('Final filtered equipment:', {
-        total: filteredEquipment?.length,
-        items: filteredEquipment?.map(e => ({
-          name: e.name,
-          location: e.location
-        }))
-      });
-
+      console.log('Filtered equipment:', filteredEquipment);
       return filteredEquipment || [];
     },
     enabled: !!locationId,
