@@ -37,17 +37,21 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                 </SelectTrigger>
               </FormControl>
               <SelectContent 
-                className="z-[1000] bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+                className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
               >
                 {equipment && equipment.length > 0 ? (
                   equipment.map((item) => (
                     <SelectItem 
                       key={item.id} 
                       value={item.id}
-                      className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+                      className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
-                      <span className="font-medium">{item.name}</span>
-                      <span className="text-gray-500 ml-2">- {item.model}</span>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-gray-900">{item.name}</span>
+                        <span className="text-sm text-gray-500">
+                          {item.model} - {item.location}
+                        </span>
+                      </div>
                     </SelectItem>
                   ))
                 ) : (
@@ -88,17 +92,23 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
                 </SelectTrigger>
               </FormControl>
               <SelectContent 
-                className="z-[1000] bg-white border border-gray-200 shadow-lg rounded-md w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+                className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
               >
                 {technicians && technicians.length > 0 ? (
                   technicians.map((tech) => (
                     <SelectItem 
                       key={tech.id} 
                       value={tech.id}
-                      className="py-3 text-sm hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+                      className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
-                      <span className="font-medium">{tech.firstName} {tech.lastName}</span>
-                      <span className="text-gray-500 ml-2">- {tech.specialization}</span>
+                      <div className="flex flex-col">
+                        <span className="font-medium text-gray-900">
+                          {tech.firstName} {tech.lastName}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {tech.specialization}
+                        </span>
+                      </div>
                     </SelectItem>
                   ))
                 ) : (
