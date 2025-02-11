@@ -1,3 +1,4 @@
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -7,7 +8,7 @@ const naString = z.union([z.string(), z.literal("NA")]);
 const naNumber = z.union([z.number(), z.literal("NA")]);
 
 export const maintenanceFormSchema = z.object({
-  location_id: z.string().min(1, "Location is required"),
+  selected_location: z.string().min(1, "Location is required"),
   equipment_id: z.string().min(1, "Equipment is required"),
   technician_id: z.string().min(1, "Technician is required"),
   equipment_type: z.string().optional(),
