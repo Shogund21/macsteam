@@ -1,3 +1,4 @@
+
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { MaintenanceCheck } from "@/types/maintenance";
@@ -12,11 +13,11 @@ export const useMaintenanceFormSubmit = (
   const handleSubmit = async (values: MaintenanceFormValues) => {
     try {
       console.log('Submitting form with values:', values);
-      const submissionData = {
+      const { selected_location, ...submissionData } = {
         ...values,
-        chiller_pressure_reading: values.chiller_pressure_reading === "NA" ? null : parseFloat(values.chiller_pressure_reading),
-        chiller_temperature_reading: values.chiller_temperature_reading === "NA" ? null : parseFloat(values.chiller_temperature_reading),
-        airflow_reading: values.airflow_reading === "NA" ? null : parseFloat(values.airflow_reading),
+        chiller_pressure_reading: values.chiller_pressure_reading === "NA" ? null : parseFloat(values.chiller_pressure_reading || "0"),
+        chiller_temperature_reading: values.chiller_temperature_reading === "NA" ? null : parseFloat(values.chiller_temperature_reading || "0"),
+        airflow_reading: values.airflow_reading === "NA" ? null : parseFloat(values.airflow_reading || "0"),
       };
 
       const { error } = initialData 
