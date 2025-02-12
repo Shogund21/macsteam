@@ -12,6 +12,7 @@ import AHUMaintenanceFields from "./AHUMaintenanceFields";
 import { useMaintenanceForm } from "./hooks/useMaintenanceForm";
 import { useState } from "react";
 import { MaintenanceFormValues } from "./hooks/useMaintenanceForm";
+import { Database } from "@/integrations/supabase/types";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -59,11 +60,11 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       const selectedEquipment = equipment?.find(eq => eq.id === values.equipment_id);
       const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
       
-      const submissionData = {
+      const submissionData: Database['public']['Tables']['hvac_maintenance_checks']['Insert'] = {
         ...formData,
         equipment_type: isAHU ? 'ahu' : 'general',
         check_date: new Date().toISOString(),
-        status: 'completed',
+        status: 'completed' as const,
         // Handle numeric fields with proper validation
         chiller_pressure_reading: formData.chiller_pressure_reading && formData.chiller_pressure_reading !== "NA" ? 
           parseFloat(formData.chiller_pressure_reading) : null,
@@ -75,7 +76,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
       const { error } = await supabase
         .from('hvac_maintenance_checks')
-        .insert([submissionData]);
+        .insert(submissionData);
 
       if (error) throw error;
 
