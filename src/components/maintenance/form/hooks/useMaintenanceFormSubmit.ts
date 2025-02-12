@@ -3,6 +3,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { MaintenanceCheck } from "@/types/maintenance";
 import { MaintenanceFormValues } from "./useMaintenanceForm";
+import { Database } from "@/integrations/supabase/types";
 
 export const useMaintenanceFormSubmit = (
   onComplete: () => void,
@@ -25,11 +26,11 @@ export const useMaintenanceFormSubmit = (
       
       const { selected_location, ...formData } = values;
       
-      const submissionData = {
+      const submissionData: Database['public']['Tables']['hvac_maintenance_checks']['Insert'] = {
         ...formData,
         equipment_type: isAHU ? 'ahu' : 'general',
         check_date: new Date().toISOString(),
-        status: 'completed',
+        status: 'completed' as const,
         // Convert string values to numbers, handling "NA" cases
         chiller_pressure_reading: values.chiller_pressure_reading === "NA" ? null : parseFloat(values.chiller_pressure_reading || "0"),
         chiller_temperature_reading: values.chiller_temperature_reading === "NA" ? null : parseFloat(values.chiller_temperature_reading || "0"),
