@@ -145,8 +145,8 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           </Button>
           <Button 
             type="submit"
-            className="bg-blue-500 text-white hover:bg-blue-600"
-            disabled={isSubmitting || !form.formState.isValid}
+            variant="default"
+            disabled={isSubmitting}
           >
             {isSubmitting ? "Submitting..." : "Submit Check"}
           </Button>
