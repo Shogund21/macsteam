@@ -50,11 +50,16 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   });
 
   const handleSubmit = async (values: MaintenanceFormValues) => {
-    if (isSubmitting) return; // Prevent double submission
+    if (isSubmitting) return;
     
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true);
       const { selected_location, ...formData } = values;
+      
+      // Validate required fields
+      if (!formData.equipment_id || !formData.technician_id) {
+        throw new Error('Please fill in all required fields');
+      }
       
       // Get equipment details to determine type
       const selectedEquipment = equipment?.find(eq => eq.id === values.equipment_id);
@@ -65,7 +70,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         equipment_type: isAHU ? 'ahu' : 'general',
         check_date: new Date().toISOString(),
         status: 'completed' as const,
-        // Handle numeric fields with proper validation
+        // Handle numeric fields with validation
         chiller_pressure_reading: formData.chiller_pressure_reading && formData.chiller_pressure_reading !== "NA" ? 
           parseFloat(formData.chiller_pressure_reading) : null,
         chiller_temperature_reading: formData.chiller_temperature_reading && formData.chiller_temperature_reading !== "NA" ? 
