@@ -7,7 +7,7 @@ import { MaintenanceCheck } from "@/types/maintenance";
 const naString = z.union([z.string(), z.literal("NA")]);
 
 export const maintenanceFormSchema = z.object({
-  selected_location: z.string().min(1, "Location is required"),
+  selected_location: z.string().optional(),
   equipment_id: z.string().min(1, "Equipment is required"),
   technician_id: z.string().min(1, "Technician is required"),
   equipment_type: z.string().optional(),
@@ -61,10 +61,14 @@ export const useMaintenanceForm = (initialData?: MaintenanceCheck) => {
         vibration_observed: false,
         air_filter_cleaned: false,
         fan_bearings_lubricated: false,
+        selected_location: "",
+        equipment_id: "",
+        technician_id: "",
       };
 
   return useForm<MaintenanceFormValues>({
     resolver: zodResolver(maintenanceFormSchema),
     defaultValues,
+    mode: "onSubmit",
   });
 };

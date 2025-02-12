@@ -59,7 +59,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     return numValue;
   };
 
-  const handleSubmit = async (values: MaintenanceFormValues) => {
+  const onSubmit = async (values: MaintenanceFormValues) => {
     console.log('Form submission started with values:', values);
     
     if (isSubmitting) {
@@ -162,7 +162,13 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 bg-white p-6 rounded-lg shadow">
+      <form 
+        className="space-y-6 bg-white p-6 rounded-lg shadow"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit(form.getValues());
+        }}
+      >
         <MaintenanceBasicInfo 
           form={form} 
           equipment={equipment || []} 
