@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
@@ -53,7 +54,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                       <div className="flex flex-col">
                         <span className="font-medium text-gray-900">{item.name}</span>
                         <span className="text-sm text-gray-500">
-                          {item.model} - {item.location}
+                          {item.model}
                         </span>
                       </div>
                     </SelectItem>
