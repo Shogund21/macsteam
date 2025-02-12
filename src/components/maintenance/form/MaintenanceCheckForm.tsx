@@ -162,13 +162,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   return (
     <Form {...form}>
-      <form 
-        onSubmit={(e) => {
-          e.preventDefault();
-          form.handleSubmit(handleSubmit)(e);
-        }} 
-        className="space-y-6 bg-white p-6 rounded-lg shadow"
-      >
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 bg-white p-6 rounded-lg shadow">
         <MaintenanceBasicInfo 
           form={form} 
           equipment={equipment || []} 
