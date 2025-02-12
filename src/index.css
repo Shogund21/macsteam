@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -117,6 +118,7 @@
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 1000 !important;
 }
 
 .select-item {
@@ -131,7 +133,7 @@
 
 .select-trigger {
   height: 3rem;
-  background-color: white;
+  background-color: white !important;
   border: 1px solid #e2e8f0;
   padding: 0 1rem;
   display: flex;
@@ -139,4 +141,21 @@
   justify-content: space-between;
   border-radius: 0.5rem;
   width: 100%;
+}
+
+[data-radix-popper-content-wrapper] {
+  z-index: 1000 !important;
+}
+
+.radix-select-content {
+  background-color: white !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  z-index: 1000 !important;
+}
+
+/* Force white background and proper z-index for all select dropdowns */
+[role="listbox"] {
+  background-color: white !important;
+  z-index: 1000 !important;
 }
