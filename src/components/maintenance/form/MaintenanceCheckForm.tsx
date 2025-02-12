@@ -10,16 +10,19 @@ import MaintenanceStatus from "./MaintenanceStatus";
 import MaintenanceObservations from "./MaintenanceObservations";
 import AHUMaintenanceFields from "./AHUMaintenanceFields";
 import { useMaintenanceForm } from "./hooks/useMaintenanceForm";
+import { useState } from "react";
+import { MaintenanceFormValues } from "./hooks/useMaintenanceForm";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
 }
 
 const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useMaintenanceForm();
   const { toast } = useToast();
 
-  const { data: equipment } = useQuery({
+  const { data: equipment, isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -32,7 +35,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     },
   });
 
-  const { data: technicians } = useQuery({
+  const { data: technicians, isLoading: isLoadingTechnicians } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -45,8 +48,11 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     },
   });
 
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async (values: MaintenanceFormValues) => {
+    if (isSubmitting) return; // Prevent double submission
+    
     try {
+      setIsSubmitting(true);
       const { selected_location, ...formData } = values;
       
       // Get equipment details to determine type
@@ -58,12 +64,12 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         equipment_type: isAHU ? 'ahu' : 'general',
         check_date: new Date().toISOString(),
         status: 'completed',
-        // Handle numeric fields
-        chiller_pressure_reading: formData.chiller_pressure_reading ? 
+        // Handle numeric fields with proper validation
+        chiller_pressure_reading: formData.chiller_pressure_reading && formData.chiller_pressure_reading !== "NA" ? 
           parseFloat(formData.chiller_pressure_reading) : null,
-        chiller_temperature_reading: formData.chiller_temperature_reading ? 
+        chiller_temperature_reading: formData.chiller_temperature_reading && formData.chiller_temperature_reading !== "NA" ? 
           parseFloat(formData.chiller_temperature_reading) : null,
-        airflow_reading: formData.airflow_reading ? 
+        airflow_reading: formData.airflow_reading && formData.airflow_reading !== "NA" ? 
           parseFloat(formData.airflow_reading) : null,
       };
 
@@ -78,14 +84,17 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
         description: "Maintenance check recorded successfully",
       });
       
+      form.reset(); // Reset form after successful submission
       onComplete();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting maintenance check:', error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to submit maintenance check. Please try again.",
+        description: error.message || "Failed to submit maintenance check. Please try again.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -94,6 +103,11 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   );
 
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
+  const isLoading = isLoadingEquipment || isLoadingTechnicians;
+
+  if (isLoading) {
+    return <div className="p-6 text-center">Loading form data...</div>;
+  }
 
   return (
     <Form {...form}>
@@ -119,14 +133,16 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
             type="button"
             variant="outline"
             onClick={onComplete}
+            disabled={isSubmitting}
           >
             Cancel
           </Button>
           <Button 
             type="submit"
             className="bg-blue-500 text-white hover:bg-blue-600"
+            disabled={isSubmitting || !form.formState.isValid}
           >
-            Submit Check
+            {isSubmitting ? "Submitting..." : "Submit Check"}
           </Button>
         </div>
       </form>
