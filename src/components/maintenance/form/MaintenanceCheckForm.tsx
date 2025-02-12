@@ -155,7 +155,6 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
   const isLoading = isLoadingEquipment || isLoadingTechnicians;
-  const isFormValid = form.formState.isValid && form.watch('equipment_id') && form.watch('technician_id');
 
   if (isLoading) {
     return <div className="p-6 text-center">Loading form data...</div>;
@@ -163,7 +162,13 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6 bg-white p-6 rounded-lg shadow">
+      <form 
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit(handleSubmit)(e);
+        }} 
+        className="space-y-6 bg-white p-6 rounded-lg shadow"
+      >
         <MaintenanceBasicInfo 
           form={form} 
           equipment={equipment || []} 
@@ -192,7 +197,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           <Button 
             type="submit"
             variant="default"
-            disabled={isSubmitting || !isFormValid}
+            disabled={isSubmitting}
           >
             {isSubmitting ? "Submitting..." : "Submit Check"}
           </Button>
