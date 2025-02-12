@@ -5,7 +5,6 @@ import * as z from "zod";
 import { MaintenanceCheck } from "@/types/maintenance";
 
 const naString = z.union([z.string(), z.literal("NA")]);
-const naNumber = z.union([z.number(), z.literal("NA")]);
 
 export const maintenanceFormSchema = z.object({
   selected_location: z.string().min(1, "Location is required"),
