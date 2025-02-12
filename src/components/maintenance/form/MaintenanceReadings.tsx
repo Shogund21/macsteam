@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -18,11 +19,14 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
             <FormLabel>Chiller Pressure Reading (PSI)</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Enter pressure or select NA" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+              >
                 <SelectItem value="NA">Not Applicable</SelectItem>
                 {[...Array(100)].map((_, i) => (
                   <SelectItem key={i} value={String(i)}>
@@ -44,11 +48,14 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
             <FormLabel>Chiller Temperature Reading (°F)</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Enter temperature or select NA" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+              >
                 <SelectItem value="NA">Not Applicable</SelectItem>
                 {[...Array(150)].map((_, i) => (
                   <SelectItem key={i} value={String(i)}>
@@ -70,11 +77,14 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
             <FormLabel>Air Filter Status</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+              >
                 <SelectItem value="NA">Not Applicable</SelectItem>
                 <SelectItem value="clean">Clean</SelectItem>
                 <SelectItem value="needs_cleaning">Needs Cleaning</SelectItem>
@@ -94,11 +104,14 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
             <FormLabel>Belt Condition</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Select condition" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+              >
                 <SelectItem value="NA">Not Applicable</SelectItem>
                 <SelectItem value="good">Good</SelectItem>
                 <SelectItem value="fair">Fair</SelectItem>

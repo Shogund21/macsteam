@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
@@ -17,11 +18,14 @@ const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
             <FormLabel>Refrigerant Level</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Select level" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+              >
                 <SelectItem value="optimal">Optimal</SelectItem>
                 <SelectItem value="low">Low</SelectItem>
                 <SelectItem value="needs_refill">Needs Refill</SelectItem>
@@ -40,11 +44,14 @@ const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
             <FormLabel>Oil Level Status</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+              >
                 <SelectItem value="optimal">Optimal</SelectItem>
                 <SelectItem value="low">Low</SelectItem>
                 <SelectItem value="needs_refill">Needs Refill</SelectItem>
@@ -63,11 +70,14 @@ const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
             <FormLabel>Condenser Condition</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Select condition" />
                 </SelectTrigger>
               </FormControl>
-              <SelectContent>
+              <SelectContent 
+                className="bg-white border border-gray-200 shadow-lg z-[100]"
+                position="popper"
+              >
                 <SelectItem value="clean">Clean</SelectItem>
                 <SelectItem value="needs_cleaning">Needs Cleaning</SelectItem>
                 <SelectItem value="needs_service">Needs Service</SelectItem>
