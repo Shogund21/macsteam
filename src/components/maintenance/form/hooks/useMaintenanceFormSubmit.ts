@@ -13,12 +13,30 @@ export const useMaintenanceFormSubmit = (
   const handleSubmit = async (values: MaintenanceFormValues) => {
     try {
       console.log('Submitting form with values:', values);
-      const { selected_location, ...submissionData } = {
-        ...values,
+      
+      // Get equipment details to determine type
+      const { data: equipment } = await supabase
+        .from('equipment')
+        .select('name')
+        .eq('id', values.equipment_id)
+        .single();
+      
+      const isAHU = equipment?.name.toLowerCase().includes('ahu');
+      
+      const { selected_location, ...formData } = values;
+      
+      const submissionData = {
+        ...formData,
+        equipment_type: isAHU ? 'ahu' : 'general',
+        check_date: new Date().toISOString(),
+        status: 'completed',
+        // Convert string values to numbers, handling "NA" cases
         chiller_pressure_reading: values.chiller_pressure_reading === "NA" ? null : parseFloat(values.chiller_pressure_reading || "0"),
         chiller_temperature_reading: values.chiller_temperature_reading === "NA" ? null : parseFloat(values.chiller_temperature_reading || "0"),
         airflow_reading: values.airflow_reading === "NA" ? null : parseFloat(values.airflow_reading || "0"),
       };
+
+      console.log('Submitting to database:', submissionData);
 
       const { error } = initialData 
         ? await supabase
@@ -29,7 +47,10 @@ export const useMaintenanceFormSubmit = (
             .from('hvac_maintenance_checks')
             .insert(submissionData);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Submission error:', error);
+        throw error;
+      }
 
       toast({
         title: "Success",
