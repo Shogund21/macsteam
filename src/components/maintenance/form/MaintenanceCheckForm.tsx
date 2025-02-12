@@ -49,57 +49,102 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     },
   });
 
+  const validateNumericField = (value: string | undefined, fieldName: string): number | null => {
+    if (!value || value === "NA") return null;
+    const numValue = parseFloat(value);
+    if (isNaN(numValue)) {
+      console.warn(`Invalid numeric value for ${fieldName}:`, value);
+      return null;
+    }
+    return numValue;
+  };
+
   const handleSubmit = async (values: MaintenanceFormValues) => {
-    if (isSubmitting) return;
+    console.log('Form submission started with values:', values);
+    
+    if (isSubmitting) {
+      console.log('Preventing double submission');
+      return;
+    }
+    
+    if (!values.equipment_id || !values.technician_id) {
+      console.error('Missing required fields:', { 
+        equipment_id: values.equipment_id, 
+        technician_id: values.technician_id 
+      });
+      toast({
+        variant: "destructive",
+        title: "Validation Error",
+        description: "Please select both equipment and technician",
+      });
+      return;
+    }
     
     setIsSubmitting(true);
     try {
       const { selected_location, ...formData } = values;
       
-      // Validate required fields
-      if (!formData.equipment_id || !formData.technician_id) {
-        throw new Error('Please fill in all required fields');
-      }
-      
       // Get equipment details to determine type
       const selectedEquipment = equipment?.find(eq => eq.id === values.equipment_id);
-      const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
+      if (!selectedEquipment) {
+        throw new Error('Selected equipment not found');
+      }
+      
+      const isAHU = selectedEquipment.name.toLowerCase().includes('ahu');
+      console.log('Processing maintenance check for:', {
+        equipmentName: selectedEquipment.name,
+        isAHU,
+      });
       
       const submissionData: Database['public']['Tables']['hvac_maintenance_checks']['Insert'] = {
         ...formData,
         equipment_type: isAHU ? 'ahu' : 'general',
         check_date: new Date().toISOString(),
         status: 'completed' as const,
-        // Handle numeric fields with validation
-        chiller_pressure_reading: formData.chiller_pressure_reading && formData.chiller_pressure_reading !== "NA" ? 
-          parseFloat(formData.chiller_pressure_reading) : null,
-        chiller_temperature_reading: formData.chiller_temperature_reading && formData.chiller_temperature_reading !== "NA" ? 
-          parseFloat(formData.chiller_temperature_reading) : null,
-        airflow_reading: formData.airflow_reading && formData.airflow_reading !== "NA" ? 
-          parseFloat(formData.airflow_reading) : null,
+        chiller_pressure_reading: validateNumericField(formData.chiller_pressure_reading, 'chiller_pressure_reading'),
+        chiller_temperature_reading: validateNumericField(formData.chiller_temperature_reading, 'chiller_temperature_reading'),
+        airflow_reading: validateNumericField(formData.airflow_reading, 'airflow_reading'),
       };
 
-      const { error } = await supabase
+      console.log('Submitting maintenance check data:', submissionData);
+
+      const { data, error } = await supabase
         .from('hvac_maintenance_checks')
         .insert(submissionData);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase insertion error:', error);
+        throw error;
+      }
 
+      console.log('Maintenance check submitted successfully:', data);
       toast({
         title: "Success",
         description: "Maintenance check recorded successfully",
       });
       
-      form.reset(); // Reset form after successful submission
+      form.reset();
       onComplete();
     } catch (error: any) {
-      console.error('Error submitting maintenance check:', error);
+      console.error('Error submitting maintenance check:', {
+        error,
+        message: error.message,
+        details: error.details,
+      });
+      
+      let errorMessage = "Failed to submit maintenance check. ";
+      if (error.code) {
+        errorMessage += `(Error code: ${error.code}) `;
+      }
+      errorMessage += error.message || "Please try again.";
+      
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message || "Failed to submit maintenance check. Please try again.",
+        description: errorMessage,
       });
     } finally {
+      console.log('Form submission completed');
       setIsSubmitting(false);
     }
   };
@@ -110,6 +155,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
 
   const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
   const isLoading = isLoadingEquipment || isLoadingTechnicians;
+  const isFormValid = form.formState.isValid && form.watch('equipment_id') && form.watch('technician_id');
 
   if (isLoading) {
     return <div className="p-6 text-center">Loading form data...</div>;
@@ -146,7 +192,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           <Button 
             type="submit"
             variant="default"
-            disabled={isSubmitting}
+            disabled={isSubmitting || !isFormValid}
           >
             {isSubmitting ? "Submitting..." : "Submit Check"}
           </Button>
