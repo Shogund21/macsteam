@@ -15,10 +15,10 @@ const Index = () => {
       <div className="space-y-8 animate-fade-in pb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0">
           <div>
-            <h1 className="text-3xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold text-black">
               Dashboard
             </h1>
-            <p className="text-gray-500 mt-2">
+            <p className="text-gray-700 mt-2">
               Welcome back to Mac's Facilities Maintenance System
             </p>
           </div>

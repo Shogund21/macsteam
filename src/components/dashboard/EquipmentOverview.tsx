@@ -30,7 +30,7 @@ const EquipmentOverview = () => {
   return (
     <Card className="border-none shadow-lg bg-gradient-to-br from-white to-purple-50 animate-fade-in">
       <CardHeader className="bg-white pb-2">
-        <CardTitle className="text-lg font-bold">Equipment Overview</CardTitle>
+        <CardTitle className="text-lg font-bold text-black">Equipment Overview</CardTitle>
       </CardHeader>
       <CardContent className="p-4">
         <div className="space-y-4">
@@ -53,7 +53,7 @@ const EquipmentOverview = () => {
               </Button>
             </>
           ) : (
-            <p className="text-gray-500 text-center py-4">No equipment data available</p>
+            <p className="text-black text-center py-4">No equipment data available</p>
           )}
         </div>
       </CardContent>

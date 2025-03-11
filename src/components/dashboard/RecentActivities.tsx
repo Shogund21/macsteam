@@ -112,14 +112,14 @@ const RecentActivities = () => {
     <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-white to-blue-50 animate-fade-in">
       <CardHeader className="bg-white pb-2">
         <div className="flex justify-between items-center">
-          <CardTitle className="text-lg font-bold">Recent Activities</CardTitle>
+          <CardTitle className="text-lg font-bold text-black">Recent Activities</CardTitle>
           <Badge className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white">Last Updated</Badge>
         </div>
       </CardHeader>
       <CardContent className="p-4">
         <div className="space-y-3">
           {activities.length === 0 ? (
-            <p className="text-gray-500 text-center py-4">No recent activities</p>
+            <p className="text-black text-center py-4">No recent activities</p>
           ) : (
             activities.map((activity) => (
               <ActivityItem

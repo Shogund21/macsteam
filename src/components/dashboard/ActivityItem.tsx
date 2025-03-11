@@ -16,8 +16,8 @@ const ActivityItem = ({ title, status, timestamp, icon: Icon }: ActivityItemProp
         <Icon className="h-5 w-5" />
       </div>
       <div className="flex-1">
-        <p className="font-semibold text-gray-800">{title}</p>
-        <p className="text-sm text-gray-500">
+        <p className="font-semibold text-black">{title}</p>
+        <p className="text-sm text-gray-700">
           {status} • {timestamp}
         </p>
       </div>
