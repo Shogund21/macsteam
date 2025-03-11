@@ -9,19 +9,30 @@ interface NavItemProps {
   isActive: boolean;
 }
 
+interface SidebarProps {
+  onClose?: () => void;
+}
+
 const NavItem = ({ icon: Icon, title, path, isActive }: NavItemProps) => (
   <Link
     to={path}
     className={`flex items-center space-x-3 px-3 py-2 rounded-lg transition-colors ${
       isActive ? "bg-background/10 text-black" : "text-gray-500 hover:text-black hover:bg-gray-100"
     }`}
+    onClick={(e) => {
+      // Close sidebar on mobile when a nav item is clicked
+      const sidebar = document.querySelector('[data-sidebar]');
+      if (sidebar && window.innerWidth < 768) {
+        sidebar.dispatchEvent(new Event('sidebarclose'));
+      }
+    }}
   >
     <Icon className="w-5 h-5" />
     <span>{title}</span>
   </Link>
 );
 
-const Sidebar = () => {
+const Sidebar = ({ onClose }: SidebarProps) => {
   const location = useLocation();
   const pathname = location.pathname;
 
@@ -36,7 +47,11 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="w-64 h-screen bg-gray-50 border-r border-gray-200 fixed top-0 left-0 overflow-y-auto z-10">
+    <aside 
+      className="w-64 h-screen bg-gray-50 border-r border-gray-200 fixed top-0 left-0 overflow-y-auto z-10"
+      data-sidebar
+      onSidebarClose={onClose}
+    >
       <div className="p-6">
         <h1 className="text-2xl font-bold">Mac's FMS</h1>
         <p className="text-sm text-gray-500 mt-1">Facilities Maintenance</p>
