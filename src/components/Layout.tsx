@@ -14,13 +14,14 @@ const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
 
   return (
-    <div className="flex h-screen bg-background">
+    <div className="flex min-h-screen bg-background overflow-hidden">
       {/* Mobile menu button */}
       {isMobile && (
         <Button
           variant="ghost"
           className="fixed top-4 left-4 z-50 p-2"
           onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label={sidebarOpen ? "Close menu" : "Open menu"}
         >
           {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
         </Button>
@@ -33,7 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
             ? `fixed inset-y-0 left-0 z-40 transform transition-transform duration-300 ease-in-out ${
                 sidebarOpen ? "translate-x-0" : "-translate-x-full"
               }`
-            : "relative"
+            : "relative w-64 flex-shrink-0"
         }`}
       >
         <Sidebar onClose={() => setSidebarOpen(false)} />
@@ -41,8 +42,8 @@ const Layout = ({ children }: LayoutProps) => {
 
       {/* Main content */}
       <main
-        className={`flex-1 overflow-auto p-4 md:p-8 ${
-          isMobile ? "pt-16" : ""
+        className={`flex-1 overflow-auto ${
+          isMobile ? "w-full pt-16 px-4" : "ml-0 px-6 py-8"
         }`}
       >
         <div className="mx-auto max-w-7xl">

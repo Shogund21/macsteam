@@ -67,7 +67,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
   return (
     <aside 
       ref={sidebarRef}
-      className="w-64 h-screen bg-gray-50 border-r border-gray-200 fixed top-0 left-0 overflow-y-auto z-10"
+      className="w-64 h-full bg-gray-50 border-r border-gray-200 overflow-y-auto z-10"
       data-sidebar
     >
       <div className="p-6">
