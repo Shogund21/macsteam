@@ -1,6 +1,7 @@
 
 import { Link, useLocation } from "react-router-dom";
 import { LayoutDashboard, Settings, Wrench, Briefcase, ClipboardCheck, ListChecks, BarChart } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -23,7 +24,7 @@ const NavItem = ({ icon: Icon, title, path, isActive }: NavItemProps) => (
       // Close sidebar on mobile when a nav item is clicked
       const sidebar = document.querySelector('[data-sidebar]');
       if (sidebar && window.innerWidth < 768) {
-        sidebar.dispatchEvent(new Event('sidebarclose'));
+        sidebar.dispatchEvent(new CustomEvent('sidebarclose'));
       }
     }}
   >
@@ -35,6 +36,23 @@ const NavItem = ({ icon: Icon, title, path, isActive }: NavItemProps) => (
 const Sidebar = ({ onClose }: SidebarProps) => {
   const location = useLocation();
   const pathname = location.pathname;
+  const sidebarRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const sidebarElement = sidebarRef.current;
+    
+    if (sidebarElement && onClose) {
+      const handleSidebarClose = () => {
+        onClose();
+      };
+
+      sidebarElement.addEventListener('sidebarclose', handleSidebarClose);
+      
+      return () => {
+        sidebarElement.removeEventListener('sidebarclose', handleSidebarClose);
+      };
+    }
+  }, [onClose]);
 
   const navItems = [
     { icon: LayoutDashboard, title: "Dashboard", path: "/" },
@@ -48,9 +66,9 @@ const Sidebar = ({ onClose }: SidebarProps) => {
 
   return (
     <aside 
+      ref={sidebarRef}
       className="w-64 h-screen bg-gray-50 border-r border-gray-200 fixed top-0 left-0 overflow-y-auto z-10"
       data-sidebar
-      onSidebarClose={onClose}
     >
       <div className="p-6">
         <h1 className="text-2xl font-bold">Mac's FMS</h1>
