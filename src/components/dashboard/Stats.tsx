@@ -1,3 +1,4 @@
+
 import { Wrench, Briefcase, Clock, AlertCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -87,6 +88,9 @@ const Stats = () => {
       icon: Wrench,
       change: "+4.75%",
       changeType: "positive",
+      bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
+      iconBgColor: "bg-blue-100",
+      iconColor: "text-blue-500"
     },
     {
       name: "Active Projects",
@@ -94,6 +98,9 @@ const Stats = () => {
       icon: Briefcase,
       change: "-0.5%",
       changeType: "negative",
+      bgColor: "bg-gradient-to-br from-purple-50 to-purple-100",
+      iconBgColor: "bg-purple-100",
+      iconColor: "text-purple-500"
     },
     {
       name: "Pending Tasks",
@@ -101,6 +108,9 @@ const Stats = () => {
       icon: Clock,
       change: "+2.1%",
       changeType: "positive",
+      bgColor: "bg-gradient-to-br from-orange-50 to-orange-100",
+      iconBgColor: "bg-orange-100",
+      iconColor: "text-orange-500"
     },
     {
       name: "Available Technicians",
@@ -110,6 +120,9 @@ const Stats = () => {
       icon: AlertCircle,
       change: "-1.5%",
       changeType: "positive",
+      bgColor: "bg-gradient-to-br from-green-50 to-green-100",
+      iconBgColor: "bg-green-100",
+      iconColor: "text-green-500"
     },
   ];
 
@@ -118,16 +131,19 @@ const Stats = () => {
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
-          <Card key={stat.name} className="p-6 glass">
+          <Card 
+            key={stat.name} 
+            className={`p-6 border-none shadow-lg animate-fade-in hover:shadow-xl transition-all ${stat.bgColor}`}
+          >
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">
+                <p className="text-sm font-medium text-gray-600">
                   {stat.name}
                 </p>
-                <p className="text-2xl font-semibold mt-2">{stat.value}</p>
+                <p className="text-3xl font-bold mt-2">{stat.value}</p>
               </div>
-              <div className="h-12 w-12 rounded-full bg-accent flex items-center justify-center">
-                <Icon className="h-6 w-6" />
+              <div className={`h-14 w-14 rounded-full ${stat.iconBgColor} flex items-center justify-center ${stat.iconColor}`}>
+                <Icon className="h-7 w-7" />
               </div>
             </div>
             <div className="mt-4">
@@ -141,7 +157,7 @@ const Stats = () => {
               >
                 {stat.change}
               </span>
-              <span className="text-sm text-muted-foreground ml-2">
+              <span className="text-sm text-gray-500 ml-2">
                 from last month
               </span>
             </div>

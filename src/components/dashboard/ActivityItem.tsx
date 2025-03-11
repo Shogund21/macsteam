@@ -1,3 +1,4 @@
+
 import { LucideIcon } from "lucide-react";
 
 interface ActivityItemProps {
@@ -10,13 +11,13 @@ interface ActivityItemProps {
 
 const ActivityItem = ({ title, status, timestamp, icon: Icon }: ActivityItemProps) => {
   return (
-    <div className="flex items-center space-x-4 p-3 rounded-lg hover:bg-accent/50 transition-colors">
-      <div className="h-10 w-10 rounded-full bg-accent flex items-center justify-center">
+    <div className="flex items-center space-x-4 p-3 rounded-lg hover:bg-white/80 transition-all duration-200 cursor-pointer">
+      <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#1EAEDB] to-[#33C3F0] text-white flex items-center justify-center shadow-md">
         <Icon className="h-5 w-5" />
       </div>
       <div className="flex-1">
-        <p className="font-medium">{title}</p>
-        <p className="text-sm text-muted-foreground">
+        <p className="font-semibold text-gray-800">{title}</p>
+        <p className="text-sm text-gray-500">
           {status} • {timestamp}
         </p>
       </div>

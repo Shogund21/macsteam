@@ -1,9 +1,15 @@
-import { Card } from "@/components/ui/card";
+
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { EquipmentItem } from "@/components/equipment/EquipmentItem";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const EquipmentOverview = () => {
+  const navigate = useNavigate();
+  
   const { data: equipmentData, isLoading: equipmentLoading } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
@@ -22,19 +28,35 @@ const EquipmentOverview = () => {
   });
 
   return (
-    <Card className="p-6">
-      <h2 className="text-lg font-semibold mb-4">Equipment Overview</h2>
-      <div className="space-y-4">
-        {equipmentLoading ? (
-          <p>Loading equipment data...</p>
-        ) : equipmentData && equipmentData.length > 0 ? (
-          equipmentData.slice(0, 3).map((equipment) => (
-            <EquipmentItem key={equipment.id} equipment={equipment} />
-          ))
-        ) : (
-          <p>No equipment data available</p>
-        )}
-      </div>
+    <Card className="border-none shadow-lg bg-gradient-to-br from-white to-purple-50 animate-fade-in">
+      <CardHeader className="bg-white pb-2">
+        <CardTitle className="text-lg font-bold">Equipment Overview</CardTitle>
+      </CardHeader>
+      <CardContent className="p-4">
+        <div className="space-y-4">
+          {equipmentLoading ? (
+            <div className="flex justify-center py-8">
+              <div className="animate-pulse h-6 w-40 bg-gray-200 rounded"></div>
+            </div>
+          ) : equipmentData && equipmentData.length > 0 ? (
+            <>
+              {equipmentData.slice(0, 3).map((equipment) => (
+                <EquipmentItem key={equipment.id} equipment={equipment} />
+              ))}
+              <Button 
+                onClick={() => navigate("/equipment")}
+                variant="ghost" 
+                className="w-full mt-4 text-[#1EAEDB] hover:text-[#33C3F0] hover:bg-blue-50"
+              >
+                View All Equipment
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </>
+          ) : (
+            <p className="text-gray-500 text-center py-4">No equipment data available</p>
+          )}
+        </div>
+      </CardContent>
     </Card>
   );
 };

@@ -1,5 +1,6 @@
+
 import { useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import ActivityItem from "./ActivityItem";
 import { 
@@ -8,6 +9,7 @@ import {
   formatTimestamp, 
   getOriginalDate 
 } from "@/utils/activityUtils";
+import { Badge } from "@/components/ui/badge";
 
 interface Activity {
   id: string;
@@ -107,16 +109,27 @@ const RecentActivities = () => {
   }, []);
 
   return (
-    <Card className="p-6 glass">
-      <h2 className="text-lg font-semibold mb-4">Recent Activities</h2>
-      <div className="space-y-4">
-        {activities.map((activity) => (
-          <ActivityItem
-            key={activity.id}
-            {...activity}
-          />
-        ))}
-      </div>
+    <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-white to-blue-50 animate-fade-in">
+      <CardHeader className="bg-white pb-2">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg font-bold">Recent Activities</CardTitle>
+          <Badge className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white">Last Updated</Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="p-4">
+        <div className="space-y-3">
+          {activities.length === 0 ? (
+            <p className="text-gray-500 text-center py-4">No recent activities</p>
+          ) : (
+            activities.map((activity) => (
+              <ActivityItem
+                key={activity.id}
+                {...activity}
+              />
+            ))
+          )}
+        </div>
+      </CardContent>
     </Card>
   );
 };
