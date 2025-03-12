@@ -3,7 +3,7 @@ import { useState, useRef } from "react";
 import { QrCode, Printer, Download, Share2, Clipboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import QRCode from "qrcode.react";
+import { QRCodeSVG } from "qrcode.react"; // Changed from default import to named import
 import { Equipment } from "@/types/equipment";
 
 interface QRCodeGeneratorProps {
@@ -79,28 +79,46 @@ export function QRCodeGenerator({ equipment }: QRCodeGeneratorProps) {
   };
 
   const handleDownload = () => {
-    const canvas = document.querySelector('.qr-code-container canvas') as HTMLCanvasElement;
-    if (!canvas) {
+    // Updated SVG selection and conversion to PNG
+    const svg = document.querySelector('.qr-code-container svg') as SVGElement;
+    if (!svg) {
       toast({
         title: "Error",
-        description: "QR code canvas not found.",
+        description: "QR code SVG not found.",
         variant: "destructive",
       });
       return;
     }
 
-    const url = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${equipment.name.replace(/\s+/g, '_')}_QRCode.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    // Create a canvas and draw the SVG on it
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const img = new Image();
     
-    toast({
-      title: "Success",
-      description: "QR code downloaded successfully.",
-    });
+    // Set canvas dimensions
+    canvas.width = size;
+    canvas.height = size;
+    
+    img.onload = () => {
+      if (ctx) {
+        ctx.drawImage(img, 0, 0);
+        const url = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${equipment.name.replace(/\s+/g, '_')}_QRCode.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        toast({
+          title: "Success",
+          description: "QR code downloaded successfully.",
+        });
+      }
+    };
+    
+    img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
   };
 
   const handleCopyLink = () => {
@@ -149,12 +167,11 @@ export function QRCodeGenerator({ equipment }: QRCodeGeneratorProps) {
       </div>
       
       <div ref={qrCodeRef} className="flex justify-center mb-6 qr-code-container">
-        <QRCode 
+        <QRCodeSVG 
           value={equipmentUrl}
           size={size}
           level="H"
           includeMargin={true}
-          renderAs="canvas"
         />
       </div>
       
