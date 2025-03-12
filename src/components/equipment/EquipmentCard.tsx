@@ -1,9 +1,11 @@
+
 import { Equipment } from "@/types/equipment";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import { StatusDropdown } from "./StatusDropdown";
 import { DeleteEquipmentDialog } from "./DeleteEquipmentDialog";
+import { QRCodeDialog } from "./QRCodeDialog";
 
 interface EquipmentCardProps {
   equipment: Equipment;
@@ -25,15 +27,18 @@ export const EquipmentCard = ({ equipment, onStatusChange, onDelete }: Equipment
             />
           </div>
         </div>
-        <DeleteEquipmentDialog onDelete={() => onDelete(equipment.id)}>
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="text-red-500 hover:text-red-600 hover:bg-red-50"
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </DeleteEquipmentDialog>
+        <div className="flex gap-2">
+          <QRCodeDialog equipment={equipment} />
+          <DeleteEquipmentDialog onDelete={() => onDelete(equipment.id)}>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="text-red-500 hover:text-red-600 hover:bg-red-50"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </DeleteEquipmentDialog>
+        </div>
       </div>
       <div className="space-y-2 text-sm mt-4">
         <p><span className="font-medium">Model:</span> {equipment.model}</p>

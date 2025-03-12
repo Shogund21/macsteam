@@ -10,6 +10,7 @@ import AddProject from "@/pages/AddProject";
 import MaintenanceChecks from "@/pages/MaintenanceChecks";
 import PrintView from "@/pages/PrintView";
 import Analytics from "@/pages/Analytics";
+import EquipmentDetails from "@/pages/EquipmentDetails";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -30,6 +31,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/equipment" element={<Equipment />} />
+            <Route path="/equipment/details/:id" element={<EquipmentDetails />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/add-equipment" element={<AddEquipment />} />
