@@ -1,3 +1,4 @@
+
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneralSection } from "@/components/settings/sections/GeneralSection";
@@ -7,6 +8,7 @@ import { DocumentationSection } from "@/components/settings/sections/Documentati
 import { LocationsSection } from "@/components/settings/sections/LocationsSection";
 import { MaintenanceSection } from "@/components/settings/sections/MaintenanceSection";
 import { RefactoringRules } from "@/components/refactoring/RefactoringRules";
+import { FeaturesSection } from "@/components/settings/sections/FeaturesSection";
 
 const Settings = () => {
   return (
@@ -22,6 +24,7 @@ const Settings = () => {
             <TabsTrigger value="documentation">Documentation</TabsTrigger>
             <TabsTrigger value="locations">Locations</TabsTrigger>
             <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
+            <TabsTrigger value="features">Features</TabsTrigger>
             <TabsTrigger value="refactoring">Refactoring</TabsTrigger>
           </TabsList>
 
@@ -47,6 +50,10 @@ const Settings = () => {
           
           <TabsContent value="maintenance">
             <MaintenanceSection />
+          </TabsContent>
+
+          <TabsContent value="features">
+            <FeaturesSection />
           </TabsContent>
 
           <TabsContent value="refactoring">
