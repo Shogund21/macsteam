@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import {
   Dialog,
@@ -25,7 +26,7 @@ const PasswordProtectionModal = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "mac0405") {
+    if (password === "mac2024") {
       onSuccess();
       setPassword("");
     } else {
