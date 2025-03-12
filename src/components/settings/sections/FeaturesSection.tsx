@@ -2,6 +2,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import FeatureItem from "../features/FeatureItem";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   BarChart4,
   Clipboard,
@@ -16,29 +17,31 @@ import {
 } from "lucide-react";
 
 export const FeaturesSection = () => {
+  const isMobile = useIsMobile();
+  
   return (
     <div className="space-y-4">
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl md:text-2xl">Features Overview</CardTitle>
-          <CardDescription className="text-sm md:text-base">
+        <CardHeader className={isMobile ? "px-3 py-4" : ""}>
+          <CardTitle className="text-lg md:text-xl">Features Overview</CardTitle>
+          <CardDescription className="text-xs md:text-sm">
             A comprehensive guide to all features and capabilities of the HVAC Maintenance System
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className={isMobile ? "px-3 py-3" : ""}>
           <Tabs defaultValue="dashboard" className="space-y-4">
             <TabsList className="flex flex-wrap">
-              <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-              <TabsTrigger value="equipment">Equipment</TabsTrigger>
-              <TabsTrigger value="maintenance">Maintenance</TabsTrigger>
-              <TabsTrigger value="projects">Projects</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
+              <TabsTrigger value="dashboard" className={isMobile ? "text-xs py-1 px-2" : ""}>Dashboard</TabsTrigger>
+              <TabsTrigger value="equipment" className={isMobile ? "text-xs py-1 px-2" : ""}>Equipment</TabsTrigger>
+              <TabsTrigger value="maintenance" className={isMobile ? "text-xs py-1 px-2" : ""}>Maintenance</TabsTrigger>
+              <TabsTrigger value="projects" className={isMobile ? "text-xs py-1 px-2" : ""}>Projects</TabsTrigger>
+              <TabsTrigger value="analytics" className={isMobile ? "text-xs py-1 px-2" : ""}>Analytics</TabsTrigger>
+              <TabsTrigger value="settings" className={isMobile ? "text-xs py-1 px-2" : ""}>Settings</TabsTrigger>
             </TabsList>
 
-            <TabsContent value="dashboard" className="space-y-4">
-              <h3 className="text-lg font-semibold">Dashboard Features</h3>
-              <div className="grid gap-4 md:grid-cols-2">
+            <TabsContent value="dashboard" className="space-y-3 md:space-y-4">
+              <h3 className="text-sm md:text-lg font-semibold">Dashboard Features</h3>
+              <div className="grid gap-2 md:gap-4 md:grid-cols-2">
                 <FeatureItem 
                   icon={Info} 
                   title="System Overview" 
@@ -62,9 +65,9 @@ export const FeaturesSection = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="equipment" className="space-y-4">
-              <h3 className="text-lg font-semibold">Equipment Management Features</h3>
-              <div className="grid gap-4 md:grid-cols-2">
+            <TabsContent value="equipment" className="space-y-3 md:space-y-4">
+              <h3 className="text-sm md:text-lg font-semibold">Equipment Management Features</h3>
+              <div className="grid gap-2 md:gap-4 md:grid-cols-2">
                 <FeatureItem 
                   icon={HardDrive} 
                   title="Equipment Registry" 
@@ -88,9 +91,9 @@ export const FeaturesSection = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="maintenance" className="space-y-4">
-              <h3 className="text-lg font-semibold">Maintenance Check Features</h3>
-              <div className="grid gap-4 md:grid-cols-2">
+            <TabsContent value="maintenance" className="space-y-3 md:space-y-4">
+              <h3 className="text-sm md:text-lg font-semibold">Maintenance Check Features</h3>
+              <div className="grid gap-2 md:gap-4 md:grid-cols-2">
                 <FeatureItem 
                   icon={Clipboard} 
                   title="Maintenance Forms" 
@@ -114,9 +117,9 @@ export const FeaturesSection = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="projects" className="space-y-4">
-              <h3 className="text-lg font-semibold">Project Management Features</h3>
-              <div className="grid gap-4 md:grid-cols-2">
+            <TabsContent value="projects" className="space-y-3 md:space-y-4">
+              <h3 className="text-sm md:text-lg font-semibold">Project Management Features</h3>
+              <div className="grid gap-2 md:gap-4 md:grid-cols-2">
                 <FeatureItem 
                   icon={Workflow} 
                   title="Project Tracking" 
@@ -140,9 +143,9 @@ export const FeaturesSection = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="analytics" className="space-y-4">
-              <h3 className="text-lg font-semibold">Analytics & Reporting Features</h3>
-              <div className="grid gap-4 md:grid-cols-2">
+            <TabsContent value="analytics" className="space-y-3 md:space-y-4">
+              <h3 className="text-sm md:text-lg font-semibold">Analytics & Reporting Features</h3>
+              <div className="grid gap-2 md:gap-4 md:grid-cols-2">
                 <FeatureItem 
                   icon={BarChart4} 
                   title="Maintenance Trends" 
@@ -176,9 +179,9 @@ export const FeaturesSection = () => {
               </div>
             </TabsContent>
 
-            <TabsContent value="settings" className="space-y-4">
-              <h3 className="text-lg font-semibold">System Settings Features</h3>
-              <div className="grid gap-4 md:grid-cols-2">
+            <TabsContent value="settings" className="space-y-3 md:space-y-4">
+              <h3 className="text-sm md:text-lg font-semibold">System Settings Features</h3>
+              <div className="grid gap-2 md:gap-4 md:grid-cols-2">
                 <FeatureItem 
                   icon={Users} 
                   title="Technician Management" 
