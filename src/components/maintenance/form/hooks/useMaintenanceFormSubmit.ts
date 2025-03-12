@@ -22,7 +22,7 @@ export const useMaintenanceFormSubmit = (
         .eq('id', values.equipment_id)
         .single();
       
-      const isAHU = equipment?.name.toLowerCase().includes('ahu');
+      const isAHU = equipment?.name?.toLowerCase().includes('ahu') || false;
       
       const { selected_location, ...formData } = values;
       

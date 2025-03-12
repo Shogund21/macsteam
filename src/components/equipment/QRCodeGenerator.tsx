@@ -18,7 +18,11 @@ export function QRCodeGenerator({ equipment }: QRCodeGeneratorProps) {
 
   return (
     <div className="p-4 bg-white rounded-lg shadow">
-      <QRCodeDisplay url={equipmentUrl} initialSize={size} />
+      <QRCodeDisplay 
+        url={equipmentUrl} 
+        initialSize={size} 
+        qrCodeRef={qrCodeRef} 
+      />
       
       <QRCodeActions 
         equipment={equipment} 
