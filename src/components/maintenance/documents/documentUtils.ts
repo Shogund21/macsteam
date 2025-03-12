@@ -1,7 +1,12 @@
+
 import { supabase } from "@/integrations/supabase/client";
 import { MaintenanceDocument } from "@/types/maintenance";
 
-export const fetchDocuments = async (equipmentId?: string, maintenanceCheckId?: string) => {
+export const fetchDocuments = async (
+  equipmentId?: string, 
+  maintenanceCheckId?: string,
+  category?: string
+) => {
   let query = supabase
     .from('maintenance_documents')
     .select('*')
@@ -12,6 +17,9 @@ export const fetchDocuments = async (equipmentId?: string, maintenanceCheckId?: 
   }
   if (maintenanceCheckId) {
     query = query.eq('maintenance_check_id', maintenanceCheckId);
+  }
+  if (category) {
+    query = query.eq('category', category);
   }
 
   const { data, error } = await query;

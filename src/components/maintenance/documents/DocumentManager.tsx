@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import DocumentUpload from "./DocumentUpload";
@@ -9,26 +10,51 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface DocumentManagerProps {
   equipmentId?: string;
   maintenanceCheckId?: string;
+  isRepositoryView?: boolean;
 }
 
-const DocumentManager = ({ equipmentId, maintenanceCheckId }: DocumentManagerProps) => {
+const DocumentManager = ({ 
+  equipmentId, 
+  maintenanceCheckId,
+  isRepositoryView = false
+}: DocumentManagerProps) => {
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+  const isMobile = useIsMobile();
+
+  const categories = [
+    { id: "all", name: "All Documents" },
+    { id: "manual", name: "Manuals" },
+    { id: "service_record", name: "Service Records" },
+    { id: "invoice", name: "Invoices" },
+    { id: "inspection", name: "Inspection Reports" },
+    { id: "compliance", name: "Compliance" },
+    { id: "warranty", name: "Warranties" }
+  ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold">Documents</h2>
+        <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-semibold`}>
+          {isRepositoryView ? "Document Repository" : "Documents"}
+        </h2>
         <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
           <DialogTrigger asChild>
-            <Button>Upload Documents</Button>
+            <Button className={isMobile ? "px-3" : ""}>
+              <Plus className="h-4 w-4 mr-1" />
+              {isMobile ? "" : "Upload"}
+            </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Upload Maintenance Documents</DialogTitle>
+              <DialogTitle>Upload Documents</DialogTitle>
             </DialogHeader>
             <DocumentUpload
               equipmentId={equipmentId}
@@ -39,10 +65,40 @@ const DocumentManager = ({ equipmentId, maintenanceCheckId }: DocumentManagerPro
         </Dialog>
       </div>
 
-      <DocumentList
-        equipmentId={equipmentId}
-        maintenanceCheckId={maintenanceCheckId}
-      />
+      {isRepositoryView && (
+        <Tabs 
+          defaultValue="all" 
+          value={activeCategory}
+          onValueChange={setActiveCategory}
+          className="w-full"
+        >
+          <TabsList className={`${isMobile ? 'flex flex-wrap' : ''}`}>
+            {categories.map(category => (
+              <TabsTrigger 
+                key={category.id} 
+                value={category.id}
+                className={`${isMobile ? 'text-xs py-1 px-2' : ''}`}
+              >
+                {category.name}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          <TabsContent value={activeCategory} className="mt-4">
+            <DocumentList
+              equipmentId={equipmentId}
+              maintenanceCheckId={maintenanceCheckId}
+              category={activeCategory !== "all" ? activeCategory : undefined}
+            />
+          </TabsContent>
+        </Tabs>
+      )}
+
+      {!isRepositoryView && (
+        <DocumentList
+          equipmentId={equipmentId}
+          maintenanceCheckId={maintenanceCheckId}
+        />
+      )}
     </div>
   );
 };

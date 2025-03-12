@@ -1,6 +1,8 @@
+
 import { Button } from "@/components/ui/button";
 import { Download, Trash2 } from "lucide-react";
 import { MaintenanceDocument } from "@/types/maintenance";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface DocumentActionsProps {
   document: MaintenanceDocument;
@@ -9,19 +11,23 @@ interface DocumentActionsProps {
 }
 
 export const DocumentActions = ({ document, onDownload, onDelete }: DocumentActionsProps) => {
+  const isMobile = useIsMobile();
+  
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-1">
       <Button
         variant="outline"
-        size="icon"
+        size={isMobile ? "sm" : "icon"}
         onClick={() => onDownload(document)}
+        className="h-8 w-8"
       >
         <Download className="h-4 w-4" />
       </Button>
       <Button
         variant="outline"
-        size="icon"
+        size={isMobile ? "sm" : "icon"}
         onClick={() => onDelete(document)}
+        className="h-8 w-8"
       >
         <Trash2 className="h-4 w-4" />
       </Button>

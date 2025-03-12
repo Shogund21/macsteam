@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Save, X } from "lucide-react";
 
 interface FormActionsProps {
   onCancel: () => void;
@@ -15,8 +16,9 @@ const FormActions = ({ onCancel, isEditing }: FormActionsProps) => {
       {isMobile && (
         <Button 
           type="submit"
-          className="w-full bg-blue-500 text-white hover:bg-blue-600 mb-2"
+          className="w-full bg-blue-500 text-white hover:bg-blue-600 mb-2 flex items-center justify-center"
         >
+          <Save className="h-4 w-4 mr-2" />
           {isEditing ? 'Update Check' : 'Submit Check'}
         </Button>
       )}
@@ -25,16 +27,18 @@ const FormActions = ({ onCancel, isEditing }: FormActionsProps) => {
         type="button"
         variant="outline"
         onClick={onCancel}
-        className={`${isMobile ? 'w-full' : ''}`}
+        className={`${isMobile ? 'w-full' : ''} flex items-center justify-center`}
       >
+        <X className="h-4 w-4 mr-2" />
         Cancel
       </Button>
       
       {!isMobile && (
         <Button 
           type="submit"
-          className="bg-blue-500 text-white hover:bg-blue-600"
+          className="bg-blue-500 text-white hover:bg-blue-600 flex items-center justify-center"
         >
+          <Save className="h-4 w-4 mr-2" />
           {isEditing ? 'Update Check' : 'Submit Check'}
         </Button>
       )}
