@@ -8,12 +8,43 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer 
+  ResponsiveContainer,
+  TooltipProps
 } from "recharts";
+import { 
+  NameType, 
+  ValueType 
+} from "recharts/types/component/DefaultTooltipContent";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
 import { format, parseISO, startOfMonth, endOfMonth, eachMonthOfInterval, isSameMonth } from "date-fns";
+import { HelpCircle } from "lucide-react";
+import {
+  Tooltip as UITooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+// Custom tooltip component for the chart
+const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-4 border rounded-md shadow-md">
+        <p className="font-semibold text-gray-800">{label}</p>
+        <div className="space-y-1 mt-2">
+          {payload.map((entry, index) => (
+            <p key={index} style={{ color: entry.color }}>
+              {entry.name}: {entry.value} checks
+            </p>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
 
 const MaintenanceTrends = () => {
   const { dateRange } = useAnalyticsFilters();
@@ -105,49 +136,99 @@ const MaintenanceTrends = () => {
   }
 
   return (
-    <div className="h-80">
-      <ResponsiveContainer width="100%" height="100%">
-        <LineChart
-          data={chartData}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Line 
-            type="monotone" 
-            dataKey="total" 
-            name="Total Checks" 
-            stroke="#8884d8" 
-            activeDot={{ r: 8 }} 
-          />
-          <Line 
-            type="monotone" 
-            dataKey="completed" 
-            name="Completed" 
-            stroke="#00C49F" 
-          />
-          <Line 
-            type="monotone" 
-            dataKey="pending" 
-            name="Pending" 
-            stroke="#FFBB28" 
-          />
-          <Line 
-            type="monotone" 
-            dataKey="issues" 
-            name="Issues Found" 
-            stroke="#FF8042" 
-          />
-        </LineChart>
-      </ResponsiveContainer>
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <TooltipProvider>
+          <UITooltip>
+            <TooltipTrigger asChild>
+              <HelpCircle className="h-4 w-4 text-muted-foreground cursor-help" />
+            </TooltipTrigger>
+            <TooltipContent className="max-w-md">
+              <p>
+                This graph displays the monthly trends of maintenance checks. It shows:
+              </p>
+              <ul className="list-disc pl-5 mt-2 space-y-1">
+                <li><span className="font-semibold text-[#8884d8]">Total Checks</span>: All maintenance activities performed each month</li>
+                <li><span className="font-semibold text-[#00C49F]">Completed</span>: Successfully completed maintenance checks</li>
+                <li><span className="font-semibold text-[#FFBB28]">Pending</span>: Scheduled but not yet completed checks</li>
+                <li><span className="font-semibold text-[#FF8042]">Issues Found</span>: Checks that identified problems requiring attention</li>
+              </ul>
+              <p className="mt-2">
+                The trends over time help identify seasonal patterns, maintenance backlogs, and potential areas for process improvement.
+              </p>
+            </TooltipContent>
+          </UITooltip>
+        </TooltipProvider>
+        <span className="text-sm text-muted-foreground">Hover for explanation</span>
+      </div>
+
+      <div className="h-80">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={chartData}
+            margin={{
+              top: 5,
+              right: 30,
+              left: 20,
+              bottom: 30, // Increased to provide more space for X-axis labels
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis 
+              dataKey="month" 
+              height={60}
+              angle={-45}
+              textAnchor="end"
+              interval={0}
+              tick={{ fontSize: 12 }}
+            />
+            <YAxis 
+              width={45}
+              tick={{ fontSize: 12 }}
+              label={{ 
+                value: "Number of Checks", 
+                angle: -90, 
+                position: "insideLeft",
+                style: { textAnchor: "middle", fontSize: 12 }
+              }} 
+            />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend 
+              wrapperStyle={{ paddingTop: 10 }}
+              formatter={(value) => <span style={{ fontSize: 12 }}>{value}</span>}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="total" 
+              name="Total Checks" 
+              stroke="#8884d8" 
+              activeDot={{ r: 8 }} 
+              strokeWidth={2}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="completed" 
+              name="Completed" 
+              stroke="#00C49F" 
+              strokeWidth={2}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="pending" 
+              name="Pending" 
+              stroke="#FFBB28" 
+              strokeWidth={2}
+            />
+            <Line 
+              type="monotone" 
+              dataKey="issues" 
+              name="Issues Found" 
+              stroke="#FF8042" 
+              strokeWidth={2}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

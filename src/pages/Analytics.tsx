@@ -1,6 +1,6 @@
 
 import Layout from "@/components/Layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import MaintenanceTrends from "@/components/analytics/MaintenanceTrends";
 import EquipmentStatusChart from "@/components/analytics/EquipmentStatusChart";
 import MaintenanceCompletionRate from "@/components/analytics/MaintenanceCompletionRate";
@@ -72,6 +72,18 @@ const Analytics = () => {
             </div>
           </div>
 
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle>Maintenance Trends over Time</CardTitle>
+              <CardDescription>
+                Track historical maintenance activities and identify patterns
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <MaintenanceTrends />
+            </CardContent>
+          </Card>
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
               <CardHeader className="pb-2">
@@ -90,15 +102,6 @@ const Analytics = () => {
               </CardContent>
             </Card>
           </div>
-
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle>Maintenance Trends</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <MaintenanceTrends />
-            </CardContent>
-          </Card>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card>
