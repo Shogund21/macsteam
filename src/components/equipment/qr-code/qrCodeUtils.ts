@@ -1,9 +1,12 @@
 
 import { Equipment } from "@/types/equipment";
 
-// Generate a URL for equipment (in production this would be absolute)
+// Generate a URL for equipment (ensuring it's an absolute URL)
 export const generateEquipmentUrl = (equipmentId: string): string => {
-  return `/equipment/details/${equipmentId}`;
+  // Get the base URL of the current window location
+  const baseUrl = window.location.origin;
+  // Create an absolute URL by combining the base URL with the relative path
+  return `${baseUrl}/equipment/details/${equipmentId}`;
 };
 
 // Generate HTML for printable QR code page

@@ -1,4 +1,3 @@
-
 import { useRef } from "react";
 import { Printer, Download, Share2, Clipboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -36,7 +35,6 @@ export function QRCodeActions({ equipment, qrCodeContainerRef, size }: QRCodeAct
   };
 
   const handleDownload = () => {
-    // Updated SVG selection and conversion to PNG
     const svg = document.querySelector('.qr-code-container svg') as SVGElement;
     if (!svg) {
       toast({
@@ -47,13 +45,11 @@ export function QRCodeActions({ equipment, qrCodeContainerRef, size }: QRCodeAct
       return;
     }
 
-    // Create a canvas and draw the SVG on it
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     const svgData = new XMLSerializer().serializeToString(svg);
     const img = new Image();
     
-    // Set canvas dimensions
     canvas.width = size;
     canvas.height = size;
     
@@ -79,11 +75,7 @@ export function QRCodeActions({ equipment, qrCodeContainerRef, size }: QRCodeAct
   };
 
   const handleCopyLink = () => {
-    // In production, this would be an absolute URL
-    const baseUrl = window.location.origin;
-    const fullUrl = `${baseUrl}${equipmentUrl}`;
-    
-    navigator.clipboard.writeText(fullUrl)
+    navigator.clipboard.writeText(equipmentUrl)
       .then(() => {
         toast({
           title: "Success",
