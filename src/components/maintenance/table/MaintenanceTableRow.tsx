@@ -1,3 +1,4 @@
+
 import { format } from "date-fns";
 import { MaintenanceCheck } from "@/types/maintenance";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Eye } from "lucide-react";
 import { useState } from "react";
 import MaintenanceCheckDetails from "../MaintenanceCheckDetails";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MaintenanceTableRowProps {
   check: MaintenanceCheck;
@@ -25,6 +27,7 @@ const MaintenanceTableRow = ({
   onDelete,
 }: MaintenanceTableRowProps) => {
   const [showDetails, setShowDetails] = useState(false);
+  const isMobile = useIsMobile();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -44,9 +47,9 @@ const MaintenanceTableRow = ({
 
   return (
     <>
-      <div className="border rounded-lg p-4 space-y-4 bg-white">
+      <div className="border rounded-lg p-4 space-y-4 bg-white shadow-sm hover:shadow transition-shadow duration-200">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div className="space-y-2">
+          <div className="space-y-2 w-full md:w-auto">
             <h3 className="font-semibold">
               {check.equipment?.name || "Equipment Not Available"}
             </h3>
@@ -56,8 +59,8 @@ const MaintenanceTableRow = ({
               <p>Technician: {getTechnicianName()}</p>
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Badge className={getStatusColor(check.status || "")}>
+          <div className={`flex ${isMobile ? 'w-full flex-col' : 'items-center'} gap-2`}>
+            <Badge className={`${getStatusColor(check.status || "")} ${isMobile ? 'self-start' : ''}`}>
               {check.status?.replace("_", " ").toUpperCase()}
             </Badge>
             <Select
@@ -66,7 +69,7 @@ const MaintenanceTableRow = ({
                 onStatusChange(check.id, value)
               }
             >
-              <SelectTrigger className="w-[180px] bg-white border-gray-200">
+              <SelectTrigger className={`${isMobile ? 'w-full' : 'w-[180px]'} bg-white border-gray-200`}>
                 <SelectValue placeholder="Update Status" />
               </SelectTrigger>
               <SelectContent className="bg-white border border-gray-200 shadow-lg z-50">
@@ -83,11 +86,12 @@ const MaintenanceTableRow = ({
             </Select>
             <Button
               variant="outline"
-              size="icon"
+              size={isMobile ? "default" : "icon"}
               onClick={() => setShowDetails(true)}
-              className="hover:bg-blue-50"
+              className={`hover:bg-blue-50 ${isMobile ? 'w-full' : ''}`}
             >
-              <Eye className="h-4 w-4 text-blue-600" />
+              <Eye className="h-4 w-4 text-blue-600 mr-2" />
+              {isMobile && "View Details"}
             </Button>
           </div>
         </div>

@@ -5,11 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import MaintenanceTableRow from "./table/MaintenanceTableRow";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const MaintenanceHistory = () => {
   const [maintenanceChecks, setMaintenanceChecks] = useState<MaintenanceCheck[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const fetchMaintenanceChecks = async () => {
     try {
@@ -77,14 +79,16 @@ const MaintenanceHistory = () => {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Maintenance History</h2>
+      <h2 className={`text-xl ${isMobile ? 'text-center' : 'text-2xl'} font-bold`}>
+        Maintenance History
+      </h2>
       <div className="space-y-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, index) => (
             <Skeleton key={index} className="h-24 w-full" />
           ))
         ) : maintenanceChecks.length === 0 ? (
-          <p className="text-muted-foreground">No maintenance checks found.</p>
+          <p className="text-muted-foreground text-center">No maintenance checks found.</p>
         ) : (
           maintenanceChecks.map((check) => (
             <MaintenanceTableRow

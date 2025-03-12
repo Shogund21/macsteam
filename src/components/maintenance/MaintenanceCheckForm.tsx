@@ -14,6 +14,7 @@ import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
 import { useMaintenanceFormSubmit } from "./form/hooks/useMaintenanceFormSubmit";
 import FormSection from "./form/FormSection";
 import FormActions from "./form/FormActions";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -23,6 +24,7 @@ interface MaintenanceCheckFormProps {
 const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormProps) => {
   const form = useMaintenanceForm(initialData);
   const handleSubmit = useMaintenanceFormSubmit(onComplete, initialData);
+  const isMobile = useIsMobile();
 
   const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
@@ -103,6 +105,12 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
         <div className="grid gap-6">
+          <div className={`${isMobile ? 'text-center mb-4' : ''}`}>
+            <h2 className={`text-xl ${isMobile ? '' : 'text-2xl'} font-bold`}>
+              {initialData ? 'Edit Maintenance Check' : 'New Maintenance Check'}
+            </h2>
+          </div>
+          
           <FormSection>
             <MaintenanceBasicInfo 
               form={form} 
