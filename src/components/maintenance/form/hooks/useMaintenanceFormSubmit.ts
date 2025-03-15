@@ -17,17 +17,23 @@ export const useMaintenanceFormSubmit = (
       console.log('Submitting form with values:', values);
       
       // Get equipment details to determine type
-      const { data: equipment } = await supabase
+      const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
         .select('*')
         .eq('id', values.equipment_id)
         .maybeSingle();
       
+      if (equipmentError) {
+        console.error('Error fetching equipment:', equipmentError);
+        throw new Error('Failed to fetch equipment details');
+      }
+      
       if (!equipment) {
+        console.error('Equipment not found for ID:', values.equipment_id);
         throw new Error('Equipment not found');
       }
       
-      // Use the equipment type detection hook's logic directly
+      // Use equipment type detection
       const equipmentName = equipment.name.toLowerCase();
       let equipmentType = 'general';
       
@@ -66,28 +72,33 @@ export const useMaintenanceFormSubmit = (
       // Handle equipment-specific fields
       if (equipmentType === 'elevator') {
         console.log('Processing elevator-specific fields');
+        // Make sure to copy the field values explicitly
         submissionData.unusual_noise = values.unusual_noise_elevator;
         submissionData.vibration_observed = values.vibration_elevator;
-        submissionData.notes = values.elevator_notes;
+        submissionData.notes = values.elevator_notes || values.notes;
       } else if (equipmentType === 'restroom') {
         console.log('Processing restroom-specific fields');
-        submissionData.notes = values.restroom_notes;
+        // Make sure to save restroom notes to the general notes field
+        submissionData.notes = values.restroom_notes || values.notes;
       }
 
       console.log('Final submission data:', submissionData);
 
-      const { error } = initialData 
-        ? await supabase
-            .from('hvac_maintenance_checks')
-            .update(submissionData)
-            .eq('id', initialData.id)
-        : await supabase
-            .from('hvac_maintenance_checks')
-            .insert(submissionData);
-
-      if (error) {
-        console.error('Submission error:', error);
-        throw error;
+      let dbResponse;
+      if (initialData) {
+        dbResponse = await supabase
+          .from('hvac_maintenance_checks')
+          .update(submissionData)
+          .eq('id', initialData.id);
+      } else {
+        dbResponse = await supabase
+          .from('hvac_maintenance_checks')
+          .insert(submissionData);
+      }
+      
+      if (dbResponse.error) {
+        console.error('Submission error:', dbResponse.error);
+        throw dbResponse.error;
       }
 
       toast({

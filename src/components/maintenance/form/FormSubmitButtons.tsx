@@ -1,6 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 interface FormSubmitButtonsProps {
   onCancel: () => void;
@@ -22,9 +23,16 @@ const FormSubmitButtons = ({ onCancel, isSubmitting }: FormSubmitButtonsProps) =
         type="submit"
         variant="default"
         disabled={isSubmitting}
-        className={isSubmitting ? "opacity-70 cursor-not-allowed" : ""}
+        className={isSubmitting ? "opacity-70" : ""}
       >
-        {isSubmitting ? "Submitting..." : "Submit Check"}
+        {isSubmitting ? (
+          <>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            Submitting...
+          </>
+        ) : (
+          "Submit Check"
+        )}
       </Button>
     </div>
   );
