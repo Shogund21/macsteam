@@ -3,7 +3,6 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { useEquipmentQuery } from "@/hooks/useEquipmentQuery";
-import { FACILITY_EQUIPMENT } from "@/components/equipment/constants/equipmentTypes";
 
 interface EquipmentSelectProps {
   form: UseFormReturn<any>;
@@ -18,19 +17,6 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     equipmentCount: equipmentList?.length,
     equipment: equipmentList
   });
-
-  // Function to get display name based on equipment type
-  const getEquipmentDisplayName = (equipment: any) => {
-    const facilityTypes = FACILITY_EQUIPMENT.map(type => type.toLowerCase());
-    
-    // For facility equipment (restrooms, elevators), we want to include the location
-    if (facilityTypes.some(type => equipment.name.toLowerCase().includes(type))) {
-      return `${equipment.name} (${equipment.location || 'All Locations'})`;
-    }
-    
-    // For regular HVAC equipment, just show the name and model
-    return equipment.name;
-  };
 
   return (
     <FormField
@@ -66,7 +52,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                       className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                     >
                       <div className="flex flex-col">
-                        <span className="font-medium text-gray-900">{getEquipmentDisplayName(item)}</span>
+                        <span className="font-medium text-gray-900">{item.name}</span>
                         <span className="text-sm text-gray-500">
                           {item.model}
                         </span>

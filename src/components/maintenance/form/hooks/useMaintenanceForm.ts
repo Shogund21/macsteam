@@ -39,27 +39,6 @@ export const maintenanceFormSchema = z.object({
   airflow_reading: naString.optional(),
   airflow_unit: z.string().optional(),
   
-  // Restroom specific fields
-  sink_operation: z.string().optional(),
-  sink_water_pressure: z.string().optional(),
-  sink_leakage: z.boolean().optional(),
-  toilet_operation: z.string().optional(),
-  toilet_flush_quality: z.string().optional(),
-  toilet_leakage: z.boolean().optional(),
-  cleanliness_level: z.string().optional(),
-  supplies_status: z.string().optional(),
-  restroom_notes: z.string().optional(),
-  
-  // Elevator specific fields
-  elevator_operation: z.string().optional(),
-  door_operation: z.string().optional(),
-  unusual_noises: z.boolean().optional(),
-  emergency_phone: z.string().optional(),
-  phone_test_date: z.string().optional(),
-  lighting_status: z.string().optional(),
-  emergency_lighting: z.string().optional(),
-  elevator_notes: z.string().optional(),
-  
   // Common fields
   troubleshooting_notes: z.string().optional(),
   corrective_actions: z.string().optional(),
@@ -82,9 +61,6 @@ export const useMaintenanceForm = (initialData?: MaintenanceCheck) => {
         vibration_observed: false,
         air_filter_cleaned: false,
         fan_bearings_lubricated: false,
-        sink_leakage: false,
-        toilet_leakage: false,
-        unusual_noises: false,
         selected_location: "",
         equipment_id: "",
         technician_id: "",
