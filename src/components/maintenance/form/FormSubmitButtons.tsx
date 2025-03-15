@@ -22,6 +22,7 @@ const FormSubmitButtons = ({ onCancel, isSubmitting }: FormSubmitButtonsProps) =
         type="submit"
         variant="default"
         disabled={isSubmitting}
+        className={isSubmitting ? "opacity-70 cursor-not-allowed" : ""}
       >
         {isSubmitting ? "Submitting..." : "Submit Check"}
       </Button>
