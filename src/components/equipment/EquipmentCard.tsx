@@ -6,6 +6,8 @@ import { Trash2 } from "lucide-react";
 import { StatusDropdown } from "./StatusDropdown";
 import { DeleteEquipmentDialog } from "./DeleteEquipmentDialog";
 import { QRCodeDialog } from "./QRCodeDialog";
+import { EditEquipmentDialog } from "./EditEquipmentDialog";
+import { useNavigate } from "react-router-dom";
 
 interface EquipmentCardProps {
   equipment: Equipment;
@@ -14,10 +16,12 @@ interface EquipmentCardProps {
 }
 
 export const EquipmentCard = ({ equipment, onStatusChange, onDelete }: EquipmentCardProps) => {
+  const navigate = useNavigate();
+  
   return (
     <Card className="p-4 md:p-6">
       <div className="flex justify-between items-start">
-        <div className="flex-1">
+        <div className="flex-1 cursor-pointer" onClick={() => navigate(`/equipment/${equipment.id}`)}>
           <h3 className="text-base md:text-lg font-semibold break-words">{equipment.name}</h3>
           <p className="text-sm text-muted-foreground mt-1">{equipment.location}</p>
           <div className="mt-2">
@@ -29,6 +33,7 @@ export const EquipmentCard = ({ equipment, onStatusChange, onDelete }: Equipment
         </div>
         <div className="flex gap-2">
           <QRCodeDialog equipment={equipment} />
+          <EditEquipmentDialog equipment={equipment} />
           <DeleteEquipmentDialog onDelete={() => onDelete(equipment.id)}>
             <Button 
               variant="ghost" 
@@ -40,7 +45,7 @@ export const EquipmentCard = ({ equipment, onStatusChange, onDelete }: Equipment
           </DeleteEquipmentDialog>
         </div>
       </div>
-      <div className="space-y-2 text-sm mt-4">
+      <div className="space-y-2 text-sm mt-4 cursor-pointer" onClick={() => navigate(`/equipment/${equipment.id}`)}>
         <p><span className="font-medium">Model:</span> {equipment.model}</p>
         <p><span className="font-medium">Serial Number:</span> {equipment.serialNumber}</p>
       </div>
