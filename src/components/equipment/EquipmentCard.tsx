@@ -31,35 +31,33 @@ export const EquipmentCard = ({ equipment, onStatusChange, onDelete }: Equipment
             />
           </div>
         </div>
-        <div className="flex flex-col md:flex-row gap-2">
-          <div className="flex gap-2 mb-2 md:mb-0">
+        <div className="flex flex-row gap-2">
+          <Button 
+            variant="outline" 
+            size="sm"
+            className="flex items-center text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+            onClick={() => navigate(`/equipment/${equipment.id}`)}
+          >
+            <QrCode className="h-4 w-4 mr-1" />
+            View
+          </Button>
+          <EditEquipmentDialog equipment={equipment}>
             <Button 
               variant="outline" 
               size="sm"
-              className="flex items-center text-blue-500 hover:text-blue-600 hover:bg-blue-50"
-              onClick={() => navigate(`/equipment/${equipment.id}`)}
+              className="flex items-center text-green-500 hover:text-green-600 hover:bg-green-50"
             >
-              <QrCode className="h-4 w-4 mr-2" />
-              View
+              <Pen className="h-4 w-4 mr-1" />
+              Edit
             </Button>
-            <EditEquipmentDialog equipment={equipment}>
-              <Button 
-                variant="outline" 
-                size="sm"
-                className="flex items-center text-green-500 hover:text-green-600 hover:bg-green-50"
-              >
-                <Pen className="h-4 w-4 mr-2" />
-                Edit
-              </Button>
-            </EditEquipmentDialog>
-          </div>
+          </EditEquipmentDialog>
           <DeleteEquipmentDialog onDelete={() => onDelete(equipment.id)}>
             <Button 
               variant="outline" 
               size="sm"
               className="flex items-center text-red-500 hover:text-red-600 hover:bg-red-50"
             >
-              <Trash2 className="h-4 w-4 mr-2" />
+              <Trash2 className="h-4 w-4 mr-1" />
               Delete
             </Button>
           </DeleteEquipmentDialog>
