@@ -1,5 +1,6 @@
 
-export const EQUIPMENT_TYPES = [
+// Define equipment categories
+export const HVAC_EQUIPMENT = [
   "Air Handling Unit (AHU)",
   "Air Handler Unit 1",
   "Air Handler Unit 2",
@@ -29,6 +30,18 @@ export const EQUIPMENT_TYPES = [
   "Split System",
   "VAV Box",
   "VRF System",
+] as const;
+
+export const FACILITY_EQUIPMENT = [
   "Restroom",
   "Elevator",
 ] as const;
+
+// Export a combined list for use in dropdowns and selectors
+export const EQUIPMENT_TYPES = [
+  ...HVAC_EQUIPMENT,
+  ...FACILITY_EQUIPMENT,
+] as const;
+
+// Export equipment type for TypeScript
+export type EquipmentType = typeof EQUIPMENT_TYPES[number];

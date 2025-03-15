@@ -73,11 +73,14 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
   const getEquipmentType = () => {
     if (!selectedEquipment) return null;
     const name = selectedEquipment.name.toLowerCase();
+    
+    // Check for specific equipment types
     if (name.includes('ahu') || name.includes('air handler')) return 'ahu';
     if (name.includes('chiller')) return 'chiller';
     if (name.includes('cooling tower')) return 'cooling_tower';
     if (name.includes('restroom')) return 'restroom';
     if (name.includes('elevator')) return 'elevator';
+    
     return 'general';
   };
 
