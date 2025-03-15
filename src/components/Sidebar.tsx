@@ -1,6 +1,6 @@
 
 import { Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Settings, Wrench, Briefcase, ClipboardCheck, ListChecks, BarChart } from "lucide-react";
+import { LayoutDashboard, Settings, Wrench, Briefcase, ClipboardCheck, ListChecks, BarChart, Shield } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 interface NavItemProps {
@@ -71,8 +71,13 @@ const Sidebar = ({ onClose }: SidebarProps) => {
       data-sidebar
     >
       <div className="p-6">
-        <h1 className="text-2xl font-bold">Mac's FMS</h1>
-        <p className="text-sm text-gray-500 mt-1">Facilities Maintenance</p>
+        <div className="flex items-center space-x-2">
+          <Shield className="h-7 w-7 text-[#1EAEDB]" />
+          <div>
+            <h1 className="text-xl font-bold">AssetGuardian</h1>
+            <p className="text-sm text-gray-500 mt-1">Facilities Maintenance</p>
+          </div>
+        </div>
       </div>
       <nav className="px-4 py-2 space-y-1">
         {navItems.map((item) => (
