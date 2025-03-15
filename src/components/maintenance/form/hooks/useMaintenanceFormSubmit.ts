@@ -4,7 +4,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { MaintenanceCheck } from "@/types/maintenance";
 import { MaintenanceFormValues } from "./useMaintenanceForm";
 import { Database } from "@/integrations/supabase/types";
-import useEquipmentTypeDetection from "./useEquipmentTypeDetection";
 
 export const useMaintenanceFormSubmit = (
   onComplete: () => void,
@@ -33,8 +32,22 @@ export const useMaintenanceFormSubmit = (
         throw new Error('Equipment not found');
       }
       
-      // Use equipment detection to determine the equipment type
-      const equipmentType = useEquipmentTypeDetection(equipment);
+      // Determine equipment type directly from name
+      const equipmentName = equipment.name.toLowerCase();
+      let equipmentType = 'general';
+      
+      if (equipmentName.includes('ahu') || equipmentName.includes('air handler')) {
+        equipmentType = 'ahu';
+      } else if (equipmentName.includes('chiller')) {
+        equipmentType = 'chiller';
+      } else if (equipmentName.includes('cooling tower')) {
+        equipmentType = 'cooling_tower';
+      } else if (equipmentName.includes('elevator')) {
+        equipmentType = 'elevator';
+      } else if (equipmentName.includes('restroom')) {
+        equipmentType = 'restroom';
+      }
+      
       console.log('Detected equipment type:', equipmentType);
       
       const { selected_location, ...formData } = values;

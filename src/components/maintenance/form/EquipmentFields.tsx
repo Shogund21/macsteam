@@ -15,6 +15,8 @@ interface EquipmentFieldsProps {
 }
 
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
+  console.log('Rendering EquipmentFields with type:', equipmentType);
+  
   if (equipmentType === 'ahu') {
     return <AHUMaintenanceFields form={form} />;
   }
@@ -27,7 +29,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
     return <RestroomMaintenanceFields form={form} />;
   }
   
-  // Default or general equipment
+  // Default or general equipment (includes chiller and cooling_tower)
   return (
     <>
       <MaintenanceReadings form={form} />
