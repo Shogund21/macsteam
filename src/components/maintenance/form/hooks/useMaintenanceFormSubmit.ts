@@ -34,7 +34,7 @@ export const useMaintenanceFormSubmit = (
       
       // Determine equipment type directly from name
       const equipmentName = equipment.name.toLowerCase();
-      let equipmentType = 'general';
+      let equipmentType: string;
       
       if (equipmentName.includes('ahu') || equipmentName.includes('air handler')) {
         equipmentType = 'ahu';
@@ -46,6 +46,8 @@ export const useMaintenanceFormSubmit = (
         equipmentType = 'elevator';
       } else if (equipmentName.includes('restroom')) {
         equipmentType = 'restroom';
+      } else {
+        equipmentType = 'general';
       }
       
       console.log('Detected equipment type:', equipmentType);
