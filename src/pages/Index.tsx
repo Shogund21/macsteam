@@ -19,7 +19,7 @@ const Index = () => {
               Dashboard
             </h1>
             <p className="text-gray-700 mt-2">
-              Welcome back to Mac's Facilities Maintenance System
+              Welcome to Shogunai's AssetGuardian Facilities Maintenance System
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

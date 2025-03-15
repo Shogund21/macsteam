@@ -75,7 +75,10 @@ const Sidebar = ({ onClose }: SidebarProps) => {
           <Shield className="h-7 w-7 text-[#1EAEDB]" />
           <div>
             <h1 className="text-xl font-bold">AssetGuardian</h1>
-            <p className="text-sm text-gray-500 mt-1">Facilities Maintenance</p>
+            <div className="flex flex-col">
+              <p className="text-sm text-gray-500">Facilities Maintenance</p>
+              <p className="text-xs text-[#1EAEDB]">by Shogunai LLC</p>
+            </div>
           </div>
         </div>
       </div>

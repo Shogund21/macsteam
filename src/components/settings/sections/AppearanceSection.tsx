@@ -13,7 +13,7 @@ export const AppearanceSection = () => {
         <CardHeader>
           <CardTitle className="text-xl md:text-2xl">Appearance</CardTitle>
           <CardDescription className="text-sm md:text-base">
-            Customize the look and feel of AssetGuardian.
+            Customize the look and feel of Shogunai's AssetGuardian.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -36,7 +36,7 @@ export const AppearanceSection = () => {
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-white p-4 hover:bg-gray-50 hover:border-gray-300 peer-data-[state=checked]:border-[#1EAEDB] peer-data-[state=checked]:bg-blue-50"
                   >
                     <div className="w-8 h-8 rounded-full bg-[#1EAEDB]" />
-                    <span className="mt-2">AssetBlue</span>
+                    <span className="mt-2">Shogunai Blue</span>
                   </Label>
                 </div>
                 
@@ -51,7 +51,7 @@ export const AppearanceSection = () => {
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-white p-4 hover:bg-gray-50 hover:border-gray-300 peer-data-[state=checked]:border-[#38B2AC] peer-data-[state=checked]:bg-green-50"
                   >
                     <div className="w-8 h-8 rounded-full bg-[#38B2AC]" />
-                    <span className="mt-2">GuardianGreen</span>
+                    <span className="mt-2">Guardian Green</span>
                   </Label>
                 </div>
                 
@@ -66,7 +66,7 @@ export const AppearanceSection = () => {
                     className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-white p-4 hover:bg-gray-50 hover:border-gray-300 peer-data-[state=checked]:border-[#8B5CF6] peer-data-[state=checked]:bg-purple-50"
                   >
                     <div className="w-8 h-8 rounded-full bg-[#8B5CF6]" />
-                    <span className="mt-2">AssetPurple</span>
+                    <span className="mt-2">Shogunai Purple</span>
                   </Label>
                 </div>
               </RadioGroup>
@@ -75,7 +75,7 @@ export const AppearanceSection = () => {
             <div>
               <h3 className="text-base font-medium mb-2">Future Appearance Settings</h3>
               <p className="text-sm text-muted-foreground">
-                More AssetGuardian theme customization options will be available in future updates.
+                More Shogunai AssetGuardian theme customization options will be available in future updates.
               </p>
             </div>
           </div>

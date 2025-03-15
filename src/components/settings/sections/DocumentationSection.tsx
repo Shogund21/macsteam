@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import DocumentationViewer from "../DocumentationViewer";
@@ -9,13 +10,13 @@ export const DocumentationSection = () => {
   const documentationLinks = [
     {
       title: "Equipment Management",
-      description: "Learn how to track and maintain HVAC equipment details.",
+      description: "Learn how to track and maintain equipment details with AssetGuardian.",
       icon: FileText,
       path: "/docs/equipment-management.md",
     },
     {
       title: "Maintenance Checks",
-      description: "Comprehensive guide for HVAC system maintenance checks.",
+      description: "Comprehensive guide for system maintenance checks.",
       icon: BookOpen,
       path: "/docs/maintenance-checks.md",
     },
@@ -39,7 +40,7 @@ export const DocumentationSection = () => {
         <CardHeader>
           <CardTitle className="text-xl md:text-2xl">Documentation</CardTitle>
           <CardDescription className="text-sm md:text-base">
-            Access guides and documentation for system features.
+            Access guides and documentation for Shogunai's AssetGuardian system features.
           </CardDescription>
         </CardHeader>
         <CardContent>
