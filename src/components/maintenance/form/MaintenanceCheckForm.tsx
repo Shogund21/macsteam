@@ -1,21 +1,17 @@
 
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React, { useState } from "react";
 import { Form } from "@/components/ui/form";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { useToast } from "@/hooks/use-toast";
 import MaintenanceBasicInfo from "./MaintenanceBasicInfo";
-import MaintenanceReadings from "./MaintenanceReadings";
-import MaintenanceStatus from "./MaintenanceStatus";
-import MaintenanceObservations from "./MaintenanceObservations";
-import AHUMaintenanceFields from "./AHUMaintenanceFields";
-import ElevatorMaintenanceFields from "./ElevatorMaintenanceFields";
-import RestroomMaintenanceFields from "./RestroomMaintenanceFields";
 import { useMaintenanceForm } from "./hooks/useMaintenanceForm";
-import { useState } from "react";
-import { MaintenanceFormValues } from "./hooks/useMaintenanceForm";
 import { useMaintenanceFormSubmit } from "./hooks/useMaintenanceFormSubmit";
+import { MaintenanceFormValues } from "./hooks/useMaintenanceForm";
+import EquipmentFields from "./EquipmentFields";
+import FormSubmitButtons from "./FormSubmitButtons";
+import LoadingState from "./LoadingState";
+import useEquipmentTypeDetection from "./hooks/useEquipmentTypeDetection";
+import useFormValidation from "./hooks/useFormValidation";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -24,8 +20,8 @@ interface MaintenanceCheckFormProps {
 const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useMaintenanceForm();
-  const { toast } = useToast();
   const handleSubmit = useMaintenanceFormSubmit(onComplete);
+  const validateForm = useFormValidation();
 
   const { data: equipment, isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
@@ -61,16 +57,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
       return;
     }
     
-    if (!values.equipment_id || !values.technician_id) {
-      console.error('Missing required fields:', { 
-        equipment_id: values.equipment_id, 
-        technician_id: values.technician_id 
-      });
-      toast({
-        variant: "destructive",
-        title: "Validation Error",
-        description: "Please select both equipment and technician",
-      });
+    if (!validateForm(values)) {
       return;
     }
     
@@ -87,20 +74,11 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     (eq) => eq.id === form.watch('equipment_id')
   );
 
-  const getEquipmentType = () => {
-    if (!selectedEquipment) return null;
-    const name = selectedEquipment.name.toLowerCase();
-    if (name.includes('ahu') || name.includes('air handler')) return 'ahu';
-    if (name.includes('elevator')) return 'elevator';
-    if (name.includes('restroom')) return 'restroom';
-    return 'general';
-  };
-
-  const equipmentType = getEquipmentType();
+  const equipmentType = useEquipmentTypeDetection(selectedEquipment);
   const isLoading = isLoadingEquipment || isLoadingTechnicians;
 
   if (isLoading) {
-    return <div className="p-6 text-center">Loading form data...</div>;
+    return <LoadingState />;
   }
 
   return (
@@ -118,34 +96,9 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           technicians={technicians || []} 
         />
         
-        {equipmentType === 'ahu' && <AHUMaintenanceFields form={form} />}
-        {equipmentType === 'elevator' && <ElevatorMaintenanceFields form={form} />}
-        {equipmentType === 'restroom' && <RestroomMaintenanceFields form={form} />}
-        {(!equipmentType || equipmentType === 'general') && (
-          <>
-            <MaintenanceReadings form={form} />
-            <MaintenanceStatus form={form} />
-            <MaintenanceObservations form={form} />
-          </>
-        )}
+        <EquipmentFields form={form} equipmentType={equipmentType} />
 
-        <div className="flex justify-end space-x-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onComplete}
-            disabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button 
-            type="submit"
-            variant="default"
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit Check"}
-          </Button>
-        </div>
+        <FormSubmitButtons onCancel={onComplete} isSubmitting={isSubmitting} />
       </form>
     </Form>
   );
