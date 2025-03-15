@@ -7,6 +7,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { MaintenanceFormValues } from "./hooks/useMaintenanceForm";
 import FormSection from "./FormSection";
+import ElevatorOperationalStatus from "./elevator/ElevatorOperationalStatus";
+import ElevatorSafetyFeatures from "./elevator/ElevatorSafetyFeatures";
+import ElevatorNotes from "./elevator/ElevatorNotes";
 
 interface ElevatorMaintenanceFieldsProps {
   form: UseFormReturn<MaintenanceFormValues>;
