@@ -3,7 +3,6 @@ import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { MaintenanceFormValues } from "../hooks/useMaintenanceForm";
 import FormSection from "../FormSection";
 
@@ -64,24 +63,6 @@ const ElevatorSafetyFeatures = ({ form }: ElevatorSafetyFeaturesProps) => {
                 </SelectContent>
               </Select>
               <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
-          name="alarm_button"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between space-y-0 rounded-md border p-4">
-              <div className="space-y-0.5">
-                <FormLabel>Alarm Button Functional</FormLabel>
-              </div>
-              <FormControl>
-                <Switch
-                  checked={field.value || false}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
             </FormItem>
           )}
         />

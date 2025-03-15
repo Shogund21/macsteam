@@ -58,7 +58,6 @@ export const useMaintenanceFormSubmit = (
         vibration_elevator,
         elevator_notes,
         restroom_notes,
-        alarm_button, // Remove this field as it doesn't exist in the database
         door_operation,
         elevator_operation,
         emergency_phone,
