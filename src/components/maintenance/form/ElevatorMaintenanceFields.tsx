@@ -1,7 +1,7 @@
 
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
@@ -29,6 +29,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                 <Select 
                   onValueChange={field.onChange} 
                   defaultValue={field.value || ""}
+                  value={field.value || ""}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -42,6 +43,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                     <SelectItem value="inoperative">Inoperative</SelectItem>
                   </SelectContent>
                 </Select>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -55,6 +57,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                 <Select 
                   onValueChange={field.onChange} 
                   defaultValue={field.value || ""}
+                  value={field.value || ""}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -69,6 +72,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                     <SelectItem value="inoperative">Inoperative</SelectItem>
                   </SelectContent>
                 </Select>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -85,7 +89,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                 </div>
                 <FormControl>
                   <Switch
-                    checked={field.value}
+                    checked={field.value || false}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
@@ -103,7 +107,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                 </div>
                 <FormControl>
                   <Switch
-                    checked={field.value}
+                    checked={field.value || false}
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
@@ -124,6 +128,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                 <Select 
                   onValueChange={field.onChange} 
                   defaultValue={field.value || ""}
+                  value={field.value || ""}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -136,6 +141,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                     <SelectItem value="not_tested">Not Tested</SelectItem>
                   </SelectContent>
                 </Select>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -149,6 +155,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                 <Select 
                   onValueChange={field.onChange} 
                   defaultValue={field.value || ""}
+                  value={field.value || ""}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -161,6 +168,7 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                     <SelectItem value="non_operational">Non-operational</SelectItem>
                   </SelectContent>
                 </Select>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -179,8 +187,10 @@ const ElevatorMaintenanceFields = ({ form }: ElevatorMaintenanceFieldsProps) => 
                   placeholder="Enter any additional observations or notes about the elevator"
                   className="min-h-[120px]"
                   {...field} 
+                  value={field.value || ""}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

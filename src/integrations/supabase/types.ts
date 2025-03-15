@@ -70,15 +70,21 @@ export type Database = {
           check_date: string | null
           chiller_pressure_reading: number | null
           chiller_temperature_reading: number | null
+          cleanliness_level: string | null
           coils_condition: string | null
           condenser_condition: string | null
           control_system_status: string | null
           corrective_actions: string | null
           created_at: string | null
           dampers_operation: string | null
+          door_operation: string | null
           drain_pan_status: string | null
           drainage_system_status: string | null
           drift_eliminators_condition: string | null
+          elevator_lighting: string | null
+          elevator_notes: string | null
+          elevator_operation: string | null
+          emergency_phone: string | null
           emergency_shutdown_status: string | null
           equipment_id: string | null
           equipment_type: string | null
@@ -87,7 +93,9 @@ export type Database = {
           fan_belt_condition: string | null
           fan_noise_level: string | null
           fill_media_condition: string | null
+          floor_condition: string | null
           general_inspection: string | null
+          hand_dryer_status: string | null
           id: string
           images: string[] | null
           maintenance_recommendations: string | null
@@ -97,18 +105,24 @@ export type Database = {
           oil_level_status: string | null
           pump_seals_condition: string | null
           refrigerant_level: string | null
+          restroom_notes: string | null
           safety_features_status: string | null
           seasonal_preparation_status: string | null
           sensor_status: string | null
           sensors_operation: string | null
+          sink_status: string | null
+          soap_supply: string | null
           status: Database["public"]["Enums"]["maintenance_check_status"] | null
           strainer_status: string | null
           sump_basin_condition: string | null
           technician_id: string | null
+          toilet_paper_supply: string | null
+          toilet_status: string | null
           troubleshooting_notes: string | null
           unusual_noise: boolean | null
           unusual_noise_description: string | null
           updated_at: string | null
+          urinal_status: string | null
           vibration_description: string | null
           vibration_monitoring: string | null
           vibration_observed: boolean | null
@@ -123,15 +137,21 @@ export type Database = {
           check_date?: string | null
           chiller_pressure_reading?: number | null
           chiller_temperature_reading?: number | null
+          cleanliness_level?: string | null
           coils_condition?: string | null
           condenser_condition?: string | null
           control_system_status?: string | null
           corrective_actions?: string | null
           created_at?: string | null
           dampers_operation?: string | null
+          door_operation?: string | null
           drain_pan_status?: string | null
           drainage_system_status?: string | null
           drift_eliminators_condition?: string | null
+          elevator_lighting?: string | null
+          elevator_notes?: string | null
+          elevator_operation?: string | null
+          emergency_phone?: string | null
           emergency_shutdown_status?: string | null
           equipment_id?: string | null
           equipment_type?: string | null
@@ -140,7 +160,9 @@ export type Database = {
           fan_belt_condition?: string | null
           fan_noise_level?: string | null
           fill_media_condition?: string | null
+          floor_condition?: string | null
           general_inspection?: string | null
+          hand_dryer_status?: string | null
           id?: string
           images?: string[] | null
           maintenance_recommendations?: string | null
@@ -150,20 +172,26 @@ export type Database = {
           oil_level_status?: string | null
           pump_seals_condition?: string | null
           refrigerant_level?: string | null
+          restroom_notes?: string | null
           safety_features_status?: string | null
           seasonal_preparation_status?: string | null
           sensor_status?: string | null
           sensors_operation?: string | null
+          sink_status?: string | null
+          soap_supply?: string | null
           status?:
             | Database["public"]["Enums"]["maintenance_check_status"]
             | null
           strainer_status?: string | null
           sump_basin_condition?: string | null
           technician_id?: string | null
+          toilet_paper_supply?: string | null
+          toilet_status?: string | null
           troubleshooting_notes?: string | null
           unusual_noise?: boolean | null
           unusual_noise_description?: string | null
           updated_at?: string | null
+          urinal_status?: string | null
           vibration_description?: string | null
           vibration_monitoring?: string | null
           vibration_observed?: boolean | null
@@ -178,15 +206,21 @@ export type Database = {
           check_date?: string | null
           chiller_pressure_reading?: number | null
           chiller_temperature_reading?: number | null
+          cleanliness_level?: string | null
           coils_condition?: string | null
           condenser_condition?: string | null
           control_system_status?: string | null
           corrective_actions?: string | null
           created_at?: string | null
           dampers_operation?: string | null
+          door_operation?: string | null
           drain_pan_status?: string | null
           drainage_system_status?: string | null
           drift_eliminators_condition?: string | null
+          elevator_lighting?: string | null
+          elevator_notes?: string | null
+          elevator_operation?: string | null
+          emergency_phone?: string | null
           emergency_shutdown_status?: string | null
           equipment_id?: string | null
           equipment_type?: string | null
@@ -195,7 +229,9 @@ export type Database = {
           fan_belt_condition?: string | null
           fan_noise_level?: string | null
           fill_media_condition?: string | null
+          floor_condition?: string | null
           general_inspection?: string | null
+          hand_dryer_status?: string | null
           id?: string
           images?: string[] | null
           maintenance_recommendations?: string | null
@@ -205,20 +241,26 @@ export type Database = {
           oil_level_status?: string | null
           pump_seals_condition?: string | null
           refrigerant_level?: string | null
+          restroom_notes?: string | null
           safety_features_status?: string | null
           seasonal_preparation_status?: string | null
           sensor_status?: string | null
           sensors_operation?: string | null
+          sink_status?: string | null
+          soap_supply?: string | null
           status?:
             | Database["public"]["Enums"]["maintenance_check_status"]
             | null
           strainer_status?: string | null
           sump_basin_condition?: string | null
           technician_id?: string | null
+          toilet_paper_supply?: string | null
+          toilet_status?: string | null
           troubleshooting_notes?: string | null
           unusual_noise?: boolean | null
           unusual_noise_description?: string | null
           updated_at?: string | null
+          urinal_status?: string | null
           vibration_description?: string | null
           vibration_monitoring?: string | null
           vibration_observed?: boolean | null
