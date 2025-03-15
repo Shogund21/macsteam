@@ -52,41 +52,63 @@ export const useMaintenanceFormSubmit = (
       
       const { selected_location, ...formData } = values;
       
+      // Filter out fields that don't exist in the database
+      const {
+        unusual_noise_elevator,
+        vibration_elevator,
+        elevator_notes,
+        restroom_notes,
+        alarm_button, // Remove this field as it doesn't exist in the database
+        door_operation,
+        elevator_operation,
+        emergency_phone,
+        elevator_lighting,
+        sink_status,
+        toilet_status,
+        urinal_status,
+        hand_dryer_status,
+        cleanliness_level,
+        soap_supply,
+        toilet_paper_supply,
+        floor_condition,
+        ...validDbFields
+      } = formData;
+      
       // Prepare submission data with proper type conversions
       const submissionData: Database['public']['Tables']['hvac_maintenance_checks']['Insert'] = {
-        ...formData,
+        ...validDbFields,
         equipment_type: equipmentType,
         check_date: new Date().toISOString(),
         status: 'completed' as const,
         
         // Convert string values to numbers, handling empty and "NA" cases
         chiller_pressure_reading: 
-          values.chiller_pressure_reading === "NA" || !values.chiller_pressure_reading ? 
-          null : parseFloat(values.chiller_pressure_reading),
+          validDbFields.chiller_pressure_reading === "NA" || !validDbFields.chiller_pressure_reading ? 
+          null : parseFloat(validDbFields.chiller_pressure_reading),
           
         chiller_temperature_reading: 
-          values.chiller_temperature_reading === "NA" || !values.chiller_temperature_reading ? 
-          null : parseFloat(values.chiller_temperature_reading),
+          validDbFields.chiller_temperature_reading === "NA" || !validDbFields.chiller_temperature_reading ? 
+          null : parseFloat(validDbFields.chiller_temperature_reading),
           
         airflow_reading: 
-          values.airflow_reading === "NA" || !values.airflow_reading ? 
-          null : parseFloat(values.airflow_reading),
+          validDbFields.airflow_reading === "NA" || !validDbFields.airflow_reading ? 
+          null : parseFloat(validDbFields.airflow_reading),
       };
       
       // Handle equipment-specific fields depending on equipment type
       if (equipmentType === 'elevator') {
         console.log('Processing elevator-specific fields');
         // Copy elevator-specific fields to the appropriate fields in the main record
-        submissionData.unusual_noise = values.unusual_noise_elevator;
-        submissionData.vibration_observed = values.vibration_elevator;
-        submissionData.notes = values.elevator_notes || values.notes || null;
+        submissionData.unusual_noise = unusual_noise_elevator;
+        submissionData.vibration_observed = vibration_elevator;
+        submissionData.notes = elevator_notes || validDbFields.notes || null;
       } else if (equipmentType === 'restroom') {
         console.log('Processing restroom-specific fields');
         // Make sure to save restroom notes to the general notes field
-        submissionData.notes = values.restroom_notes || values.notes || null;
+        submissionData.notes = restroom_notes || validDbFields.notes || null;
       } else {
         // For other equipment types, use the general notes
-        submissionData.notes = values.notes || null;
+        submissionData.notes = validDbFields.notes || null;
       }
 
       console.log('Final submission data:', submissionData);

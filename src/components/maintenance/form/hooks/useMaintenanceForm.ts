@@ -46,7 +46,7 @@ export const maintenanceFormSchema = z.object({
   vibration_elevator: z.boolean().optional(),
   emergency_phone: z.string().optional(),
   elevator_lighting: z.string().optional(),
-  alarm_button: z.boolean().optional(),
+  // Removed: alarm_button as it doesn't exist in the database
   elevator_notes: z.string().optional(),
   
   // Restroom fields
@@ -84,7 +84,6 @@ export const useMaintenanceForm = (initialData?: MaintenanceCheck) => {
         fan_bearings_lubricated: false,
         unusual_noise_elevator: false,
         vibration_elevator: false,
-        alarm_button: false,
         selected_location: "",
         equipment_id: "",
         technician_id: "",
