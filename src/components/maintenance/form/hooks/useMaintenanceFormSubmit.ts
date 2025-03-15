@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { MaintenanceCheck } from "@/types/maintenance";
 import { MaintenanceFormValues } from "./useMaintenanceForm";
 import { Database } from "@/integrations/supabase/types";
+import useEquipmentTypeDetection from "./useEquipmentTypeDetection";
 
 export const useMaintenanceFormSubmit = (
   onComplete: () => void,
@@ -54,16 +55,11 @@ export const useMaintenanceFormSubmit = (
       
       const { selected_location, ...formData } = values;
       
-      // Check if the equipment_type is valid according to the database constraint
-      // Fix the syntax error by using the correct parameter format
-      const { data: validTypes, error: validTypesError } = await supabase
-        .from('pg_enum')
-        .select('enumlabel')
-        .eq('enumtypid', 'maintenance_check_status')
-        .contains('enumlabel', equipmentType);
-        
-      if (validTypesError) {
-        console.error('Error checking valid equipment types:', validTypesError);
+      // Instead of querying pg_enum, we'll validate equipment type against known values
+      const validEquipmentTypes = ['ahu', 'chiller', 'cooling_tower', 'elevator', 'restroom', 'general'];
+      if (!validEquipmentTypes.includes(equipmentType)) {
+        console.error('Invalid equipment type detected:', equipmentType);
+        equipmentType = 'general'; // fallback to general if type is unknown
       }
       
       // Filter out fields that don't exist in the database
