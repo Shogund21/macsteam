@@ -1,6 +1,6 @@
 
 import { UseFormReturn } from "react-hook-form";
-import AHUMaintenanceFields from "./ahu/AHUMaintenanceFields";
+import AHUMaintenanceFields from "./AHUMaintenanceFields";
 import CoolingTowerFields from "./CoolingTowerFields";
 import RestroomMaintenanceFields from "./RestroomMaintenanceFields";
 import ElevatorMaintenanceFields from "./ElevatorMaintenanceFields";
