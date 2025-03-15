@@ -6,35 +6,73 @@ A comprehensive facility management system built with modern web technologies, d
 ## Features
 
 ### Equipment Management
-- Track and manage various types of HVAC equipment
-- Real-time equipment status monitoring
+- Track and manage various types of HVAC equipment with detailed information
+- Real-time equipment status monitoring (Operational, Needs Attention, Under Maintenance, Non-operational)
 - Detailed equipment history and maintenance records
 - Equipment location tracking and mapping
+- QR code generation for equipment identification and quick access
+- Password-protected equipment management for enhanced security
+- Equipment printing capabilities for documentation
 
 ### Maintenance Checks
-- Scheduled maintenance tracking
-- Digital maintenance checklists
-- Real-time maintenance reporting
-- AHU-specific maintenance workflows
+- Scheduled maintenance tracking and calendar integration
+- Digital maintenance checklists for different equipment types
+- Real-time maintenance reporting and status updates
+- AHU-specific maintenance workflows with detailed parameter tracking
 - Comprehensive reading and measurement logging
+- Document repository for maintenance manuals and reference materials
+- Maintenance history visualization and tracking
 
 ### Project Management
-- Project status tracking
+- Project status tracking with customizable statuses
 - Task assignment and monitoring
-- Priority-based project organization
-- Project timeline visualization
+- Priority-based project organization (High, Medium, Low)
+- Project timeline visualization with start and end dates
+- Project description editor for detailed documentation
+- Project filtering and quick status updates
+- Printable project lists for offline reference
 
 ### Technician Management
-- Technician availability tracking
+- Technician availability tracking and scheduling
 - Skill and certification management
-- Work order assignment
-- Performance monitoring
+- Work order assignment and performance tracking
+- Contact information management
+- Specialization tracking for optimal task assignment
 
 ## Dashboard
 - Real-time statistics showing equipment count, active projects, pending tasks, and available technicians
 - Recent activities feed showing latest project and maintenance updates
 - Equipment overview with quick status updates
 - Responsive design for all device sizes
+- Quick access to frequently used actions
+
+## Analytics
+- Equipment status distribution charts
+- Maintenance completion rate tracking
+- Technician performance metrics
+- Location-based analytics for equipment distribution
+- Maintenance trends visualization
+- Data export capabilities for reporting
+
+## Documentation
+- Comprehensive in-app documentation
+- Equipment management guides
+- Maintenance check procedures
+- Project management best practices
+- Technician management guidelines
+
+## Print Features
+- Equipment list printing
+- Project summary printing
+- Maintenance schedule printing
+- QR code printing for equipment identification
+
+## Settings
+- User interface customization
+- Location management for organizing equipment and projects
+- Notification preferences
+- System configuration options
+- Administrator password protection for sensitive areas
 
 ## Project Info
 
@@ -52,6 +90,7 @@ This project leverages modern web technologies:
 - **State Management**: TanStack Query
 - **Form Handling**: React Hook Form with Zod validation
 - **Charts**: Recharts
+- **QR Code Generation**: qrcode.react
 
 ## Documentation
 
@@ -104,3 +143,4 @@ For support and questions:
 ## License
 
 This project is proprietary software. All rights reserved.
+
