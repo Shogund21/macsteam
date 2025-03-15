@@ -11,13 +11,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Pen } from "lucide-react";
 
 interface EditEquipmentDialogProps {
   equipment: Equipment;
+  children?: React.ReactNode;
 }
 
-export const EditEquipmentDialog = ({ equipment }: EditEquipmentDialogProps) => {
+export const EditEquipmentDialog = ({ equipment, children }: EditEquipmentDialogProps) => {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
@@ -77,13 +77,15 @@ export const EditEquipmentDialog = ({ equipment }: EditEquipmentDialogProps) => 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="text-blue-500 hover:text-blue-600 hover:bg-blue-50"
-        >
-          <Pen className="h-4 w-4" />
-        </Button>
+        {children || (
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+          >
+            <Pen className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[550px] bg-white">
         <DialogHeader>

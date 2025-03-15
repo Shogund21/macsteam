@@ -2,7 +2,7 @@
 import { Equipment } from "@/types/equipment";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Trash2 } from "lucide-react";
+import { Trash2, Pen, QrCode } from "lucide-react";
 import { StatusDropdown } from "./StatusDropdown";
 import { DeleteEquipmentDialog } from "./DeleteEquipmentDialog";
 import { QRCodeDialog } from "./QRCodeDialog";
@@ -31,16 +31,36 @@ export const EquipmentCard = ({ equipment, onStatusChange, onDelete }: Equipment
             />
           </div>
         </div>
-        <div className="flex gap-2">
-          <QRCodeDialog equipment={equipment} />
-          <EditEquipmentDialog equipment={equipment} />
+        <div className="flex flex-col md:flex-row gap-2">
+          <div className="flex gap-2 mb-2 md:mb-0">
+            <Button 
+              variant="outline" 
+              size="sm"
+              className="flex items-center text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+              onClick={() => navigate(`/equipment/${equipment.id}`)}
+            >
+              <QrCode className="h-4 w-4 mr-2" />
+              View
+            </Button>
+            <EditEquipmentDialog equipment={equipment}>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="flex items-center text-green-500 hover:text-green-600 hover:bg-green-50"
+              >
+                <Pen className="h-4 w-4 mr-2" />
+                Edit
+              </Button>
+            </EditEquipmentDialog>
+          </div>
           <DeleteEquipmentDialog onDelete={() => onDelete(equipment.id)}>
             <Button 
-              variant="ghost" 
-              size="icon" 
-              className="text-red-500 hover:text-red-600 hover:bg-red-50"
+              variant="outline" 
+              size="sm"
+              className="flex items-center text-red-500 hover:text-red-600 hover:bg-red-50"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete
             </Button>
           </DeleteEquipmentDialog>
         </div>
