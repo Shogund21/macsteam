@@ -54,11 +54,12 @@ export const useMaintenanceFormSubmit = (
       
       const { selected_location, ...formData } = values;
       
-      // First, check if the equipment_type is valid according to the database constraint
+      // Check if the equipment_type is valid according to the database constraint
+      // Fix the syntax error by using the correct parameter format
       const { data: validTypes, error: validTypesError } = await supabase
         .from('pg_enum')
         .select('enumlabel')
-        .eq('enumtypid', 'maintenance_check_status'::regtype)
+        .eq('enumtypid', 'maintenance_check_status')
         .contains('enumlabel', equipmentType);
         
       if (validTypesError) {
