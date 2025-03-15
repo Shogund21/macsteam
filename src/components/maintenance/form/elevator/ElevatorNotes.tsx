@@ -12,7 +12,7 @@ interface ElevatorNotesProps {
 
 const ElevatorNotes = ({ form }: ElevatorNotesProps) => {
   return (
-    <FormSection title="Elevator Notes">
+    <FormSection title="Notes">
       <FormField
         control={form.control}
         name="elevator_notes"
@@ -20,11 +20,10 @@ const ElevatorNotes = ({ form }: ElevatorNotesProps) => {
           <FormItem>
             <FormLabel>Additional Notes</FormLabel>
             <FormControl>
-              <Textarea 
-                placeholder="Enter any additional observations or notes about the elevator"
-                className="min-h-[120px]"
-                {...field} 
-                value={field.value || ""}
+              <Textarea
+                placeholder="Enter any additional notes or observations about the elevator condition"
+                className="min-h-[100px]"
+                {...field}
               />
             </FormControl>
             <FormMessage />
