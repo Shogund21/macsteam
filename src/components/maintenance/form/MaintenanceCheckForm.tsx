@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,10 +10,12 @@ import MaintenanceReadings from "./MaintenanceReadings";
 import MaintenanceStatus from "./MaintenanceStatus";
 import MaintenanceObservations from "./MaintenanceObservations";
 import AHUMaintenanceFields from "./AHUMaintenanceFields";
+import ElevatorMaintenanceFields from "./ElevatorMaintenanceFields";
+import RestroomMaintenanceFields from "./RestroomMaintenanceFields";
 import { useMaintenanceForm } from "./hooks/useMaintenanceForm";
 import { useState } from "react";
 import { MaintenanceFormValues } from "./hooks/useMaintenanceForm";
-import { Database } from "@/integrations/supabase/types";
+import { useMaintenanceFormSubmit } from "./hooks/useMaintenanceFormSubmit";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -22,6 +25,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useMaintenanceForm();
   const { toast } = useToast();
+  const handleSubmit = useMaintenanceFormSubmit(onComplete);
 
   const { data: equipment, isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
@@ -49,16 +53,6 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     },
   });
 
-  const validateNumericField = (value: string | undefined, fieldName: string): number | null => {
-    if (!value || value === "NA") return null;
-    const numValue = parseFloat(value);
-    if (isNaN(numValue)) {
-      console.warn(`Invalid numeric value for ${fieldName}:`, value);
-      return null;
-    }
-    return numValue;
-  };
-
   const onSubmit = async (values: MaintenanceFormValues) => {
     console.log('Form submission started with values:', values);
     
@@ -82,67 +76,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     
     setIsSubmitting(true);
     try {
-      const { selected_location, ...formData } = values;
-      
-      // Get equipment details to determine type
-      const selectedEquipment = equipment?.find(eq => eq.id === values.equipment_id);
-      if (!selectedEquipment) {
-        throw new Error('Selected equipment not found');
-      }
-      
-      const isAHU = selectedEquipment.name.toLowerCase().includes('ahu');
-      console.log('Processing maintenance check for:', {
-        equipmentName: selectedEquipment.name,
-        isAHU,
-      });
-      
-      const submissionData: Database['public']['Tables']['hvac_maintenance_checks']['Insert'] = {
-        ...formData,
-        equipment_type: isAHU ? 'ahu' : 'general',
-        check_date: new Date().toISOString(),
-        status: 'completed' as const,
-        chiller_pressure_reading: validateNumericField(formData.chiller_pressure_reading, 'chiller_pressure_reading'),
-        chiller_temperature_reading: validateNumericField(formData.chiller_temperature_reading, 'chiller_temperature_reading'),
-        airflow_reading: validateNumericField(formData.airflow_reading, 'airflow_reading'),
-      };
-
-      console.log('Submitting maintenance check data:', submissionData);
-
-      const { data, error } = await supabase
-        .from('hvac_maintenance_checks')
-        .insert(submissionData);
-
-      if (error) {
-        console.error('Supabase insertion error:', error);
-        throw error;
-      }
-
-      console.log('Maintenance check submitted successfully:', data);
-      toast({
-        title: "Success",
-        description: "Maintenance check recorded successfully",
-      });
-      
-      form.reset();
-      onComplete();
-    } catch (error: any) {
-      console.error('Error submitting maintenance check:', {
-        error,
-        message: error.message,
-        details: error.details,
-      });
-      
-      let errorMessage = "Failed to submit maintenance check. ";
-      if (error.code) {
-        errorMessage += `(Error code: ${error.code}) `;
-      }
-      errorMessage += error.message || "Please try again.";
-      
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: errorMessage,
-      });
+      await handleSubmit(values);
     } finally {
       console.log('Form submission completed');
       setIsSubmitting(false);
@@ -153,7 +87,16 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     (eq) => eq.id === form.watch('equipment_id')
   );
 
-  const isAHU = selectedEquipment?.name.toLowerCase().includes('ahu');
+  const getEquipmentType = () => {
+    if (!selectedEquipment) return null;
+    const name = selectedEquipment.name.toLowerCase();
+    if (name.includes('ahu') || name.includes('air handler')) return 'ahu';
+    if (name.includes('elevator')) return 'elevator';
+    if (name.includes('restroom')) return 'restroom';
+    return 'general';
+  };
+
+  const equipmentType = getEquipmentType();
   const isLoading = isLoadingEquipment || isLoadingTechnicians;
 
   if (isLoading) {
@@ -175,9 +118,10 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
           technicians={technicians || []} 
         />
         
-        {isAHU ? (
-          <AHUMaintenanceFields form={form} />
-        ) : (
+        {equipmentType === 'ahu' && <AHUMaintenanceFields form={form} />}
+        {equipmentType === 'elevator' && <ElevatorMaintenanceFields form={form} />}
+        {equipmentType === 'restroom' && <RestroomMaintenanceFields form={form} />}
+        {(!equipmentType || equipmentType === 'general') && (
           <>
             <MaintenanceReadings form={form} />
             <MaintenanceStatus form={form} />

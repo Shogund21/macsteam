@@ -49,6 +49,15 @@ export const useMaintenanceFormSubmit = (
         chiller_pressure_reading: values.chiller_pressure_reading === "NA" ? null : parseFloat(values.chiller_pressure_reading || "0"),
         chiller_temperature_reading: values.chiller_temperature_reading === "NA" ? null : parseFloat(values.chiller_temperature_reading || "0"),
         airflow_reading: values.airflow_reading === "NA" ? null : parseFloat(values.airflow_reading || "0"),
+        
+        // Add proper mapping for elevator fields
+        unusual_noise: equipmentType === 'elevator' ? values.unusual_noise_elevator : values.unusual_noise,
+        vibration_observed: equipmentType === 'elevator' ? values.vibration_elevator : values.vibration_observed,
+        notes: equipmentType === 'elevator' 
+          ? values.elevator_notes 
+          : equipmentType === 'restroom'
+            ? values.restroom_notes
+            : values.notes,
       };
 
       console.log('Submitting to database:', submissionData);
