@@ -1,3 +1,4 @@
+
 export const EQUIPMENT_TYPES = [
   "Air Handling Unit (AHU)",
   "Air Handler Unit 1",
@@ -28,4 +29,6 @@ export const EQUIPMENT_TYPES = [
   "Split System",
   "VAV Box",
   "VRF System",
+  "Elevator",
+  "Restroom",
 ] as const;

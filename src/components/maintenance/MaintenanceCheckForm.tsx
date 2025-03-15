@@ -9,6 +9,8 @@ import MaintenanceStatus from "./form/MaintenanceStatus";
 import MaintenanceObservations from "./form/MaintenanceObservations";
 import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
 import CoolingTowerFields from "./form/CoolingTowerFields";
+import ElevatorMaintenanceFields from "./form/ElevatorMaintenanceFields";
+import RestroomMaintenanceFields from "./form/RestroomMaintenanceFields";
 import DocumentManager from "./documents/DocumentManager";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
 import { useMaintenanceFormSubmit } from "./form/hooks/useMaintenanceFormSubmit";
@@ -74,6 +76,8 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
     if (name.includes('ahu') || name.includes('air handler')) return 'ahu';
     if (name.includes('chiller')) return 'chiller';
     if (name.includes('cooling tower')) return 'cooling_tower';
+    if (name.includes('elevator')) return 'elevator';
+    if (name.includes('restroom')) return 'restroom';
     return 'general';
   };
 
@@ -85,6 +89,10 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
         return <AHUMaintenanceFields form={form} />;
       case 'cooling_tower':
         return <CoolingTowerFields form={form} />;
+      case 'elevator':
+        return <ElevatorMaintenanceFields form={form} />;
+      case 'restroom':
+        return <RestroomMaintenanceFields form={form} />;
       case 'chiller':
       default:
         return (

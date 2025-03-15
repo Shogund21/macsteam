@@ -22,13 +22,27 @@ export const useMaintenanceFormSubmit = (
         .eq('id', values.equipment_id)
         .single();
       
-      const isAHU = equipment?.name?.toLowerCase().includes('ahu') || false;
+      // Determine equipment type based on name
+      const equipmentName = equipment?.name?.toLowerCase() || '';
+      let equipmentType = 'general';
+      
+      if (equipmentName.includes('ahu') || equipmentName.includes('air handler')) {
+        equipmentType = 'ahu';
+      } else if (equipmentName.includes('cooling tower')) {
+        equipmentType = 'cooling_tower';
+      } else if (equipmentName.includes('elevator')) {
+        equipmentType = 'elevator';
+      } else if (equipmentName.includes('restroom')) {
+        equipmentType = 'restroom';
+      } else if (equipmentName.includes('chiller')) {
+        equipmentType = 'chiller';
+      }
       
       const { selected_location, ...formData } = values;
       
       const submissionData: Database['public']['Tables']['hvac_maintenance_checks']['Insert'] = {
         ...formData,
-        equipment_type: isAHU ? 'ahu' : 'general',
+        equipment_type: equipmentType,
         check_date: new Date().toISOString(),
         status: 'completed' as const,
         // Convert string values to numbers, handling "NA" cases
