@@ -6,7 +6,7 @@ import MaintenanceReadings from "./MaintenanceReadings";
 import MaintenanceStatus from "./MaintenanceStatus";
 import MaintenanceObservations from "./MaintenanceObservations";
 import AHUMaintenanceFields from "./AHUMaintenanceFields";
-import ElevatorMaintenanceFields from "./ElevatorMaintenanceFields";
+import ElevatorMaintenanceFields from "./elevator/ElevatorMaintenanceFields";
 import RestroomMaintenanceFields from "./RestroomMaintenanceFields";
 
 interface EquipmentFieldsProps {

@@ -12,18 +12,18 @@ interface ElevatorSafetyFeaturesProps {
 
 const ElevatorSafetyFeatures = ({ form }: ElevatorSafetyFeaturesProps) => {
   return (
-    <FormSection title="Elevator Safety Features">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <FormSection title="Safety Features">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={form.control}
           name="emergency_phone"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Emergency Phone</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value || ""}
+              <Select 
+                onValueChange={field.onChange} 
                 defaultValue={field.value || ""}
+                value={field.value || ""}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -31,8 +31,9 @@ const ElevatorSafetyFeatures = ({ form }: ElevatorSafetyFeaturesProps) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="working">Working</SelectItem>
-                  <SelectItem value="not_working">Not Working</SelectItem>
+                  <SelectItem value="operational">Operational</SelectItem>
+                  <SelectItem value="non_operational">Non-operational</SelectItem>
+                  <SelectItem value="not_tested">Not Tested</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -45,11 +46,11 @@ const ElevatorSafetyFeatures = ({ form }: ElevatorSafetyFeaturesProps) => {
           name="elevator_lighting"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Lighting Status</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value || ""}
+              <FormLabel>Elevator Lighting</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
                 defaultValue={field.value || ""}
+                value={field.value || ""}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -57,9 +58,9 @@ const ElevatorSafetyFeatures = ({ form }: ElevatorSafetyFeaturesProps) => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="all_working">All Working</SelectItem>
-                  <SelectItem value="partial">Partially Working</SelectItem>
-                  <SelectItem value="not_working">Not Working</SelectItem>
+                  <SelectItem value="fully_functional">Fully Functional</SelectItem>
+                  <SelectItem value="partially_functional">Partially Functional</SelectItem>
+                  <SelectItem value="non_operational">Non-operational</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />

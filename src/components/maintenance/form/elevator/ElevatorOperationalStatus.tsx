@@ -14,17 +14,17 @@ interface ElevatorOperationalStatusProps {
 const ElevatorOperationalStatus = ({ form }: ElevatorOperationalStatusProps) => {
   return (
     <FormSection title="Elevator Operational Status">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <FormField
           control={form.control}
           name="elevator_operation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Operational Status</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value || ""}
+              <FormLabel>Elevator Operation</FormLabel>
+              <Select 
+                onValueChange={field.onChange} 
                 defaultValue={field.value || ""}
+                value={field.value || ""}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -32,9 +32,10 @@ const ElevatorOperationalStatus = ({ form }: ElevatorOperationalStatusProps) => 
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="normal">Normal Operation</SelectItem>
-                  <SelectItem value="requires_attention">Requires Attention</SelectItem>
-                  <SelectItem value="out_of_service">Out of Service</SelectItem>
+                  <SelectItem value="normal">Normal</SelectItem>
+                  <SelectItem value="sluggish">Sluggish</SelectItem>
+                  <SelectItem value="erratic">Erratic</SelectItem>
+                  <SelectItem value="inoperative">Inoperative</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -48,10 +49,10 @@ const ElevatorOperationalStatus = ({ form }: ElevatorOperationalStatusProps) => 
           render={({ field }) => (
             <FormItem>
               <FormLabel>Door Operation</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                value={field.value || ""}
+              <Select 
+                onValueChange={field.onChange} 
                 defaultValue={field.value || ""}
+                value={field.value || ""}
               >
                 <FormControl>
                   <SelectTrigger>
@@ -62,20 +63,22 @@ const ElevatorOperationalStatus = ({ form }: ElevatorOperationalStatusProps) => 
                   <SelectItem value="normal">Normal</SelectItem>
                   <SelectItem value="slow">Slow</SelectItem>
                   <SelectItem value="noisy">Noisy</SelectItem>
-                  <SelectItem value="obstructed">Obstructed</SelectItem>
-                  <SelectItem value="faulty">Faulty</SelectItem>
+                  <SelectItem value="misaligned">Misaligned</SelectItem>
+                  <SelectItem value="inoperative">Inoperative</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
             </FormItem>
           )}
         />
+      </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
         <FormField
           control={form.control}
           name="unusual_noise_elevator"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between space-y-0 rounded-md border p-4">
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
                 <FormLabel>Unusual Noise</FormLabel>
               </div>
@@ -93,9 +96,9 @@ const ElevatorOperationalStatus = ({ form }: ElevatorOperationalStatusProps) => 
           control={form.control}
           name="vibration_elevator"
           render={({ field }) => (
-            <FormItem className="flex flex-row items-center justify-between space-y-0 rounded-md border p-4">
+            <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>Excessive Vibration</FormLabel>
+                <FormLabel>Abnormal Vibration</FormLabel>
               </div>
               <FormControl>
                 <Switch

@@ -9,7 +9,7 @@ import MaintenanceStatus from "./form/MaintenanceStatus";
 import MaintenanceObservations from "./form/MaintenanceObservations";
 import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
 import CoolingTowerFields from "./form/CoolingTowerFields";
-import ElevatorMaintenanceFields from "./form/ElevatorMaintenanceFields";
+import ElevatorMaintenanceFields from "./form/elevator/ElevatorMaintenanceFields";
 import RestroomMaintenanceFields from "./form/RestroomMaintenanceFields";
 import DocumentManager from "./documents/DocumentManager";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
