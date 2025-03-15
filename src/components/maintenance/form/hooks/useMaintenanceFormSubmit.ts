@@ -54,6 +54,17 @@ export const useMaintenanceFormSubmit = (
       
       const { selected_location, ...formData } = values;
       
+      // First, check if the equipment_type is valid according to the database constraint
+      const { data: validTypes, error: validTypesError } = await supabase
+        .from('pg_enum')
+        .select('enumlabel')
+        .eq('enumtypid', 'maintenance_check_status'::regtype)
+        .contains('enumlabel', equipmentType);
+        
+      if (validTypesError) {
+        console.error('Error checking valid equipment types:', validTypesError);
+      }
+      
       // Filter out fields that don't exist in the database
       const {
         unusual_noise_elevator,
@@ -76,7 +87,7 @@ export const useMaintenanceFormSubmit = (
       } = formData;
       
       // Prepare submission data with proper type conversions
-      const submissionData: Database['public']['Tables']['hvac_maintenance_checks']['Insert'] = {
+      const submissionData: any = {
         ...validDbFields,
         equipment_type: equipmentType,
         check_date: new Date().toISOString(),
