@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { normalizeString } from "@/utils/locationMatching";
@@ -51,9 +52,15 @@ export const useEquipmentQuery = (locationId: string) => {
         const normalizedName = normalizeString(e.name);
         
         // Match if location contains store number OR name contains store number
+        // Also include elevators and restrooms for any location
+        const isElevatorOrRestroom = 
+          e.name.toLowerCase().includes('elevator') || 
+          e.name.toLowerCase().includes('restroom');
+        
         const isMatch = normalizedLocation.includes(normalizedStoreNumber) || 
                        normalizedName.includes(normalizedStoreNumber) ||
-                       normalizedLocation.includes('dadeland home');
+                       normalizedLocation.includes('dadeland home') ||
+                       isElevatorOrRestroom;
 
         console.log('Equipment match check:', {
           equipmentName: e.name,
@@ -62,6 +69,7 @@ export const useEquipmentQuery = (locationId: string) => {
           normalizedLocation,
           normalizedStoreNumber,
           normalizedName,
+          isElevatorOrRestroom,
           isMatch
         });
 
