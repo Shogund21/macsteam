@@ -36,7 +36,10 @@ export const EquipmentCard = ({ equipment, onStatusChange, onDelete }: Equipment
             variant="outline" 
             size="sm"
             className="flex items-center text-blue-500 hover:text-blue-600 hover:bg-blue-50"
-            onClick={() => navigate(`/equipment/${equipment.id}`)}
+            onClick={(e) => {
+              e.stopPropagation();
+              navigate(`/equipment/${equipment.id}`);
+            }}
           >
             <QrCode className="h-4 w-4 mr-1" />
             View

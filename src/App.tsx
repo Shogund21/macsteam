@@ -1,49 +1,45 @@
 
-import React from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
 import Index from "@/pages/Index";
 import Equipment from "@/pages/Equipment";
-import Projects from "@/pages/Projects";
-import Settings from "@/pages/Settings";
+import EquipmentDetails from "@/pages/EquipmentDetails";
 import AddEquipment from "@/pages/AddEquipment";
+import Projects from "@/pages/Projects";
 import AddProject from "@/pages/AddProject";
 import MaintenanceChecks from "@/pages/MaintenanceChecks";
-import PrintView from "@/pages/PrintView";
 import Analytics from "@/pages/Analytics";
-import EquipmentDetails from "@/pages/EquipmentDetails";
-import { Toaster } from "@/components/ui/toaster";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Settings from "@/pages/Settings";
+import PrintView from "@/pages/PrintView";
+import "./App.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 1,
       refetchOnWindowFocus: false,
+      retry: 1,
     },
   },
 });
 
 function App() {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/equipment" element={<Equipment />} />
-            <Route path="/equipment/details/:id" element={<EquipmentDetails />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/add-equipment" element={<AddEquipment />} />
-            <Route path="/add-project" element={<AddProject />} />
-            <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
-            <Route path="/print" element={<PrintView />} />
-            <Route path="/analytics" element={<Analytics />} />
-          </Routes>
-          <Toaster />
-        </BrowserRouter>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/equipment" element={<Equipment />} />
+        <Route path="/equipment/:id" element={<EquipmentDetails />} />
+        <Route path="/add-equipment" element={<AddEquipment />} />
+        <Route path="/projects" element={<Projects />} />
+        <Route path="/add-project" element={<AddProject />} />
+        <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
+        <Route path="/analytics" element={<Analytics />} />
+        <Route path="/settings" element={<Settings />} />
+        <Route path="/print" element={<PrintView />} />
+      </Routes>
+      <Toaster />
+    </QueryClientProvider>
   );
 }
 

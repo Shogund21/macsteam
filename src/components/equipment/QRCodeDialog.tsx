@@ -29,7 +29,7 @@ export function QRCodeDialog({ equipment }: QRCodeDialogProps) {
           QR Code
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-white">
         <DialogHeader>
           <DialogTitle className="text-black">QR Code for {equipment.name}</DialogTitle>
           <DialogDescription>
