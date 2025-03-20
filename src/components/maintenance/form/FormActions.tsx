@@ -8,6 +8,8 @@ interface FormActionsProps {
 }
 
 const FormActions = ({ onCancel, isEditing = false, isSubmitting = false }: FormActionsProps) => {
+  console.log('FormActions render:', { isEditing, isSubmitting });
+  
   return (
     <div className="flex flex-col md:flex-row justify-end gap-2 pt-4 border-t">
       <Button

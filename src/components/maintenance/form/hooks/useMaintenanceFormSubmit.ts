@@ -47,7 +47,9 @@ export const useMaintenanceFormSubmit = (
       // Submit to database (update or create)
       let dbResponse;
       if (initialData && initialData.id) {
+        console.log('Updating existing check with ID:', initialData.id);
         dbResponse = await maintenanceDbService.updateMaintenanceCheck(initialData.id, submissionData);
+        console.log('Update response:', dbResponse);
       } else {
         dbResponse = await maintenanceDbService.createMaintenanceCheck(submissionData);
       }

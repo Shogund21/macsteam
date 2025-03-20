@@ -41,6 +41,14 @@ export const maintenanceDbService = {
       throw new Error('Missing maintenance check ID for update');
     }
     
+    // Ensure we're not sending undefined values
+    Object.keys(data).forEach(key => {
+      if (data[key] === undefined) {
+        console.log(`Removing undefined value for field: ${key}`);
+        delete data[key];
+      }
+    });
+    
     const { data: result, error } = await supabase
       .from('hvac_maintenance_checks')
       .update(data)
@@ -62,6 +70,14 @@ export const maintenanceDbService = {
   async createMaintenanceCheck(data: any) {
     console.log('Creating new record');
     console.log('Creation data:', JSON.stringify(data, null, 2));
+    
+    // Ensure we're not sending undefined values
+    Object.keys(data).forEach(key => {
+      if (data[key] === undefined) {
+        console.log(`Removing undefined value for field: ${key}`);
+        delete data[key];
+      }
+    });
     
     const { data: result, error } = await supabase
       .from('hvac_maintenance_checks')

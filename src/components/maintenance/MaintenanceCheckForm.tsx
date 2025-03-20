@@ -1,4 +1,5 @@
 
+import React, { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
@@ -17,7 +18,6 @@ import { useMaintenanceFormSubmit } from "./form/hooks/useMaintenanceFormSubmit"
 import FormSection from "./form/FormSection";
 import FormActions from "./form/FormActions";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useState, useEffect } from "react";
 import useFormValidation from "./form/hooks/useFormValidation";
 
 interface MaintenanceCheckFormProps {
@@ -120,34 +120,18 @@ const MaintenanceCheckForm = ({
     
     setIsSubmitting(true);
     try {
+      // Ensure location_id is preserved for updates
+      if (initialData && initialData.location_id && !values.location_id) {
+        console.log('Preserving original location_id:', initialData.location_id);
+        values.location_id = initialData.location_id;
+      }
+      
       await handleSubmit(values);
     } catch (error) {
       console.error('Error in form submission:', error);
     } finally {
       console.log('Form submission completed');
       setIsSubmitting(false);
-    }
-  };
-
-  const renderMaintenanceFields = () => {
-    switch (equipmentType) {
-      case 'ahu':
-        return <AHUMaintenanceFields form={form} />;
-      case 'cooling_tower':
-        return <CoolingTowerFields form={form} />;
-      case 'elevator':
-        return <ElevatorMaintenanceFields form={form} />;
-      case 'restroom':
-        return <RestroomMaintenanceFields form={form} />;
-      case 'chiller':
-      default:
-        return (
-          <>
-            <MaintenanceReadings form={form} />
-            <MaintenanceStatus form={form} />
-            <MaintenanceObservations form={form} />
-          </>
-        );
     }
   };
 
