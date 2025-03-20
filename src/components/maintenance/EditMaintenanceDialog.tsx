@@ -23,13 +23,18 @@ const EditMaintenanceDialog = ({
   console.log('EditMaintenanceDialog - Initial check data:', check);
 
   const handleComplete = () => {
+    console.log('EditMaintenanceDialog - Handling completion');
     onComplete();
     onOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={(newOpen) => {
-      if (isSubmitting) return; // Prevent closing during submission
+      if (isSubmitting) {
+        console.log('Preventing dialog close during submission');
+        return; // Prevent closing during submission
+      }
+      console.log('Dialog open state changing to:', newOpen);
       onOpenChange(newOpen);
     }}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">

@@ -5,9 +5,15 @@ interface FormActionsProps {
   onCancel: () => void;
   isEditing?: boolean;
   isSubmitting?: boolean;
+  onSubmit?: () => void; // Add explicit onSubmit handler
 }
 
-const FormActions = ({ onCancel, isEditing = false, isSubmitting = false }: FormActionsProps) => {
+const FormActions = ({ 
+  onCancel, 
+  isEditing = false, 
+  isSubmitting = false,
+  onSubmit
+}: FormActionsProps) => {
   console.log('FormActions render:', { isEditing, isSubmitting });
   
   return (
@@ -22,7 +28,8 @@ const FormActions = ({ onCancel, isEditing = false, isSubmitting = false }: Form
       </Button>
       
       <Button 
-        type="submit"
+        type={onSubmit ? "button" : "submit"}
+        onClick={onSubmit}
         className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white"
         disabled={isSubmitting}
       >

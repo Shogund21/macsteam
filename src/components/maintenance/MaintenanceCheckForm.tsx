@@ -157,6 +157,12 @@ const MaintenanceCheckForm = ({
     }
   };
 
+  // Manual form submission handler for the button click
+  const manualSubmit = () => {
+    console.log('Manual submit triggered');
+    form.handleSubmit(onSubmitForm)();
+  };
+
   if (isLoadingEquipment || isLoadingTechnicians) {
     return <div className="p-4 text-center">Loading...</div>;
   }
@@ -191,6 +197,7 @@ const MaintenanceCheckForm = ({
             onCancel={onComplete}
             isEditing={!!initialData}
             isSubmitting={isSubmitting}
+            onSubmit={initialData ? manualSubmit : undefined} // Use manual submit for edit mode
           />
         </div>
       </form>

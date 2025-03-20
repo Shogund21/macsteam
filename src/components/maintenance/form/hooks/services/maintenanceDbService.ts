@@ -49,19 +49,27 @@ export const maintenanceDbService = {
       }
     });
     
-    const { data: result, error } = await supabase
-      .from('hvac_maintenance_checks')
-      .update(data)
-      .eq('id', checkId)
-      .select();
-      
-    if (error) {
-      console.error('Error updating maintenance check:', error);
-      throw new Error(`Failed to update maintenance check: ${error.message}`);
-    }
+    // Add updated_at timestamp
+    data.updated_at = new Date().toISOString();
     
-    console.log('Update successful, affected rows:', result?.length || 0);
-    return { data: result, error };
+    try {
+      const { data: result, error } = await supabase
+        .from('hvac_maintenance_checks')
+        .update(data)
+        .eq('id', checkId)
+        .select();
+        
+      if (error) {
+        console.error('Error updating maintenance check:', error);
+        throw error;
+      }
+      
+      console.log('Update successful, affected rows:', result?.length || 0);
+      return { data: result, error: null };
+    } catch (error: any) {
+      console.error('Exception during update operation:', error);
+      return { data: null, error };
+    }
   },
 
   /**
@@ -79,17 +87,22 @@ export const maintenanceDbService = {
       }
     });
     
-    const { data: result, error } = await supabase
-      .from('hvac_maintenance_checks')
-      .insert(data)
-      .select();
+    try {
+      const { data: result, error } = await supabase
+        .from('hvac_maintenance_checks')
+        .insert(data)
+        .select();
+        
+      if (error) {
+        console.error('Error creating maintenance check:', error);
+        throw error;
+      }
       
-    if (error) {
-      console.error('Error creating maintenance check:', error);
-      throw new Error(`Failed to create maintenance check: ${error.message}`);
+      console.log('Creation successful, new record:', result);
+      return { data: result, error: null };
+    } catch (error: any) {
+      console.error('Exception during create operation:', error);
+      return { data: null, error };
     }
-    
-    console.log('Creation successful, new record:', result);
-    return { data: result, error };
   }
 };

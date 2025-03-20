@@ -76,6 +76,7 @@ export const useMaintenanceFormSubmit = (
         title: "Error",
         description: error.message || `Failed to ${initialData ? 'update' : 'submit'} maintenance check. Please try again.`,
       });
+      throw error; // Re-throw to let the caller handle it
     }
   };
 
