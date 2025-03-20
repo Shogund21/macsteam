@@ -17,7 +17,7 @@ import { useMaintenanceFormSubmit } from "./form/hooks/useMaintenanceFormSubmit"
 import FormSection from "./form/FormSection";
 import FormActions from "./form/FormActions";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -29,6 +29,13 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
   const form = useMaintenanceForm(initialData);
   const handleSubmit = useMaintenanceFormSubmit(onComplete, initialData);
   const isMobile = useIsMobile();
+
+  // Log initialData to help with debugging
+  useEffect(() => {
+    if (initialData) {
+      console.log('EditMaintenanceForm initialData:', initialData);
+    }
+  }, [initialData]);
 
   const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
@@ -86,12 +93,21 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
   const equipmentType = getEquipmentType();
 
   const onSubmitForm = async (values: any) => {
-    if (isSubmitting) return;
+    console.log('Form submission initiated with values:', values);
+    console.log('Is update mode:', !!initialData);
+    
+    if (isSubmitting) {
+      console.log('Preventing double submission');
+      return;
+    }
     
     setIsSubmitting(true);
     try {
       await handleSubmit(values);
+    } catch (error) {
+      console.error('Error in form submission:', error);
     } finally {
+      console.log('Form submission completed');
       setIsSubmitting(false);
     }
   };

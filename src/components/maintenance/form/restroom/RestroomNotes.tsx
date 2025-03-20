@@ -18,7 +18,7 @@ const RestroomNotes = ({ form }: RestroomNotesProps) => {
         name="restroom_notes"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Additional Notes</FormLabel>
+            <FormLabel>Additional Notes (Optional)</FormLabel>
             <FormControl>
               <Textarea
                 placeholder="Enter any additional notes or observations about the restroom condition (optional)"

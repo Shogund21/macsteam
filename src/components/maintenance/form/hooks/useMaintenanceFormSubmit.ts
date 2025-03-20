@@ -15,6 +15,10 @@ export const useMaintenanceFormSubmit = (
       console.log('Submitting form with values:', values);
       console.log('Update mode:', !!initialData);
       
+      if (initialData) {
+        console.log('Initial data ID for update:', initialData.id);
+      }
+      
       // Get equipment details to determine type
       const { data: equipment, error: equipmentError } = await supabase
         .from('equipment')
@@ -61,6 +65,14 @@ export const useMaintenanceFormSubmit = (
         equipmentType = 'general'; // fallback to general if type is unknown
       }
       
+      // Helper function to handle empty strings and null values
+      const processField = (value: any) => {
+        if (value === "" || value === undefined) {
+          return null;
+        }
+        return value;
+      };
+      
       // Prepare the submission data properly based on equipment type
       let submissionData: any = {
         equipment_id: values.equipment_id,
@@ -73,14 +85,6 @@ export const useMaintenanceFormSubmit = (
       if (!initialData) {
         submissionData.check_date = new Date().toISOString();
       }
-      
-      // Helper function to handle empty strings and null values
-      const processField = (value: any) => {
-        if (value === "" || value === undefined) {
-          return null;
-        }
-        return value;
-      };
       
       // Handle equipment-specific data mapping
       if (equipmentType === 'elevator') {
@@ -160,15 +164,12 @@ export const useMaintenanceFormSubmit = (
       }
 
       console.log('Final submission data:', submissionData);
-      console.log('Is update mode:', !!initialData);
-      if (initialData) {
-        console.log('Updating record with ID:', initialData.id);
-      }
-
+      
       // Use different approach for update vs insert
       let dbResponse;
+      
       if (initialData) {
-        console.log('Updating existing record:', initialData.id);
+        console.log('Updating existing record with ID:', initialData.id);
         dbResponse = await supabase
           .from('hvac_maintenance_checks')
           .update(submissionData)
@@ -185,7 +186,7 @@ export const useMaintenanceFormSubmit = (
         throw dbResponse.error;
       }
 
-      console.log('Submission successful!');
+      console.log('Submission successful!', dbResponse);
       
       toast({
         title: "Success",
