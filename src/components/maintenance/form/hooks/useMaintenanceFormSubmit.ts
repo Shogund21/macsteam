@@ -1,7 +1,7 @@
 
 import { useToast } from "@/hooks/use-toast";
 import { MaintenanceCheck } from "@/types/maintenance";
-import { MaintenanceFormValues } from "./useMaintenanceForm";
+import { MaintenanceFormValues } from "./schema/maintenanceFormSchema";
 import { detectEquipmentType, isValidEquipmentType } from "./utils/equipmentTypeDetection";
 import { mapMaintenanceData } from "./services/maintenanceDataMapper";
 import { maintenanceDbService } from "./services/maintenanceDbService";
@@ -46,7 +46,7 @@ export const useMaintenanceFormSubmit = (
       
       // Submit to database (update or create)
       let dbResponse;
-      if (initialData) {
+      if (initialData && initialData.id) {
         dbResponse = await maintenanceDbService.updateMaintenanceCheck(initialData.id, submissionData);
       } else {
         dbResponse = await maintenanceDbService.createMaintenanceCheck(submissionData);
@@ -67,12 +67,12 @@ export const useMaintenanceFormSubmit = (
       });
       
       onComplete();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting maintenance check:', error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: `Failed to ${initialData ? 'update' : 'submit'} maintenance check. Please try again.`,
+        description: error.message || `Failed to ${initialData ? 'update' : 'submit'} maintenance check. Please try again.`,
       });
     }
   };

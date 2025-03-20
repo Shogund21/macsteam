@@ -6,6 +6,7 @@ export const useFormValidation = () => {
   const { toast } = useToast();
   
   const validateForm = (values: MaintenanceFormValues): boolean => {
+    // Check required fields
     if (!values.equipment_id || !values.technician_id) {
       console.error('Missing required fields:', { 
         equipment_id: values.equipment_id, 
@@ -20,6 +21,8 @@ export const useFormValidation = () => {
       
       return false;
     }
+    
+    // Add additional validation as needed here
     
     return true;
   };

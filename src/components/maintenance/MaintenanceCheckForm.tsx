@@ -18,22 +18,34 @@ import FormSection from "./form/FormSection";
 import FormActions from "./form/FormActions";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useState, useEffect } from "react";
+import useFormValidation from "./form/hooks/useFormValidation";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
   initialData?: MaintenanceCheck;
+  isSubmitting?: boolean;
+  setIsSubmitting?: (isSubmitting: boolean) => void;
 }
 
-const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormProps) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const MaintenanceCheckForm = ({ 
+  onComplete, 
+  initialData,
+  isSubmitting: externalIsSubmitting,
+  setIsSubmitting: externalSetIsSubmitting
+}: MaintenanceCheckFormProps) => {
+  const [internalIsSubmitting, setInternalIsSubmitting] = useState(false);
+  const isSubmitting = externalIsSubmitting !== undefined ? externalIsSubmitting : internalIsSubmitting;
+  const setIsSubmitting = externalSetIsSubmitting || setInternalIsSubmitting;
+  
   const form = useMaintenanceForm(initialData);
   const handleSubmit = useMaintenanceFormSubmit(onComplete, initialData);
+  const validateForm = useFormValidation();
   const isMobile = useIsMobile();
 
   // Log initialData to help with debugging
   useEffect(() => {
     if (initialData) {
-      console.log('EditMaintenanceForm initialData:', initialData);
+      console.log('MaintenanceCheckForm initialData:', initialData);
     }
   }, [initialData]);
 
@@ -98,6 +110,11 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
     
     if (isSubmitting) {
       console.log('Preventing double submission');
+      return;
+    }
+    
+    // Validate form before submission
+    if (!validateForm(values)) {
       return;
     }
     

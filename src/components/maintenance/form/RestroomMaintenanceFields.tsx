@@ -11,6 +11,14 @@ interface RestroomMaintenanceFieldsProps {
 }
 
 const RestroomMaintenanceFields = ({ form }: RestroomMaintenanceFieldsProps) => {
+  // Make sure the restroom notes field is registered
+  React.useEffect(() => {
+    if (!form.getValues('restroom_notes')) {
+      // Ensure the field exists in form state
+      form.register('restroom_notes');
+    }
+  }, [form]);
+  
   return (
     <div className="space-y-6">
       <RestroomFixturesStatus form={form} />
