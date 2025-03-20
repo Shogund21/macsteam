@@ -17,6 +17,7 @@ import { useMaintenanceFormSubmit } from "./form/hooks/useMaintenanceFormSubmit"
 import FormSection from "./form/FormSection";
 import FormActions from "./form/FormActions";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useState } from "react";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -24,6 +25,7 @@ interface MaintenanceCheckFormProps {
 }
 
 const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormProps) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const form = useMaintenanceForm(initialData);
   const handleSubmit = useMaintenanceFormSubmit(onComplete, initialData);
   const isMobile = useIsMobile();
@@ -83,6 +85,17 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
 
   const equipmentType = getEquipmentType();
 
+  const onSubmitForm = async (values: any) => {
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
+    try {
+      await handleSubmit(values);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const renderMaintenanceFields = () => {
     switch (equipmentType) {
       case 'ahu':
@@ -111,7 +124,7 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6">
         <div className="grid gap-6">
           <div className={`${isMobile ? 'text-center mb-4' : ''}`}>
             <h2 className={`text-xl ${isMobile ? '' : 'text-2xl'} font-bold`}>
@@ -138,6 +151,7 @@ const MaintenanceCheckForm = ({ onComplete, initialData }: MaintenanceCheckFormP
           <FormActions 
             onCancel={onComplete}
             isEditing={!!initialData}
+            isSubmitting={isSubmitting}
           />
         </div>
       </form>

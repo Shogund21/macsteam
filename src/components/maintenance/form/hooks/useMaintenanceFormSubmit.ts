@@ -3,8 +3,6 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { MaintenanceCheck } from "@/types/maintenance";
 import { MaintenanceFormValues } from "./useMaintenanceForm";
-import { Database } from "@/integrations/supabase/types";
-import useEquipmentTypeDetection from "./useEquipmentTypeDetection";
 
 export const useMaintenanceFormSubmit = (
   onComplete: () => void,
@@ -15,6 +13,7 @@ export const useMaintenanceFormSubmit = (
   const handleSubmit = async (values: MaintenanceFormValues) => {
     try {
       console.log('Submitting form with values:', values);
+      console.log('Update mode:', !!initialData);
       
       // Get equipment details to determine type
       const { data: equipment, error: equipmentError } = await supabase
@@ -63,14 +62,17 @@ export const useMaintenanceFormSubmit = (
       }
       
       // Prepare the submission data properly based on equipment type
-      // For elevator and restroom, we need to handle their specific fields differently
       let submissionData: any = {
         equipment_id: values.equipment_id,
         technician_id: values.technician_id,
         equipment_type: equipmentType,
-        check_date: new Date().toISOString(),
         status: 'completed' as const
       };
+      
+      // Update check_date only for new entries, not for updates
+      if (!initialData) {
+        submissionData.check_date = new Date().toISOString();
+      }
       
       // Handle equipment-specific data mapping
       if (equipmentType === 'elevator') {
@@ -150,6 +152,10 @@ export const useMaintenanceFormSubmit = (
       }
 
       console.log('Final submission data:', submissionData);
+      console.log('Is update mode:', !!initialData);
+      if (initialData) {
+        console.log('Updating record with ID:', initialData.id);
+      }
 
       // Use different approach for update vs insert
       let dbResponse;

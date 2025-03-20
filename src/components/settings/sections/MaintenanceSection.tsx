@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -11,6 +12,7 @@ import MaintenanceCheckItem from "../maintenance/MaintenanceCheckItem";
 
 export const MaintenanceSection = () => {
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [selectedCheck, setSelectedCheck] = useState<MaintenanceCheck | null>(null);
   const [actionType, setActionType] = useState<'edit' | 'delete'>('edit');
   const { toast } = useToast();
@@ -79,7 +81,11 @@ export const MaintenanceSection = () => {
           variant: "destructive",
         });
       }
+    } else if (actionType === 'edit') {
+      // Open the edit dialog after password verification succeeds
+      setIsEditDialogOpen(true);
     }
+    
     setIsPasswordModalOpen(false);
   };
 
@@ -111,14 +117,15 @@ export const MaintenanceSection = () => {
           onSuccess={handlePasswordSuccess}
         />
 
-        {selectedCheck && actionType === 'edit' && (
+        {selectedCheck && (
           <EditMaintenanceDialog
             check={selectedCheck}
-            open={isPasswordModalOpen}
-            onOpenChange={(open) => setIsPasswordModalOpen(open)}
+            open={isEditDialogOpen}
+            onOpenChange={setIsEditDialogOpen}
             onComplete={() => {
               refetch();
               setSelectedCheck(null);
+              setIsEditDialogOpen(false);
             }}
           />
         )}
