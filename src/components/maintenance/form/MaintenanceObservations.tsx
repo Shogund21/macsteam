@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,7 +37,11 @@ const MaintenanceObservations = ({ form }: MaintenanceObservationsProps) => {
             <FormItem>
               <FormLabel>Noise Description</FormLabel>
               <FormControl>
-                <Textarea {...field} className="bg-white" />
+                <Textarea 
+                  {...field} 
+                  value={field.value || ""} 
+                  className="bg-white" 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -70,7 +75,11 @@ const MaintenanceObservations = ({ form }: MaintenanceObservationsProps) => {
             <FormItem>
               <FormLabel>Vibration Description</FormLabel>
               <FormControl>
-                <Textarea {...field} className="bg-white" />
+                <Textarea 
+                  {...field} 
+                  value={field.value || ""} 
+                  className="bg-white" 
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -83,9 +92,14 @@ const MaintenanceObservations = ({ form }: MaintenanceObservationsProps) => {
         name="notes"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Additional Notes</FormLabel>
+            <FormLabel>Additional Notes (Optional)</FormLabel>
             <FormControl>
-              <Textarea {...field} className="bg-white" />
+              <Textarea 
+                {...field} 
+                value={field.value || ""} 
+                className="bg-white" 
+                placeholder="Enter any additional observations or notes (optional)"
+              />
             </FormControl>
             <FormMessage />
           </FormItem>

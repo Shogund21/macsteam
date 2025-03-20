@@ -24,7 +24,7 @@ export const maintenanceFormSchema = z.object({
   vibration_description: z.string().optional(),
   oil_level_status: naString.optional(),
   condenser_condition: naString.optional(),
-  notes: z.string().optional(),
+  notes: z.string().optional().nullable(),
   
   // AHU specific fields
   air_filter_cleaned: z.boolean().optional(),
@@ -46,8 +46,7 @@ export const maintenanceFormSchema = z.object({
   vibration_elevator: z.boolean().optional(),
   emergency_phone: z.string().optional(),
   elevator_lighting: z.string().optional(),
-  // Removed: alarm_button as it doesn't exist in the database
-  elevator_notes: z.string().optional(),
+  elevator_notes: z.string().optional().nullable(),
   
   // Restroom fields
   sink_status: z.string().optional(),
@@ -58,12 +57,12 @@ export const maintenanceFormSchema = z.object({
   soap_supply: z.string().optional(),
   toilet_paper_supply: z.string().optional(),
   floor_condition: z.string().optional(),
-  restroom_notes: z.string().optional(),
+  restroom_notes: z.string().optional().nullable(),
   
   // Common fields
-  troubleshooting_notes: z.string().optional(),
-  corrective_actions: z.string().optional(),
-  maintenance_recommendations: z.string().optional(),
+  troubleshooting_notes: z.string().optional().nullable(),
+  corrective_actions: z.string().optional().nullable(),
+  maintenance_recommendations: z.string().optional().nullable(),
   images: z.array(z.string()).optional(),
 });
 
@@ -87,6 +86,12 @@ export const useMaintenanceForm = (initialData?: MaintenanceCheck) => {
         selected_location: "",
         equipment_id: "",
         technician_id: "",
+        notes: "",
+        restroom_notes: "",
+        elevator_notes: "",
+        troubleshooting_notes: "",
+        corrective_actions: "",
+        maintenance_recommendations: "",
       };
 
   return useForm<MaintenanceFormValues>({

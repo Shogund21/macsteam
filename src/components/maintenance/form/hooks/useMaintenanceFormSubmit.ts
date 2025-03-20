@@ -74,38 +74,46 @@ export const useMaintenanceFormSubmit = (
         submissionData.check_date = new Date().toISOString();
       }
       
+      // Helper function to handle empty strings and null values
+      const processField = (value: any) => {
+        if (value === "" || value === undefined) {
+          return null;
+        }
+        return value;
+      };
+      
       // Handle equipment-specific data mapping
       if (equipmentType === 'elevator') {
         // Map elevator-specific fields
         submissionData = {
           ...submissionData,
           // Copy elevator fields to the appropriate database fields
-          elevator_operation: values.elevator_operation ?? null,
-          door_operation: values.door_operation ?? null,
-          emergency_phone: values.emergency_phone ?? null,
-          elevator_lighting: values.elevator_lighting ?? null,
-          elevator_notes: values.elevator_notes ?? null,
+          elevator_operation: processField(values.elevator_operation),
+          door_operation: processField(values.door_operation),
+          emergency_phone: processField(values.emergency_phone),
+          elevator_lighting: processField(values.elevator_lighting),
+          elevator_notes: processField(values.elevator_notes),
           // Include general fields that might be used for reporting
           unusual_noise: values.unusual_noise_elevator ?? false,
           vibration_observed: values.vibration_elevator ?? false,
-          notes: values.elevator_notes ?? null
+          notes: processField(values.elevator_notes)
         };
       } else if (equipmentType === 'restroom') {
         // Map restroom-specific fields
         submissionData = {
           ...submissionData,
           // Map restroom-specific fields to database columns
-          sink_status: values.sink_status ?? null,
-          toilet_status: values.toilet_status ?? null,
-          urinal_status: values.urinal_status ?? null,
-          hand_dryer_status: values.hand_dryer_status ?? null,
-          cleanliness_level: values.cleanliness_level ?? null,
-          soap_supply: values.soap_supply ?? null,
-          toilet_paper_supply: values.toilet_paper_supply ?? null,
-          floor_condition: values.floor_condition ?? null,
-          restroom_notes: values.restroom_notes ?? null,
+          sink_status: processField(values.sink_status),
+          toilet_status: processField(values.toilet_status),
+          urinal_status: processField(values.urinal_status),
+          hand_dryer_status: processField(values.hand_dryer_status),
+          cleanliness_level: processField(values.cleanliness_level),
+          soap_supply: processField(values.soap_supply),
+          toilet_paper_supply: processField(values.toilet_paper_supply),
+          floor_condition: processField(values.floor_condition),
+          restroom_notes: processField(values.restroom_notes),
           // Store restroom notes in the general notes field as well
-          notes: values.restroom_notes ?? null
+          notes: processField(values.restroom_notes)
         };
       } else {
         // For other equipment types, map standard fields
@@ -125,29 +133,29 @@ export const useMaintenanceFormSubmit = (
             null : parseFloat(formData.airflow_reading),
           
           // Copy over standard fields
-          air_filter_status: formData.air_filter_status ?? null,
-          belt_condition: formData.belt_condition ?? null,
-          refrigerant_level: formData.refrigerant_level ?? null,
+          air_filter_status: processField(formData.air_filter_status),
+          belt_condition: processField(formData.belt_condition),
+          refrigerant_level: processField(formData.refrigerant_level),
           unusual_noise: formData.unusual_noise ?? false,
           vibration_observed: formData.vibration_observed ?? false,
-          oil_level_status: formData.oil_level_status ?? null,
-          condenser_condition: formData.condenser_condition ?? null,
-          notes: formData.notes ?? null,
+          oil_level_status: processField(formData.oil_level_status),
+          condenser_condition: processField(formData.condenser_condition),
+          notes: processField(formData.notes),
           
           // AHU specific fields
           air_filter_cleaned: formData.air_filter_cleaned ?? false,
-          fan_belt_condition: formData.fan_belt_condition ?? null,
+          fan_belt_condition: processField(formData.fan_belt_condition),
           fan_bearings_lubricated: formData.fan_bearings_lubricated ?? false,
-          fan_noise_level: formData.fan_noise_level ?? null,
-          dampers_operation: formData.dampers_operation ?? null,
-          coils_condition: formData.coils_condition ?? null,
-          sensors_operation: formData.sensors_operation ?? null,
-          motor_condition: formData.motor_condition ?? null,
-          drain_pan_status: formData.drain_pan_status ?? null,
-          airflow_unit: formData.airflow_unit ?? null,
-          troubleshooting_notes: formData.troubleshooting_notes ?? null,
-          corrective_actions: formData.corrective_actions ?? null,
-          maintenance_recommendations: formData.maintenance_recommendations ?? null
+          fan_noise_level: processField(formData.fan_noise_level),
+          dampers_operation: processField(formData.dampers_operation),
+          coils_condition: processField(formData.coils_condition),
+          sensors_operation: processField(formData.sensors_operation),
+          motor_condition: processField(formData.motor_condition),
+          drain_pan_status: processField(formData.drain_pan_status),
+          airflow_unit: processField(formData.airflow_unit),
+          troubleshooting_notes: processField(formData.troubleshooting_notes),
+          corrective_actions: processField(formData.corrective_actions),
+          maintenance_recommendations: processField(formData.maintenance_recommendations)
         };
       }
 

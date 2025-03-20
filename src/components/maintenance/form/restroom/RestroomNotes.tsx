@@ -21,9 +21,10 @@ const RestroomNotes = ({ form }: RestroomNotesProps) => {
             <FormLabel>Additional Notes</FormLabel>
             <FormControl>
               <Textarea
-                placeholder="Enter any additional notes or observations about the restroom condition"
+                placeholder="Enter any additional notes or observations about the restroom condition (optional)"
                 className="min-h-[100px]"
                 {...field}
+                value={field.value || ""}
               />
             </FormControl>
             <FormMessage />
