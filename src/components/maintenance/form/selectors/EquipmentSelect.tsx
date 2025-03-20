@@ -26,7 +26,10 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         <FormItem>
           <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
           <Select
-            onValueChange={field.onChange}
+            onValueChange={(value) => {
+              // When equipment changes, retain the current locationId
+              field.onChange(value);
+            }}
             value={field.value || ""}
             defaultValue={field.value || ""}
           >

@@ -22,6 +22,12 @@ export const useFormValidation = () => {
       return false;
     }
     
+    // Log form values for debugging
+    console.log('Validating form with values:', {
+      equipment_id: values.equipment_id,
+      location_id: values.location_id
+    });
+    
     // Add additional validation as needed here
     
     return true;

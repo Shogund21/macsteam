@@ -1,3 +1,4 @@
+
 import { UseFormReturn } from "react-hook-form";
 import { Equipment, Technician } from "@/types/maintenance";
 import LocationSelect from "./selectors/LocationSelect";
@@ -11,10 +12,16 @@ interface MaintenanceBasicInfoProps {
 }
 
 const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasicInfoProps) => {
+  // Add logging to track location and equipment changes
+  const locationId = form.watch('location_id');
+  const equipmentId = form.watch('equipment_id');
+  
+  console.log('MaintenanceBasicInfo render:', { locationId, equipmentId });
+
   return (
     <div className="space-y-6">
       <LocationSelect form={form} />
-      <EquipmentSelect form={form} locationId={form.watch('location_id')} />
+      <EquipmentSelect form={form} locationId={locationId} />
       <TechnicianSelect form={form} technicians={technicians} />
     </div>
   );

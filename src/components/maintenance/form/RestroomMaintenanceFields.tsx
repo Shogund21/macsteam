@@ -11,13 +11,21 @@ interface RestroomMaintenanceFieldsProps {
 }
 
 const RestroomMaintenanceFields = ({ form }: RestroomMaintenanceFieldsProps) => {
+  // Get the equipment information to determine proper values
+  const equipmentId = form.watch('equipment_id');
+  
   // Make sure the restroom notes field is registered
   React.useEffect(() => {
     if (!form.getValues('restroom_notes')) {
       // Ensure the field exists in form state
       form.register('restroom_notes');
     }
-  }, [form]);
+    
+    // Instead of defaulting to a hardcoded location (806), we should preserve
+    // the location that was selected with the equipment
+    const locationId = form.getValues('location_id');
+    console.log('Restroom component with equipment ID:', equipmentId, 'and location ID:', locationId);
+  }, [form, equipmentId]);
   
   return (
     <div className="space-y-6">

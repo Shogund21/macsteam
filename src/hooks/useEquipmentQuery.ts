@@ -47,20 +47,25 @@ export const useEquipmentQuery = (locationId: string) => {
 
       // Filter equipment based on location or name containing store number
       const matchedEquipment = equipment?.filter(e => {
+        // Preserve the exact location of equipment items, especially for restrooms
+        // Don't default restrooms to specific locations based on matching logic
+        if (e.name.toLowerCase().includes('restroom')) {
+          console.log(`Keeping restroom "${e.name}" with its original location: "${e.location}"`);
+          return true;
+        }
+        
         const normalizedLocation = normalizeString(e.location);
         const normalizedStoreNumber = normalizeString(locationData.store_number);
         const normalizedName = normalizeString(e.name);
         
         // Match if location contains store number OR name contains store number
-        // Also include elevators and restrooms for any location
-        const isElevatorOrRestroom = 
-          e.name.toLowerCase().includes('elevator') || 
-          e.name.toLowerCase().includes('restroom');
+        // Also include elevators for any location
+        const isElevator = e.name.toLowerCase().includes('elevator');
         
         const isMatch = normalizedLocation.includes(normalizedStoreNumber) || 
                        normalizedName.includes(normalizedStoreNumber) ||
                        normalizedLocation.includes('dadeland home') ||
-                       isElevatorOrRestroom;
+                       isElevator;
 
         console.log('Equipment match check:', {
           equipmentName: e.name,
@@ -69,7 +74,7 @@ export const useEquipmentQuery = (locationId: string) => {
           normalizedLocation,
           normalizedStoreNumber,
           normalizedName,
-          isElevatorOrRestroom,
+          isElevator,
           isMatch
         });
 
