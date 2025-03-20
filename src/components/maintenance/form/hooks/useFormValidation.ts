@@ -25,7 +25,7 @@ export const useFormValidation = () => {
     // Log form values for debugging
     console.log('Validating form with values:', {
       equipment_id: values.equipment_id,
-      location_id: values.location_id
+      location_id: values.location_id || 'not set'
     });
     
     // Add additional validation as needed here

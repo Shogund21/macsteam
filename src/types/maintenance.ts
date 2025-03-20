@@ -1,3 +1,4 @@
+
 import { Database } from "@/integrations/supabase/types";
 
 export type MaintenanceCheckStatus = Database["public"]["Enums"]["maintenance_check_status"];
@@ -61,6 +62,7 @@ export interface MaintenanceCheck {
   equipment_id: string | null;
   technician_id: string | null;
   equipment_type: string | null;
+  location_id?: string | null;
   // Standard HVAC fields
   chiller_pressure_reading: number | null;
   chiller_temperature_reading: number | null;

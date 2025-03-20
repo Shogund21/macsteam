@@ -14,6 +14,7 @@ export const createDefaultValues = (initialData?: MaintenanceCheck): Partial<Mai
       chiller_pressure_reading: initialData.chiller_pressure_reading?.toString() || "NA",
       chiller_temperature_reading: initialData.chiller_temperature_reading?.toString() || "NA",
       airflow_reading: initialData.airflow_reading?.toString() || "NA",
+      location_id: initialData.location_id || "",
     };
   }
   
@@ -25,6 +26,7 @@ export const createDefaultValues = (initialData?: MaintenanceCheck): Partial<Mai
     unusual_noise_elevator: false,
     vibration_elevator: false,
     selected_location: "",
+    location_id: "",
     equipment_id: "",
     technician_id: "",
     notes: "",

@@ -23,8 +23,8 @@ const RestroomMaintenanceFields = ({ form }: RestroomMaintenanceFieldsProps) => 
     
     // Instead of defaulting to a hardcoded location (806), we should preserve
     // the location that was selected with the equipment
-    const locationId = form.getValues('location_id');
-    console.log('Restroom component with equipment ID:', equipmentId, 'and location ID:', locationId);
+    const selectedLocationId = form.watch('location_id');
+    console.log('Restroom component with equipment ID:', equipmentId, 'and location ID:', selectedLocationId);
   }, [form, equipmentId]);
   
   return (

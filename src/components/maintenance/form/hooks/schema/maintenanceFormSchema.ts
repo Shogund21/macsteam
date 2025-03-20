@@ -11,6 +11,7 @@ export const naString = z.union([z.string(), z.literal("NA")]);
  */
 export const maintenanceFormSchema = z.object({
   selected_location: z.string().optional(),
+  location_id: z.string().optional(),
   equipment_id: z.string().min(1, "Equipment is required"),
   technician_id: z.string().min(1, "Technician is required"),
   equipment_type: z.string().optional(),
