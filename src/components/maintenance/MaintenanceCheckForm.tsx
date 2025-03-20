@@ -197,7 +197,7 @@ const MaintenanceCheckForm = ({
             onCancel={onComplete}
             isEditing={!!initialData}
             isSubmitting={isSubmitting}
-            onSubmit={initialData ? manualSubmit : undefined} // Use manual submit for edit mode
+            onSubmit={manualSubmit} // Use manual submit for both create and edit modes
           />
         </div>
       </form>

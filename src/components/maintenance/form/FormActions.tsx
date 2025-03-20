@@ -5,7 +5,7 @@ interface FormActionsProps {
   onCancel: () => void;
   isEditing?: boolean;
   isSubmitting?: boolean;
-  onSubmit?: () => void; // Add explicit onSubmit handler
+  onSubmit?: () => void;
 }
 
 const FormActions = ({ 
@@ -15,6 +15,13 @@ const FormActions = ({
   onSubmit
 }: FormActionsProps) => {
   console.log('FormActions render:', { isEditing, isSubmitting });
+  
+  const handleClick = () => {
+    console.log('Submit button clicked, onSubmit handler exists:', !!onSubmit);
+    if (onSubmit) {
+      onSubmit();
+    }
+  };
   
   return (
     <div className="flex flex-col md:flex-row justify-end gap-2 pt-4 border-t">
@@ -29,7 +36,7 @@ const FormActions = ({
       
       <Button 
         type={onSubmit ? "button" : "submit"}
-        onClick={onSubmit}
+        onClick={handleClick}
         className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white"
         disabled={isSubmitting}
       >
