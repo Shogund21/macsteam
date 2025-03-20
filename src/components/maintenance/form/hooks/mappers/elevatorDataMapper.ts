@@ -1,6 +1,6 @@
 
 import { processField } from "../utils/formValueProcessors";
-import { MaintenanceFormValues } from "../useMaintenanceForm";
+import { MaintenanceFormValues } from "../schema/maintenanceFormSchema";
 
 /**
  * Maps form values to elevator specific database fields

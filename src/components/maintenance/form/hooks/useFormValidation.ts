@@ -1,6 +1,6 @@
 
 import { useToast } from "@/hooks/use-toast";
-import { MaintenanceFormValues } from "./useMaintenanceForm";
+import { MaintenanceFormValues } from "./schema/maintenanceFormSchema";
 
 export const useFormValidation = () => {
   const { toast } = useToast();
