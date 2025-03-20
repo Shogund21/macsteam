@@ -104,6 +104,28 @@ const MaintenanceCheckForm = ({
 
   const equipmentType = getEquipmentType();
 
+  // Function to render maintenance fields based on equipment type
+  const renderEquipmentTypeFields = () => {
+    switch (equipmentType) {
+      case 'ahu':
+        return <AHUMaintenanceFields form={form} />;
+      case 'cooling_tower':
+        return <CoolingTowerFields form={form} />;
+      case 'elevator':
+        return <ElevatorMaintenanceFields form={form} />;
+      case 'restroom':
+        return <RestroomMaintenanceFields form={form} />;
+      default:
+        return (
+          <>
+            <MaintenanceReadings form={form} />
+            <MaintenanceStatus form={form} />
+            <MaintenanceObservations form={form} />
+          </>
+        );
+    }
+  };
+
   const onSubmitForm = async (values: any) => {
     console.log('Form submission initiated with values:', values);
     console.log('Is update mode:', !!initialData);
@@ -158,7 +180,7 @@ const MaintenanceCheckForm = ({
           </FormSection>
           
           <FormSection>
-            {renderMaintenanceFields()}
+            {renderEquipmentTypeFields()}
           </FormSection>
 
           <FormSection>
