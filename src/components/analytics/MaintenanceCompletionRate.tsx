@@ -77,18 +77,37 @@ const MaintenanceCompletionRate = () => {
             data={chartData}
             cx="50%"
             cy="50%"
-            labelLine={false}
+            labelLine={true}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+            labelStyle={{ fontSize: '14px', fontWeight: 'bold', fill: '#333' }}
           >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip formatter={(value) => [`${value} checks`, 'Count']} />
-          <Legend />
+          <Tooltip 
+            formatter={(value) => [`${value} checks`, 'Count']}
+            contentStyle={{ 
+              fontSize: '14px', 
+              fontWeight: 'medium', 
+              backgroundColor: 'white', 
+              borderRadius: '8px', 
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)' 
+            }} 
+          />
+          <Legend 
+            layout="horizontal" 
+            verticalAlign="bottom" 
+            align="center"
+            wrapperStyle={{
+              fontSize: '14px',
+              fontWeight: 'medium',
+              paddingTop: '15px'
+            }}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>

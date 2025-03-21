@@ -30,6 +30,7 @@ const FormActions = ({
         variant="outline"
         onClick={onCancel}
         disabled={isSubmitting}
+        className="text-base font-medium"
       >
         Cancel
       </Button>
@@ -37,7 +38,7 @@ const FormActions = ({
       <Button 
         type={onSubmit ? "button" : "submit"}
         onClick={handleClick}
-        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white"
+        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white text-base font-medium"
         disabled={isSubmitting}
       >
         {isSubmitting ? (

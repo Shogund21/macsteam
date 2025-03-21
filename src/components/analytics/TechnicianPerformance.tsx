@@ -119,15 +119,37 @@ const TechnicianPerformance = () => {
           margin={{
             top: 5,
             right: 30,
-            left: 100,
+            left: 120, // Increased left margin for better name visibility
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis type="number" />
-          <YAxis type="category" dataKey="name" />
-          <Tooltip />
-          <Legend />
+          <XAxis 
+            type="number" 
+            tick={{ fontSize: 12, fontWeight: 600 }}
+          />
+          <YAxis 
+            type="category" 
+            dataKey="name" 
+            tick={{ fontSize: 13, fontWeight: 600, fill: '#333' }} 
+            width={120} // Increased width for technician names
+          />
+          <Tooltip 
+            contentStyle={{ 
+              fontSize: '14px', 
+              fontWeight: 'medium', 
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+            }} 
+          />
+          <Legend 
+            wrapperStyle={{ 
+              fontSize: '14px', 
+              fontWeight: 'medium',
+              paddingTop: '10px'
+            }} 
+          />
           <Bar dataKey="completed" name="Completed" fill="#00C49F" />
           <Bar dataKey="pending" name="Pending" fill="#FFBB28" />
           <Bar dataKey="issues" name="Issues Found" fill="#FF8042" />

@@ -68,16 +68,49 @@ const LocationBreakdown = () => {
           margin={{
             top: 5,
             right: 30,
-            left: 80,
+            left: 120, // Increased for better visibility
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis type="number" />
-          <YAxis type="category" dataKey="name" width={80} />
-          <Tooltip formatter={(value) => [`${value} equipment`, 'Count']} />
-          <Legend />
-          <Bar dataKey="value" name="Equipment Count" fill="#8884d8" />
+          <XAxis 
+            type="number" 
+            tick={{ fontSize: 12, fontWeight: 600 }}
+          />
+          <YAxis 
+            type="category" 
+            dataKey="name" 
+            width={120} 
+            tick={{ fontSize: 13, fontWeight: 600, fill: '#333' }}
+          />
+          <Tooltip 
+            formatter={(value) => [`${value} equipment`, 'Count']}
+            contentStyle={{ 
+              fontSize: '14px', 
+              fontWeight: 'medium', 
+              backgroundColor: 'white',
+              borderRadius: '8px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+            }}
+          />
+          <Legend 
+            wrapperStyle={{ 
+              fontSize: '14px', 
+              fontWeight: 'medium',
+              paddingTop: '10px'
+            }}
+          />
+          <Bar 
+            dataKey="value" 
+            name="Equipment Count" 
+            fill="#8884d8" 
+            label={{ 
+              position: 'right', 
+              fontSize: 13,
+              fontWeight: 'bold',
+              fill: '#333'
+            }}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
 
-// Define the colors for different status categories
+// Define the colors for different status categories - using more vibrant colors
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
 const EquipmentStatusChart = () => {
@@ -63,18 +63,31 @@ const EquipmentStatusChart = () => {
             data={chartData}
             cx="50%"
             cy="50%"
-            labelLine={false}
+            labelLine={true}
             outerRadius={80}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+            labelStyle={{ fontSize: '14px', fontWeight: 'bold', fill: '#333' }}
           >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip formatter={(value) => [`${value} equipment`, 'Count']} />
-          <Legend />
+          <Tooltip 
+            formatter={(value) => [`${value} equipment`, 'Count']}
+            contentStyle={{ fontSize: '14px', fontWeight: 'medium', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }} 
+          />
+          <Legend 
+            layout="horizontal" 
+            verticalAlign="bottom" 
+            align="center"
+            wrapperStyle={{
+              fontSize: '14px',
+              fontWeight: 'medium',
+              paddingTop: '15px'
+            }}
+          />
         </PieChart>
       </ResponsiveContainer>
     </div>

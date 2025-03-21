@@ -67,6 +67,30 @@
   }
 }
 
+/* Better text rendering for charts and legibility */
+text.recharts-text {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  fill: #333333 !important;
+}
+
+.recharts-default-tooltip {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  font-size: 14px !important;
+  padding: 10px 14px !important;
+}
+
+.recharts-legend-item-text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+.recharts-cartesian-axis-tick-value {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
 /* Print styles */
 @media print {
   .print-content {
