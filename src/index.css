@@ -74,6 +74,13 @@ text.recharts-text {
   fill: #333333 !important;
 }
 
+/* Style for pie chart labels */
+.recharts-pie-label-text {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  fill: #333333 !important;
+}
+
 .recharts-default-tooltip {
   border-radius: 8px !important;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
