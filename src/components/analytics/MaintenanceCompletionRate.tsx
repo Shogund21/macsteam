@@ -77,9 +77,9 @@ const MaintenanceCompletionRate = () => {
             data={chartData}
             cx="50%"
             cy="50%"
-            labelLine={true}
+            labelLine={false}
             outerRadius={75}
-            innerRadius={0}
+            innerRadius={30}
             paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
