@@ -64,7 +64,9 @@ const EquipmentStatusChart = () => {
             cx="50%"
             cy="50%"
             labelLine={true}
-            outerRadius={80}
+            outerRadius={75}
+            innerRadius={0}
+            paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
@@ -75,7 +77,13 @@ const EquipmentStatusChart = () => {
           </Pie>
           <Tooltip 
             formatter={(value) => [`${value} equipment`, 'Count']}
-            contentStyle={{ fontSize: '14px', fontWeight: 'medium', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.15)' }} 
+            contentStyle={{ 
+              fontSize: '14px', 
+              fontWeight: 'medium', 
+              backgroundColor: 'white', 
+              borderRadius: '8px', 
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)' 
+            }} 
           />
           <Legend 
             layout="horizontal" 
@@ -84,7 +92,8 @@ const EquipmentStatusChart = () => {
             wrapperStyle={{
               fontSize: '14px',
               fontWeight: 'medium',
-              paddingTop: '15px'
+              paddingTop: '20px',
+              paddingBottom: '10px'
             }}
           />
         </PieChart>

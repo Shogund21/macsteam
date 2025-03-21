@@ -78,7 +78,9 @@ const MaintenanceCompletionRate = () => {
             cx="50%"
             cy="50%"
             labelLine={true}
-            outerRadius={80}
+            outerRadius={75}
+            innerRadius={0}
+            paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
@@ -104,7 +106,8 @@ const MaintenanceCompletionRate = () => {
             wrapperStyle={{
               fontSize: '14px',
               fontWeight: 'medium',
-              paddingTop: '15px'
+              paddingTop: '20px',
+              paddingBottom: '10px'
             }}
           />
         </PieChart>
