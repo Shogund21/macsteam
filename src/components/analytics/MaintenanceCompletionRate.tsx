@@ -83,14 +83,14 @@ const MaintenanceCompletionRate = () => {
             paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
-            label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+            label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
           >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
           <Tooltip 
-            formatter={(value) => [`${value} checks`, 'Count']}
+            formatter={(value, name) => [`${value} checks`, name]}
             contentStyle={{ 
               fontSize: '14px', 
               fontWeight: 'medium', 
