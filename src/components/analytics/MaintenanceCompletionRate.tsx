@@ -78,8 +78,8 @@ const MaintenanceCompletionRate = () => {
             cx="50%"
             cy="50%"
             labelLine={false}
-            outerRadius={75}
-            innerRadius={30}
+            outerRadius={90}
+            innerRadius={45}
             paddingAngle={2}
             fill="#8884d8"
             dataKey="value"

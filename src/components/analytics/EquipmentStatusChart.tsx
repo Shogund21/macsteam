@@ -63,8 +63,8 @@ const EquipmentStatusChart = () => {
             data={chartData}
             cx="50%"
             cy="50%"
-            labelLine={true}
-            outerRadius={75}
+            labelLine={false}
+            outerRadius={80}
             innerRadius={0}
             paddingAngle={2}
             fill="#8884d8"

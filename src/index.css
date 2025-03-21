@@ -76,10 +76,10 @@ text.recharts-text {
 
 /* Style for pie chart labels */
 .recharts-pie-label-text {
-  font-size: 18px !important;
+  font-size: 20px !important;
   font-weight: 700 !important;
   fill: #333333 !important;
-  text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
+  text-shadow: 0 0 4px white, 0 0 4px white, 0 0 4px white, 0 0 4px white;
 }
 
 /* Style for legend text */
