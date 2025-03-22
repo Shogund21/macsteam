@@ -1,5 +1,5 @@
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
@@ -11,7 +11,15 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
   const isMobile = useIsMobile();
+
+  useEffect(() => {
+    setIsPageLoaded(true);
+    return () => {
+      setIsPageLoaded(false);
+    };
+  }, []);
 
   return (
     <div className="flex min-h-screen bg-background overflow-hidden">
@@ -44,7 +52,7 @@ const Layout = ({ children }: LayoutProps) => {
       <main
         className={`flex-1 overflow-auto ${
           isMobile ? "w-full pt-16 px-4" : "ml-0 px-6 py-8"
-        }`}
+        } ${isPageLoaded ? "animate-fade-in" : ""}`}
       >
         <div className="mx-auto max-w-7xl">
           {children}
@@ -54,7 +62,7 @@ const Layout = ({ children }: LayoutProps) => {
       {/* Mobile overlay */}
       {isMobile && sidebarOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30"
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 animate-fade-in"
           onClick={() => setSidebarOpen(false)}
         />
       )}
