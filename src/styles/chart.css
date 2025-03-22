@@ -8,7 +8,7 @@ text.recharts-text {
 
 /* Style for pie chart labels */
 .recharts-pie-label-text {
-  font-size: 20px !important;
+  font-size: 16px !important;
   font-weight: 700 !important;
   fill: #333333 !important;
   text-shadow: 0 0 4px white, 0 0 4px white, 0 0 4px white, 0 0 4px white;
@@ -16,7 +16,7 @@ text.recharts-text {
 
 /* Style for legend text */
 .recharts-legend-item-text {
-  font-size: 16px !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
   margin-left: 5px !important;
 }
@@ -38,4 +38,15 @@ text.recharts-text {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   font-size: 16px !important;
   padding: 10px 14px !important;
+}
+
+/* Ensure legend items have enough spacing */
+.recharts-legend-wrapper {
+  padding: 5px 0 !important;
+}
+
+/* Better legend item spacing */
+.recharts-legend-item {
+  margin-right: 12px !important;
+  margin-bottom: 8px !important;
 }
