@@ -11,6 +11,7 @@ import EquipmentFields from "./EquipmentFields";
 import FormSubmitButtons from "./FormSubmitButtons";
 import LoadingState from "./LoadingState";
 import useFormValidation from "./hooks/useFormValidation";
+import useEquipmentType from "./hooks/useEquipmentType";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -21,7 +22,9 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
   const form = useMaintenanceForm();
   const handleSubmit = useMaintenanceFormSubmit(onComplete);
   const validateForm = useFormValidation();
+  const { detectEquipmentType } = useEquipmentType();
 
+  // Fetch equipment data
   const { data: equipment, isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
@@ -35,6 +38,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     },
   });
 
+  // Fetch technicians data
   const { data: technicians, isLoading: isLoadingTechnicians } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
@@ -48,6 +52,7 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     },
   });
 
+  // Form submission handler
   const onSubmit = async (values: MaintenanceFormValues) => {
     console.log('Form submission started with values:', values);
     
@@ -69,25 +74,14 @@ const MaintenanceCheckForm = ({ onComplete }: MaintenanceCheckFormProps) => {
     }
   };
 
+  // Get selected equipment and determine type
   const selectedEquipment = equipment?.find(
     (eq) => eq.id === form.watch('equipment_id')
   );
-
-  // Determine equipment type directly in this component
-  const getEquipmentType = () => {
-    if (!selectedEquipment) return null;
-    const name = selectedEquipment.name.toLowerCase();
-    if (name.includes('ahu') || name.includes('air handler')) return 'ahu';
-    if (name.includes('chiller')) return 'chiller';
-    if (name.includes('cooling tower')) return 'cooling_tower';
-    if (name.includes('elevator')) return 'elevator';
-    if (name.includes('restroom')) return 'restroom';
-    return 'general';
-  };
-
-  const equipmentType = getEquipmentType();
+  const equipmentType = detectEquipmentType(selectedEquipment);
+  
+  // Show loading state while data is being fetched
   const isLoading = isLoadingEquipment || isLoadingTechnicians;
-
   if (isLoading) {
     return <LoadingState />;
   }
