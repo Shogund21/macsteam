@@ -25,7 +25,7 @@ export interface LineSeriesConfig {
   stroke: string;
   strokeWidth?: number;
   type?: "monotone" | "linear" | "step" | "stepBefore" | "stepAfter" | "basis" | "basisOpen" | "basisClosed" | "natural";
-  dot?: boolean;
+  dot?: boolean | object;
   activeDot?: boolean | object;
   hiddenOnMobile?: boolean;
 }
@@ -58,9 +58,18 @@ const LineChart: React.FC<LineChartProps> = ({
     bottom: isMobile ? 90 : 30,
   };
 
+  // Ensure we have data to display
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-[350px] w-full bg-gray-50 rounded-md border border-gray-100">
+        <p className="text-muted-foreground">No data available</p>
+      </div>
+    );
+  }
+
   return (
     <div className={`w-full h-full ${className}`}>
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height={height || 350}>
         <RechartsLineChart
           data={data}
           margin={margins}
@@ -103,6 +112,7 @@ const LineChart: React.FC<LineChartProps> = ({
           
           <Tooltip 
             content={<ChartTooltip formatter={tooltipFormatter} />}
+            wrapperStyle={{ zIndex: 10 }}
           />
           
           <Legend 
@@ -130,8 +140,9 @@ const LineChart: React.FC<LineChartProps> = ({
                 name={s.name} 
                 stroke={s.stroke} 
                 strokeWidth={s.strokeWidth || 2}
-                dot={s.dot ?? { r: 3 }}
+                dot={s.dot === undefined ? { r: 3 } : s.dot}
                 activeDot={s.activeDot || { r: 6 }}
+                isAnimationActive={true}
               />
             );
           })}

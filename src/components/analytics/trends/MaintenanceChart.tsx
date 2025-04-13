@@ -2,6 +2,7 @@
 import React from "react";
 import LineChart from "@/components/charts/LineChart";
 import { useIsMobile } from "@/hooks/use-mobile";
+import MaintenanceChartHelp from "./MaintenanceChartHelp";
 
 interface MaintenanceChartProps {
   chartData: any[];
@@ -18,6 +19,9 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
   
   return (
     <div className="h-full w-full">
+      <div className="flex justify-end mb-2">
+        <MaintenanceChartHelp />
+      </div>
       <LineChart 
         data={formattedData}
         series={[

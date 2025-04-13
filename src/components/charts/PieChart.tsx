@@ -14,7 +14,7 @@ import ChartTooltip from "./ChartTooltip";
 export interface PieChartDataItem {
   name: string;
   value: number;
-  [key: string]: string | number; // Add index signature
+  [key: string]: string | number;
 }
 
 interface PieChartProps {
@@ -23,7 +23,7 @@ interface PieChartProps {
   height?: number;
   className?: string;
   donut?: boolean;
-  tooltipFormatter?: (value: any, name: string) => [string, string]; // Fixed signature
+  tooltipFormatter?: (value: any, name: string) => [string, string];
 }
 
 const PieChart: React.FC<PieChartProps> = ({
@@ -53,11 +53,20 @@ const PieChart: React.FC<PieChartProps> = ({
   
   // Improved margins for better visibility
   const margins = {
-    top: 5,
-    right: 5,
-    left: 5,
+    top: 20,
+    right: 20,
+    left: 20,
     bottom: isMobile ? 50 : 20,
   };
+
+  // Ensure we have data to display
+  if (!data || data.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-full w-full bg-gray-50 rounded-md border border-gray-100">
+        <p className="text-muted-foreground">No data available</p>
+      </div>
+    );
+  }
 
   return (
     <div className={`w-full h-full ${className}`} style={{ height: height || 280 }}>
@@ -77,7 +86,6 @@ const PieChart: React.FC<PieChartProps> = ({
               if (percent < 0.08) return null;
               return `${(percent * 100).toFixed(0)}%`;
             }}
-            fontWeight="bold"
           >
             {data.map((entry, index) => (
               <Cell 
@@ -85,7 +93,6 @@ const PieChart: React.FC<PieChartProps> = ({
                 fill={colors[index % colors.length]} 
                 stroke="#fff"
                 strokeWidth={1.5}
-                strokeOpacity={1}
               />
             ))}
           </Pie>
@@ -94,6 +101,7 @@ const PieChart: React.FC<PieChartProps> = ({
             content={
               <ChartTooltip formatter={tooltipFormatter || defaultFormatter} />
             }
+            wrapperStyle={{ zIndex: 10 }}
           />
           
           <Legend 
@@ -102,7 +110,7 @@ const PieChart: React.FC<PieChartProps> = ({
             align="center"
             iconType="circle"
             iconSize={10}
-            formatter={(value) => truncateName(value)}
+            formatter={(value) => truncateName(value as string)}
             wrapperStyle={{
               fontSize: isMobile ? '10px' : '11px',
               fontWeight: 'medium',

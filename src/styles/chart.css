@@ -45,6 +45,7 @@ text.recharts-text {
   padding: 10px 12px !important;
   background-color: white !important;
   border: 1px solid #e0e0e0 !important;
+  z-index: 1000 !important;
 }
 
 /* Ensure legend items have enough spacing */
@@ -146,6 +147,11 @@ text.recharts-text {
 /* Animation for charts */
 .recharts-layer {
   transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Fix z-index for tooltips to ensure they're visible */
+.recharts-tooltip-wrapper {
+  z-index: 1000 !important;
 }
 
 /* Mobile-specific styles */

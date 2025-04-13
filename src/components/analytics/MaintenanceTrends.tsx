@@ -9,7 +9,7 @@ const MaintenanceTrends = () => {
   const { dateRange } = useAnalyticsFilters();
   const { chartData, isLoading } = useTrendsData(dateRange);
 
-  if (isLoading && chartData.length === 0) {
+  if (isLoading) {
     return (
       <div className="h-full w-full flex items-center justify-center">
         <div className="w-full space-y-4">
@@ -20,7 +20,7 @@ const MaintenanceTrends = () => {
     );
   }
 
-  if (chartData.length === 0) {
+  if (!chartData || chartData.length === 0) {
     return (
       <div className="h-full w-full flex flex-col items-center justify-center p-8 text-center">
         <div className="text-muted-foreground">
