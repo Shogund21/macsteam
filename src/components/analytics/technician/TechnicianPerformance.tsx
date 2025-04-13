@@ -11,7 +11,7 @@ const TechnicianPerformance = () => {
   }
 
   return (
-    <div className="w-full h-[400px] md:h-[450px]">
+    <div className="w-full h-[400px] md:h-[450px] overflow-visible">
       <BarChart 
         data={chartData}
         series={[
@@ -32,6 +32,7 @@ const TechnicianPerformance = () => {
           }
         ]}
         layout="vertical"
+        tooltipFormatter={(value, name) => [`${value} maintenance checks`, name]}
       />
     </div>
   );

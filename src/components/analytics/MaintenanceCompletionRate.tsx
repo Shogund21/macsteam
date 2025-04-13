@@ -1,10 +1,11 @@
+
 import { useQuery } from "@tanstack/react-query";
 import PieChart, { PieChartDataItem } from "@/components/charts/PieChart";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
 
-// Colors for the pie chart segments
+// Colors for the pie chart segments with improved contrast
 const COLORS = ['#00C49F', '#FFBB28', '#FF8042'];
 
 const MaintenanceCompletionRate = () => {
@@ -82,7 +83,7 @@ const MaintenanceCompletionRate = () => {
         data={chartData}
         colors={COLORS}
         donut={true}
-        height={450}
+        height={420}
         tooltipFormatter={(value, name) => [
           `${value} (${((value / total) * 100).toFixed(0)}%)`, 
           name

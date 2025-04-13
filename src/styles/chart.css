@@ -8,100 +8,87 @@ text.recharts-text {
 
 /* Style for pie chart labels */
 .recharts-pie-label-text {
-  font-size: 13px !important;
+  font-size: 11px !important;
   font-weight: 600 !important;
   fill: #333333 !important;
-  text-shadow: 0 0 4px white, 0 0 4px white, 0 0 4px white, 0 0 4px white;
+  text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 3px white;
 }
 
 /* Style for legend text */
 .recharts-legend-item-text {
   font-size: 12px !important;
   font-weight: 500 !important;
-  margin-left: 5px !important;
+  margin-left: 4px !important;
+  color: #333 !important;
 }
 
 /* Style for axis labels */
 .recharts-cartesian-axis-tick-value {
-  font-size: 12px !important;
+  font-size: 11px !important;
   font-weight: 500 !important;
+  fill: #333 !important;
 }
 
 /* Style for pie chart labels lines */
 .recharts-pie-label-line {
   stroke-width: 1px !important;
+  stroke: #999 !important;
 }
 
 /* Better tooltip styling */
 .recharts-default-tooltip {
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 6px !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15) !important;
   font-size: 12px !important;
-  padding: 8px 12px !important;
-  max-width: 200px !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  z-index: 1000 !important;
+  padding: 8px 10px !important;
 }
 
 /* Ensure legend items have enough spacing */
 .recharts-legend-wrapper {
-  padding: 4px 0 !important;
+  padding: 2px 0 !important;
   max-width: 100% !important;
   overflow: visible !important;
-  margin-top: 15px !important;
-  margin-bottom: 20px !important; /* Increase bottom margin for better spacing */
 }
 
 /* Better legend item spacing */
 .recharts-legend-item {
-  margin-right: 12px !important;
-  margin-bottom: 8px !important;
-  white-space: normal !important;
+  margin-right: 10px !important;
+  margin-bottom: 6px !important;
 }
 
 /* Make sure the pie chart segments are distinct */
 .recharts-sector {
   stroke: #fff !important;
   stroke-width: 1px !important;
+  stroke-opacity: 0.8 !important;
 }
 
 /* Improve responsiveness of charts */
 .recharts-responsive-container {
   width: 100% !important;
   height: 100% !important;
-  min-height: 400px !important;
+  min-height: 350px !important;
   max-width: 100% !important;
   overflow: visible !important;
-}
-
-/* Ensure the pie labels are visible */
-.recharts-pie text {
-  font-weight: 600 !important;
-  font-size: 12px !important;
 }
 
 /* Container for charts to ensure proper spacing and sizing */
 .chart-container {
   width: 100%;
   height: auto !important;
-  min-height: 400px !important;
-  max-height: 600px !important;
+  min-height: 380px !important;
+  max-height: 580px !important;
   position: relative;
   overflow: visible !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 30px !important; /* Increased padding for legend room */
-  margin-bottom: 10px !important; /* Added margin for additional spacing */
+  padding-bottom: 20px !important;
 }
 
 /* Fix for labels being cut off */
 .recharts-wrapper {
   overflow: visible !important;
-  height: auto !important;
-  min-height: 380px !important;
-  margin-bottom: 20px !important; /* Added margin for bottom spacing */
 }
 
 /* Better axis line styling */
@@ -112,35 +99,13 @@ text.recharts-text {
 /* Better grid styling */
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
-  stroke: #f0f0f0 !important;
-}
-
-/* Ensure charts don't get too squished */
-.recharts-cartesian-axis-tick {
-  line-height: 1.2 !important;
-}
-
-/* Give more space to tick labels */
-.recharts-xAxis .recharts-cartesian-axis-tick-value {
-  margin-top: 8px !important;
-}
-
-.recharts-yAxis .recharts-cartesian-axis-tick-value {
-  margin-right: 8px !important;
-}
-
-/* Ensure tooltips are visible */
-.recharts-tooltip-wrapper {
-  z-index: 1000 !important;
-  pointer-events: none !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+  stroke: #f5f5f5 !important;
 }
 
 /* Fix for horizontal bar charts - ensure text labels are visible */
 .recharts-layer .recharts-cartesian-axis-tick text {
   fill: #333 !important; 
-  font-weight: 600 !important;
+  font-weight: 500 !important;
 }
 
 /* Fix for bar labels getting cut off */
@@ -157,10 +122,9 @@ text.recharts-text {
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .chart-container {
-    min-height: 350px !important;
-    max-height: 500px !important;
-    padding-bottom: 45px !important; /* More padding for mobile legends */
-    margin-bottom: 15px !important;
+    min-height: 340px !important;
+    max-height: 480px !important;
+    padding-bottom: 30px !important;
   }
   
   text.recharts-text {
@@ -172,16 +136,11 @@ text.recharts-text {
   }
   
   .recharts-cartesian-axis-tick-value {
-    font-size: 10px !important;
+    font-size: 9px !important;
   }
   
   .recharts-pie-label-text {
-    font-size: 10px !important;
-  }
-  
-  .recharts-legend-wrapper {
-    padding: 2px 0 !important;
-    margin-bottom: 35px !important; /* Increased bottom margin for mobile */
+    font-size: 9px !important;
   }
   
   .recharts-legend-item {
@@ -190,14 +149,6 @@ text.recharts-text {
   }
   
   .recharts-responsive-container {
-    min-height: 320px !important; /* Reduced min-height for mobile */
-  }
-  
-  .recharts-pie text {
-    font-size: 10px !important;
-  }
-  
-  .recharts-wrapper {
-    min-height: 320px !important; /* Reduced min-height for mobile */
+    min-height: 300px !important;
   }
 }

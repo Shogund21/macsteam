@@ -23,7 +23,7 @@ interface PieChartProps {
   height?: number;
   className?: string;
   donut?: boolean;
-  tooltipFormatter?: (value: number, name: string) => [string, string]; // Fixed signature
+  tooltipFormatter?: (value: any, name: string) => [string, string]; // Fixed signature
 }
 
 const PieChart: React.FC<PieChartProps> = ({
@@ -44,11 +44,18 @@ const PieChart: React.FC<PieChartProps> = ({
     return [`${value} (${((value / total) * 100).toFixed(0)}%)`, name];
   };
   
+  // Truncate long names for better readability
+  const truncateName = (value: string): string => {
+    if (!value || typeof value !== 'string') return '';
+    const limit = isMobile ? 10 : 16;
+    return value.length > limit ? `${value.slice(0, limit)}...` : value;
+  };
+  
   const margins = {
     top: 20,
     right: 20,
     left: 20,
-    bottom: isMobile ? 60 : 50,
+    bottom: isMobile ? 40 : 30,
   };
 
   return (
@@ -58,22 +65,24 @@ const PieChart: React.FC<PieChartProps> = ({
           <Pie
             data={data}
             cx="50%"
-            cy="45%" 
-            labelLine={true}
-            outerRadius={isMobile ? 110 : 140}
-            innerRadius={donut ? (isMobile ? 60 : 80) : 0}
-            paddingAngle={donut ? 4 : 3}
+            cy="40%" 
+            labelLine={false}
+            outerRadius={isMobile ? 90 : 120}
+            innerRadius={donut ? (isMobile ? 50 : 70) : 0}
+            paddingAngle={donut ? 2 : 1}
             dataKey="value"
             label={({ name, percent }) => {
               // Only show label if segment is large enough
-              if (percent < 0.08 && isMobile) return null;
-              return `${name}: ${(percent * 100).toFixed(0)}%`;
+              if (percent < 0.1) return null;
+              return `${(percent * 100).toFixed(0)}%`;
             }}
           >
             {data.map((entry, index) => (
               <Cell 
                 key={`cell-${index}`} 
                 fill={colors[index % colors.length]} 
+                stroke="#fff"
+                strokeWidth={1}
               />
             ))}
           </Pie>
@@ -89,16 +98,14 @@ const PieChart: React.FC<PieChartProps> = ({
             verticalAlign="bottom" 
             align="center"
             iconType="circle"
-            formatter={(value) => {
-              const limit = isMobile ? 12 : 16;
-              return value.length > limit ? `${value.slice(0, limit)}...` : value;
-            }}
+            iconSize={8}
+            formatter={(value) => truncateName(value)}
             wrapperStyle={{
-              fontSize: isMobile ? '12px' : '14px',
+              fontSize: isMobile ? '10px' : '12px',
               fontWeight: 'medium',
               paddingTop: '20px',
               width: '100%',
-              marginBottom: isMobile ? '15px' : '0'
+              marginBottom: isMobile ? '10px' : '0'
             }}
           />
         </RechartsPieChart>

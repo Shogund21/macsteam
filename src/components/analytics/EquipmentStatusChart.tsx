@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useCompanyFilter } from "@/hooks/useCompanyFilter";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// Updated colors for better contrast
+// Updated colors for better contrast and visibility
 const COLORS = ['#4299E1', '#48BB78', '#F6AD55', '#F56565', '#805AD5', '#DD6B20', '#38B2AC'];
 
 const EquipmentStatusChart = () => {
@@ -85,7 +85,7 @@ const EquipmentStatusChart = () => {
       <PieChart 
         data={chartData}
         colors={COLORS}
-        height={450}
+        height={420}
         tooltipFormatter={(value, name) => [
           `${value} (${((value / totalEquipment) * 100).toFixed(1)}%)`, 
           name
