@@ -45,7 +45,7 @@ const LineChart: React.FC<LineChartProps> = ({
   series,
   xAxisLabel,
   yAxisLabel,
-  height = 400,
+  height,
   className = "",
   tooltipFormatter
 }) => {
@@ -53,13 +53,13 @@ const LineChart: React.FC<LineChartProps> = ({
   
   const margins = {
     top: 20,
-    right: isMobile ? 20 : 60,
-    left: isMobile ? 0 : 30,
-    bottom: isMobile ? 100 : 50,
+    right: isMobile ? 10 : 30,
+    left: isMobile ? 0 : 20,
+    bottom: isMobile ? 90 : 30,
   };
 
   return (
-    <div className={`w-full h-[${height}px] overflow-visible ${className}`}>
+    <div className={`w-full h-full ${className}`}>
       <ResponsiveContainer width="100%" height="100%">
         <RechartsLineChart
           data={data}
@@ -69,7 +69,7 @@ const LineChart: React.FC<LineChartProps> = ({
           
           <XAxis 
             dataKey="name"
-            height={isMobile ? 80 : 60}
+            height={isMobile ? 60 : 30}
             angle={isMobile ? -45 : 0}
             textAnchor={isMobile ? "end" : "middle"}
             interval={0}
@@ -87,7 +87,7 @@ const LineChart: React.FC<LineChartProps> = ({
           </XAxis>
           
           <YAxis 
-            width={isMobile ? 40 : 50}
+            width={30}
             tick={{ fontSize: isMobile ? 10 : 12 }}
             padding={{ top: 10, bottom: 10 }}
           >
@@ -109,12 +109,10 @@ const LineChart: React.FC<LineChartProps> = ({
             wrapperStyle={{ 
               paddingTop: 20,
               fontSize: isMobile ? 10 : 12,
-              width: '100%',
               marginBottom: isMobile ? 30 : 10
             }}
             iconSize={isMobile ? 8 : 10}
             verticalAlign="bottom"
-            align="center"
           />
           
           {/* Render lines for each series */}
@@ -132,7 +130,7 @@ const LineChart: React.FC<LineChartProps> = ({
                 name={s.name} 
                 stroke={s.stroke} 
                 strokeWidth={s.strokeWidth || 2}
-                dot={s.dot ?? !isMobile}
+                dot={s.dot ?? { r: 3 }}
                 activeDot={s.activeDot || { r: 6 }}
               />
             );

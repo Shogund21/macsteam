@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import MaintenanceTrends from "@/components/analytics/MaintenanceTrends";
 import EquipmentStatusChart from "@/components/analytics/EquipmentStatusChart";
 import MaintenanceCompletionRate from "@/components/analytics/MaintenanceCompletionRate";
-import TechnicianPerformance from "@/components/analytics/TechnicianPerformance";
-import LocationBreakdown from "@/components/analytics/LocationBreakdown";
+import TechnicianPerformance from "@/components/analytics/technician/TechnicianPerformance";
+import LocationBreakdown from "@/components/analytics/location/LocationBreakdown";
 import { Button } from "@/components/ui/button";
 import { Download, RefreshCw } from "lucide-react";
 import { useState } from "react";
@@ -49,7 +49,8 @@ const Analytics = () => {
   return (
     <Layout>
       <AnalyticsFilterProvider>
-        <div className="space-y-6 md:space-y-8 max-w-full p-3 md:p-4 pb-20">
+        <div className="max-w-full p-3 md:p-6 pb-20 space-y-6">
+          {/* Header Section */}
           <div className="flex flex-col gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold">Analytics & Reporting</h1>
@@ -57,6 +58,8 @@ const Analytics = () => {
                 View insights and track maintenance performance metrics
               </p>
             </div>
+            
+            {/* Controls Section */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full justify-between">
               <DatePickerWithRange defaultDateRange={defaultDateRange} />
               <div className="flex gap-2 w-full sm:w-auto">
@@ -82,39 +85,43 @@ const Analytics = () => {
           </div>
 
           {/* Main Trends Chart - Full width */}
-          <div className="bg-white shadow-md rounded-xl p-4 overflow-auto">
+          <div className="bg-white shadow rounded-xl p-4">
             <h2 className="text-lg font-semibold mb-2">Maintenance Trends over Time</h2>
-            <div className="aspect-[16/9] w-full overflow-visible min-h-[350px]">
+            <div className="h-[350px] w-full">
               <MaintenanceTrends />
             </div>
           </div>
 
-          {/* Charts - Responsive Grid layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
-            <div className="bg-white shadow-md rounded-xl p-4 min-h-[300px] overflow-auto">
+          {/* Charts Grid Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Equipment Status */}
+            <div className="bg-white shadow rounded-xl p-4">
               <h2 className="text-lg font-semibold mb-2">Equipment Status</h2>
-              <div className="aspect-[4/3] w-full overflow-visible">
+              <div className="h-[300px]">
                 <EquipmentStatusChart />
               </div>
             </div>
             
-            <div className="bg-white shadow-md rounded-xl p-4 min-h-[300px] overflow-auto">
+            {/* Maintenance Completion Rate */}
+            <div className="bg-white shadow rounded-xl p-4">
               <h2 className="text-lg font-semibold mb-2">Maintenance Completion Rate</h2>
-              <div className="aspect-[4/3] w-full overflow-visible">
+              <div className="h-[300px]">
                 <MaintenanceCompletionRate />
               </div>
             </div>
           
-            <div className="bg-white shadow-md rounded-xl p-4 min-h-[300px] overflow-auto">
+            {/* Technician Performance */}
+            <div className="bg-white shadow rounded-xl p-4">
               <h2 className="text-lg font-semibold mb-2">Technician Performance</h2>
-              <div className="aspect-[4/3] w-full overflow-visible">
+              <div className="h-[300px]">
                 <TechnicianPerformance />
               </div>
             </div>
             
-            <div className="bg-white shadow-md rounded-xl p-4 min-h-[300px] overflow-auto">
+            {/* Equipment by Location */}
+            <div className="bg-white shadow rounded-xl p-4">
               <h2 className="text-lg font-semibold mb-2">Equipment by Location</h2>
-              <div className="aspect-[4/3] w-full overflow-visible">
+              <div className="h-[300px]">
                 <LocationBreakdown />
               </div>
             </div>

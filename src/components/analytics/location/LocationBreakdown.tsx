@@ -7,24 +7,27 @@ const LocationBreakdown = () => {
   const { chartData, isLoading } = useLocationBreakdownData();
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
+    return <div className="h-full flex items-center justify-center">Loading chart data...</div>;
+  }
+
+  if (chartData.length === 0) {
+    return <div className="h-full flex items-center justify-center">No location data available</div>;
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="h-full w-full">
       <BarChart 
         data={chartData}
         series={[
           {
             dataKey: "value",
             name: "Equipment Count",
-            fill: "#7E69AB",  // More vibrant purple
+            fill: "#7E69AB",
             showLabel: true
           }
         ]}
         layout="vertical"
         tooltipFormatter={(value) => [`${value} equipment`, 'Count']}
-        height={280}
       />
     </div>
   );

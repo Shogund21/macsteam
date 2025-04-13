@@ -16,7 +16,7 @@ import ChartTooltip from "./ChartTooltip";
 
 export interface BarChartDataItem {
   name: string;
-  [key: string]: string | number; // Index signature for string keys
+  [key: string]: string | number;
 }
 
 export interface BarSeriesConfig {
@@ -43,38 +43,36 @@ const BarChart: React.FC<BarChartProps> = ({
   layout = "horizontal",
   xAxisLabel,
   yAxisLabel,
-  height = 280,
+  height,
   className = "",
   tooltipFormatter
 }) => {
   const isMobile = useIsMobile();
   
   const isVertical = layout === "vertical";
-  
-  // Improved margins for better visibility
-  const margins = {
-    top: 5,
-    right: isVertical ? (isMobile ? 30 : 50) : 10,
-    left: isVertical ? (isMobile ? 100 : 120) : (isMobile ? 10 : 30),
-    bottom: isMobile ? 50 : 30,
-  };
-  
+
   // Truncate long names for better readability
   const truncateName = (name: string): string => {
     if (!name || typeof name !== 'string') return '';
-    const limit = isMobile ? 8 : 12;
+    const limit = isMobile ? 10 : 15;
     return name.length > limit ? `${name.slice(0, limit)}...` : name;
   };
   
+  // Improved margins for better visibility
+  const margins = {
+    top: 10,
+    right: isVertical ? (isMobile ? 30 : 40) : 10,
+    left: isVertical ? (isMobile ? 80 : 100) : 10,
+    bottom: isMobile ? 50 : 25,
+  };
+  
   return (
-    <div className={`w-full h-full ${className}`} style={{ height }}>
+    <div className={`w-full h-full ${className}`}>
       <ResponsiveContainer width="100%" height="100%">
         <RechartsBarChart
           data={data}
           layout={layout}
           margin={margins}
-          barGap={isMobile ? 2 : 4}
-          barCategoryGap={isMobile ? 4 : 8}
           barSize={isVertical ? (isMobile ? 10 : 15) : undefined}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
@@ -96,24 +94,13 @@ const BarChart: React.FC<BarChartProps> = ({
             tickFormatter={
               isVertical ? undefined : truncateName
             }
-            axisLine={{ stroke: '#cccccc', strokeWidth: 1 }}
-            tickLine={{ stroke: '#cccccc' }}
-          >
-            {xAxisLabel && !isMobile && (
-              <Label 
-                value={xAxisLabel} 
-                position="insideBottom" 
-                offset={-10}
-                style={{ textAnchor: 'middle', fontSize: 11, fill: '#555555', fontWeight: 600 }}
-              />
-            )}
-          </XAxis>
+          />
           
           {/* Configure Y axis based on layout */}
           <YAxis 
             type={isVertical ? "category" : "number"}
             dataKey={isVertical ? "name" : undefined} 
-            width={isVertical ? (isMobile ? 90 : 110) : (isMobile ? 30 : 40)}
+            width={isVertical ? (isMobile ? 80 : 100) : 30}
             tick={{ 
               fontSize: isMobile ? 9 : 11,
               fontWeight: 500,
@@ -122,20 +109,8 @@ const BarChart: React.FC<BarChartProps> = ({
             tickFormatter={
               isVertical ? truncateName : undefined
             }
-            axisLine={{ stroke: '#cccccc', strokeWidth: 1 }}
-            tickLine={{ stroke: '#cccccc' }}
             tickCount={7}
-          >
-            {yAxisLabel && !isMobile && (
-              <Label 
-                value={yAxisLabel} 
-                angle={-90} 
-                position="insideLeft" 
-                offset={-5}
-                style={{ textAnchor: 'middle', fontSize: 11, fill: '#555555', fontWeight: 600 }}
-              />
-            )}
-          </YAxis>
+          />
           
           <Tooltip 
             content={<ChartTooltip formatter={tooltipFormatter} />}
@@ -146,8 +121,7 @@ const BarChart: React.FC<BarChartProps> = ({
             wrapperStyle={{ 
               fontSize: isMobile ? '10px' : '11px',
               fontWeight: 'medium',
-              paddingTop: '10px',
-              width: '100%'
+              paddingTop: '10px'
             }}
             verticalAlign="bottom"
             align="center"

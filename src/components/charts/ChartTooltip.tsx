@@ -5,16 +5,16 @@ interface ChartTooltipProps {
   active?: boolean;
   payload?: any[];
   label?: string;
-  formatter?: (value: any, name: string) => [string, string]; // Consistent formatter signature
+  formatter?: (value: any, name: string) => [string, string];
 }
 
 const ChartTooltip: React.FC<ChartTooltipProps> = ({ active, payload, label, formatter }) => {
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="bg-white p-3 border border-gray-200 rounded-md shadow-lg max-w-[250px] z-[1000]">
-      {label && <p className="font-semibold text-gray-800 text-sm mb-2 border-b pb-1">{label}</p>}
-      <div className="space-y-2">
+    <div className="bg-white p-2 border border-gray-200 rounded-md shadow-lg z-50 max-w-[200px]">
+      {label && <p className="font-semibold text-gray-800 text-xs mb-1">{label}</p>}
+      <div className="space-y-1">
         {payload.map((entry, index) => {
           const [value, name] = formatter 
             ? formatter(entry.value, entry.name)
@@ -23,18 +23,18 @@ const ChartTooltip: React.FC<ChartTooltipProps> = ({ active, payload, label, for
           return (
             <div 
               key={index} 
-              className="flex items-center justify-between gap-2"
+              className="flex items-center justify-between gap-1 text-xs"
             >
-              <span className="flex items-center gap-1.5">
+              <span className="flex items-center gap-1">
                 <span 
-                  className="w-3 h-3 rounded-sm inline-block" 
+                  className="w-2 h-2 rounded-sm inline-block" 
                   style={{ backgroundColor: entry.color }}
                 />
-                <span className="text-xs font-medium text-gray-700 truncate max-w-[120px]">
+                <span className="font-medium text-gray-700 truncate max-w-[100px]">
                   {name}:
                 </span>
               </span>
-              <span className="text-xs font-bold whitespace-nowrap">
+              <span className="font-bold whitespace-nowrap text-right">
                 {value}
               </span>
             </div>
