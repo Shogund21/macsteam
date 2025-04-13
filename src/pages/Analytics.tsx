@@ -6,7 +6,7 @@ import MaintenanceCompletionRate from "@/components/analytics/MaintenanceComplet
 import TechnicianPerformance from "@/components/analytics/technician/TechnicianPerformance";
 import LocationBreakdown from "@/components/analytics/location/LocationBreakdown";
 import { Button } from "@/components/ui/button";
-import { Download, RefreshCw, Filter, ArrowUpDown, HelpCircle } from "lucide-react";
+import { Download, RefreshCw, Filter, ArrowUpDown, HelpCircle, BarChart4Icon, ListFilterIcon } from "lucide-react";
 import { useState } from "react";
 import { DatePickerWithRange } from "@/components/analytics/DateRangePicker";
 import { DateRange } from "react-day-picker";
@@ -82,7 +82,7 @@ const Analytics = () => {
                   onClick={() => setActiveView("charts")}
                   className="w-full sm:w-auto"
                 >
-                  <BarChart4 className="mr-2 h-4 w-4" />
+                  <BarChart4Icon className="mr-2 h-4 w-4" />
                   Charts
                 </Button>
                 <Button 
@@ -91,7 +91,7 @@ const Analytics = () => {
                   onClick={() => setActiveView("tables")}
                   className="w-full sm:w-auto"
                 >
-                  <ListFilter className="mr-2 h-4 w-4" />
+                  <ListFilterIcon className="mr-2 h-4 w-4" />
                   Tables
                 </Button>
               </div>
