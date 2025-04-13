@@ -85,43 +85,43 @@ const Analytics = () => {
           </div>
 
           {/* Main Trends Chart - Full width */}
-          <div className="bg-white shadow rounded-xl p-4">
+          <div className="bg-white shadow rounded-xl p-4 w-full">
             <h2 className="text-lg font-semibold mb-2">Maintenance Trends over Time</h2>
-            <div className="h-[350px] w-full">
+            <div className="h-[400px] w-full">
               <MaintenanceTrends />
             </div>
           </div>
 
           {/* Charts Grid Layout */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             {/* Equipment Status */}
-            <div className="bg-white shadow rounded-xl p-4">
+            <div className="bg-white shadow rounded-xl p-4 w-full">
               <h2 className="text-lg font-semibold mb-2">Equipment Status</h2>
-              <div className="h-[300px]">
+              <div className="h-[350px] w-full">
                 <EquipmentStatusChart />
               </div>
             </div>
             
             {/* Maintenance Completion Rate */}
-            <div className="bg-white shadow rounded-xl p-4">
+            <div className="bg-white shadow rounded-xl p-4 w-full">
               <h2 className="text-lg font-semibold mb-2">Maintenance Completion Rate</h2>
-              <div className="h-[300px]">
+              <div className="h-[350px] w-full">
                 <MaintenanceCompletionRate />
               </div>
             </div>
           
             {/* Technician Performance */}
-            <div className="bg-white shadow rounded-xl p-4">
+            <div className="bg-white shadow rounded-xl p-4 w-full">
               <h2 className="text-lg font-semibold mb-2">Technician Performance</h2>
-              <div className="h-[300px]">
+              <div className="h-[350px] w-full">
                 <TechnicianPerformance />
               </div>
             </div>
             
             {/* Equipment by Location */}
-            <div className="bg-white shadow rounded-xl p-4">
+            <div className="bg-white shadow rounded-xl p-4 w-full">
               <h2 className="text-lg font-semibold mb-2">Equipment by Location</h2>
-              <div className="h-[300px]">
+              <div className="h-[350px] w-full">
                 <LocationBreakdown />
               </div>
             </div>
@@ -133,3 +133,4 @@ const Analytics = () => {
 };
 
 export default Analytics;
+
