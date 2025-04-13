@@ -8,8 +8,7 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer,
-  Label
+  ResponsiveContainer
 } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ChartTooltip from "./ChartTooltip";
