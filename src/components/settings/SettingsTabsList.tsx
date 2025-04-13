@@ -1,3 +1,4 @@
+
 import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Building2, 
@@ -29,7 +30,7 @@ const SettingsTabsList = ({ tabs, isMobile }: SettingsTabsListProps) => {
       case "features":
         return <Settings className="h-4 w-4" />;
       case "maintenance":
-        return <Wrench className="h-4 w-4" />;
+        return <Wrench className="h-4 w-4" />; // Changed from Tool to Wrench
       case "appearance":
         return <Paintbrush className="h-4 w-4" />;
       case "documentation":
