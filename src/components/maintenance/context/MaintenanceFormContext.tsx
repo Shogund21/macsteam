@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { MaintenanceCheck, Equipment, Technician } from '@/types/maintenance';
 import { MaintenanceFormValues } from '../form/hooks/useMaintenanceForm';
