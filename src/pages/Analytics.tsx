@@ -47,7 +47,7 @@ const Analytics = () => {
   return (
     <Layout>
       <AnalyticsFilterProvider>
-        <div className="space-y-8 max-w-full">
+        <div className="space-y-8 max-w-full px-2">
           <div className="flex flex-col gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold">Analytics & Reporting</h1>
@@ -80,57 +80,57 @@ const Analytics = () => {
           </div>
 
           {/* Main Trends Chart */}
-          <Card className="overflow-visible">
+          <Card className="overflow-visible p-1">
             <CardHeader className="pb-2">
               <CardTitle>Maintenance Trends over Time</CardTitle>
               <CardDescription>
                 Track historical maintenance activities and identify patterns
               </CardDescription>
             </CardHeader>
-            <CardContent className="overflow-visible">
+            <CardContent className="overflow-visible pt-0">
               <MaintenanceTrends />
             </CardContent>
           </Card>
 
           {/* First Row of Charts - Equipment Status and Maintenance Completion */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="h-full overflow-visible">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="h-full overflow-visible p-1">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment Status</CardTitle>
                 <CardDescription>Current status of all equipment</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible">
+              <CardContent className="overflow-visible pt-0">
                 <EquipmentStatusChart />
               </CardContent>
             </Card>
-            <Card className="h-full overflow-visible">
+            <Card className="h-full overflow-visible p-1">
               <CardHeader className="pb-2">
                 <CardTitle>Maintenance Completion Rate</CardTitle>
                 <CardDescription>Breakdown of maintenance check statuses</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible">
+              <CardContent className="overflow-visible pt-0">
                 <MaintenanceCompletionRate />
               </CardContent>
             </Card>
           </div>
 
           {/* Second Row of Charts - Technician Performance and Location Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <Card className="h-full overflow-visible">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <Card className="h-full overflow-visible p-1">
               <CardHeader className="pb-2">
                 <CardTitle>Technician Performance</CardTitle>
                 <CardDescription>Maintenance checks by technician</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible">
+              <CardContent className="overflow-visible pt-0">
                 <TechnicianPerformance />
               </CardContent>
             </Card>
-            <Card className="h-full overflow-visible">
+            <Card className="h-full overflow-visible p-1">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment by Location</CardTitle>
                 <CardDescription>Distribution of equipment across locations</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible">
+              <CardContent className="overflow-visible pt-0">
                 <LocationBreakdown />
               </CardContent>
             </Card>

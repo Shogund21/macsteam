@@ -72,42 +72,28 @@ const MaintenanceCompletionRate = () => {
   }, [maintenanceData]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[250px]">Loading chart data...</div>;
   }
 
+  // Calculate total for percentages
+  const total = chartData.reduce((sum, entry) => sum + entry.value, 0);
+
   return (
-    <div className="h-72 md:h-96 w-full chart-container">
+    <div className="h-[300px] md:h-[350px] w-full chart-container">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
-            cy="45%" 
-            labelLine={true}
-            outerRadius={isMobile ? 65 : 85}
+            cy="42%" 
+            labelLine={false}
+            outerRadius={isMobile ? 70 : 85}
             innerRadius={isMobile ? 35 : 45}
             paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
-            label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
-              const RADIAN = Math.PI / 180;
-              const radius = 25 + innerRadius + (outerRadius - innerRadius);
-              const x = cx + radius * Math.cos(-midAngle * RADIAN);
-              const y = cy + radius * Math.sin(-midAngle * RADIAN);
-              
-              return (
-                <text
-                  x={x}
-                  y={y}
-                  textAnchor={x > cx ? 'start' : 'end'}
-                  dominantBaseline="central"
-                  fill="#333"
-                  fontSize={12}
-                  fontWeight="bold"
-                >
-                  {`${(percent * 100).toFixed(0)}%`}
-                </text>
-              );
+            label={({ name, percent }) => {
+              return `${name}: ${(percent * 100).toFixed(0)}%`;
             }}
           >
             {chartData.map((entry, index) => (
@@ -115,7 +101,7 @@ const MaintenanceCompletionRate = () => {
             ))}
           </Pie>
           <Tooltip 
-            formatter={(value, name) => [`${value} checks`, name]}
+            formatter={(value, name) => [`${value} (${((value as number / total) * 100).toFixed(0)}%)`, name]}
             contentStyle={{ 
               fontSize: isMobile ? '12px' : '14px', 
               fontWeight: 'medium', 

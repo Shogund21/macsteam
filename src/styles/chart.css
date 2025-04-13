@@ -8,7 +8,7 @@ text.recharts-text {
 
 /* Style for pie chart labels */
 .recharts-pie-label-text {
-  font-size: 12px !important;
+  font-size: 13px !important;
   font-weight: 600 !important;
   fill: #333333 !important;
   text-shadow: 0 0 4px white, 0 0 4px white, 0 0 4px white, 0 0 4px white;
@@ -38,6 +38,9 @@ text.recharts-text {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   font-size: 12px !important;
   padding: 8px 12px !important;
+  max-width: 200px !important; /* Prevent tooltips from getting too wide */
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* Ensure legend items have enough spacing */
@@ -45,6 +48,7 @@ text.recharts-text {
   padding: 4px 0 !important;
   max-width: 100% !important;
   overflow: visible !important;
+  margin-top: 10px !important;
 }
 
 /* Better legend item spacing */
@@ -64,7 +68,7 @@ text.recharts-text {
 .recharts-responsive-container {
   width: 100% !important;
   height: 100% !important;
-  min-height: 200px !important;
+  min-height: 250px !important;
   max-width: 100% !important;
   overflow: visible !important;
 }
@@ -82,12 +86,15 @@ text.recharts-text {
   overflow: visible;
   position: relative;
   height: auto !important;
-  min-height: 250px;
+  min-height: 300px;
+  max-height: 400px;
 }
 
 /* Fix for labels being cut off */
 .recharts-wrapper {
   overflow: visible !important;
+  height: auto !important;
+  min-height: 250px !important;
 }
 
 /* Better axis line styling */
@@ -99,6 +106,11 @@ text.recharts-text {
 .recharts-cartesian-grid-horizontal line,
 .recharts-cartesian-grid-vertical line {
   stroke: #f0f0f0 !important;
+}
+
+/* Ensure charts don't get too squished */
+.recharts-cartesian-axis-tick {
+  line-height: 1.2 !important;
 }
 
 /* Mobile-specific styles */
@@ -130,7 +142,7 @@ text.recharts-text {
   }
   
   .recharts-responsive-container {
-    min-height: 180px !important;
+    min-height: 220px !important;
   }
   
   .recharts-pie text {
@@ -138,7 +150,8 @@ text.recharts-text {
   }
   
   .chart-container {
-    min-height: 200px;
+    min-height: 250px;
+    max-height: 350px;
     padding: 0.25rem;
   }
 }

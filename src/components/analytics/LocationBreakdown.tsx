@@ -67,19 +67,19 @@ const LocationBreakdown = () => {
   }, [equipmentData, isMobile]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[250px]">Loading chart data...</div>;
   }
 
   return (
-    <div className="h-72 md:h-96 w-full chart-container">
+    <div className="h-[300px] md:h-[350px] w-full chart-container">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
             top: 10,
-            right: isMobile ? 15 : 40,
-            left: isMobile ? 70 : 110,
+            right: isMobile ? 30 : 60,
+            left: isMobile ? 80 : 120,
             bottom: 10,
           }}
         >
@@ -91,9 +91,13 @@ const LocationBreakdown = () => {
           <YAxis 
             type="category" 
             dataKey="name" 
-            width={isMobile ? 70 : 110} 
+            width={isMobile ? 80 : 120} 
             tick={{ fontSize: isMobile ? 10 : 12, fontWeight: 600, fill: '#333' }}
-            tickFormatter={(value) => isMobile && value.length > 8 ? `${value.slice(0, 8)}...` : value}
+            tickFormatter={(value) => {
+              // Truncate long location names
+              const limit = isMobile ? 8 : 15;
+              return value.length > limit ? `${value.slice(0, limit)}...` : value;
+            }}
           />
           <Tooltip 
             formatter={(value) => [`${value} equipment`, 'Count']}
@@ -123,7 +127,8 @@ const LocationBreakdown = () => {
               fontSize: isMobile ? 10 : 12,
               fontWeight: 'bold',
               fill: '#333',
-              offset: 5
+              offset: 5,
+              formatter: (value) => value.toString()
             }}
           />
         </BarChart>

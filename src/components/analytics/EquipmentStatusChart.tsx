@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useCompanyFilter } from "@/hooks/useCompanyFilter";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-// Updated colors for better contrast and distinctiveness
+// Updated colors for better contrast
 const COLORS = ['#4299E1', '#48BB78', '#F6AD55', '#F56565', '#805AD5', '#DD6B20', '#38B2AC'];
 
 const EquipmentStatusChart = () => {
@@ -74,51 +74,30 @@ const EquipmentStatusChart = () => {
   }, [equipmentData, isMobile]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[250px]">Loading chart data...</div>;
   }
 
   // Calculate total equipment count for percentage calculation
   const totalEquipment = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="h-72 md:h-96 w-full chart-container">
+    <div className="h-[300px] md:h-[350px] w-full chart-container">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
-            cy="45%"
-            labelLine={true}
-            outerRadius={isMobile ? 65 : 85}
+            cy="42%"
+            labelLine={false}
+            outerRadius={isMobile ? 70 : 85}
             innerRadius={0}
             paddingAngle={3}
             fill="#8884d8"
             dataKey="value"
-            label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-              // Only show percentage for items that are significant enough (>5%)
+            label={({ name, percent }) => {
+              // Only show label for segments that are significant enough (>5%)
               if (percent < 0.05) return null;
-              
-              const RADIAN = Math.PI / 180;
-              const radius = 5 + outerRadius;
-              const x = cx + radius * Math.cos(-midAngle * RADIAN);
-              const y = cy + radius * Math.sin(-midAngle * RADIAN);
-              
-              return (
-                <text 
-                  x={x} 
-                  y={y} 
-                  fill="#333"
-                  textAnchor={x > cx ? 'start' : 'end'}
-                  dominantBaseline="central"
-                  className="font-semibold"
-                  style={{ 
-                    fontSize: isMobile ? 10 : 12,
-                    textShadow: '0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white' 
-                  }}
-                >
-                  {`${(percent * 100).toFixed(0)}%`}
-                </text>
-              );
+              return `${name}: ${(percent * 100).toFixed(0)}%`;
             }}
           >
             {chartData.map((entry, index) => (
@@ -144,8 +123,8 @@ const EquipmentStatusChart = () => {
             verticalAlign={isMobile ? "bottom" : "middle"}
             iconSize={10}
             iconType="circle"
-            formatter={(value, entry, index) => {
-              const limit = isMobile ? 8 : 12;
+            formatter={(value) => {
+              const limit = isMobile ? 8 : 14;
               return value.length > limit ? `${value.slice(0, limit)}...` : value;
             }}
             wrapperStyle={{
