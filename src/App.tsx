@@ -13,6 +13,7 @@ import Analytics from "@/pages/Analytics";
 import Settings from "@/pages/Settings";
 import PrintView from "@/pages/PrintView";
 import PageTransition from "@/components/PageTransition";
+import { CompanyProvider } from "@/contexts/CompanyContext";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -48,10 +49,12 @@ function AnimatedRoutes() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <AnimatedRoutes />
-        <Toaster />
-      </BrowserRouter>
+      <CompanyProvider>
+        <BrowserRouter>
+          <AnimatedRoutes />
+          <Toaster />
+        </BrowserRouter>
+      </CompanyProvider>
     </QueryClientProvider>
   );
 }

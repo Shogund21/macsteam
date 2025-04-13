@@ -4,20 +4,29 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recha
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
+import { useCompanyFilter } from "@/hooks/useCompanyFilter";
 
 // Updated colors for better contrast and distinctiveness
 const COLORS = ['#4299E1', '#48BB78', '#F6AD55', '#F56565', '#805AD5', '#DD6B20', '#38B2AC'];
 
 const EquipmentStatusChart = () => {
   const { dateRange } = useAnalyticsFilters();
+  const { companyId, applyCompanyFilter } = useCompanyFilter();
   const [chartData, setChartData] = useState<any[]>([]);
 
   const { data: equipmentData, isLoading } = useQuery({
-    queryKey: ['equipment', dateRange],
+    queryKey: ['equipment', dateRange, companyId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('equipment')
         .select('*');
+      
+      // Apply company filter if available
+      if (companyId) {
+        query = query.eq('company_id', companyId);
+      }
+      
+      const { data, error } = await query;
       
       if (error) {
         console.error('Error fetching equipment:', error);

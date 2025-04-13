@@ -2,33 +2,28 @@
 import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-export const SETTINGS_TABS = [
-  { id: "general", label: "General" },
-  { id: "appearance", label: "Appearance" },
-  { id: "notifications", label: "Notifications" },
-  { id: "documentation", label: "Documentation" },
-  { id: "locations", label: "Locations" },
-  { id: "maintenance", label: "Maintenance" },
-  { id: "features", label: "Features" },
-  { id: "refactoring", label: "Refactoring" },
-];
-
 export const useSettingsTabs = () => {
   const isMobile = useIsMobile();
   const [activeTab, setActiveTab] = useState("general");
   const [showTabList, setShowTabList] = useState(!isMobile);
 
-  // Update showTabList when screen size changes
+  const tabs = [
+    { id: "general", label: "General" },
+    { id: "notifications", label: "Notifications" },
+    { id: "locations", label: "Locations" },
+    { id: "companies", label: "Companies" },
+    { id: "features", label: "Features" },
+    { id: "maintenance", label: "Maintenance" },
+    { id: "appearance", label: "Appearance" },
+    { id: "documentation", label: "Documentation" },
+  ];
+
   useEffect(() => {
     setShowTabList(!isMobile);
   }, [isMobile]);
 
-  const currentTabIndex = SETTINGS_TABS.findIndex(tab => tab.id === activeTab);
-  const prevTab = SETTINGS_TABS[currentTabIndex - 1];
-  const nextTab = SETTINGS_TABS[currentTabIndex + 1];
-
-  const handleTabChange = (value: string) => {
-    setActiveTab(value);
+  const handleTabChange = (tabId: string) => {
+    setActiveTab(tabId);
     if (isMobile) {
       setShowTabList(false);
     }
@@ -38,14 +33,28 @@ export const useSettingsTabs = () => {
     setShowTabList(!showTabList);
   };
 
+  const prevTab = () => {
+    const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
+    if (currentIndex > 0) {
+      setActiveTab(tabs[currentIndex - 1].id);
+    }
+  };
+
+  const nextTab = () => {
+    const currentIndex = tabs.findIndex(tab => tab.id === activeTab);
+    if (currentIndex < tabs.length - 1) {
+      setActiveTab(tabs[currentIndex + 1].id);
+    }
+  };
+
   return {
-    tabs: SETTINGS_TABS,
+    tabs,
     activeTab,
     showTabList,
     prevTab,
     nextTab,
     isMobile,
     handleTabChange,
-    toggleTabList
+    toggleTabList,
   };
 };

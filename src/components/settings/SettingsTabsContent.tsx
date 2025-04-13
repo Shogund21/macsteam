@@ -1,92 +1,48 @@
 
-import { TabsContent } from "@/components/ui/tabs";
-import { GeneralSection } from "@/components/settings/sections/GeneralSection";
-import { AppearanceSection } from "@/components/settings/sections/AppearanceSection";
-import { NotificationsSection } from "@/components/settings/sections/NotificationsSection";
-import { DocumentationSection } from "@/components/settings/sections/DocumentationSection";
-import { LocationsSection } from "@/components/settings/sections/LocationsSection";
-import { MaintenanceSection } from "@/components/settings/sections/MaintenanceSection";
-import { FeaturesSection } from "@/components/settings/sections/FeaturesSection";
-import { RefactoringRules } from "@/components/refactoring/RefactoringRules";
-import FormSection from "@/components/maintenance/form/FormSection";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { GeneralSection } from "./sections/GeneralSection";
+import { NotificationsSection } from "./sections/NotificationsSection";
+import { LocationsSection } from "./sections/LocationsSection";
+import { FeaturesSection } from "./sections/FeaturesSection";
+import { MaintenanceSection } from "./sections/MaintenanceSection";
+import { DocumentationSection } from "./sections/DocumentationSection";
+import { AppearanceSection } from "./sections/AppearanceSection";
+import { CompaniesSection } from "./sections/CompaniesSection";
 
 interface SettingsTabsContentProps {
   isMobile: boolean;
 }
 
 const SettingsTabsContent = ({ isMobile }: SettingsTabsContentProps) => {
-  if (isMobile) {
-    return (
-      <FormSection noPadding>
-        <TabsContent value="general">
+  return (
+    <div className={`${isMobile ? 'mt-0' : 'mt-2'}`}>
+      <Tabs defaultValue="general">
+        <TabsContent value="general" className="mt-0">
           <GeneralSection />
         </TabsContent>
-        
-        <TabsContent value="appearance">
-          <AppearanceSection />
-        </TabsContent>
-        
-        <TabsContent value="notifications">
+        <TabsContent value="notifications" className="mt-0">
           <NotificationsSection />
         </TabsContent>
-        
-        <TabsContent value="documentation">
-          <DocumentationSection />
-        </TabsContent>
-        
-        <TabsContent value="locations">
+        <TabsContent value="locations" className="mt-0">
           <LocationsSection />
         </TabsContent>
-        
-        <TabsContent value="maintenance">
-          <MaintenanceSection />
+        <TabsContent value="companies" className="mt-0">
+          <CompaniesSection />
         </TabsContent>
-
-        <TabsContent value="features">
+        <TabsContent value="features" className="mt-0">
           <FeaturesSection />
         </TabsContent>
-
-        <TabsContent value="refactoring">
-          <RefactoringRules />
+        <TabsContent value="maintenance" className="mt-0">
+          <MaintenanceSection />
         </TabsContent>
-      </FormSection>
-    );
-  }
-  
-  return (
-    <>
-      <TabsContent value="general">
-        <GeneralSection />
-      </TabsContent>
-      
-      <TabsContent value="appearance">
-        <AppearanceSection />
-      </TabsContent>
-      
-      <TabsContent value="notifications">
-        <NotificationsSection />
-      </TabsContent>
-      
-      <TabsContent value="documentation">
-        <DocumentationSection />
-      </TabsContent>
-      
-      <TabsContent value="locations">
-        <LocationsSection />
-      </TabsContent>
-      
-      <TabsContent value="maintenance">
-        <MaintenanceSection />
-      </TabsContent>
-
-      <TabsContent value="features">
-        <FeaturesSection />
-      </TabsContent>
-
-      <TabsContent value="refactoring">
-        <RefactoringRules />
-      </TabsContent>
-    </>
+        <TabsContent value="appearance" className="mt-0">
+          <AppearanceSection />
+        </TabsContent>
+        <TabsContent value="documentation" className="mt-0">
+          <DocumentationSection />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 
