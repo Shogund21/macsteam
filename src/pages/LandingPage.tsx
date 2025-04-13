@@ -20,7 +20,7 @@ const LandingPage = () => {
       <header className="p-6 border-b bg-white shadow-sm">
         <div className="container mx-auto flex items-center justify-between">
           <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-            Facility Management System
+            AssetGuardian
           </h1>
         </div>
       </header>
@@ -28,7 +28,7 @@ const LandingPage = () => {
       <main className="flex-grow container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Welcome to the Facility Management System</h2>
+            <h2 className="text-3xl font-bold mb-4">Welcome to AssetGuardian</h2>
             <p className="text-lg text-gray-600 mb-8">
               Select your company to access your facility management dashboard
             </p>
@@ -70,7 +70,7 @@ const LandingPage = () => {
 
       <footer className="bg-white py-6 border-t">
         <div className="container mx-auto px-4 text-center text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Facility Management System. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} AssetGuardian. All rights reserved.</p>
         </div>
       </footer>
     </div>
