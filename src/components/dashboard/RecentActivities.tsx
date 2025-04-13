@@ -10,8 +10,6 @@ import {
   getOriginalDate 
 } from "@/utils/activityUtils";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Clock } from "lucide-react";
 
 interface Activity {
   id: string;
@@ -23,11 +21,9 @@ interface Activity {
 
 const RecentActivities = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchRecentActivities = async () => {
-      setIsLoading(true);
       try {
         const { data: projects } = await supabase
           .from("projects")
@@ -78,13 +74,11 @@ const RecentActivities = () => {
             const dateB = new Date(getOriginalDate(b.timestamp)).getTime();
             return dateB - dateA;
           })
-          .slice(0, 5);
+          .slice(0, 4);
 
         setActivities(sortedActivities);
       } catch (error) {
         console.error("Error fetching recent activities:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -115,42 +109,23 @@ const RecentActivities = () => {
   }, []);
 
   return (
-    <Card className="border shadow-md rounded-xl overflow-hidden">
-      <CardHeader className="bg-white border-b pb-3 flex flex-row items-center justify-between">
-        <div>
-          <CardTitle className="text-lg font-bold text-gray-800">Recent Activities</CardTitle>
-          <p className="text-sm text-gray-500 mt-1">Latest updates and changes</p>
+    <Card className="overflow-hidden border-none shadow-lg bg-gradient-to-br from-white to-blue-50 animate-fade-in">
+      <CardHeader className="bg-white pb-2">
+        <div className="flex justify-between items-center">
+          <CardTitle className="text-lg font-bold text-black">Recent Activities</CardTitle>
+          <Badge className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white">Last Updated</Badge>
         </div>
-        <Badge className="bg-blue-500 hover:bg-blue-600 text-white flex items-center gap-1">
-          <Clock className="h-3 w-3" />
-          Live Updates
-        </Badge>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="divide-y">
-          {isLoading ? (
-            <>
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="p-4">
-                  <div className="flex items-center space-x-4">
-                    <Skeleton className="h-10 w-10 rounded-full" />
-                    <div className="space-y-2 flex-1">
-                      <Skeleton className="h-4 w-3/4" />
-                      <Skeleton className="h-3 w-1/2" />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </>
-          ) : activities.length === 0 ? (
-            <div className="py-8 text-center">
-              <p className="text-gray-500">No recent activities</p>
-            </div>
+      <CardContent className="p-4">
+        <div className="space-y-3">
+          {activities.length === 0 ? (
+            <p className="text-black text-center py-4">No recent activities</p>
           ) : (
             activities.map((activity) => (
-              <div key={activity.id} className="hover:bg-gray-50 transition-colors duration-200">
-                <ActivityItem {...activity} />
-              </div>
+              <ActivityItem
+                key={activity.id}
+                {...activity}
+              />
             ))
           )}
         </div>
