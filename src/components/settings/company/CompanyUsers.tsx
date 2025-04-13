@@ -29,6 +29,11 @@ interface User {
   is_admin: boolean;
 }
 
+interface AuthUser {
+  id: string;
+  email?: string;
+}
+
 const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -58,6 +63,16 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
       const usersWithEmails = await Promise.all(
         data.map(async (item) => {
           try {
+            if (!item.user_id) {
+              return {
+                id: item.id,
+                user_id: undefined,
+                email: "Unknown user",
+                role: item.role,
+                is_admin: item.is_admin,
+              };
+            }
+            
             // Get user email from auth.users table
             const { data: userData, error: userError } = await supabase.auth.admin.getUserById(item.user_id);
             
@@ -114,13 +129,13 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
       setIsAdding(true);
 
       // First, check if the user exists by searching all auth users
-      const { data: userData, error: userError } = await supabase.auth.admin.listUsers();
+      const { data: authData, error: authError } = await supabase.auth.admin.listUsers();
       
-      if (userError) throw userError;
+      if (authError) throw authError;
       
-      const user = userData?.users?.find(u => u.email === newUserEmail);
+      const foundUser = authData?.users?.find(u => u.email === newUserEmail) as AuthUser | undefined;
       
-      if (!user) {
+      if (!foundUser) {
         toast({
           title: "Error",
           description: "User not found. Please check the email address.",
@@ -134,7 +149,7 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
         .from("company_users")
         .select("*")
         .eq("company_id", companyId)
-        .eq("user_id", user.id);
+        .eq("user_id", foundUser.id);
 
       if (existingUsers && existingUsers.length > 0) {
         toast({
@@ -151,7 +166,7 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
         .insert([
           {
             company_id: companyId,
-            user_id: user.id,
+            user_id: foundUser.id,
             role: newUserRole,
             is_admin: newUserIsAdmin,
           },
