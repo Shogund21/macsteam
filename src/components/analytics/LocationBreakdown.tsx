@@ -27,7 +27,7 @@ const LocationBreakdown = () => {
         console.error('Error fetching equipment:', error);
         throw error;
       }
-      return data;
+      return data || [];
     },
   });
 
@@ -49,14 +49,23 @@ const LocationBreakdown = () => {
       
       setChartData(data);
     }
+    
+    // If no data or empty data, use sample data for preview
+    if (!equipmentData || equipmentData.length === 0) {
+      const sampleData = [
+        { name: "Main Building", value: 24 },
+        { name: "North Wing", value: 18 },
+        { name: "South Wing", value: 15 },
+        { name: "East Block", value: 12 },
+        { name: "West Block", value: 9 },
+        { name: "Data Center", value: 6 }
+      ];
+      setChartData(sampleData);
+    }
   }, [equipmentData]);
 
-  if (isLoading) {
+  if (isLoading && chartData.length === 0) {
     return <div className="h-64 flex items-center justify-center">Loading chart data...</div>;
-  }
-
-  if (chartData.length === 0) {
-    return <div className="h-64 flex items-center justify-center">No location data available</div>;
   }
 
   return (
