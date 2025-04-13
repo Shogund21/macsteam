@@ -17,7 +17,7 @@ const FormActions = ({
   console.log('FormActions render:', { isEditing, isSubmitting });
   
   // Custom props for ActionButtons
-  const actionProps: Partial<ActionButtonsProps> = {
+  const actionProps: ActionButtonsProps = {
     onCancel,
     isSubmitting,
     variant: "secondary",

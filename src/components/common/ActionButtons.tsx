@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { buttonStyles } from "./ButtonStyles";
 
 export interface ActionButtonsProps {
-  onCancel: () => void;
+  onCancel?: () => void;
   cancelText?: string;
   submitText?: string;
   isSubmitting?: boolean;
@@ -27,14 +27,16 @@ export const ActionButtons = ({
 }: ActionButtonsProps) => {
   return (
     <div className="flex justify-end space-x-4">
-      <Button
-        type="button"
-        variant="outline"
-        onClick={onCancel}
-        disabled={isSubmitting}
-      >
-        {cancelText}
-      </Button>
+      {onCancel && (
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          disabled={isSubmitting}
+        >
+          {cancelText}
+        </Button>
+      )}
       <Button 
         type={customSubmit ? "button" : "submit"}
         onClick={customSubmit && onSubmitClick ? onSubmitClick : undefined}
