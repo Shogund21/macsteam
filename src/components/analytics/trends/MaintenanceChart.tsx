@@ -21,15 +21,15 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
   const isMobile = useIsMobile();
   
   return (
-    <div className="h-96 md:h-[450px] chart-container">
+    <div className="h-96 md:h-[450px] w-full overflow-visible">
       <ResponsiveContainer width="100%" height="100%">
         <LineChart
           data={chartData}
           margin={{
             top: 20,
-            right: isMobile ? 20 : 50,
-            left: isMobile ? 10 : 30,
-            bottom: isMobile ? 70 : 40,
+            right: isMobile ? 30 : 60,
+            left: isMobile ? 10 : 40,
+            bottom: isMobile ? 80 : 40,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -57,7 +57,8 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
           <Legend 
             wrapperStyle={{ 
               paddingTop: 15,
-              fontSize: isMobile ? 10 : 12
+              fontSize: isMobile ? 10 : 12,
+              width: '100%'
             }}
             iconSize={isMobile ? 8 : 10}
             verticalAlign="bottom"
@@ -88,6 +89,7 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
                 name="Pending" 
                 stroke="#FFBB28" 
                 strokeWidth={2}
+                dot={true}
               />
               <Line 
                 type="monotone" 
@@ -95,6 +97,7 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
                 name="Issues Found" 
                 stroke="#FF8042" 
                 strokeWidth={2}
+                dot={true}
               />
             </>
           )}

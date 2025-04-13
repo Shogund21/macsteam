@@ -38,9 +38,10 @@ text.recharts-text {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
   font-size: 12px !important;
   padding: 8px 12px !important;
-  max-width: 200px !important; /* Prevent tooltips from getting too wide */
+  max-width: 200px !important;
   overflow: hidden !important;
   text-overflow: ellipsis !important;
+  z-index: 1000 !important;
 }
 
 /* Ensure legend items have enough spacing */
@@ -49,7 +50,7 @@ text.recharts-text {
   max-width: 100% !important;
   overflow: visible !important;
   margin-top: 15px !important;
-  margin-bottom: 5px !important;
+  margin-bottom: 10px !important;
 }
 
 /* Better legend item spacing */
@@ -84,23 +85,21 @@ text.recharts-text {
 .chart-container {
   width: 100%;
   height: auto !important;
-  min-height: 450px;
-  max-height: 650px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
+  min-height: 400px !important;
+  max-height: 600px !important;
   position: relative;
-  overflow-x: auto;
-  overflow-y: visible;
+  overflow: visible !important;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 20px !important;
 }
 
 /* Fix for labels being cut off */
 .recharts-wrapper {
   overflow: visible !important;
   height: auto !important;
-  min-height: 400px !important;
+  min-height: 380px !important;
 }
 
 /* Better axis line styling */
@@ -128,13 +127,18 @@ text.recharts-text {
   margin-right: 8px !important;
 }
 
+/* Ensure tooltips are visible */
+.recharts-tooltip-wrapper {
+  z-index: 1000 !important;
+  pointer-events: none !important;
+}
+
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .chart-container {
-    min-height: 400px;
-    max-height: 550px;
-    padding: 1rem;
-    overflow-x: auto;
+    min-height: 380px !important;
+    max-height: 500px !important;
+    padding-bottom: 40px !important;
   }
   
   text.recharts-text {
@@ -155,6 +159,7 @@ text.recharts-text {
   
   .recharts-legend-wrapper {
     padding: 2px 0 !important;
+    margin-bottom: 30px !important;
   }
   
   .recharts-legend-item {

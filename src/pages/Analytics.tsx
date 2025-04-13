@@ -14,6 +14,7 @@ import { DateRange } from "react-day-picker";
 import { sub } from "date-fns";
 import { AnalyticsFilterProvider } from "@/components/analytics/AnalyticsFilterContext";
 import { useToast } from "@/components/ui/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Analytics = () => {
   // Default date range is last 30 days
@@ -24,6 +25,7 @@ const Analytics = () => {
   
   const [isRefreshing, setIsRefreshing] = useState(false);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const handleRefresh = () => {
     setIsRefreshing(true);
@@ -47,7 +49,7 @@ const Analytics = () => {
   return (
     <Layout>
       <AnalyticsFilterProvider>
-        <div className="space-y-10 max-w-full px-4 pb-16">
+        <div className="space-y-6 md:space-y-10 max-w-full px-3 md:px-4 pb-16">
           <div className="flex flex-col gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold">Analytics & Reporting</h1>
@@ -87,50 +89,49 @@ const Analytics = () => {
                 Track historical maintenance activities and identify patterns
               </CardDescription>
             </CardHeader>
-            <CardContent className="overflow-visible p-4 md:p-6 lg:p-8">
+            <CardContent className="overflow-visible p-3 pt-1 md:p-4 lg:p-6">
               <MaintenanceTrends />
             </CardContent>
           </Card>
 
-          {/* First Row of Charts - Equipment Status and Maintenance Completion */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <Card className="overflow-visible h-full">
+          {/* Charts - Grid layout that stacks on mobile */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
+            <Card className="overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment Status</CardTitle>
                 <CardDescription>Current status of all equipment</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible p-4 md:p-6">
+              <CardContent className="overflow-visible p-3 pt-1 md:p-4">
                 <EquipmentStatusChart />
               </CardContent>
             </Card>
-            <Card className="overflow-visible h-full">
+            
+            <Card className="overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Maintenance Completion Rate</CardTitle>
                 <CardDescription>Breakdown of maintenance check statuses</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible p-4 md:p-6">
+              <CardContent className="overflow-visible p-3 pt-1 md:p-4">
                 <MaintenanceCompletionRate />
               </CardContent>
             </Card>
-          </div>
-
-          {/* Second Row of Charts - Technician Performance and Location Breakdown */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-            <Card className="overflow-visible h-full">
+          
+            <Card className="overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Technician Performance</CardTitle>
                 <CardDescription>Maintenance checks by technician</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible p-4 md:p-6">
+              <CardContent className="overflow-visible p-3 pt-1 md:p-4">
                 <TechnicianPerformance />
               </CardContent>
             </Card>
-            <Card className="overflow-visible h-full">
+            
+            <Card className="overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment by Location</CardTitle>
                 <CardDescription>Distribution of equipment across locations</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible p-4 md:p-6">
+              <CardContent className="overflow-visible p-3 pt-1 md:p-4">
                 <LocationBreakdown />
               </CardContent>
             </Card>
