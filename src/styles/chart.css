@@ -50,7 +50,7 @@ text.recharts-text {
   max-width: 100% !important;
   overflow: visible !important;
   margin-top: 15px !important;
-  margin-bottom: 10px !important;
+  margin-bottom: 20px !important; /* Increase bottom margin for better spacing */
 }
 
 /* Better legend item spacing */
@@ -92,7 +92,8 @@ text.recharts-text {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 20px !important;
+  padding-bottom: 30px !important; /* Increased padding for legend room */
+  margin-bottom: 10px !important; /* Added margin for additional spacing */
 }
 
 /* Fix for labels being cut off */
@@ -100,6 +101,7 @@ text.recharts-text {
   overflow: visible !important;
   height: auto !important;
   min-height: 380px !important;
+  margin-bottom: 20px !important; /* Added margin for bottom spacing */
 }
 
 /* Better axis line styling */
@@ -136,9 +138,10 @@ text.recharts-text {
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .chart-container {
-    min-height: 380px !important;
+    min-height: 350px !important;
     max-height: 500px !important;
-    padding-bottom: 40px !important;
+    padding-bottom: 45px !important; /* More padding for mobile legends */
+    margin-bottom: 15px !important;
   }
   
   text.recharts-text {
@@ -159,7 +162,7 @@ text.recharts-text {
   
   .recharts-legend-wrapper {
     padding: 2px 0 !important;
-    margin-bottom: 30px !important;
+    margin-bottom: 35px !important; /* Increased bottom margin for mobile */
   }
   
   .recharts-legend-item {
@@ -168,7 +171,7 @@ text.recharts-text {
   }
   
   .recharts-responsive-container {
-    min-height: 350px !important;
+    min-height: 320px !important; /* Reduced min-height for mobile */
   }
   
   .recharts-pie text {
@@ -176,6 +179,6 @@ text.recharts-text {
   }
   
   .recharts-wrapper {
-    min-height: 350px !important;
+    min-height: 320px !important; /* Reduced min-height for mobile */
   }
 }

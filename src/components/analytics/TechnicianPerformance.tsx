@@ -142,15 +142,15 @@ const TechnicianPerformance = () => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={450}>
+      <ResponsiveContainer width="100%" height={isMobile ? 350 : 450}>
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
-            top: 30,
-            right: isMobile ? 70 : 100,
-            left: isMobile ? 130 : 170,
-            bottom: 40,
+            top: 20,
+            right: isMobile ? 50 : 90,
+            left: isMobile ? 110 : 150,
+            bottom: isMobile ? 70 : 50,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -163,10 +163,10 @@ const TechnicianPerformance = () => {
             type="category" 
             dataKey="name" 
             tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }} 
-            width={isMobile ? 130 : 170}
+            width={isMobile ? 110 : 150}
             tickFormatter={(value) => {
               // Truncate long names
-              const limit = isMobile ? 14 : 20;
+              const limit = isMobile ? 12 : 18;
               return value.length > limit ? `${value.slice(0, limit)}...` : value;
             }}
           />

@@ -80,13 +80,13 @@ const MaintenanceCompletionRate = () => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={450}>
+      <ResponsiveContainer width="100%" height={isMobile ? 350 : 450}>
         <PieChart
           margin={{
-            top: 30,
-            right: 30,
-            left: 30,
-            bottom: 50,
+            top: 20,
+            right: 20,
+            left: 20,
+            bottom: isMobile ? 60 : 50,
           }}
         >
           <Pie
@@ -94,8 +94,8 @@ const MaintenanceCompletionRate = () => {
             cx="50%"
             cy="45%" 
             labelLine={true}
-            outerRadius={isMobile ? 120 : 150}
-            innerRadius={isMobile ? 70 : 90}
+            outerRadius={isMobile ? 110 : 140}
+            innerRadius={isMobile ? 60 : 80}
             paddingAngle={4}
             fill="#8884d8"
             dataKey="value"
@@ -126,8 +126,9 @@ const MaintenanceCompletionRate = () => {
             wrapperStyle={{
               fontSize: isMobile ? '12px' : '14px',
               fontWeight: 'medium',
-              paddingTop: '30px',
-              width: '100%'
+              paddingTop: '20px',
+              width: '100%',
+              marginBottom: isMobile ? '15px' : '0'
             }}
           />
         </PieChart>

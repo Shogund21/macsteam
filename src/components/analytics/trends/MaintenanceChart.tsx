@@ -27,15 +27,15 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
           data={chartData}
           margin={{
             top: 20,
-            right: isMobile ? 30 : 60,
-            left: isMobile ? 10 : 40,
-            bottom: isMobile ? 80 : 40,
+            right: isMobile ? 20 : 60,
+            left: isMobile ? 0 : 30,
+            bottom: isMobile ? 100 : 50,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             dataKey={isMobile ? "monthShort" : "month"} 
-            height={60}
+            height={isMobile ? 80 : 60}
             angle={isMobile ? -45 : 0}
             textAnchor={isMobile ? "end" : "middle"}
             interval={0}
@@ -43,7 +43,7 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
             padding={{ left: 10, right: 10 }}
           />
           <YAxis 
-            width={isMobile ? 35 : 50}
+            width={isMobile ? 40 : 50}
             tick={{ fontSize: isMobile ? 10 : 12 }}
             padding={{ top: 10, bottom: 10 }}
             label={!isMobile ? { 
@@ -56,9 +56,10 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
           <Tooltip content={<CustomTooltip />} />
           <Legend 
             wrapperStyle={{ 
-              paddingTop: 15,
+              paddingTop: 20,
               fontSize: isMobile ? 10 : 12,
-              width: '100%'
+              width: '100%',
+              marginBottom: isMobile ? 30 : 10
             }}
             iconSize={isMobile ? 8 : 10}
             verticalAlign="bottom"
