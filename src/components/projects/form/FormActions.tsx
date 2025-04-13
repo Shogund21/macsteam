@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -20,7 +21,7 @@ export const FormActions = ({ isSubmitting }: FormActionsProps) => {
       <Button 
         type="submit" 
         disabled={isSubmitting}
-        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
+        className="bg-[#9b87f5] hover:bg-[#7E69AB] text-white"
       >
         {isSubmitting ? "Adding..." : "Add Project"}
       </Button>
