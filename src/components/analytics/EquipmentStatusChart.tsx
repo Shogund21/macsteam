@@ -82,13 +82,13 @@ const EquipmentStatusChart = () => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={450}>
         <PieChart
           margin={{
-            top: 20,
-            right: 20,
-            left: 20,
-            bottom: 40,
+            top: 30,
+            right: 30,
+            left: 30,
+            bottom: 50,
           }}
         >
           <Pie
@@ -96,7 +96,7 @@ const EquipmentStatusChart = () => {
             cx="50%"
             cy="45%"
             labelLine={true}
-            outerRadius={isMobile ? 110 : 140}
+            outerRadius={isMobile ? 120 : 150}
             innerRadius={0}
             paddingAngle={3}
             fill="#8884d8"
@@ -138,7 +138,7 @@ const EquipmentStatusChart = () => {
             wrapperStyle={{
               fontSize: isMobile ? '11px' : '13px',
               fontWeight: 'medium',
-              paddingTop: '25px',
+              paddingTop: '30px',
               width: '100%'
             }}
           />

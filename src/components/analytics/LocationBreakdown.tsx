@@ -72,30 +72,31 @@ const LocationBreakdown = () => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={400}>
+      <ResponsiveContainer width="100%" height={450}>
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
             top: 30,
-            right: isMobile ? 60 : 90,
-            left: isMobile ? 120 : 160,
-            bottom: 30,
+            right: isMobile ? 70 : 100,
+            left: isMobile ? 130 : 170,
+            bottom: 40,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             type="number" 
             tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600 }}
+            domain={[0, 'dataMax + 5']} // Add some extra space on the right
           />
           <YAxis 
             type="category" 
             dataKey="name" 
-            width={isMobile ? 120 : 160} 
+            width={isMobile ? 130 : 170} 
             tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }}
             tickFormatter={(value) => {
               // Truncate long location names
-              const limit = isMobile ? 12 : 18;
+              const limit = isMobile ? 14 : 20;
               return value.length > limit ? `${value.slice(0, limit)}...` : value;
             }}
           />
@@ -113,7 +114,7 @@ const LocationBreakdown = () => {
             wrapperStyle={{ 
               fontSize: isMobile ? '11px' : '13px', 
               fontWeight: 'medium',
-              paddingTop: '20px'
+              paddingTop: '25px'
             }}
             verticalAlign="bottom"
             align="center"
@@ -127,7 +128,7 @@ const LocationBreakdown = () => {
               fontSize: isMobile ? 11 : 12,
               fontWeight: 'bold',
               fill: '#333',
-              offset: 10,
+              offset: 15,
               formatter: (value) => value.toString()
             }}
           />

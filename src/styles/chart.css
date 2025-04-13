@@ -48,13 +48,14 @@ text.recharts-text {
   padding: 4px 0 !important;
   max-width: 100% !important;
   overflow: visible !important;
-  margin-top: 10px !important;
+  margin-top: 15px !important;
+  margin-bottom: 5px !important;
 }
 
 /* Better legend item spacing */
 .recharts-legend-item {
-  margin-right: 10px !important;
-  margin-bottom: 6px !important;
+  margin-right: 12px !important;
+  margin-bottom: 8px !important;
   white-space: normal !important;
 }
 
@@ -68,7 +69,7 @@ text.recharts-text {
 .recharts-responsive-container {
   width: 100% !important;
   height: 100% !important;
-  min-height: 350px !important;
+  min-height: 400px !important;
   max-width: 100% !important;
   overflow: visible !important;
 }
@@ -83,10 +84,10 @@ text.recharts-text {
 .chart-container {
   width: 100%;
   height: auto !important;
-  min-height: 400px;
-  max-height: 600px;
+  min-height: 450px;
+  max-height: 650px;
   padding: 1.5rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
   position: relative;
   overflow-x: auto;
   overflow-y: visible;
@@ -99,7 +100,7 @@ text.recharts-text {
 .recharts-wrapper {
   overflow: visible !important;
   height: auto !important;
-  min-height: 350px !important;
+  min-height: 400px !important;
 }
 
 /* Better axis line styling */
@@ -118,11 +119,20 @@ text.recharts-text {
   line-height: 1.2 !important;
 }
 
+/* Give more space to tick labels */
+.recharts-xAxis .recharts-cartesian-axis-tick-value {
+  margin-top: 8px !important;
+}
+
+.recharts-yAxis .recharts-cartesian-axis-tick-value {
+  margin-right: 8px !important;
+}
+
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .chart-container {
-    min-height: 350px;
-    max-height: 500px;
+    min-height: 400px;
+    max-height: 550px;
     padding: 1rem;
     overflow-x: auto;
   }
@@ -153,7 +163,7 @@ text.recharts-text {
   }
   
   .recharts-responsive-container {
-    min-height: 300px !important;
+    min-height: 350px !important;
   }
   
   .recharts-pie text {
@@ -161,6 +171,6 @@ text.recharts-text {
   }
   
   .recharts-wrapper {
-    min-height: 300px !important;
+    min-height: 350px !important;
   }
 }

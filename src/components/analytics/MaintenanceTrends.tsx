@@ -162,11 +162,11 @@ const MaintenanceTrends = () => {
   }, [maintenanceData]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="h-80 flex items-center justify-center">Loading chart data...</div>;
+    return <div className="h-96 flex items-center justify-center">Loading chart data...</div>;
   }
 
   if (chartData.length === 0) {
-    return <div className="h-80 flex items-center justify-center">No maintenance trend data available</div>;
+    return <div className="h-96 flex items-center justify-center">No maintenance trend data available</div>;
   }
 
   return (
@@ -193,15 +193,15 @@ const MaintenanceTrends = () => {
         <span className="text-sm text-muted-foreground">Hover for explanation</span>
       </div>
 
-      <div className="h-72 md:h-96 chart-container">
+      <div className="h-96 md:h-[450px] chart-container">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={chartData}
             margin={{
-              top: 10,
-              right: isMobile ? 15 : 40,
-              left: isMobile ? 5 : 20,
-              bottom: isMobile ? 65 : 30,
+              top: 20,
+              right: isMobile ? 20 : 50,
+              left: isMobile ? 10 : 30,
+              bottom: isMobile ? 70 : 40,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
@@ -212,10 +212,12 @@ const MaintenanceTrends = () => {
               textAnchor={isMobile ? "end" : "middle"}
               interval={0}
               tick={{ fontSize: isMobile ? 10 : 12 }}
+              padding={{ left: 10, right: 10 }}
             />
             <YAxis 
-              width={isMobile ? 30 : 45}
+              width={isMobile ? 35 : 50}
               tick={{ fontSize: isMobile ? 10 : 12 }}
+              padding={{ top: 10, bottom: 10 }}
               label={!isMobile ? { 
                 value: "Checks", 
                 angle: -90, 
@@ -226,7 +228,7 @@ const MaintenanceTrends = () => {
             <Tooltip content={<CustomTooltip />} />
             <Legend 
               wrapperStyle={{ 
-                paddingTop: 10,
+                paddingTop: 15,
                 fontSize: isMobile ? 10 : 12
               }}
               iconSize={isMobile ? 8 : 10}
