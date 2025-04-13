@@ -58,7 +58,7 @@ const EquipmentStatusChart = () => {
       data.sort((a, b) => b.value - a.value);
       
       // Limit to top statuses
-      setChartData(isMobile ? data.slice(0, 4) : data);
+      setChartData(isMobile ? data.slice(0, 4) : data.slice(0, 6));
     } else {
       // Sample data for preview when no data is available
       const sampleData = [
@@ -66,8 +66,8 @@ const EquipmentStatusChart = () => {
         { name: "Working", value: 25 },
         { name: "Offline", value: 15 },
         { name: "Unknown", value: 13 },
-        { name: "active", value: 7 },
-        { name: "Maintenance", value: 5 }
+        { name: "Maintenance", value: 7 },
+        { name: "Repair", value: 5 }
       ];
       setChartData(isMobile ? sampleData.slice(0, 4) : sampleData);
     }
@@ -81,13 +81,13 @@ const EquipmentStatusChart = () => {
   const totalEquipment = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="h-[350px] w-full chart-container">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="chart-container">
+      <ResponsiveContainer width="100%" height={350}>
         <PieChart
           margin={{
             top: 10,
-            right: isMobile ? 10 : 20,
-            left: isMobile ? 10 : 20,
+            right: 10,
+            left: 10,
             bottom: 40,
           }}
         >
@@ -96,7 +96,7 @@ const EquipmentStatusChart = () => {
             cx="50%"
             cy="45%"
             labelLine={true}
-            outerRadius={isMobile ? 80 : 100}
+            outerRadius={isMobile ? 90 : 110}
             innerRadius={0}
             paddingAngle={2}
             fill="#8884d8"
@@ -104,7 +104,8 @@ const EquipmentStatusChart = () => {
             label={({ name, percent }) => {
               // Only show label for segments that are significant enough (>8%)
               if (percent < 0.08) return null;
-              return `${name.length > 10 ? name.substring(0, 10) + '...' : name}: ${(percent * 100).toFixed(0)}%`;
+              const displayName = name.length > 12 ? name.substring(0, 12) + '...' : name;
+              return `${displayName}: ${(percent * 100).toFixed(0)}%`;
             }}
           >
             {chartData.map((entry, index) => (
@@ -137,7 +138,6 @@ const EquipmentStatusChart = () => {
             wrapperStyle={{
               fontSize: isMobile ? '11px' : '12px',
               fontWeight: 'medium',
-              lineHeight: '1.5em',
               paddingTop: '10px',
               width: '100%'
             }}

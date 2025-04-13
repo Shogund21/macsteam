@@ -79,13 +79,13 @@ const MaintenanceCompletionRate = () => {
   const total = chartData.reduce((sum, entry) => sum + entry.value, 0);
 
   return (
-    <div className="h-[350px] w-full chart-container">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="chart-container">
+      <ResponsiveContainer width="100%" height={350}>
         <PieChart
           margin={{
             top: 10,
-            right: 30,
-            left: 30,
+            right: 10,
+            left: 10,
             bottom: 40,
           }}
         >
@@ -94,14 +94,14 @@ const MaintenanceCompletionRate = () => {
             cx="50%"
             cy="45%" 
             labelLine={true}
-            outerRadius={isMobile ? 80 : 100}
-            innerRadius={isMobile ? 40 : 50}
+            outerRadius={isMobile ? 90 : 110}
+            innerRadius={isMobile ? 50 : 60}
             paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => {
               // Only show label if segment is large enough
-              if (percent < 0.08 && isMobile) return null;
+              if (percent < 0.1 && isMobile) return null;
               return `${name}: ${(percent * 100).toFixed(0)}%`;
             }}
           >

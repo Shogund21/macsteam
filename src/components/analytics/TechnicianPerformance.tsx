@@ -141,15 +141,15 @@ const TechnicianPerformance = () => {
   }
 
   return (
-    <div className="h-[350px] w-full chart-container">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="chart-container">
+      <ResponsiveContainer width="100%" height={350}>
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
             top: 20,
-            right: isMobile ? 40 : 60,
-            left: isMobile ? 90 : 120,
+            right: isMobile ? 50 : 80,
+            left: isMobile ? 100 : 140,
             bottom: 20,
           }}
         >
@@ -162,7 +162,7 @@ const TechnicianPerformance = () => {
             type="category" 
             dataKey="name" 
             tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }} 
-            width={isMobile ? 90 : 120}
+            width={isMobile ? 100 : 140}
             tickFormatter={(value) => {
               // Truncate long names
               const limit = isMobile ? 10 : 15;

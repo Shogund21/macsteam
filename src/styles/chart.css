@@ -82,12 +82,17 @@ text.recharts-text {
 /* Container for charts to ensure proper spacing and sizing */
 .chart-container {
   width: 100%;
-  padding: 0.5rem;
-  overflow: visible;
-  position: relative;
   height: auto !important;
   min-height: 350px;
   max-height: 500px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: visible;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Fix for labels being cut off */
@@ -115,6 +120,13 @@ text.recharts-text {
 
 /* Mobile-specific styles */
 @media (max-width: 768px) {
+  .chart-container {
+    min-height: 300px;
+    max-height: 400px;
+    padding: 0.5rem;
+    overflow-x: auto;
+  }
+  
   text.recharts-text {
     font-size: 10px !important;
   }
@@ -131,9 +143,8 @@ text.recharts-text {
     font-size: 10px !important;
   }
   
-  .recharts-default-tooltip {
-    font-size: 10px !important;
-    padding: 6px 10px !important;
+  .recharts-legend-wrapper {
+    padding: 2px 0 !important;
   }
   
   .recharts-legend-item {
@@ -149,12 +160,6 @@ text.recharts-text {
     font-size: 10px !important;
   }
   
-  .chart-container {
-    min-height: 300px;
-    max-height: 400px;
-    padding: 0.25rem;
-  }
-
   .recharts-wrapper {
     min-height: 250px !important;
   }
