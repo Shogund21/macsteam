@@ -1,6 +1,6 @@
 
 import React from "react";
-import { SidebarProvider, Sidebar, SidebarInset } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import Sidebar from "@/components/Sidebar";
 
 interface LayoutProps {
