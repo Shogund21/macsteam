@@ -1,7 +1,7 @@
 
 import React from "react";
 import { SidebarProvider, Sidebar, SidebarInset } from "@/components/ui/sidebar";
-import { SidebarWrapper } from "@/components/SidebarWrapper";
+import Sidebar from "@/components/Sidebar";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -11,9 +11,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <SidebarProvider defaultOpen={true}>
       <div className="flex h-screen overflow-hidden">
-        <Sidebar>
-          <SidebarWrapper />
-        </Sidebar>
+        <Sidebar />
         <SidebarInset className="bg-gray-50 p-6">
           {children}
         </SidebarInset>

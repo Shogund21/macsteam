@@ -6,6 +6,7 @@ import {
   SidebarFooter,
 } from "@/components/ui/sidebar";
 import { CompanySelector } from "@/components/company/CompanySelector";
+import Sidebar from "@/components/Sidebar";
 
 export const SidebarWrapper = () => {
   return (
@@ -16,7 +17,7 @@ export const SidebarWrapper = () => {
         </div>
       </SidebarHeader>
       <SidebarContent>
-        {/* Sidebar content will come from the Layout component */}
+        <Sidebar />
       </SidebarContent>
       <SidebarFooter>
         {/* Footer content */}
@@ -24,3 +25,5 @@ export const SidebarWrapper = () => {
     </div>
   );
 };
+
+export default SidebarWrapper;
