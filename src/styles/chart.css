@@ -61,10 +61,48 @@ text.recharts-text {
 .recharts-responsive-container {
   width: 100% !important;
   height: 100% !important;
+  min-height: 200px !important;
 }
 
 /* Ensure the pie labels are visible */
 .recharts-pie text {
   font-weight: 600 !important;
   font-size: 12px !important;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  text.recharts-text {
+    font-size: 10px !important;
+  }
+  
+  .recharts-legend-item-text {
+    font-size: 10px !important;
+  }
+  
+  .recharts-cartesian-axis-tick-value {
+    font-size: 10px !important;
+  }
+  
+  .recharts-pie-label-text {
+    font-size: 10px !important;
+  }
+  
+  .recharts-default-tooltip {
+    font-size: 10px !important;
+    padding: 6px 10px !important;
+  }
+  
+  .recharts-legend-item {
+    margin-right: 6px !important;
+    margin-bottom: 4px !important;
+  }
+  
+  .recharts-responsive-container {
+    min-height: 160px !important;
+  }
+  
+  .recharts-pie text {
+    font-size: 10px !important;
+  }
 }

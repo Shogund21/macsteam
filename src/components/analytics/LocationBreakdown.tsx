@@ -12,9 +12,11 @@ import {
 } from "recharts";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const LocationBreakdown = () => {
   const [chartData, setChartData] = useState<any[]>([]);
+  const isMobile = useIsMobile();
 
   const { data: equipmentData, isLoading } = useQuery({
     queryKey: ['equipment_by_location'],
@@ -45,7 +47,7 @@ const LocationBreakdown = () => {
       const data = Object.entries(locationCounts)
         .map(([name, value]) => ({ name, value }))
         .sort((a, b) => b.value - a.value)
-        .slice(0, 6); // Show top 6 locations
+        .slice(0, isMobile ? 4 : 6); // Show fewer locations on mobile
       
       setChartData(data);
     }
@@ -57,45 +59,45 @@ const LocationBreakdown = () => {
         { name: "North Wing", value: 18 },
         { name: "South Wing", value: 15 },
         { name: "East Block", value: 12 },
-        { name: "West Block", value: 9 },
+        { name: isMobile ? "Others" : "West Block", value: 9 },
         { name: "Data Center", value: 6 }
-      ];
+      ].slice(0, isMobile ? 4 : 6);
       setChartData(sampleData);
     }
-  }, [equipmentData]);
+  }, [equipmentData, isMobile]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="h-64 flex items-center justify-center">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
   }
 
   return (
-    <div className="h-64">
+    <div className="h-64 md:h-80 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
             top: 5,
-            right: 30,
-            left: 120, // Increased for better visibility
+            right: isMobile ? 10 : 30,
+            left: isMobile ? 80 : 120,
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             type="number" 
-            tick={{ fontSize: 12, fontWeight: 600 }}
+            tick={{ fontSize: isMobile ? 10 : 12, fontWeight: 600 }}
           />
           <YAxis 
             type="category" 
             dataKey="name" 
-            width={120} 
-            tick={{ fontSize: 13, fontWeight: 600, fill: '#333' }}
+            width={isMobile ? 80 : 120} 
+            tick={{ fontSize: isMobile ? 10 : 13, fontWeight: 600, fill: '#333' }}
           />
           <Tooltip 
             formatter={(value) => [`${value} equipment`, 'Count']}
             contentStyle={{ 
-              fontSize: '14px', 
+              fontSize: isMobile ? '12px' : '14px', 
               fontWeight: 'medium', 
               backgroundColor: 'white',
               borderRadius: '8px',
@@ -104,7 +106,7 @@ const LocationBreakdown = () => {
           />
           <Legend 
             wrapperStyle={{ 
-              fontSize: '14px', 
+              fontSize: isMobile ? '12px' : '14px', 
               fontWeight: 'medium',
               paddingTop: '10px'
             }}
@@ -115,7 +117,7 @@ const LocationBreakdown = () => {
             fill="#8884d8" 
             label={{ 
               position: 'right', 
-              fontSize: 13,
+              fontSize: isMobile ? 10 : 13,
               fontWeight: 'bold',
               fill: '#333'
             }}

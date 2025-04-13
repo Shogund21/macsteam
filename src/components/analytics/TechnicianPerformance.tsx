@@ -13,10 +13,12 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const TechnicianPerformance = () => {
   const { dateRange } = useAnalyticsFilters();
   const [chartData, setChartData] = useState<any[]>([]);
+  const isMobile = useIsMobile();
 
   // Fetch technicians for names
   const { data: technicians } = useQuery({
@@ -96,64 +98,75 @@ const TechnicianPerformance = () => {
           total: stats.completed + stats.pending + stats.issues
         }))
         .sort((a, b) => b.total - a.total)
-        .slice(0, 5); // Show top 5 technicians by volume
+        .slice(0, isMobile ? 3 : 5); // Show fewer technicians on mobile
       
       // If no data, add sample data for preview
       if (formattedData.length === 0) {
         formattedData.push(
           { name: "Filip Carter", completed: 28, pending: 5, issues: 2, total: 35 },
           { name: "Emma Johnson", completed: 22, pending: 3, issues: 1, total: 26 },
-          { name: "David Smith", completed: 18, pending: 7, issues: 3, total: 28 },
+          { name: "David Smith", completed: 18, pending: 7, issues: 3, total: 28 }
+        );
+        
+        if (!isMobile) {
+          formattedData.push(
+            { name: "Sarah Brown", completed: 15, pending: 2, issues: 0, total: 17 },
+            { name: "Michael Davis", completed: 12, pending: 4, issues: 1, total: 17 }
+          );
+        }
+      }
+      
+      setChartData(formattedData);
+    } else {
+      // Add sample data for preview when no data is available
+      const sampleData = [
+        { name: "Filip Carter", completed: 28, pending: 5, issues: 2, total: 35 },
+        { name: "Emma Johnson", completed: 22, pending: 3, issues: 1, total: 26 },
+        { name: "David Smith", completed: 18, pending: 7, issues: 3, total: 28 }
+      ];
+      
+      if (!isMobile) {
+        sampleData.push(
           { name: "Sarah Brown", completed: 15, pending: 2, issues: 0, total: 17 },
           { name: "Michael Davis", completed: 12, pending: 4, issues: 1, total: 17 }
         );
       }
       
-      setChartData(formattedData);
-    } else if (!maintenanceData || !technicians) {
-      // Add sample data for preview when no data is available
-      const sampleData = [
-        { name: "Filip Carter", completed: 28, pending: 5, issues: 2, total: 35 },
-        { name: "Emma Johnson", completed: 22, pending: 3, issues: 1, total: 26 },
-        { name: "David Smith", completed: 18, pending: 7, issues: 3, total: 28 },
-        { name: "Sarah Brown", completed: 15, pending: 2, issues: 0, total: 17 },
-        { name: "Michael Davis", completed: 12, pending: 4, issues: 1, total: 17 }
-      ];
       setChartData(sampleData);
     }
-  }, [maintenanceData, technicians]);
+  }, [maintenanceData, technicians, isMobile]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="h-64 flex items-center justify-center">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
   }
 
   return (
-    <div className="h-64">
+    <div className="h-64 md:h-80 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
             top: 5,
-            right: 30,
-            left: 120, // Increased left margin for better name visibility
+            right: isMobile ? 10 : 30,
+            left: isMobile ? 80 : 120,
             bottom: 5,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             type="number" 
-            tick={{ fontSize: 12, fontWeight: 600 }}
+            tick={{ fontSize: isMobile ? 10 : 12, fontWeight: 600 }}
           />
           <YAxis 
             type="category" 
             dataKey="name" 
-            tick={{ fontSize: 13, fontWeight: 600, fill: '#333' }} 
-            width={120} // Increased width for technician names
+            tick={{ fontSize: isMobile ? 10 : 13, fontWeight: 600, fill: '#333' }} 
+            width={isMobile ? 80 : 120}
           />
           <Tooltip 
             contentStyle={{ 
-              fontSize: '14px', 
+              fontSize: isMobile ? '12px' : '14px', 
               fontWeight: 'medium', 
               backgroundColor: 'white',
               borderRadius: '8px',
@@ -162,7 +175,7 @@ const TechnicianPerformance = () => {
           />
           <Legend 
             wrapperStyle={{ 
-              fontSize: '14px', 
+              fontSize: isMobile ? '10px' : '14px', 
               fontWeight: 'medium',
               paddingTop: '10px'
             }} 

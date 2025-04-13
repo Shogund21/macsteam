@@ -18,7 +18,7 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
-import { format, parseISO, startOfMonth, endOfMonth, eachMonthOfInterval, isSameMonth } from "date-fns";
+import { format, parseISO, eachMonthOfInterval, isSameMonth } from "date-fns";
 import { HelpCircle } from "lucide-react";
 import {
   Tooltip as UITooltip,
@@ -26,6 +26,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 // Custom tooltip component for the chart
 const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameType>) => {
@@ -49,6 +50,7 @@ const CustomTooltip = ({ active, payload, label }: TooltipProps<ValueType, NameT
 const MaintenanceTrends = () => {
   const { dateRange } = useAnalyticsFilters();
   const [chartData, setChartData] = useState<any[]>([]);
+  const isMobile = useIsMobile();
 
   const { data: maintenanceData, isLoading } = useQuery({
     queryKey: ['maintenance_checks_trends', dateRange],
@@ -95,6 +97,7 @@ const MaintenanceTrends = () => {
       // Initialize data with all months
       const monthlyData = monthsRange.map(month => ({
         month: format(month, 'MMM yyyy'),
+        monthShort: format(month, 'MMM'), // Shorter format for mobile
         completed: 0,
         pending: 0,
         issues: 0,
@@ -153,49 +156,46 @@ const MaintenanceTrends = () => {
                 <li><span className="font-semibold text-[#FFBB28]">Pending</span>: Scheduled but not yet completed checks</li>
                 <li><span className="font-semibold text-[#FF8042]">Issues Found</span>: Checks that identified problems requiring attention</li>
               </ul>
-              <p className="mt-2">
-                The trends over time help identify seasonal patterns, maintenance backlogs, and potential areas for process improvement.
-              </p>
             </TooltipContent>
           </UITooltip>
         </TooltipProvider>
         <span className="text-sm text-muted-foreground">Hover for explanation</span>
       </div>
 
-      <div className="h-80">
+      <div className="h-60 md:h-80">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={chartData}
             margin={{
               top: 5,
-              right: 30,
-              left: 20,
-              bottom: 30, // Increased to provide more space for X-axis labels
+              right: isMobile ? 10 : 30,
+              left: isMobile ? 0 : 20,
+              bottom: isMobile ? 60 : 30,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis 
-              dataKey="month" 
+              dataKey={isMobile ? "monthShort" : "month"} 
               height={60}
               angle={-45}
               textAnchor="end"
               interval={0}
-              tick={{ fontSize: 12 }}
+              tick={{ fontSize: isMobile ? 10 : 12 }}
             />
             <YAxis 
-              width={45}
-              tick={{ fontSize: 12 }}
-              label={{ 
-                value: "Number of Checks", 
+              width={isMobile ? 30 : 45}
+              tick={{ fontSize: isMobile ? 10 : 12 }}
+              label={!isMobile ? { 
+                value: "Checks", 
                 angle: -90, 
                 position: "insideLeft",
                 style: { textAnchor: "middle", fontSize: 12 }
-              }} 
+              } : undefined} 
             />
             <Tooltip content={<CustomTooltip />} />
             <Legend 
               wrapperStyle={{ paddingTop: 10 }}
-              formatter={(value) => <span style={{ fontSize: 12 }}>{value}</span>}
+              formatter={(value) => <span style={{ fontSize: isMobile ? 10 : 12 }}>{value}</span>}
             />
             <Line 
               type="monotone" 
@@ -204,6 +204,7 @@ const MaintenanceTrends = () => {
               stroke="#8884d8" 
               activeDot={{ r: 8 }} 
               strokeWidth={2}
+              dot={!isMobile}
             />
             <Line 
               type="monotone" 
@@ -211,21 +212,26 @@ const MaintenanceTrends = () => {
               name="Completed" 
               stroke="#00C49F" 
               strokeWidth={2}
+              dot={!isMobile}
             />
-            <Line 
-              type="monotone" 
-              dataKey="pending" 
-              name="Pending" 
-              stroke="#FFBB28" 
-              strokeWidth={2}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="issues" 
-              name="Issues Found" 
-              stroke="#FF8042" 
-              strokeWidth={2}
-            />
+            {!isMobile && (
+              <>
+                <Line 
+                  type="monotone" 
+                  dataKey="pending" 
+                  name="Pending" 
+                  stroke="#FFBB28" 
+                  strokeWidth={2}
+                />
+                <Line 
+                  type="monotone" 
+                  dataKey="issues" 
+                  name="Issues Found" 
+                  stroke="#FF8042" 
+                  strokeWidth={2}
+                />
+              </>
+            )}
           </LineChart>
         </ResponsiveContainer>
       </div>

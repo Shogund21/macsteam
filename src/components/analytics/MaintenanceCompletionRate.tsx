@@ -4,12 +4,14 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recha
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const COLORS = ['#00C49F', '#FFBB28', '#FF8042'];
 
 const MaintenanceCompletionRate = () => {
   const { dateRange } = useAnalyticsFilters();
   const [chartData, setChartData] = useState<any[]>([]);
+  const isMobile = useIsMobile();
 
   const { data: maintenanceData, isLoading } = useQuery({
     queryKey: ['maintenance_checks', dateRange],
@@ -70,11 +72,11 @@ const MaintenanceCompletionRate = () => {
   }, [maintenanceData]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="h-64 flex items-center justify-center">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
   }
 
   return (
-    <div className="h-64">
+    <div className="h-64 md:h-80 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
@@ -82,8 +84,8 @@ const MaintenanceCompletionRate = () => {
             cx="50%"
             cy="50%"
             labelLine={false}
-            outerRadius={90}
-            innerRadius={45}
+            outerRadius={isMobile ? 70 : 90}
+            innerRadius={isMobile ? 35 : 45}
             paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
@@ -96,7 +98,7 @@ const MaintenanceCompletionRate = () => {
           <Tooltip 
             formatter={(value, name) => [`${value} checks`, name]}
             contentStyle={{ 
-              fontSize: '14px', 
+              fontSize: isMobile ? '12px' : '14px', 
               fontWeight: 'medium', 
               backgroundColor: 'white', 
               borderRadius: '8px', 
@@ -108,7 +110,7 @@ const MaintenanceCompletionRate = () => {
             verticalAlign="bottom" 
             align="center"
             wrapperStyle={{
-              fontSize: '14px',
+              fontSize: isMobile ? '12px' : '14px',
               fontWeight: 'medium',
               paddingTop: '20px',
               paddingBottom: '10px'
