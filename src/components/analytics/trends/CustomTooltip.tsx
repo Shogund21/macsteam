@@ -10,7 +10,7 @@ interface CustomTooltipProps {
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-white p-3 border rounded-md shadow-md max-w-[250px] z-50">
+      <div className="bg-white p-3 border rounded-md shadow-md max-w-[250px] z-[100]">
         <p className="font-semibold text-gray-800 text-sm mb-1">{label}</p>
         <div className="space-y-1.5">
           {payload.map((entry: any, index: number) => (

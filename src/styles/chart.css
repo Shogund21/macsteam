@@ -133,6 +133,20 @@ text.recharts-text {
 .recharts-tooltip-wrapper {
   z-index: 1000 !important;
   pointer-events: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Fix for horizontal bar charts - ensure text labels are visible */
+.recharts-layer .recharts-cartesian-axis-tick text {
+  fill: #333 !important; 
+  font-weight: 600 !important;
+}
+
+/* Fix for bar labels getting cut off */
+.recharts-label-list text {
+  font-weight: bold !important;
+  fill: #333 !important;
 }
 
 /* Mobile-specific styles */

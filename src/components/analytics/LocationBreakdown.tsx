@@ -71,16 +71,16 @@ const LocationBreakdown = () => {
   }
 
   return (
-    <div className="chart-container">
-      <ResponsiveContainer width="100%" height={isMobile ? 350 : 450}>
+    <div className="w-full h-[400px] md:h-[450px]">
+      <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
             top: 20,
-            right: isMobile ? 50 : 90,
-            left: isMobile ? 110 : 150,
-            bottom: isMobile ? 70 : 50,
+            right: isMobile ? 60 : 100,
+            left: isMobile ? 120 : 150,
+            bottom: isMobile ? 80 : 50,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -92,7 +92,7 @@ const LocationBreakdown = () => {
           <YAxis 
             type="category" 
             dataKey="name" 
-            width={isMobile ? 110 : 150} 
+            width={isMobile ? 120 : 150} 
             tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }}
             tickFormatter={(value) => {
               // Truncate long location names
@@ -128,7 +128,7 @@ const LocationBreakdown = () => {
               fontSize: isMobile ? 11 : 12,
               fontWeight: 'bold',
               fill: '#333',
-              offset: 15,
+              offset: isMobile ? 10 : 15,
               formatter: (value) => value.toString()
             }}
           />
