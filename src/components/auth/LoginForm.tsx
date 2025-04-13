@@ -57,8 +57,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
       <CardFooter>
         <Button 
           type="submit" 
-          className="w-full" 
-          variant="default"
+          className="w-full bg-[#0EA5E9] hover:bg-[#0EA5E9]/90 text-white" 
           disabled={isSubmitting}
         >
           {isSubmitting ? (
