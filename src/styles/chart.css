@@ -68,7 +68,7 @@ text.recharts-text {
 .recharts-responsive-container {
   width: 100% !important;
   height: 100% !important;
-  min-height: 250px !important;
+  min-height: 300px !important;
   max-width: 100% !important;
   overflow: visible !important;
 }
@@ -86,15 +86,15 @@ text.recharts-text {
   overflow: visible;
   position: relative;
   height: auto !important;
-  min-height: 300px;
-  max-height: 400px;
+  min-height: 350px;
+  max-height: 500px;
 }
 
 /* Fix for labels being cut off */
 .recharts-wrapper {
   overflow: visible !important;
   height: auto !important;
-  min-height: 250px !important;
+  min-height: 300px !important;
 }
 
 /* Better axis line styling */
@@ -142,7 +142,7 @@ text.recharts-text {
   }
   
   .recharts-responsive-container {
-    min-height: 220px !important;
+    min-height: 250px !important;
   }
   
   .recharts-pie text {
@@ -150,8 +150,12 @@ text.recharts-text {
   }
   
   .chart-container {
-    min-height: 250px;
-    max-height: 350px;
+    min-height: 300px;
+    max-height: 400px;
     padding: 0.25rem;
+  }
+
+  .recharts-wrapper {
+    min-height: 250px !important;
   }
 }

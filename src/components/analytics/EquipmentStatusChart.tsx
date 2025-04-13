@@ -57,8 +57,8 @@ const EquipmentStatusChart = () => {
       // Sort by value in descending order for better visualization
       data.sort((a, b) => b.value - a.value);
       
-      // Limit to top statuses for mobile
-      setChartData(isMobile ? data.slice(0, 4) : data.slice(0, 6));
+      // Limit to top statuses
+      setChartData(isMobile ? data.slice(0, 4) : data);
     } else {
       // Sample data for preview when no data is available
       const sampleData = [
@@ -81,23 +81,30 @@ const EquipmentStatusChart = () => {
   const totalEquipment = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="h-[300px] md:h-[350px] w-full chart-container">
+    <div className="h-[350px] w-full chart-container">
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart>
+        <PieChart
+          margin={{
+            top: 10,
+            right: isMobile ? 10 : 20,
+            left: isMobile ? 10 : 20,
+            bottom: 40,
+          }}
+        >
           <Pie
             data={chartData}
             cx="50%"
-            cy="42%"
-            labelLine={false}
-            outerRadius={isMobile ? 70 : 85}
+            cy="45%"
+            labelLine={true}
+            outerRadius={isMobile ? 80 : 100}
             innerRadius={0}
-            paddingAngle={3}
+            paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => {
-              // Only show label for segments that are significant enough (>5%)
-              if (percent < 0.05) return null;
-              return `${name}: ${(percent * 100).toFixed(0)}%`;
+              // Only show label for segments that are significant enough (>8%)
+              if (percent < 0.08) return null;
+              return `${name.length > 10 ? name.substring(0, 10) + '...' : name}: ${(percent * 100).toFixed(0)}%`;
             }}
           >
             {chartData.map((entry, index) => (
@@ -118,21 +125,20 @@ const EquipmentStatusChart = () => {
             }} 
           />
           <Legend 
-            layout={isMobile ? "horizontal" : "vertical"}
-            align={isMobile ? "center" : "right"}
-            verticalAlign={isMobile ? "bottom" : "middle"}
+            layout="horizontal"
+            align="center"
+            verticalAlign="bottom"
             iconSize={10}
             iconType="circle"
             formatter={(value) => {
-              const limit = isMobile ? 8 : 14;
+              const limit = isMobile ? 10 : 14;
               return value.length > limit ? `${value.slice(0, limit)}...` : value;
             }}
             wrapperStyle={{
-              fontSize: isMobile ? '10px' : '12px',
+              fontSize: isMobile ? '11px' : '12px',
               fontWeight: 'medium',
-              lineHeight: '1.2em',
-              paddingLeft: isMobile ? '0' : '10px',
-              paddingTop: isMobile ? '10px' : '0',
+              lineHeight: '1.5em',
+              paddingTop: '10px',
               width: '100%'
             }}
           />

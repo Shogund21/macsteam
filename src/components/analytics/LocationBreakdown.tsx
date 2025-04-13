@@ -71,31 +71,31 @@ const LocationBreakdown = () => {
   }
 
   return (
-    <div className="h-[300px] md:h-[350px] w-full chart-container">
+    <div className="h-[350px] w-full chart-container">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
-            top: 10,
-            right: isMobile ? 30 : 60,
-            left: isMobile ? 80 : 120,
-            bottom: 10,
+            top: 20,
+            right: isMobile ? 40 : 70,
+            left: isMobile ? 90 : 130,
+            bottom: 20,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis 
             type="number" 
-            tick={{ fontSize: isMobile ? 10 : 12, fontWeight: 600 }}
+            tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600 }}
           />
           <YAxis 
             type="category" 
             dataKey="name" 
-            width={isMobile ? 80 : 120} 
-            tick={{ fontSize: isMobile ? 10 : 12, fontWeight: 600, fill: '#333' }}
+            width={isMobile ? 90 : 130} 
+            tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }}
             tickFormatter={(value) => {
               // Truncate long location names
-              const limit = isMobile ? 8 : 15;
+              const limit = isMobile ? 10 : 16;
               return value.length > limit ? `${value.slice(0, limit)}...` : value;
             }}
           />
@@ -113,7 +113,7 @@ const LocationBreakdown = () => {
             wrapperStyle={{ 
               fontSize: isMobile ? '11px' : '13px', 
               fontWeight: 'medium',
-              paddingTop: '10px'
+              paddingTop: '15px'
             }}
             verticalAlign="bottom"
             align="center"
@@ -124,7 +124,7 @@ const LocationBreakdown = () => {
             fill="#8884d8" 
             label={{ 
               position: 'right', 
-              fontSize: isMobile ? 10 : 12,
+              fontSize: isMobile ? 11 : 12,
               fontWeight: 'bold',
               fill: '#333',
               offset: 5,
