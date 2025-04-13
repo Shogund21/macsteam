@@ -1,12 +1,11 @@
 
 import React from "react";
-import { Sidebar } from "@/components/ui/sidebar";
-import { CompanySelector } from "@/components/company/CompanySelector";
 import { 
   SidebarHeader, 
   SidebarContent,
   SidebarFooter,
 } from "@/components/ui/sidebar";
+import { CompanySelector } from "@/components/company/CompanySelector";
 
 export const SidebarWrapper = () => {
   return (

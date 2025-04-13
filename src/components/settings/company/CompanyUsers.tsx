@@ -57,7 +57,7 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
           return {
             id: item.id,
             user_id: item.user_id,
-            email: userData?.email || "Unknown",
+            email: userData?.user?.email || "Unknown",
             role: item.role,
             is_admin: item.is_admin,
           };
