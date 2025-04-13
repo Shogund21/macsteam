@@ -1,4 +1,6 @@
 
+/* Modern chart styling for better readability and aesthetics */
+
 /* Better text rendering for charts and legibility */
 text.recharts-text {
   font-size: 12px !important;
@@ -133,6 +135,17 @@ text.recharts-text {
 .recharts-bar-rectangle > path {
   stroke: white !important;
   stroke-width: 1 !important;
+}
+
+/* Hover effects for better interaction */
+.recharts-active-dot {
+  stroke-width: 2px !important;
+  r: 6px !important;
+}
+
+/* Animation for charts */
+.recharts-layer {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
 /* Mobile-specific styles */

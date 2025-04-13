@@ -8,7 +8,8 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer
+  ResponsiveContainer,
+  LabelList
 } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ChartTooltip from "./ChartTooltip";
@@ -61,8 +62,8 @@ const BarChart: React.FC<BarChartProps> = ({
   const margins = {
     top: 10,
     right: isVertical ? (isMobile ? 30 : 40) : 10,
-    left: isVertical ? (isMobile ? 80 : 100) : 10,
-    bottom: isMobile ? 50 : 25,
+    left: isVertical ? (isMobile ? 80 : 120) : 10,
+    bottom: isMobile ? 60 : 30,
   };
   
   return (
@@ -72,7 +73,9 @@ const BarChart: React.FC<BarChartProps> = ({
           data={data}
           layout={layout}
           margin={margins}
-          barSize={isVertical ? (isMobile ? 10 : 15) : undefined}
+          barSize={isVertical ? (isMobile ? 12 : 18) : undefined}
+          barGap={5}
+          className="fill-current"
         >
           <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
           
@@ -85,7 +88,7 @@ const BarChart: React.FC<BarChartProps> = ({
               fontWeight: 500,
               fill: '#333333'
             }}
-            height={isMobile ? 50 : 30}
+            height={isMobile ? 60 : 30}
             domain={isVertical ? [0, 'dataMax + 5'] : undefined}
             angle={isMobile && !isVertical ? -45 : 0}
             textAnchor={isMobile && !isVertical ? "end" : "middle"}
@@ -99,7 +102,7 @@ const BarChart: React.FC<BarChartProps> = ({
           <YAxis 
             type={isVertical ? "category" : "number"}
             dataKey={isVertical ? "name" : undefined} 
-            width={isVertical ? (isMobile ? 80 : 100) : 30}
+            width={isVertical ? (isMobile ? 80 : 120) : 40}
             tick={{ 
               fontSize: isMobile ? 9 : 11,
               fontWeight: 500,
@@ -114,6 +117,7 @@ const BarChart: React.FC<BarChartProps> = ({
           <Tooltip 
             content={<ChartTooltip formatter={tooltipFormatter} />}
             cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
+            wrapperStyle={{ zIndex: 1000 }}
           />
           
           <Legend 
@@ -126,28 +130,36 @@ const BarChart: React.FC<BarChartProps> = ({
             align="center"
             layout="horizontal"
             iconType="circle"
-            iconSize={8}
+            iconSize={isMobile ? 6 : 8}
           />
           
           {/* Render bars for each series with better styling */}
-          {series.map((s) => (
+          {series.map((s, index) => (
             <Bar 
               key={s.dataKey} 
               dataKey={s.dataKey} 
               name={s.name} 
               fill={s.fill}
-              radius={[2, 2, 0, 0]}
-              label={s.showLabel ? {
-                position: isVertical ? 'right' : 'top',
-                fontSize: isMobile ? 9 : 10,
-                fontWeight: 'bold',
-                fill: '#333333',
-                offset: 5,
-                formatter: (value) => value || ''
-              } : false}
-              stroke="#ffffff"
-              strokeWidth={1}
-            />
+              radius={[3, 3, 0, 0]}
+              animationDuration={1000 + (index * 200)}
+              animationBegin={300 + (index * 150)}
+              stroke={s.fill}
+              strokeWidth={0.5}
+            >
+              {s.showLabel && (
+                <LabelList 
+                  dataKey={s.dataKey} 
+                  position={isVertical ? 'right' : 'top'} 
+                  style={{ 
+                    fontSize: isMobile ? 9 : 10,
+                    fontWeight: 'bold',
+                    fill: '#333333'
+                  }}
+                  formatter={(value) => value || ''}
+                  offset={5}
+                />
+              )}
+            </Bar>
           ))}
         </RechartsBarChart>
       </ResponsiveContainer>
