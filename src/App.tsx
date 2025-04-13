@@ -1,7 +1,8 @@
 
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
+import LandingPage from "@/pages/LandingPage";
 import Index from "@/pages/Index";
 import Equipment from "@/pages/Equipment";
 import EquipmentDetails from "@/pages/EquipmentDetails";
@@ -14,6 +15,7 @@ import Settings from "@/pages/Settings";
 import PrintView from "@/pages/PrintView";
 import PageTransition from "@/components/PageTransition";
 import { CompanyProvider } from "@/contexts/CompanyContext";
+import { CompanyRouteGuard } from "@/components/company/CompanyRouteGuard";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -31,16 +33,20 @@ function AnimatedRoutes() {
   return (
     <PageTransition>
       <Routes location={location}>
-        <Route path="/" element={<Index />} />
-        <Route path="/equipment" element={<Equipment />} />
-        <Route path="/equipment/:id" element={<EquipmentDetails />} />
-        <Route path="/add-equipment" element={<AddEquipment />} />
-        <Route path="/projects" element={<Projects />} />
-        <Route path="/add-project" element={<AddProject />} />
-        <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
-        <Route path="/analytics" element={<Analytics />} />
-        <Route path="/settings" element={<Settings />} />
-        <Route path="/print" element={<PrintView />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route element={<CompanyRouteGuard />}>
+          <Route path="/dashboard" element={<Index />} />
+          <Route path="/equipment" element={<Equipment />} />
+          <Route path="/equipment/:id" element={<EquipmentDetails />} />
+          <Route path="/add-equipment" element={<AddEquipment />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/add-project" element={<AddProject />} />
+          <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/settings" element={<Settings />} />
+          <Route path="/print" element={<PrintView />} />
+        </Route>
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </PageTransition>
   );

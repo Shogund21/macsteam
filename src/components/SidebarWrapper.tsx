@@ -14,18 +14,24 @@ import {
   Wrench, 
   Briefcase, 
   BarChart, 
-  Settings 
+  Settings,
+  Building,
+  LogOut
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { useCompany } from "@/contexts/CompanyContext";
 
 export const SidebarWrapper = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentCompany } = useCompany();
 
   const menuItems = [
     { 
       icon: Home, 
       label: "Dashboard", 
-      path: "/" 
+      path: "/dashboard" 
     },
     { 
       icon: Wrench, 
@@ -48,6 +54,10 @@ export const SidebarWrapper = () => {
       path: "/settings" 
     }
   ];
+
+  const handleChangeCompany = () => {
+    navigate("/");
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -76,8 +86,26 @@ export const SidebarWrapper = () => {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter>
-        {/* Optional: Add footer content like user info or logout */}
+      <SidebarFooter className="p-4 border-t">
+        <div className="space-y-2">
+          {currentCompany && (
+            <div className="text-sm text-muted-foreground mb-2 px-2">
+              <div className="font-medium flex items-center gap-2">
+                <Building className="h-4 w-4" />
+                <span>{currentCompany.name}</span>
+              </div>
+            </div>
+          )}
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full flex items-center gap-2"
+            onClick={handleChangeCompany}
+          >
+            <LogOut className="h-4 w-4" />
+            <span>Change Company</span>
+          </Button>
+        </div>
       </SidebarFooter>
     </div>
   );
