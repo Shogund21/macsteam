@@ -1,28 +1,17 @@
 
-// DEPRECATED: This file has been refactored into smaller components.
-// Please use MaintenanceCheckFormRefactored.tsx instead.
-// The file is kept temporarily for reference.
-
 import React, { useState, useEffect } from "react";
 import { Form } from "@/components/ui/form";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { MaintenanceCheck } from "@/types/maintenance";
-import MaintenanceBasicInfo from "./form/MaintenanceBasicInfo";
-import MaintenanceReadings from "./form/MaintenanceReadings";
-import MaintenanceStatus from "./form/MaintenanceStatus";
-import MaintenanceObservations from "./form/MaintenanceObservations";
-import AHUMaintenanceFields from "./form/AHUMaintenanceFields";
-import CoolingTowerFields from "./form/CoolingTowerFields";
-import ElevatorMaintenanceFields from "./form/ElevatorMaintenanceFields";
-import RestroomMaintenanceFields from "./form/RestroomMaintenanceFields";
-import DocumentManager from "./documents/DocumentManager";
 import { useMaintenanceForm } from "./form/hooks/useMaintenanceForm";
 import { useMaintenanceFormSubmit } from "./form/hooks/useMaintenanceFormSubmit";
-import FormSection from "./form/FormSection";
-import FormActions from "./form/FormActions";
 import { useIsMobile } from "@/hooks/use-mobile";
 import useFormValidation from "./form/hooks/useFormValidation";
+import { MaintenanceFormProvider } from "./context/MaintenanceFormContext";
+import MaintenanceFormHeader from "./form/layout/MaintenanceFormHeader";
+import MaintenanceFormBody from "./form/layout/MaintenanceFormBody";
+import FormActions from "./form/FormActions";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -53,6 +42,7 @@ const MaintenanceCheckForm = ({
     }
   }, [initialData]);
 
+  // Fetch equipment data
   const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
@@ -72,6 +62,7 @@ const MaintenanceCheckForm = ({
     },
   });
 
+  // Fetch technicians data
   const { data: technicians = [], isLoading: isLoadingTechnicians } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
@@ -107,28 +98,6 @@ const MaintenanceCheckForm = ({
   };
 
   const equipmentType = getEquipmentType();
-
-  // Function to render maintenance fields based on equipment type
-  const renderEquipmentTypeFields = () => {
-    switch (equipmentType) {
-      case 'ahu':
-        return <AHUMaintenanceFields form={form} />;
-      case 'cooling_tower':
-        return <CoolingTowerFields form={form} />;
-      case 'elevator':
-        return <ElevatorMaintenanceFields form={form} />;
-      case 'restroom':
-        return <RestroomMaintenanceFields form={form} />;
-      default:
-        return (
-          <>
-            <MaintenanceReadings form={form} />
-            <MaintenanceStatus form={form} />
-            <MaintenanceObservations form={form} />
-          </>
-        );
-    }
-  };
 
   const onSubmitForm = async (values: any) => {
     console.log('Form submission initiated with values:', values);
@@ -172,40 +141,32 @@ const MaintenanceCheckForm = ({
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6">
-        <div className="grid gap-6">
-          <div className={`${isMobile ? 'text-center mb-4' : ''}`}>
-            <h2 className={`text-xl ${isMobile ? '' : 'text-2xl'} font-bold`}>
-              {initialData ? 'Edit Maintenance Check' : 'New Maintenance Check'}
-            </h2>
-          </div>
-          
-          <FormSection>
-            <MaintenanceBasicInfo 
-              form={form} 
-              equipment={equipment} 
-              technicians={technicians} 
+    <MaintenanceFormProvider
+      form={form}
+      initialData={initialData}
+      isSubmitting={isSubmitting}
+      setIsSubmitting={setIsSubmitting}
+      equipment={equipment}
+      technicians={technicians}
+      selectedEquipment={selectedEquipment}
+      equipmentType={equipmentType}
+      isMobile={isMobile}
+    >
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6">
+          <div className="grid gap-6">
+            <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
+            <MaintenanceFormBody />
+            <FormActions 
+              onCancel={onComplete}
+              isEditing={!!initialData}
+              isSubmitting={isSubmitting}
+              onSubmit={manualSubmit}
             />
-          </FormSection>
-          
-          <FormSection>
-            {renderEquipmentTypeFields()}
-          </FormSection>
-
-          <FormSection>
-            <DocumentManager equipmentId={form.watch('equipment_id')} />
-          </FormSection>
-
-          <FormActions 
-            onCancel={onComplete}
-            isEditing={!!initialData}
-            isSubmitting={isSubmitting}
-            onSubmit={manualSubmit} // Use manual submit for both create and edit modes
-          />
-        </div>
-      </form>
-    </Form>
+          </div>
+        </form>
+      </Form>
+    </MaintenanceFormProvider>
   );
 };
 
