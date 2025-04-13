@@ -24,7 +24,7 @@ const TechnicianPerformance = () => {
   }
 
   return (
-    <div className="h-[300px] w-full flex flex-col">
+    <div className="h-full w-full flex flex-col">
       <div className="flex-1 min-h-0 w-full overflow-visible">
         <TechnicianPerformanceChart data={chartData} />
       </div>

@@ -3,19 +3,19 @@ import AnalyticsCard from "./AnalyticsCard";
 import MaintenanceTrends from "@/components/analytics/MaintenanceTrends";
 import EquipmentStatusChart from "@/components/analytics/EquipmentStatusChart";
 import MaintenanceCompletionRate from "@/components/analytics/MaintenanceCompletionRate";
-import TechnicianPerformance from "@/components/analytics/TechnicianPerformance";
-import LocationBreakdown from "@/components/analytics/LocationBreakdown";
+import TechnicianPerformance from "@/components/analytics/technician/TechnicianPerformance";
+import LocationBreakdown from "@/components/analytics/location/LocationBreakdown";
 
 const ChartsView = () => {
   return (
-    <div className="grid grid-cols-1 gap-6">
+    <div className="grid grid-cols-1 gap-4 md:gap-6">
       {/* Main Trends Chart - Full width */}
       <AnalyticsCard
         title="Maintenance Trends"
         description="Historical maintenance activity over time"
         tooltipContent="This chart shows maintenance activities over time, including completed, pending, and issues found."
       >
-        <div className="h-[400px] w-full">
+        <div className="min-h-[350px] w-full">
           <MaintenanceTrends />
         </div>
       </AnalyticsCard>
@@ -28,7 +28,7 @@ const ChartsView = () => {
           description="Current status breakdown"
           tooltipContent="Distribution of equipment by current operational status"
         >
-          <div className="h-[300px] w-full">
+          <div className="min-h-[300px] w-full">
             <EquipmentStatusChart />
           </div>
         </AnalyticsCard>
@@ -39,7 +39,7 @@ const ChartsView = () => {
           description="Maintenance status overview"
           tooltipContent="Breakdown of maintenance tasks by completion status"
         >
-          <div className="h-[300px] w-full">
+          <div className="min-h-[300px] w-full">
             <MaintenanceCompletionRate />
           </div>
         </AnalyticsCard>
@@ -50,7 +50,7 @@ const ChartsView = () => {
           description="Maintenance by technician"
           tooltipContent="Comparison of completed, pending, and issues found by technician"
         >
-          <div className="h-[300px] w-full">
+          <div className="min-h-[300px] w-full">
             <TechnicianPerformance />
           </div>
         </AnalyticsCard>
@@ -61,7 +61,7 @@ const ChartsView = () => {
           description="Distribution across sites"
           tooltipContent="Count of equipment items by location"
         >
-          <div className="h-[300px] w-full">
+          <div className="min-h-[300px] w-full">
             <LocationBreakdown />
           </div>
         </AnalyticsCard>
