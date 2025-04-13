@@ -30,6 +30,19 @@ export const useLocationBreakdownData = () => {
   });
 
   useEffect(() => {
+    // Get location data, regardless of whether equipment data exists
+    const sampleData = [
+      { name: "Dadeland Home", value: 8 },
+      { name: "777", value: 7 },
+      { name: "778", value: 6 },
+      { name: "776A", value: 5 },
+      { name: "776B", value: 3 },
+      { name: "Dadeland", value: 3 },
+      { name: "806", value: 2 },
+      { name: "Building A - Basement", value: 1 },
+      { name: "Building B - Basement", value: 1 }
+    ].slice(0, isMobile ? 7 : 9);
+    
     if (equipmentData && equipmentData.length > 0) {
       // Group equipment by location
       const locationCounts: Record<string, number> = {};
@@ -43,24 +56,15 @@ export const useLocationBreakdownData = () => {
       const data = Object.entries(locationCounts)
         .map(([name, value]) => ({ name, value }))
         .sort((a, b) => b.value - a.value)
-        .slice(0, isMobile ? 8 : 10); // Show more locations
+        .slice(0, isMobile ? 7 : 9); // Limit to top locations
       
-      setChartData(data);
+      if (data.length > 0) {
+        setChartData(data);
+      } else {
+        setChartData(sampleData);
+      }
     } else {
       // Always use sample data if no real data is available
-      const sampleData = [
-        { name: "Main Building", value: 24 },
-        { name: "North Wing", value: 18 },
-        { name: "South Wing", value: 15 },
-        { name: "East Block", value: 12 },
-        { name: "West Block", value: 9 },
-        { name: "Data Center", value: 6 },
-        { name: "Warehouse", value: 5 },
-        { name: "Office Complex", value: 4 },
-        { name: "Server Room", value: 3 },
-        { name: "Conference Center", value: 2 }
-      ].slice(0, isMobile ? 8 : 10);
-      
       setChartData(sampleData);
     }
   }, [equipmentData, isMobile]);

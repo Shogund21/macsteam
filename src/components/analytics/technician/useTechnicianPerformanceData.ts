@@ -62,74 +62,68 @@ export function useTechnicianPerformanceData() {
   });
 
   useEffect(() => {
-    if (maintenanceData && technicians && maintenanceData.length > 0 && technicians.length > 0) {
-      // Create a lookup map for technician names
-      const technicianMap = new Map();
-      technicians.forEach(tech => {
-        technicianMap.set(tech.id, `${tech.firstName} ${tech.lastName}`);
-      });
-      
-      // Group maintenance checks by technician
-      const techPerformance: Record<string, { completed: number; pending: number; issues: number }> = {};
-      
-      maintenanceData.forEach(check => {
-        if (!check.technician_id) return;
+    // Sample data that will be used when no data is available
+    const sampleData = [
+      { name: "Jorge Salazar", completed: 15, pending: 8, issues: 6, total: 29 },
+      { name: "Jose Pizarro", completed: 12, pending: 6, issues: 2, total: 20 },
+      { name: "Maria Rodriguez", completed: 10, pending: 4, issues: 1, total: 15 },
+      { name: "Carlos Gomez", completed: 9, pending: 3, issues: 2, total: 14 },
+      { name: "Ana Martinez", completed: 8, pending: 2, issues: 0, total: 10 }
+    ].slice(0, isMobile ? 4 : 5);
+    
+    if (maintenanceData && technicians) {
+      // Process real data if available
+      try {
+        // Create a lookup map for technician names
+        const technicianMap = new Map();
+        technicians.forEach(tech => {
+          technicianMap.set(tech.id, `${tech.firstName} ${tech.lastName}`);
+        });
         
-        const techId = check.technician_id;
-        if (!techPerformance[techId]) {
-          techPerformance[techId] = { completed: 0, pending: 0, issues: 0 };
-        }
+        // Group maintenance checks by technician
+        const techPerformance: Record<string, { completed: number; pending: number; issues: number }> = {};
         
-        if (check.status === 'completed') {
-          techPerformance[techId].completed += 1;
-        } else if (check.status === 'pending') {
-          techPerformance[techId].pending += 1;
-        } else if (check.status === 'issue_found') {
-          techPerformance[techId].issues += 1;
+        maintenanceData.forEach(check => {
+          if (!check.technician_id) return;
+          
+          const techId = check.technician_id;
+          if (!techPerformance[techId]) {
+            techPerformance[techId] = { completed: 0, pending: 0, issues: 0 };
+          }
+          
+          if (check.status === 'completed') {
+            techPerformance[techId].completed += 1;
+          } else if (check.status === 'pending') {
+            techPerformance[techId].pending += 1;
+          } else if (check.status === 'issue_found') {
+            techPerformance[techId].issues += 1;
+          }
+        });
+        
+        // Format for chart - convert to array, add names, and sort by total tasks
+        const formattedData = Object.entries(techPerformance)
+          .map(([techId, stats]) => ({
+            name: technicianMap.get(techId) || 'Unknown Technician',
+            ...stats,
+            total: stats.completed + stats.pending + stats.issues
+          }))
+          .sort((a, b) => b.total - a.total)
+          .slice(0, isMobile ? 4 : 5); // Show fewer technicians on mobile
+        
+        if (formattedData.length > 0) {
+          setChartData(formattedData);
+        } else {
+          setChartData(sampleData);
         }
-      });
-      
-      // Format for chart - convert to array, add names, and sort by completed checks
-      const formattedData = Object.entries(techPerformance)
-        .map(([techId, stats]) => ({
-          name: technicianMap.get(techId) || 'Unknown Technician',
-          ...stats,
-          total: stats.completed + stats.pending + stats.issues
-        }))
-        .sort((a, b) => b.total - a.total)
-        .slice(0, isMobile ? 5 : 7); // Show more technicians
-      
-      if (formattedData.length > 0) {
-        setChartData(formattedData);
-      } else {
-        // Use sample data if no formatted data
-        setChartData(getSampleData(isMobile));
+      } catch (error) {
+        console.error("Error processing technician data:", error);
+        setChartData(sampleData);
       }
     } else {
       // Always use sample data if no real data is available
-      setChartData(getSampleData(isMobile));
+      setChartData(sampleData);
     }
   }, [maintenanceData, technicians, isMobile]);
 
   return { chartData, isLoading };
-}
-
-// Helper function to get sample data
-function getSampleData(isMobile: boolean): Array<TechnicianStats> {
-  const sampleData = [
-    { name: "Filip Carter", completed: 28, pending: 5, issues: 2, total: 35 },
-    { name: "Emma Johnson", completed: 22, pending: 3, issues: 1, total: 26 },
-    { name: "David Smith", completed: 18, pending: 7, issues: 3, total: 28 },
-    { name: "Sarah Brown", completed: 15, pending: 2, issues: 0, total: 17 },
-    { name: "Michael Davis", completed: 12, pending: 4, issues: 1, total: 17 }
-  ];
-  
-  if (!isMobile) {
-    sampleData.push(
-      { name: "Carlos Rodriguez", completed: 10, pending: 3, issues: 2, total: 15 },
-      { name: "Lisa Wilson", completed: 8, pending: 2, issues: 0, total: 10 }
-    );
-  }
-  
-  return sampleData.slice(0, isMobile ? 5 : 7);
 }

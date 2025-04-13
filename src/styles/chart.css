@@ -8,33 +8,11 @@ text.recharts-text {
   fill: #333333 !important;
 }
 
-/* Style for pie chart labels */
-.recharts-pie-label-text {
-  font-size: 12px !important;
-  font-weight: 700 !important;
-  fill: #333333 !important;
-  text-shadow: 0 0 4px white, 0 0 4px white, 0 0 4px white, 0 0 4px white;
-}
-
-/* Style for legend text */
-.recharts-legend-item-text {
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  margin-left: 6px !important;
-  color: #333333 !important;
-}
-
 /* Style for axis labels */
 .recharts-cartesian-axis-tick-value {
   font-size: 12px !important;
   font-weight: 600 !important;
   fill: #333333 !important;
-}
-
-/* Style for pie chart labels lines */
-.recharts-pie-label-line {
-  stroke-width: 1px !important;
-  stroke: #666666 !important;
 }
 
 /* Better tooltip styling */
@@ -61,13 +39,6 @@ text.recharts-text {
   margin-bottom: 8px !important;
 }
 
-/* Make sure the pie chart segments are distinct */
-.recharts-sector {
-  stroke: #fff !important;
-  stroke-width: 2px !important;
-  stroke-opacity: 1 !important;
-}
-
 /* Improve responsiveness of charts */
 .recharts-responsive-container {
   width: 100% !important;
@@ -77,35 +48,9 @@ text.recharts-text {
   overflow: visible !important;
 }
 
-/* Container for charts to ensure proper spacing and sizing */
-.chart-container {
-  width: 100%;
-  height: auto !important;
-  min-height: 280px !important;
-  max-height: 450px !important;
-  position: relative;
-  overflow: visible !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 20px !important;
-}
-
 /* Fix for labels being cut off */
 .recharts-wrapper {
   overflow: visible !important;
-}
-
-/* Better axis line styling */
-.recharts-cartesian-axis-line {
-  stroke: #cccccc !important;
-  stroke-width: 1px !important;
-}
-
-/* Better grid styling */
-.recharts-cartesian-grid-horizontal line,
-.recharts-cartesian-grid-vertical line {
-  stroke: #e5e5e5 !important;
 }
 
 /* Fix for horizontal bar charts - ensure text labels are visible */
@@ -126,29 +71,6 @@ text.recharts-text {
   overflow: visible !important;
 }
 
-/* Improved bars for better visibility */
-.recharts-rectangle {
-  stroke: #ffffff !important;
-  stroke-width: 1px !important;
-}
-
-/* Bar chart label coloring */
-.recharts-bar-rectangle > path {
-  stroke: white !important;
-  stroke-width: 1 !important;
-}
-
-/* Hover effects for better interaction */
-.recharts-active-dot {
-  stroke-width: 2px !important;
-  r: 6px !important;
-}
-
-/* Animation for charts */
-.recharts-layer {
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
 /* Fix z-index for tooltips to ensure they're visible */
 .recharts-tooltip-wrapper {
   z-index: 1000 !important;
@@ -161,29 +83,13 @@ text.recharts-text {
   font-weight: bold !important;
 }
 
-/* Ensure chart bars have enough space */
-.recharts-layer.recharts-bar-rectangles {
-  transform: translateX(0) !important;
-}
-
 /* Ensure YAxis has enough space for labels */
 .recharts-yAxis .recharts-cartesian-axis-tick-value {
   text-anchor: end !important;
 }
 
-/* Prevent clipping issues */
-.recharts-wrapper .recharts-cartesian-grid {
-  overflow: visible !important;
-}
-
 /* Mobile-specific styles */
 @media (max-width: 768px) {
-  .chart-container {
-    min-height: 260px !important;
-    max-height: 400px !important;
-    padding-bottom: 30px !important;
-  }
-  
   text.recharts-text {
     font-size: 10px !important;
   }
@@ -196,19 +102,6 @@ text.recharts-text {
     font-size: 10px !important;
   }
   
-  .recharts-pie-label-text {
-    font-size: 10px !important;
-  }
-  
-  .recharts-legend-item {
-    margin-right: 8px !important;
-    margin-bottom: 6px !important;
-  }
-  
-  .recharts-responsive-container {
-    min-height: 240px !important;
-  }
-
   /* Ensure tooltips are visible on mobile */
   .recharts-tooltip-wrapper {
     z-index: 1000 !important;

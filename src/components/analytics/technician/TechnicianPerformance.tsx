@@ -15,19 +15,9 @@ const TechnicianPerformance = () => {
     );
   }
 
-  if (!chartData || chartData.length === 0) {
-    return (
-      <div className="h-full w-full flex items-center justify-center text-muted-foreground">
-        No technician data available
-      </div>
-    );
-  }
-
   return (
-    <div className="h-full w-full flex flex-col">
-      <div className="flex-1 min-h-0 w-full overflow-visible">
-        <TechnicianPerformanceChart data={chartData} />
-      </div>
+    <div className="h-full w-full">
+      <TechnicianPerformanceChart data={chartData} />
     </div>
   );
 };
