@@ -23,6 +23,7 @@ interface CompanyUsersProps {
 
 interface User {
   id: string;
+  user_id?: string;
   email: string;
   role: string;
   is_admin: boolean;
