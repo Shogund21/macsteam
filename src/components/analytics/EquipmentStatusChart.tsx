@@ -74,7 +74,7 @@ const EquipmentStatusChart = () => {
   }, [equipmentData, isMobile]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[250px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[300px]">Loading chart data...</div>;
   }
 
   // Calculate total equipment count for percentage calculation
@@ -82,12 +82,12 @@ const EquipmentStatusChart = () => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={400}>
         <PieChart
           margin={{
-            top: 10,
-            right: 10,
-            left: 10,
+            top: 20,
+            right: 20,
+            left: 20,
             bottom: 40,
           }}
         >
@@ -96,9 +96,9 @@ const EquipmentStatusChart = () => {
             cx="50%"
             cy="45%"
             labelLine={true}
-            outerRadius={isMobile ? 90 : 110}
+            outerRadius={isMobile ? 110 : 140}
             innerRadius={0}
-            paddingAngle={2}
+            paddingAngle={3}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => {
@@ -132,13 +132,13 @@ const EquipmentStatusChart = () => {
             iconSize={10}
             iconType="circle"
             formatter={(value) => {
-              const limit = isMobile ? 10 : 14;
+              const limit = isMobile ? 12 : 16;
               return value.length > limit ? `${value.slice(0, limit)}...` : value;
             }}
             wrapperStyle={{
-              fontSize: isMobile ? '11px' : '12px',
+              fontSize: isMobile ? '11px' : '13px',
               fontWeight: 'medium',
-              paddingTop: '10px',
+              paddingTop: '25px',
               width: '100%'
             }}
           />

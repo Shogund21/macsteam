@@ -68,7 +68,7 @@ text.recharts-text {
 .recharts-responsive-container {
   width: 100% !important;
   height: 100% !important;
-  min-height: 300px !important;
+  min-height: 350px !important;
   max-width: 100% !important;
   overflow: visible !important;
 }
@@ -83,10 +83,10 @@ text.recharts-text {
 .chart-container {
   width: 100%;
   height: auto !important;
-  min-height: 350px;
-  max-height: 500px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  min-height: 400px;
+  max-height: 600px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   position: relative;
   overflow-x: auto;
   overflow-y: visible;
@@ -99,7 +99,7 @@ text.recharts-text {
 .recharts-wrapper {
   overflow: visible !important;
   height: auto !important;
-  min-height: 300px !important;
+  min-height: 350px !important;
 }
 
 /* Better axis line styling */
@@ -121,9 +121,9 @@ text.recharts-text {
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .chart-container {
-    min-height: 300px;
-    max-height: 400px;
-    padding: 0.5rem;
+    min-height: 350px;
+    max-height: 500px;
+    padding: 1rem;
     overflow-x: auto;
   }
   
@@ -153,7 +153,7 @@ text.recharts-text {
   }
   
   .recharts-responsive-container {
-    min-height: 250px !important;
+    min-height: 300px !important;
   }
   
   .recharts-pie text {
@@ -161,6 +161,6 @@ text.recharts-text {
   }
   
   .recharts-wrapper {
-    min-height: 250px !important;
+    min-height: 300px !important;
   }
 }

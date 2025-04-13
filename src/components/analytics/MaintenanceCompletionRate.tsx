@@ -72,7 +72,7 @@ const MaintenanceCompletionRate = () => {
   }, [maintenanceData]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[250px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[300px]">Loading chart data...</div>;
   }
 
   // Calculate total for percentages
@@ -80,12 +80,12 @@ const MaintenanceCompletionRate = () => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={400}>
         <PieChart
           margin={{
-            top: 10,
-            right: 10,
-            left: 10,
+            top: 20,
+            right: 20,
+            left: 20,
             bottom: 40,
           }}
         >
@@ -94,14 +94,14 @@ const MaintenanceCompletionRate = () => {
             cx="50%"
             cy="45%" 
             labelLine={true}
-            outerRadius={isMobile ? 90 : 110}
-            innerRadius={isMobile ? 50 : 60}
-            paddingAngle={2}
+            outerRadius={isMobile ? 110 : 140}
+            innerRadius={isMobile ? 60 : 80}
+            paddingAngle={3}
             fill="#8884d8"
             dataKey="value"
             label={({ name, percent }) => {
               // Only show label if segment is large enough
-              if (percent < 0.1 && isMobile) return null;
+              if (percent < 0.08 && isMobile) return null;
               return `${name}: ${(percent * 100).toFixed(0)}%`;
             }}
           >
@@ -124,9 +124,9 @@ const MaintenanceCompletionRate = () => {
             verticalAlign="bottom" 
             align="center"
             wrapperStyle={{
-              fontSize: isMobile ? '11px' : '13px',
+              fontSize: isMobile ? '12px' : '14px',
               fontWeight: 'medium',
-              paddingTop: '20px',
+              paddingTop: '25px',
               bottom: 0,
               left: 0,
               width: '100%'

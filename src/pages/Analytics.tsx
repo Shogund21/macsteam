@@ -47,7 +47,7 @@ const Analytics = () => {
   return (
     <Layout>
       <AnalyticsFilterProvider>
-        <div className="space-y-6 max-w-full px-4 pb-8">
+        <div className="space-y-8 max-w-full px-4 pb-12">
           <div className="flex flex-col gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold">Analytics & Reporting</h1>
@@ -87,19 +87,19 @@ const Analytics = () => {
                 Track historical maintenance activities and identify patterns
               </CardDescription>
             </CardHeader>
-            <CardContent className="overflow-visible p-2 md:p-4">
+            <CardContent className="overflow-visible p-4 md:p-8">
               <MaintenanceTrends />
             </CardContent>
           </Card>
 
           {/* First Row of Charts - Equipment Status and Maintenance Completion */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card className="overflow-visible h-full">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment Status</CardTitle>
                 <CardDescription>Current status of all equipment</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible p-2 md:p-4">
+              <CardContent className="overflow-visible p-4 md:p-6">
                 <EquipmentStatusChart />
               </CardContent>
             </Card>
@@ -108,20 +108,20 @@ const Analytics = () => {
                 <CardTitle>Maintenance Completion Rate</CardTitle>
                 <CardDescription>Breakdown of maintenance check statuses</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible p-2 md:p-4">
+              <CardContent className="overflow-visible p-4 md:p-6">
                 <MaintenanceCompletionRate />
               </CardContent>
             </Card>
           </div>
 
           {/* Second Row of Charts - Technician Performance and Location Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <Card className="overflow-visible h-full">
               <CardHeader className="pb-2">
                 <CardTitle>Technician Performance</CardTitle>
                 <CardDescription>Maintenance checks by technician</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible p-2 md:p-4">
+              <CardContent className="overflow-visible p-4 md:p-6">
                 <TechnicianPerformance />
               </CardContent>
             </Card>
@@ -130,7 +130,7 @@ const Analytics = () => {
                 <CardTitle>Equipment by Location</CardTitle>
                 <CardDescription>Distribution of equipment across locations</CardDescription>
               </CardHeader>
-              <CardContent className="overflow-visible p-2 md:p-4">
+              <CardContent className="overflow-visible p-4 md:p-6">
                 <LocationBreakdown />
               </CardContent>
             </Card>

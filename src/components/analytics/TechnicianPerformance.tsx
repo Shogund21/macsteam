@@ -137,20 +137,20 @@ const TechnicianPerformance = () => {
   }, [maintenanceData, technicians, isMobile]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[250px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[300px]">Loading chart data...</div>;
   }
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={400}>
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
-            top: 20,
-            right: isMobile ? 50 : 80,
-            left: isMobile ? 100 : 140,
-            bottom: 20,
+            top: 30,
+            right: isMobile ? 60 : 90,
+            left: isMobile ? 120 : 160,
+            bottom: 30,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -162,10 +162,10 @@ const TechnicianPerformance = () => {
             type="category" 
             dataKey="name" 
             tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }} 
-            width={isMobile ? 100 : 140}
+            width={isMobile ? 120 : 160}
             tickFormatter={(value) => {
               // Truncate long names
-              const limit = isMobile ? 10 : 15;
+              const limit = isMobile ? 12 : 18;
               return value.length > limit ? `${value.slice(0, limit)}...` : value;
             }}
           />
@@ -180,9 +180,9 @@ const TechnicianPerformance = () => {
           />
           <Legend 
             wrapperStyle={{ 
-              fontSize: isMobile ? '11px' : '12px', 
+              fontSize: isMobile ? '11px' : '13px', 
               fontWeight: 'medium',
-              paddingTop: '15px'
+              paddingTop: '20px'
             }}
             verticalAlign="bottom"
             align="center"
