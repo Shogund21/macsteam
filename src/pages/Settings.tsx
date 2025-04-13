@@ -39,8 +39,8 @@ const Settings = () => {
         <div className={`${isMobile ? 'flex flex-col' : 'space-y-4'}`}>
           {isMobile && !showTabList && (
             <MobileTabNavigation 
-              prevTab={prevTab} 
-              nextTab={nextTab} 
+              prevTab={() => prevTab()} 
+              nextTab={() => nextTab()} 
               handleTabChange={handleTabChange}
             />
           )}

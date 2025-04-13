@@ -50,6 +50,7 @@ export const CompanyForm = ({ initialData, onSuccess }: CompanyFormProps) => {
     setIsSubmitting(true);
     try {
       if (initialData?.id) {
+        // Update existing company
         const { error } = await supabase
           .from("companies")
           .update(values)
@@ -62,9 +63,10 @@ export const CompanyForm = ({ initialData, onSuccess }: CompanyFormProps) => {
           description: "Company updated successfully",
         });
       } else {
+        // Insert new company - fix the values format
         const { error } = await supabase
           .from("companies")
-          .insert([values]);
+          .insert(values); // Changed from [values] to values
 
         if (error) throw error;
 

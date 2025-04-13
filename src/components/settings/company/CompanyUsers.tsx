@@ -40,28 +40,31 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
   const loadUsers = async () => {
     try {
       setLoading(true);
+      // Changed the query to avoid using the join that causes issues
       const { data, error } = await supabase
         .from("company_users")
-        .select(`
-          id,
-          user_id,
-          role,
-          is_admin,
-          auth:user_id(email)
-        `)
+        .select("id, user_id, role, is_admin")
         .eq("company_id", companyId);
 
       if (error) throw error;
 
-      const formattedUsers = data.map(item => ({
-        id: item.id,
-        user_id: item.user_id,
-        email: item.auth?.email || "Unknown",
-        role: item.role,
-        is_admin: item.is_admin,
-      }));
+      // Then fetch user emails separately for each user_id
+      const usersWithEmails = await Promise.all(
+        data.map(async (item) => {
+          // Get user email from auth.users table
+          const { data: userData, error: userError } = await supabase.auth.admin.getUserById(item.user_id);
+          
+          return {
+            id: item.id,
+            user_id: item.user_id,
+            email: userData?.email || "Unknown",
+            role: item.role,
+            is_admin: item.is_admin,
+          };
+        })
+      );
 
-      setUsers(formattedUsers);
+      setUsers(usersWithEmails);
     } catch (error) {
       console.error("Error loading users:", error);
       toast({
@@ -91,10 +94,14 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
     try {
       setIsAdding(true);
 
-      // First, check if the user exists
-      const { data: userData, error: userError } = await supabase.auth.admin.getUserByEmail(newUserEmail);
-
-      if (userError || !userData) {
+      // First, check if the user exists by searching all auth users
+      const { data: userData, error: userError } = await supabase.auth.admin.listUsers();
+      
+      if (userError) throw userError;
+      
+      const user = userData?.users?.find(u => u.email === newUserEmail);
+      
+      if (!user) {
         toast({
           title: "Error",
           description: "User not found. Please check the email address.",
@@ -108,7 +115,7 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
         .from("company_users")
         .select("*")
         .eq("company_id", companyId)
-        .eq("user_id", userData.id);
+        .eq("user_id", user.id);
 
       if (existingUsers && existingUsers.length > 0) {
         toast({
@@ -125,7 +132,7 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
         .insert([
           {
             company_id: companyId,
-            user_id: userData.id,
+            user_id: user.id,
             role: newUserRole,
             is_admin: newUserIsAdmin,
           },
