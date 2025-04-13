@@ -67,47 +67,6 @@
   }
 }
 
-/* Better text rendering for charts and legibility */
-text.recharts-text {
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  fill: #333333 !important;
-}
-
-/* Style for pie chart labels */
-.recharts-pie-label-text {
-  font-size: 20px !important;
-  font-weight: 700 !important;
-  fill: #333333 !important;
-  text-shadow: 0 0 4px white, 0 0 4px white, 0 0 4px white, 0 0 4px white;
-}
-
-/* Style for legend text */
-.recharts-legend-item-text {
-  font-size: 16px !important;
-  font-weight: 500 !important;
-  margin-left: 5px !important;
-}
-
-/* Style for axis labels */
-.recharts-cartesian-axis-tick-value {
-  font-size: 16px !important;
-  font-weight: 500 !important;
-}
-
-/* Style for pie chart labels lines */
-.recharts-pie-label-line {
-  stroke-width: 2px !important;
-}
-
-/* Better tooltip styling */
-.recharts-default-tooltip {
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  font-size: 16px !important;
-  padding: 10px 14px !important;
-}
-
 /* Print styles */
 @media print {
   .print-content {
