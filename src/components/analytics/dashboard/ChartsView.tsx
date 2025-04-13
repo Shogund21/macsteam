@@ -1,0 +1,73 @@
+
+import AnalyticsCard from "./AnalyticsCard";
+import MaintenanceTrends from "@/components/analytics/MaintenanceTrends";
+import EquipmentStatusChart from "@/components/analytics/EquipmentStatusChart";
+import MaintenanceCompletionRate from "@/components/analytics/MaintenanceCompletionRate";
+import TechnicianPerformance from "@/components/analytics/TechnicianPerformance";
+import LocationBreakdown from "@/components/analytics/LocationBreakdown";
+
+const ChartsView = () => {
+  return (
+    <div className="grid grid-cols-1 gap-6">
+      {/* Main Trends Chart - Full width */}
+      <AnalyticsCard
+        title="Maintenance Trends"
+        description="Historical maintenance activity over time"
+        tooltipContent="This chart shows maintenance activities over time, including completed, pending, and issues found."
+      >
+        <div className="h-[400px] w-full">
+          <MaintenanceTrends />
+        </div>
+      </AnalyticsCard>
+
+      {/* Two-column grid for secondary charts */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Equipment Status */}
+        <AnalyticsCard
+          title="Equipment Status"
+          description="Current status breakdown"
+          tooltipContent="Distribution of equipment by current operational status"
+        >
+          <div className="h-[300px] w-full">
+            <EquipmentStatusChart />
+          </div>
+        </AnalyticsCard>
+        
+        {/* Maintenance Completion Rate */}
+        <AnalyticsCard
+          title="Completion Rate"
+          description="Maintenance status overview"
+          tooltipContent="Breakdown of maintenance tasks by completion status"
+        >
+          <div className="h-[300px] w-full">
+            <MaintenanceCompletionRate />
+          </div>
+        </AnalyticsCard>
+      
+        {/* Technician Performance */}
+        <AnalyticsCard
+          title="Technician Performance"
+          description="Maintenance by technician"
+          tooltipContent="Comparison of completed, pending, and issues found by technician"
+        >
+          <div className="h-[300px] w-full">
+            <TechnicianPerformance />
+          </div>
+        </AnalyticsCard>
+        
+        {/* Equipment by Location */}
+        <AnalyticsCard
+          title="Equipment by Location"
+          description="Distribution across sites"
+          tooltipContent="Count of equipment items by location"
+        >
+          <div className="h-[300px] w-full">
+            <LocationBreakdown />
+          </div>
+        </AnalyticsCard>
+      </div>
+    </div>
+  );
+};
+
+export default ChartsView;
