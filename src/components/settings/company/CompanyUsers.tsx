@@ -34,6 +34,16 @@ interface AuthUser {
   email?: string;
 }
 
+// Define the structure of the auth users API response
+interface AuthUserResponse {
+  users?: {
+    id: string;
+    email?: string;
+    [key: string]: any;
+  }[];
+  [key: string]: any;
+}
+
 const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -133,7 +143,9 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
       
       if (authError) throw authError;
       
-      const foundUser = authData?.users?.find(u => u.email === newUserEmail) as AuthUser | undefined;
+      // Properly type the auth data response
+      const typedAuthData = authData as AuthUserResponse;
+      const foundUser = typedAuthData.users?.find(u => u.email === newUserEmail);
       
       if (!foundUser) {
         toast({
