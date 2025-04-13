@@ -22,7 +22,7 @@ interface CompanyContextType {
   setCurrentCompany: (company: Company | null) => void;
   refreshCompanies: () => Promise<void>;
   addUserToCompany: (userId: string, companyId: string, role?: string, isAdmin?: boolean) => Promise<void>;
-  createCompany: (companyData: Partial<Company>) => Promise<Company>;
+  createCompany: (companyData: { name: string } & Partial<Omit<Company, 'id' | 'created_at' | 'updated_at'>>) => Promise<Company>;
 }
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined);
@@ -160,16 +160,16 @@ export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   // Create a new company
-  const createCompany = async (companyData: Partial<Company>): Promise<Company> => {
+  const createCompany = async (companyData: { name: string } & Partial<Omit<Company, 'id' | 'created_at' | 'updated_at'>>): Promise<Company> => {
     if (!user) {
       throw new Error("User must be logged in to create a company");
     }
 
     try {
-      // Insert company
+      // Insert company - ensuring name is required in the type
       const { data, error } = await supabase
         .from("companies")
-        .insert([companyData])
+        .insert(companyData)
         .select()
         .single();
 
