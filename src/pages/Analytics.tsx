@@ -46,7 +46,7 @@ const Analytics = () => {
   return (
     <Layout>
       <AnalyticsFilterProvider>
-        <div className="w-full max-w-full space-y-6 pb-20">
+        <div className="w-full max-w-full space-y-6 px-1 sm:px-2 md:px-3 pb-20">
           {/* Header Section */}
           <AnalyticsHeader 
             activeView={activeView} 

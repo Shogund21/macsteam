@@ -12,7 +12,7 @@ const Layout = ({ children }: LayoutProps) => {
     <SidebarProvider defaultOpen={true}>
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
-        <SidebarInset className="bg-gray-50 p-6 w-full overflow-y-auto">
+        <SidebarInset className="bg-gray-50 p-3 sm:p-4 md:p-6 w-full overflow-y-auto">
           {children}
         </SidebarInset>
       </div>

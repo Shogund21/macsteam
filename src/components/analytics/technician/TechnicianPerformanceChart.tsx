@@ -34,9 +34,9 @@ const TechnicianPerformanceChart: React.FC<TechnicianPerformanceChartProps> = ({
         layout="vertical"
         margin={{
           top: 20,
-          right: isMobile ? 60 : 100,
-          left: isMobile ? 120 : 150,
-          bottom: isMobile ? 80 : 50,
+          right: isMobile ? 20 : 70,
+          left: isMobile ? 100 : 130,
+          bottom: isMobile ? 70 : 40,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
@@ -49,7 +49,7 @@ const TechnicianPerformanceChart: React.FC<TechnicianPerformanceChartProps> = ({
           type="category" 
           dataKey="name" 
           tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }} 
-          width={isMobile ? 120 : 150}
+          width={isMobile ? 100 : 130}
           tickFormatter={(value) => {
             // Truncate long names
             const limit = isMobile ? 12 : 18;
