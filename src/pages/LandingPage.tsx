@@ -47,7 +47,15 @@ const LandingPage = () => {
   const onSubmit = async (data: CompanyFormValues) => {
     setIsSubmitting(true);
     try {
-      const newCompany = await createCompany(data);
+      // Ensure name is required when creating a company
+      const companyData = {
+        name: data.name, // This is now guaranteed to exist because of zod validation
+        contact_email: data.contact_email || undefined,
+        contact_phone: data.contact_phone || undefined,
+        address: data.address || undefined
+      };
+      
+      const newCompany = await createCompany(companyData);
       setIsDialogOpen(false);
       form.reset();
       handleCompanySelect(newCompany);
