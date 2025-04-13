@@ -48,19 +48,37 @@ const CompanyUsers = ({ companyId, companyName }: CompanyUsersProps) => {
 
       if (error) throw error;
 
+      if (!data) {
+        setUsers([]);
+        return;
+      }
+
       // Then fetch user emails separately for each user_id
       const usersWithEmails = await Promise.all(
         data.map(async (item) => {
-          // Get user email from auth.users table
-          const { data: userData, error: userError } = await supabase.auth.admin.getUserById(item.user_id);
-          
-          return {
-            id: item.id,
-            user_id: item.user_id,
-            email: userData?.user?.email || "Unknown",
-            role: item.role,
-            is_admin: item.is_admin,
-          };
+          try {
+            // Get user email from auth.users table
+            const { data: userData, error: userError } = await supabase.auth.admin.getUserById(item.user_id);
+            
+            if (userError) throw userError;
+            
+            return {
+              id: item.id,
+              user_id: item.user_id,
+              email: userData?.user?.email || "Unknown",
+              role: item.role,
+              is_admin: item.is_admin,
+            };
+          } catch (error) {
+            console.error(`Error fetching user data for ${item.user_id}:`, error);
+            return {
+              id: item.id,
+              user_id: item.user_id,
+              email: "Error fetching email",
+              role: item.role,
+              is_admin: item.is_admin,
+            };
+          }
         })
       );
 

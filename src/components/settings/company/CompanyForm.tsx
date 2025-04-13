@@ -63,10 +63,16 @@ export const CompanyForm = ({ initialData, onSuccess }: CompanyFormProps) => {
           description: "Company updated successfully",
         });
       } else {
-        // Insert new company - fix the values format
+        // Insert new company - ensure name is not optional in the actual insert
         const { error } = await supabase
           .from("companies")
-          .insert(values); // Changed from [values] to values
+          .insert({
+            name: values.name, // Explicitly include name to satisfy TS
+            contact_email: values.contact_email,
+            contact_phone: values.contact_phone,
+            address: values.address,
+            logo_url: values.logo_url
+          });
 
         if (error) throw error;
 
