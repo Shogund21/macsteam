@@ -16,7 +16,7 @@ const TechnicianPerformance = () => {
   }
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full overflow-hidden">
       <TechnicianPerformanceChart data={chartData} />
     </div>
   );
