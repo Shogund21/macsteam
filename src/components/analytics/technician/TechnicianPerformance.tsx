@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useTechnicianPerformanceData } from "./useTechnicianPerformanceData";
-import TechnicianPerformanceChart from "./TechnicianPerformanceChart";
+import BarChart from "@/components/charts/BarChart";
 
 const TechnicianPerformance = () => {
   const { chartData, isLoading } = useTechnicianPerformanceData();
@@ -12,7 +12,27 @@ const TechnicianPerformance = () => {
 
   return (
     <div className="w-full h-[400px] md:h-[450px]">
-      <TechnicianPerformanceChart data={chartData} />
+      <BarChart 
+        data={chartData}
+        series={[
+          {
+            dataKey: "completed",
+            name: "Completed",
+            fill: "#00C49F"
+          },
+          {
+            dataKey: "pending",
+            name: "Pending",
+            fill: "#FFBB28"
+          },
+          {
+            dataKey: "issues",
+            name: "Issues Found",
+            fill: "#FF8042"
+          }
+        ]}
+        layout="vertical"
+      />
     </div>
   );
 };

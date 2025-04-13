@@ -1,6 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import PieChart from "@/components/charts/PieChart";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
@@ -82,69 +82,15 @@ const EquipmentStatusChart = () => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={isMobile ? 350 : 450}>
-        <PieChart
-          margin={{
-            top: 20,
-            right: 20,
-            left: 20,
-            bottom: isMobile ? 60 : 50,
-          }}
-        >
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="45%"
-            labelLine={true}
-            outerRadius={isMobile ? 110 : 140}
-            innerRadius={0}
-            paddingAngle={3}
-            fill="#8884d8"
-            dataKey="value"
-            label={({ name, percent }) => {
-              // Only show label for segments that are significant enough (>8%)
-              if (percent < 0.08) return null;
-              const displayName = name.length > 12 ? name.substring(0, 12) + '...' : name;
-              return `${displayName}: ${(percent * 100).toFixed(0)}%`;
-            }}
-          >
-            {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip 
-            formatter={(value, name) => [
-              `${value} (${((value as number / totalEquipment) * 100).toFixed(1)}%)`, 
-              name
-            ]}
-            contentStyle={{ 
-              fontSize: isMobile ? '12px' : '14px', 
-              fontWeight: 'medium', 
-              backgroundColor: 'white', 
-              borderRadius: '8px', 
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)' 
-            }} 
-          />
-          <Legend 
-            layout="horizontal"
-            align="center"
-            verticalAlign="bottom"
-            iconSize={10}
-            iconType="circle"
-            formatter={(value) => {
-              const limit = isMobile ? 12 : 16;
-              return value.length > limit ? `${value.slice(0, limit)}...` : value;
-            }}
-            wrapperStyle={{
-              fontSize: isMobile ? '11px' : '13px',
-              fontWeight: 'medium',
-              paddingTop: '20px',
-              width: '100%',
-              marginBottom: isMobile ? '15px' : '0'
-            }}
-          />
-        </PieChart>
-      </ResponsiveContainer>
+      <PieChart 
+        data={chartData}
+        colors={COLORS}
+        height={450}
+        tooltipFormatter={(value, name) => [
+          `${value} (${((value / totalEquipment) * 100).toFixed(1)}%)`, 
+          name
+        ]}
+      />
     </div>
   );
 };

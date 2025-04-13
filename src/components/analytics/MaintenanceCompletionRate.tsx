@@ -1,17 +1,16 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import PieChart from "@/components/charts/PieChart";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
 
+// Colors for the pie chart segments
 const COLORS = ['#00C49F', '#FFBB28', '#FF8042'];
 
 const MaintenanceCompletionRate = () => {
   const { dateRange } = useAnalyticsFilters();
   const [chartData, setChartData] = useState<any[]>([]);
-  const isMobile = useIsMobile();
 
   const { data: maintenanceData, isLoading } = useQuery({
     queryKey: ['maintenance_checks', dateRange],
@@ -80,59 +79,16 @@ const MaintenanceCompletionRate = () => {
 
   return (
     <div className="chart-container">
-      <ResponsiveContainer width="100%" height={isMobile ? 350 : 450}>
-        <PieChart
-          margin={{
-            top: 20,
-            right: 20,
-            left: 20,
-            bottom: isMobile ? 60 : 50,
-          }}
-        >
-          <Pie
-            data={chartData}
-            cx="50%"
-            cy="45%" 
-            labelLine={true}
-            outerRadius={isMobile ? 110 : 140}
-            innerRadius={isMobile ? 60 : 80}
-            paddingAngle={4}
-            fill="#8884d8"
-            dataKey="value"
-            label={({ name, percent }) => {
-              // Only show label if segment is large enough
-              if (percent < 0.08 && isMobile) return null;
-              return `${name}: ${(percent * 100).toFixed(0)}%`;
-            }}
-          >
-            {chartData.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip 
-            formatter={(value, name) => [`${value} (${((value as number / total) * 100).toFixed(0)}%)`, name]}
-            contentStyle={{ 
-              fontSize: isMobile ? '12px' : '14px', 
-              fontWeight: 'medium', 
-              backgroundColor: 'white', 
-              borderRadius: '8px', 
-              boxShadow: '0 4px 12px rgba(0,0,0,0.15)' 
-            }} 
-          />
-          <Legend 
-            layout="horizontal" 
-            verticalAlign="bottom" 
-            align="center"
-            wrapperStyle={{
-              fontSize: isMobile ? '12px' : '14px',
-              fontWeight: 'medium',
-              paddingTop: '20px',
-              width: '100%',
-              marginBottom: isMobile ? '15px' : '0'
-            }}
-          />
-        </PieChart>
-      </ResponsiveContainer>
+      <PieChart 
+        data={chartData}
+        colors={COLORS}
+        donut={true}
+        height={450}
+        tooltipFormatter={(value, name) => [
+          `${value} (${((value / total) * 100).toFixed(0)}%)`, 
+          name
+        ]}
+      />
     </div>
   );
 };
