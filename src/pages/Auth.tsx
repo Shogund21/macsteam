@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -21,7 +20,6 @@ const Auth = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Redirect to landing page if user is already logged in
     if (user && !isLoading) {
       navigate("/");
     }
@@ -39,9 +37,7 @@ const Auth = () => {
     try {
       setIsSubmitting(true);
       await signIn(email, password);
-      // Navigation will happen automatically via the useEffect
     } catch (error) {
-      // Error is handled in the signIn function
     } finally {
       setIsSubmitting(false);
     }
@@ -71,7 +67,6 @@ const Auth = () => {
       await signUp(email, password);
       setActiveTab("login");
     } catch (error) {
-      // Error is handled in the signUp function
     } finally {
       setIsSubmitting(false);
     }
@@ -149,7 +144,12 @@ const Auth = () => {
                     {error && <p className="text-red-500 text-sm">{error}</p>}
                   </CardContent>
                   <CardFooter>
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      variant="default"
+                      disabled={isSubmitting}
+                    >
                       {isSubmitting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -209,7 +209,12 @@ const Auth = () => {
                     {error && <p className="text-red-500 text-sm">{error}</p>}
                   </CardContent>
                   <CardFooter>
-                    <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    <Button 
+                      type="submit" 
+                      className="w-full" 
+                      variant="default"
+                      disabled={isSubmitting}
+                    >
                       {isSubmitting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
