@@ -69,7 +69,7 @@ text.recharts-text {
 .recharts-responsive-container {
   width: 100% !important;
   height: 100% !important;
-  min-height: 350px !important;
+  min-height: 280px !important;
   max-width: 100% !important;
   overflow: visible !important;
 }
@@ -78,14 +78,14 @@ text.recharts-text {
 .chart-container {
   width: 100%;
   height: auto !important;
-  min-height: 380px !important;
-  max-height: 580px !important;
+  min-height: 280px !important;
+  max-height: 450px !important;
   position: relative;
   overflow: visible !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-bottom: 30px !important;
+  padding-bottom: 20px !important;
 }
 
 /* Fix for labels being cut off */
@@ -138,9 +138,9 @@ text.recharts-text {
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .chart-container {
-    min-height: 340px !important;
-    max-height: 480px !important;
-    padding-bottom: 50px !important;
+    min-height: 260px !important;
+    max-height: 400px !important;
+    padding-bottom: 30px !important;
   }
   
   text.recharts-text {
@@ -165,7 +165,7 @@ text.recharts-text {
   }
   
   .recharts-responsive-container {
-    min-height: 300px !important;
+    min-height: 240px !important;
   }
 
   /* Ensure tooltips are visible on mobile */

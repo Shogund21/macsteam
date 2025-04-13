@@ -7,11 +7,11 @@ const TechnicianPerformance = () => {
   const { chartData, isLoading } = useTechnicianPerformanceData();
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[300px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
   }
 
   return (
-    <div className="w-full h-[450px] overflow-visible">
+    <div className="w-full h-full">
       <BarChart 
         data={chartData}
         series={[
@@ -33,7 +33,7 @@ const TechnicianPerformance = () => {
         ]}
         layout="vertical"
         tooltipFormatter={(value, name) => [`${value} maintenance checks`, name]}
-        height={450}
+        height={280}
       />
     </div>
   );

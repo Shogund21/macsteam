@@ -74,18 +74,18 @@ const EquipmentStatusChart = () => {
   }, [equipmentData, isMobile]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[300px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
   }
 
   // Calculate total equipment count for percentage calculation
   const totalEquipment = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="chart-container">
+    <div className="h-full w-full">
       <PieChart 
         data={chartData}
         colors={COLORS}
-        height={420}
+        height={280}
         tooltipFormatter={(value, name) => [
           `${value} (${((value / totalEquipment) * 100).toFixed(1)}%)`, 
           name

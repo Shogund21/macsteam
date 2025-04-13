@@ -23,6 +23,7 @@ export interface LineSeriesConfig {
   dataKey: string;
   name: string;
   stroke: string;
+  strokeWidth?: number;
   type?: "monotone" | "linear" | "step" | "stepBefore" | "stepAfter" | "basis" | "basisOpen" | "basisClosed" | "natural";
   dot?: boolean;
   activeDot?: boolean | object;
@@ -130,7 +131,7 @@ const LineChart: React.FC<LineChartProps> = ({
                 dataKey={s.dataKey} 
                 name={s.name} 
                 stroke={s.stroke} 
-                strokeWidth={2}
+                strokeWidth={s.strokeWidth || 2}
                 dot={s.dot ?? !isMobile}
                 activeDot={s.activeDot || { r: 6 }}
               />

@@ -53,14 +53,14 @@ const PieChart: React.FC<PieChartProps> = ({
   
   // Improved margins for better visibility
   const margins = {
-    top: 20,
-    right: 20,
-    left: 20,
-    bottom: isMobile ? 80 : 40,
+    top: 5,
+    right: 5,
+    left: 5,
+    bottom: isMobile ? 50 : 20,
   };
 
   return (
-    <div className={`w-full h-[${height}px] overflow-visible ${className}`}>
+    <div className={`w-full h-full ${className}`} style={{ height: height || 280 }}>
       <ResponsiveContainer width="100%" height="100%">
         <RechartsPieChart margin={margins}>
           <Pie
@@ -68,8 +68,8 @@ const PieChart: React.FC<PieChartProps> = ({
             cx="50%"
             cy="45%" 
             labelLine={donut}
-            outerRadius={isMobile ? 90 : 130}
-            innerRadius={donut ? (isMobile ? 60 : 85) : 0}
+            outerRadius={isMobile ? 80 : 100}
+            innerRadius={donut ? (isMobile ? 50 : 65) : 0}
             paddingAngle={donut ? 3 : 2}
             dataKey="value"
             label={({ name, percent }) => {
@@ -104,11 +104,10 @@ const PieChart: React.FC<PieChartProps> = ({
             iconSize={10}
             formatter={(value) => truncateName(value)}
             wrapperStyle={{
-              fontSize: isMobile ? '11px' : '12px',
+              fontSize: isMobile ? '10px' : '11px',
               fontWeight: 'medium',
-              paddingTop: '20px',
-              width: '100%',
-              marginBottom: isMobile ? '20px' : '0'
+              paddingTop: '10px',
+              width: '100%'
             }}
           />
         </RechartsPieChart>

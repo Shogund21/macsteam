@@ -17,7 +17,7 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
   }));
   
   return (
-    <div className="h-96 md:h-[450px] w-full overflow-visible">
+    <div className="h-full w-full">
       <LineChart 
         data={formattedData}
         series={[

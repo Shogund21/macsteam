@@ -49,7 +49,7 @@ const Analytics = () => {
   return (
     <Layout>
       <AnalyticsFilterProvider>
-        <div className="space-y-6 md:space-y-10 max-w-full px-3 md:px-4 pb-20">
+        <div className="space-y-6 md:space-y-8 max-w-full p-3 md:p-4 pb-20">
           <div className="flex flex-col gap-4">
             <div>
               <h1 className="text-2xl md:text-3xl font-bold">Analytics & Reporting</h1>
@@ -81,60 +81,43 @@ const Analytics = () => {
             </div>
           </div>
 
-          {/* Main Trends Chart - Full width with better container */}
-          <Card className="overflow-visible">
-            <CardHeader className="pb-2">
-              <CardTitle>Maintenance Trends over Time</CardTitle>
-              <CardDescription>
-                Track historical maintenance activities and identify patterns
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="overflow-visible p-3 pt-1 md:p-6">
+          {/* Main Trends Chart - Full width */}
+          <div className="bg-white shadow-md rounded-xl p-4 overflow-auto">
+            <h2 className="text-lg font-semibold mb-2">Maintenance Trends over Time</h2>
+            <div className="aspect-[16/9] w-full overflow-visible min-h-[350px]">
               <MaintenanceTrends />
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Charts - Grid layout that stacks on mobile */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            <Card className="overflow-visible">
-              <CardHeader className="pb-2">
-                <CardTitle>Equipment Status</CardTitle>
-                <CardDescription>Current status of all equipment</CardDescription>
-              </CardHeader>
-              <CardContent className="overflow-visible p-3 pt-1 md:p-6">
+          {/* Charts - Responsive Grid layout */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
+            <div className="bg-white shadow-md rounded-xl p-4 min-h-[300px] overflow-auto">
+              <h2 className="text-lg font-semibold mb-2">Equipment Status</h2>
+              <div className="aspect-[4/3] w-full overflow-visible">
                 <EquipmentStatusChart />
-              </CardContent>
-            </Card>
+              </div>
+            </div>
             
-            <Card className="overflow-visible">
-              <CardHeader className="pb-2">
-                <CardTitle>Maintenance Completion Rate</CardTitle>
-                <CardDescription>Breakdown of maintenance check statuses</CardDescription>
-              </CardHeader>
-              <CardContent className="overflow-visible p-3 pt-1 md:p-6">
+            <div className="bg-white shadow-md rounded-xl p-4 min-h-[300px] overflow-auto">
+              <h2 className="text-lg font-semibold mb-2">Maintenance Completion Rate</h2>
+              <div className="aspect-[4/3] w-full overflow-visible">
                 <MaintenanceCompletionRate />
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           
-            <Card className="overflow-visible">
-              <CardHeader className="pb-2">
-                <CardTitle>Technician Performance</CardTitle>
-                <CardDescription>Maintenance checks by technician</CardDescription>
-              </CardHeader>
-              <CardContent className="overflow-visible p-3 pt-1 md:p-6">
+            <div className="bg-white shadow-md rounded-xl p-4 min-h-[300px] overflow-auto">
+              <h2 className="text-lg font-semibold mb-2">Technician Performance</h2>
+              <div className="aspect-[4/3] w-full overflow-visible">
                 <TechnicianPerformance />
-              </CardContent>
-            </Card>
+              </div>
+            </div>
             
-            <Card className="overflow-visible">
-              <CardHeader className="pb-2">
-                <CardTitle>Equipment by Location</CardTitle>
-                <CardDescription>Distribution of equipment across locations</CardDescription>
-              </CardHeader>
-              <CardContent className="overflow-visible p-3 pt-1 md:p-6">
+            <div className="bg-white shadow-md rounded-xl p-4 min-h-[300px] overflow-auto">
+              <h2 className="text-lg font-semibold mb-2">Equipment by Location</h2>
+              <div className="aspect-[4/3] w-full overflow-visible">
                 <LocationBreakdown />
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </div>
         </div>
       </AnalyticsFilterProvider>

@@ -71,19 +71,19 @@ const MaintenanceCompletionRate = () => {
   }, [maintenanceData]);
 
   if (isLoading && chartData.length === 0) {
-    return <div className="flex items-center justify-center h-full min-h-[300px]">Loading chart data...</div>;
+    return <div className="flex items-center justify-center h-full min-h-[200px]">Loading chart data...</div>;
   }
 
   // Calculate total for percentages
   const total = chartData.reduce((sum, entry) => sum + entry.value, 0);
 
   return (
-    <div className="chart-container">
+    <div className="h-full w-full">
       <PieChart 
         data={chartData}
         colors={COLORS}
         donut={true}
-        height={420}
+        height={280}
         tooltipFormatter={(value, name) => [
           `${value} (${((value / total) * 100).toFixed(0)}%)`, 
           name
