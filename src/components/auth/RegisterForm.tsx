@@ -4,30 +4,24 @@ import { Loader2 } from "lucide-react";
 import { CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useAuthState } from "@/contexts/AuthStateContext";
 
 interface RegisterFormProps {
-  email: string;
-  setEmail: (email: string) => void;
-  password: string;
-  setPassword: (password: string) => void;
-  confirmPassword: string;
-  setConfirmPassword: (confirmPassword: string) => void;
-  error: string;
-  isSubmitting: boolean;
   onSubmit: (e: React.FormEvent) => Promise<void>;
 }
 
-export const RegisterForm: React.FC<RegisterFormProps> = ({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  confirmPassword,
-  setConfirmPassword,
-  error,
-  isSubmitting,
-  onSubmit
-}) => {
+export const RegisterForm: React.FC<RegisterFormProps> = ({ onSubmit }) => {
+  const { 
+    email, 
+    setEmail, 
+    password, 
+    setPassword, 
+    confirmPassword, 
+    setConfirmPassword, 
+    error, 
+    isSubmitting 
+  } = useAuthState();
+
   return (
     <form onSubmit={onSubmit}>
       <CardHeader>

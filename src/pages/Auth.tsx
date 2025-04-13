@@ -11,17 +11,25 @@ import { AuthHeader } from "@/components/auth/AuthHeader";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { RegisterForm } from "@/components/auth/RegisterForm";
 import { AuthFooter } from "@/components/auth/AuthFooter";
+import { AuthStateProvider, useAuthState } from "@/contexts/AuthStateContext";
 
-const Auth = () => {
+const AuthContent = () => {
   const { signIn, signUp, user, isLoading } = useAuth();
   const { companies } = useCompany();
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
   const [activeTab, setActiveTab] = useState("login");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState("");
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+    error,
+    setError,
+    isSubmitting,
+    setIsSubmitting
+  } = useAuthState();
 
   useEffect(() => {
     if (user && !isLoading) {
@@ -42,6 +50,7 @@ const Auth = () => {
       setIsSubmitting(true);
       await signIn(email, password);
     } catch (error) {
+      // Error handling is done in AuthContext
     } finally {
       setIsSubmitting(false);
     }
@@ -71,6 +80,7 @@ const Auth = () => {
       await signUp(email, password);
       setActiveTab("login");
     } catch (error) {
+      // Error handling is done in AuthContext
     } finally {
       setIsSubmitting(false);
     }
@@ -96,35 +106,25 @@ const Auth = () => {
           </TabsList>
 
           <TabsContent value="login">
-            <LoginForm
-              email={email}
-              setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
-              error={error}
-              isSubmitting={isSubmitting}
-              onSubmit={handleLogin}
-            />
+            <LoginForm onSubmit={handleLogin} />
           </TabsContent>
 
           <TabsContent value="register">
-            <RegisterForm
-              email={email}
-              setEmail={setEmail}
-              password={password}
-              setPassword={setPassword}
-              confirmPassword={confirmPassword}
-              setConfirmPassword={setConfirmPassword}
-              error={error}
-              isSubmitting={isSubmitting}
-              onSubmit={handleSignUp}
-            />
+            <RegisterForm onSubmit={handleSignUp} />
           </TabsContent>
         </Tabs>
       </Card>
       
       <AuthFooter />
     </AuthLayout>
+  );
+};
+
+const Auth = () => {
+  return (
+    <AuthStateProvider>
+      <AuthContent />
+    </AuthStateProvider>
   );
 };
 
