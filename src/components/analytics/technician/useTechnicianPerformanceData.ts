@@ -62,7 +62,7 @@ export function useTechnicianPerformanceData() {
   });
 
   useEffect(() => {
-    if (maintenanceData && technicians) {
+    if (maintenanceData && technicians && maintenanceData.length > 0 && technicians.length > 0) {
       // Create a lookup map for technician names
       const technicianMap = new Map();
       technicians.forEach(tech => {
@@ -99,14 +99,14 @@ export function useTechnicianPerformanceData() {
         .sort((a, b) => b.total - a.total)
         .slice(0, isMobile ? 5 : 7); // Show more technicians
       
-      // If no data, add sample data for preview
-      if (formattedData.length === 0) {
-        setChartData(getSampleData(isMobile));
-      } else {
+      if (formattedData.length > 0) {
         setChartData(formattedData);
+      } else {
+        // Use sample data if no formatted data
+        setChartData(getSampleData(isMobile));
       }
     } else {
-      // Add sample data for preview when no data is available
+      // Always use sample data if no real data is available
       setChartData(getSampleData(isMobile));
     }
   }, [maintenanceData, technicians, isMobile]);

@@ -7,7 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 const TechnicianPerformance = () => {
   const { chartData, isLoading } = useTechnicianPerformanceData();
 
-  if (isLoading && chartData.length === 0) {
+  if (isLoading) {
     return (
       <div className="h-full w-full flex items-center justify-center">
         <Skeleton className="h-[300px] w-full" />
@@ -15,7 +15,7 @@ const TechnicianPerformance = () => {
     );
   }
 
-  if (chartData.length === 0) {
+  if (!chartData || chartData.length === 0) {
     return (
       <div className="h-full w-full flex items-center justify-center text-muted-foreground">
         No technician data available

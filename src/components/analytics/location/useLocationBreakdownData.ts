@@ -30,7 +30,7 @@ export const useLocationBreakdownData = () => {
   });
 
   useEffect(() => {
-    if (equipmentData) {
+    if (equipmentData && equipmentData.length > 0) {
       // Group equipment by location
       const locationCounts: Record<string, number> = {};
       
@@ -46,10 +46,8 @@ export const useLocationBreakdownData = () => {
         .slice(0, isMobile ? 8 : 10); // Show more locations
       
       setChartData(data);
-    }
-    
-    // If no data or empty data, use sample data for preview
-    if (!equipmentData || equipmentData.length === 0) {
+    } else {
+      // Always use sample data if no real data is available
       const sampleData = [
         { name: "Main Building", value: 24 },
         { name: "North Wing", value: 18 },
@@ -62,6 +60,7 @@ export const useLocationBreakdownData = () => {
         { name: "Server Room", value: 3 },
         { name: "Conference Center", value: 2 }
       ].slice(0, isMobile ? 8 : 10);
+      
       setChartData(sampleData);
     }
   }, [equipmentData, isMobile]);
