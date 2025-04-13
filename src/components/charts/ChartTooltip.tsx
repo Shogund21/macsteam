@@ -5,7 +5,7 @@ interface ChartTooltipProps {
   active?: boolean;
   payload?: any[];
   label?: string;
-  formatter?: (value: any, name: string) => [string, string];
+  formatter?: (value: any, name: string) => [string, string]; // Consistent formatter signature
 }
 
 const ChartTooltip: React.FC<ChartTooltipProps> = ({ active, payload, label, formatter }) => {

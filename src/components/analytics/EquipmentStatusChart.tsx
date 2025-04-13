@@ -1,6 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
-import PieChart from "@/components/charts/PieChart";
+import PieChart, { PieChartDataItem } from "@/components/charts/PieChart";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
@@ -13,7 +13,7 @@ const COLORS = ['#4299E1', '#48BB78', '#F6AD55', '#F56565', '#805AD5', '#DD6B20'
 const EquipmentStatusChart = () => {
   const { dateRange } = useAnalyticsFilters();
   const { companyId } = useCompanyFilter();
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<PieChartDataItem[]>([]);
   const isMobile = useIsMobile();
 
   const { data: equipmentData, isLoading } = useQuery({

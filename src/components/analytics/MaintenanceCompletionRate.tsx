@@ -1,6 +1,5 @@
-
 import { useQuery } from "@tanstack/react-query";
-import PieChart from "@/components/charts/PieChart";
+import PieChart, { PieChartDataItem } from "@/components/charts/PieChart";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
@@ -10,7 +9,7 @@ const COLORS = ['#00C49F', '#FFBB28', '#FF8042'];
 
 const MaintenanceCompletionRate = () => {
   const { dateRange } = useAnalyticsFilters();
-  const [chartData, setChartData] = useState<any[]>([]);
+  const [chartData, setChartData] = useState<PieChartDataItem[]>([]);
 
   const { data: maintenanceData, isLoading } = useQuery({
     queryKey: ['maintenance_checks', dateRange],

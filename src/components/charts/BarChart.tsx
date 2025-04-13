@@ -16,7 +16,7 @@ import ChartTooltip from "./ChartTooltip";
 
 export interface BarChartDataItem {
   name: string;
-  [key: string]: string | number;
+  [key: string]: string | number; // Index signature for string keys
 }
 
 export interface BarSeriesConfig {

@@ -3,8 +3,9 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { BarChartDataItem } from "@/components/charts/BarChart";
 
-export interface LocationBreakdownData {
+export interface LocationBreakdownData extends BarChartDataItem {
   name: string;
   value: number;
 }

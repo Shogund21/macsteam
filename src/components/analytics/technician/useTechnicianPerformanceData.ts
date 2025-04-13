@@ -4,8 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useAnalyticsFilters } from "../AnalyticsFilterContext";
+import { BarChartDataItem } from "@/components/charts/BarChart";
 
-interface TechnicianStats {
+interface TechnicianStats extends BarChartDataItem {
   name: string;
   completed: number;
   pending: number;

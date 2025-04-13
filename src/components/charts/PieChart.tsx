@@ -14,6 +14,7 @@ import ChartTooltip from "./ChartTooltip";
 export interface PieChartDataItem {
   name: string;
   value: number;
+  [key: string]: string | number; // Add index signature
 }
 
 interface PieChartProps {
@@ -22,7 +23,7 @@ interface PieChartProps {
   height?: number;
   className?: string;
   donut?: boolean;
-  tooltipFormatter?: (value: number, name: string, item: any) => [string, string];
+  tooltipFormatter?: (value: number, name: string) => [string, string]; // Fixed signature
 }
 
 const PieChart: React.FC<PieChartProps> = ({
@@ -39,7 +40,7 @@ const PieChart: React.FC<PieChartProps> = ({
   const total = data.reduce((sum, entry) => sum + entry.value, 0);
   
   // Default formatter shows percentage
-  const defaultFormatter = (value: number, name: string) => {
+  const defaultFormatter = (value: number, name: string): [string, string] => {
     return [`${value} (${((value / total) * 100).toFixed(0)}%)`, name];
   };
   
