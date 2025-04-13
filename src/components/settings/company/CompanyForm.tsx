@@ -50,7 +50,6 @@ export const CompanyForm = ({ initialData, onSuccess }: CompanyFormProps) => {
     setIsSubmitting(true);
     try {
       if (initialData?.id) {
-        // Update existing company
         const { error } = await supabase
           .from("companies")
           .update(values)
@@ -63,16 +62,9 @@ export const CompanyForm = ({ initialData, onSuccess }: CompanyFormProps) => {
           description: "Company updated successfully",
         });
       } else {
-        // Insert new company - ensure name is not optional in the actual insert
         const { error } = await supabase
           .from("companies")
-          .insert({
-            name: values.name, // Explicitly include name to satisfy TS
-            contact_email: values.contact_email,
-            contact_phone: values.contact_phone,
-            address: values.address,
-            logo_url: values.logo_url
-          });
+          .insert([values]);
 
         if (error) throw error;
 

@@ -17,7 +17,6 @@ interface EquipmentFieldsProps {
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   console.log('Rendering EquipmentFields with type:', equipmentType);
   
-  // Render appropriate fields based on equipment type
   if (equipmentType === 'ahu') {
     return <AHUMaintenanceFields form={form} />;
   }

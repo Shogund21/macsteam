@@ -1,9 +1,26 @@
 
-import React, { createContext, useContext, useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
-import { useCompanyData } from "@/hooks/useCompanyData";
-import { useCompanyOperations } from "@/hooks/useCompanyOperations";
-import { Company, CompanyContextType } from "@/types/company";
+import React, { createContext, useContext, useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+export interface Company {
+  id: string;
+  name: string;
+  logo_url: string | null;
+  address: string | null;
+  contact_email: string | null;
+  contact_phone: string | null;
+  created_at: string | null;
+  updated_at: string | null;
+}
+
+interface CompanyContextType {
+  currentCompany: Company | null;
+  companies: Company[];
+  isLoading: boolean;
+  setCurrentCompany: (company: Company | null) => void;
+  refreshCompanies: () => Promise<void>;
+}
 
 const CompanyContext = createContext<CompanyContextType | undefined>(undefined);
 
@@ -16,48 +33,79 @@ export const useCompany = () => {
 };
 
 export const CompanyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { user } = useAuth();
-  const { 
-    currentCompany, 
-    setCurrentCompany, 
-    companies, 
-    isLoading, 
-    refreshCompanies 
-  } = useCompanyData(user?.id);
-  
-  const { addUserToCompany, createCompany } = useCompanyOperations();
+  const [currentCompany, setCurrentCompany] = useState<Company | null>(null);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
-  // Initialize and fetch companies when the component mounts or user changes
-  useEffect(() => {
-    refreshCompanies();
-  }, [user]);
+  const fetchCompanies = async () => {
+    try {
+      setIsLoading(true);
+      const { data, error } = await supabase
+        .from("companies")
+        .select("*")
+        .order("name");
 
-  // Custom implementation of createCompany that handles user assignment
-  const createCompanyWithUser = async (companyData: { name: string } & Partial<Omit<Company, 'id' | 'created_at' | 'updated_at'>>): Promise<Company> => {
-    if (!user) {
-      throw new Error("User must be logged in to create a company");
+      if (error) throw error;
+      
+      setCompanies(data || []);
+      
+      // Set first company as default if we have companies and no current selection
+      if (data && data.length > 0 && !currentCompany) {
+        const savedCompanyId = localStorage.getItem("selectedCompanyId");
+        
+        if (savedCompanyId) {
+          const savedCompany = data.find(c => c.id === savedCompanyId);
+          if (savedCompany) {
+            setCurrentCompany(savedCompany);
+          } else {
+            setCurrentCompany(data[0]);
+            localStorage.setItem("selectedCompanyId", data[0].id);
+          }
+        } else {
+          setCurrentCompany(data[0]);
+          localStorage.setItem("selectedCompanyId", data[0].id);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+      toast({
+        title: "Error",
+        description: "Could not load companies. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
-
-    // Create the company first
-    const newCompany = await createCompany(companyData);
-    
-    // Then add the creator as an admin
-    await addUserToCompany(user.id, newCompany.id, "admin", true);
-    
-    // Refresh the company list
-    await refreshCompanies();
-    
-    return newCompany;
   };
+
+  // Initialize and fetch companies when the component mounts
+  useEffect(() => {
+    fetchCompanies();
+    
+    // Subscribe to auth changes to refetch companies when user logs in/out
+    const { data: authListener } = supabase.auth.onAuthStateChange(() => {
+      fetchCompanies();
+    });
+    
+    return () => {
+      authListener?.subscription.unsubscribe();
+    };
+  }, []);
+
+  // Save selected company to localStorage when it changes
+  useEffect(() => {
+    if (currentCompany) {
+      localStorage.setItem("selectedCompanyId", currentCompany.id);
+    }
+  }, [currentCompany]);
 
   const value = {
     currentCompany,
     setCurrentCompany,
     companies,
     isLoading,
-    refreshCompanies,
-    addUserToCompany,
-    createCompany: createCompanyWithUser,
+    refreshCompanies: fetchCompanies,
   };
 
   return <CompanyContext.Provider value={value}>{children}</CompanyContext.Provider>;

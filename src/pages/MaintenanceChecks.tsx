@@ -1,5 +1,6 @@
+
 import Layout from "@/components/Layout";
-import MaintenanceCheckForm from "@/components/maintenance/form/MaintenanceCheckForm";
+import MaintenanceCheckForm from "@/components/maintenance/MaintenanceCheckForm";
 import MaintenanceHistory from "@/components/maintenance/MaintenanceHistory";
 import DocumentManager from "@/components/maintenance/documents/DocumentManager";
 import { Button } from "@/components/ui/button";

@@ -1,5 +1,5 @@
 
-import { ActionButtons, ActionButtonsProps } from "@/components/common/ActionButtons";
+import { Button } from "@/components/ui/button";
 
 interface FormActionsProps {
   onCancel: () => void;
@@ -16,31 +16,40 @@ const FormActions = ({
 }: FormActionsProps) => {
   console.log('FormActions render:', { isEditing, isSubmitting });
   
-  // Custom props for ActionButtons
-  const actionProps: ActionButtonsProps = {
-    onCancel,
-    isSubmitting,
-    variant: "secondary",
-    submitText: isEditing ? 'Update Maintenance Check' : 'Submit Maintenance Check',
-    processingText: isEditing ? 'Updating...' : 'Saving...',
+  const handleClick = () => {
+    console.log('Submit button clicked, onSubmit handler exists:', !!onSubmit);
+    if (onSubmit) {
+      onSubmit();
+    }
   };
-  
-  // If there's a custom onSubmit handler, we need to create a custom button
-  if (onSubmit) {
-    return (
-      <div className="flex flex-col md:flex-row justify-end gap-2 pt-4 border-t">
-        <ActionButtons 
-          {...actionProps}
-          customSubmit={true}
-          onSubmitClick={onSubmit}
-        />
-      </div>
-    );
-  }
   
   return (
     <div className="flex flex-col md:flex-row justify-end gap-2 pt-4 border-t">
-      <ActionButtons {...actionProps} />
+      <Button
+        type="button"
+        variant="outline"
+        onClick={onCancel}
+        disabled={isSubmitting}
+        className="text-base font-medium"
+      >
+        Cancel
+      </Button>
+      
+      <Button 
+        type={onSubmit ? "button" : "submit"}
+        onClick={onSubmit ? handleClick : undefined}
+        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white text-base font-medium"
+        disabled={isSubmitting}
+      >
+        {isSubmitting ? (
+          <div className="flex items-center">
+            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+            <span>{isEditing ? 'Updating...' : 'Saving...'}</span>
+          </div>
+        ) : (
+          isEditing ? 'Update Maintenance Check' : 'Submit Maintenance Check'
+        )}
+      </Button>
     </div>
   );
 };

@@ -6,7 +6,7 @@ import {
   Bell, 
   Map, 
   Settings,
-  Wrench, 
+  Tool, 
   Paintbrush, 
   FileText 
 } from "lucide-react";
@@ -30,7 +30,7 @@ const SettingsTabsList = ({ tabs, isMobile }: SettingsTabsListProps) => {
       case "features":
         return <Settings className="h-4 w-4" />;
       case "maintenance":
-        return <Wrench className="h-4 w-4" />; // Changed from Tool to Wrench
+        return <Tool className="h-4 w-4" />;
       case "appearance":
         return <Paintbrush className="h-4 w-4" />;
       case "documentation":
