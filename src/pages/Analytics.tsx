@@ -13,6 +13,7 @@ import { DatePickerWithRange } from "@/components/analytics/DateRangePicker";
 import { DateRange } from "react-day-picker";
 import { sub } from "date-fns";
 import { AnalyticsFilterProvider } from "@/components/analytics/AnalyticsFilterContext";
+import { useToast } from "@/components/ui/use-toast";
 
 const Analytics = () => {
   // Default date range is last 30 days
@@ -22,19 +23,25 @@ const Analytics = () => {
   };
   
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const { toast } = useToast();
 
   const handleRefresh = () => {
     setIsRefreshing(true);
     // Simulate refresh delay
     setTimeout(() => {
       setIsRefreshing(false);
+      toast({
+        title: "Analytics refreshed",
+        description: "Chart data has been updated with the latest information."
+      });
     }, 1000);
   };
 
   const handleExportData = () => {
-    // This is a placeholder for the export functionality
-    // In a real application, this would generate a CSV or PDF file
-    alert("Analytics data export feature will be implemented in a future update.");
+    toast({
+      title: "Export initiated",
+      description: "Analytics data export feature will be implemented in a future update."
+    });
   };
 
   return (
@@ -72,6 +79,7 @@ const Analytics = () => {
             </div>
           </div>
 
+          {/* Main Trends Chart */}
           <Card>
             <CardHeader className="pb-2">
               <CardTitle>Maintenance Trends over Time</CardTitle>
@@ -84,18 +92,21 @@ const Analytics = () => {
             </CardContent>
           </Card>
 
+          {/* First Row of Charts - Equipment Status and Maintenance Completion */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
+            <Card className="h-full">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment Status</CardTitle>
+                <CardDescription>Current status of all equipment</CardDescription>
               </CardHeader>
               <CardContent>
                 <EquipmentStatusChart />
               </CardContent>
             </Card>
-            <Card>
+            <Card className="h-full">
               <CardHeader className="pb-2">
                 <CardTitle>Maintenance Completion Rate</CardTitle>
+                <CardDescription>Breakdown of maintenance check statuses</CardDescription>
               </CardHeader>
               <CardContent>
                 <MaintenanceCompletionRate />
@@ -103,18 +114,21 @@ const Analytics = () => {
             </Card>
           </div>
 
+          {/* Second Row of Charts - Technician Performance and Location Breakdown */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
+            <Card className="h-full">
               <CardHeader className="pb-2">
                 <CardTitle>Technician Performance</CardTitle>
+                <CardDescription>Maintenance checks by technician</CardDescription>
               </CardHeader>
               <CardContent>
                 <TechnicianPerformance />
               </CardContent>
             </Card>
-            <Card>
+            <Card className="h-full">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment by Location</CardTitle>
+                <CardDescription>Distribution of equipment across locations</CardDescription>
               </CardHeader>
               <CardContent>
                 <LocationBreakdown />

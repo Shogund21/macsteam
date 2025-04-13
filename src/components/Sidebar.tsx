@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { 
   SidebarContent, 
   SidebarMenu, 
@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 
 export const Sidebar = () => {
+  const location = useLocation();
+  
   const menuItems = [
     { title: "Dashboard", icon: LayoutDashboard, path: "/" },
     { title: "Equipment", icon: Wrench, path: "/equipment" },
@@ -29,16 +31,23 @@ export const Sidebar = () => {
   return (
     <SidebarContent>
       <SidebarMenu>
-        {menuItems.map((item) => (
-          <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild tooltip={item.title}>
-              <Link to={item.path}>
-                <item.icon />
-                <span>{item.title}</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
+        {menuItems.map((item) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton 
+                asChild 
+                tooltip={item.title}
+                className={isActive ? "bg-secondary text-primary" : ""}
+              >
+                <Link to={item.path} className="flex items-center gap-2">
+                  <item.icon className="h-5 w-5" />
+                  <span>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          );
+        })}
       </SidebarMenu>
     </SidebarContent>
   );

@@ -1,5 +1,9 @@
 
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
 @import './base.css';
-@import './chart.css';
-@import './print.css';
 @import './components.css';
+@import './print.css';
+@import './chart.css';
