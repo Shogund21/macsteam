@@ -10,9 +10,9 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
   return (
     <SidebarProvider defaultOpen={true}>
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex h-screen overflow-hidden bg-gray-50">
         <Sidebar />
-        <SidebarInset className="bg-gray-50 p-6 w-full overflow-y-auto">
+        <SidebarInset className="w-full overflow-y-auto">
           {children}
         </SidebarInset>
       </div>

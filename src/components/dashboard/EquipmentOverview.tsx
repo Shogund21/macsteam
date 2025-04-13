@@ -4,8 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { EquipmentItem } from "@/components/equipment/EquipmentItem";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const EquipmentOverview = () => {
   const navigate = useNavigate();
@@ -28,32 +29,66 @@ const EquipmentOverview = () => {
   });
 
   return (
-    <Card className="border-none shadow-lg bg-gradient-to-br from-white to-purple-50 animate-fade-in">
-      <CardHeader className="bg-white pb-2">
-        <CardTitle className="text-lg font-bold text-black">Equipment Overview</CardTitle>
+    <Card className="border shadow-md rounded-xl overflow-hidden">
+      <CardHeader className="bg-white border-b pb-3 flex flex-row items-center justify-between">
+        <div>
+          <CardTitle className="text-lg font-bold text-gray-800">Equipment Overview</CardTitle>
+          <p className="text-sm text-gray-500 mt-1">Most recent equipment items</p>
+        </div>
+        <Button 
+          size="sm" 
+          variant="outline" 
+          className="h-8 gap-1 text-xs"
+          onClick={() => navigate("/add-equipment")}
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Add
+        </Button>
       </CardHeader>
-      <CardContent className="p-4">
-        <div className="space-y-4">
+      <CardContent className="p-0">
+        <div className="divide-y">
           {equipmentLoading ? (
-            <div className="flex justify-center py-8">
-              <div className="animate-pulse h-6 w-40 bg-gray-200 rounded"></div>
-            </div>
+            <>
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="p-4">
+                  <div className="flex items-center space-x-4">
+                    <Skeleton className="h-12 w-12 rounded-full" />
+                    <div className="space-y-2">
+                      <Skeleton className="h-4 w-[200px]" />
+                      <Skeleton className="h-4 w-[160px]" />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </>
           ) : equipmentData && equipmentData.length > 0 ? (
             <>
-              {equipmentData.slice(0, 3).map((equipment) => (
-                <EquipmentItem key={equipment.id} equipment={equipment} />
+              {equipmentData.slice(0, 4).map((equipment) => (
+                <div key={equipment.id} className="hover:bg-gray-50 transition-colors duration-200">
+                  <EquipmentItem equipment={equipment} />
+                </div>
               ))}
-              <Button 
-                onClick={() => navigate("/equipment")}
-                variant="ghost" 
-                className="w-full mt-4 text-[#1EAEDB] hover:text-[#33C3F0] hover:bg-blue-50"
-              >
-                View All Equipment
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
+              <div className="p-3 bg-gray-50">
+                <Button 
+                  onClick={() => navigate("/equipment")}
+                  variant="ghost" 
+                  className="w-full h-10 gap-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 transition-colors"
+                >
+                  View All Equipment
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </div>
             </>
           ) : (
-            <p className="text-black text-center py-4">No equipment data available</p>
+            <div className="py-8 text-center">
+              <p className="text-gray-500">No equipment data available</p>
+              <Button 
+                className="mt-4"
+                onClick={() => navigate("/add-equipment")}
+              >
+                Add Equipment
+              </Button>
+            </div>
           )}
         </div>
       </CardContent>

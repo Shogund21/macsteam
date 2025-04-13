@@ -1,5 +1,5 @@
 
-import { Wrench, Briefcase, Clock, AlertCircle } from "lucide-react";
+import { Wrench, Briefcase, Clock, UserCheck } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
@@ -88,9 +88,9 @@ const Stats = () => {
       icon: Wrench,
       change: "+4.75%",
       changeType: "positive",
-      bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
-      iconBgColor: "bg-blue-100",
-      iconColor: "text-blue-500"
+      bgColor: "from-blue-500 to-blue-600",
+      textColor: "text-white",
+      iconColor: "text-blue-100"
     },
     {
       name: "Active Projects",
@@ -98,9 +98,9 @@ const Stats = () => {
       icon: Briefcase,
       change: "-0.5%",
       changeType: "negative",
-      bgColor: "bg-gradient-to-br from-purple-50 to-purple-100",
-      iconBgColor: "bg-purple-100",
-      iconColor: "text-purple-500"
+      bgColor: "from-purple-500 to-purple-600",
+      textColor: "text-white",
+      iconColor: "text-purple-100"
     },
     {
       name: "Pending Tasks",
@@ -108,58 +108,59 @@ const Stats = () => {
       icon: Clock,
       change: "+2.1%",
       changeType: "positive",
-      bgColor: "bg-gradient-to-br from-orange-50 to-orange-100",
-      iconBgColor: "bg-orange-100",
-      iconColor: "text-orange-500"
+      bgColor: "from-amber-500 to-amber-600",
+      textColor: "text-white",
+      iconColor: "text-amber-100"
     },
     {
       name: "Available Technicians",
       value: techniciansLoading 
         ? "..." 
         : techniciansData?.filter(tech => tech.isAvailable).length.toString() || "0",
-      icon: AlertCircle,
+      icon: UserCheck,
       change: "-1.5%",
       changeType: "positive",
-      bgColor: "bg-gradient-to-br from-green-50 to-green-100",
-      iconBgColor: "bg-green-100",
-      iconColor: "text-green-500"
+      bgColor: "from-green-500 to-green-600",
+      textColor: "text-white",
+      iconColor: "text-green-100"
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats.map((stat) => {
         const Icon = stat.icon;
         return (
           <Card 
             key={stat.name} 
-            className={`p-6 border-none shadow-lg animate-fade-in hover:shadow-xl transition-all ${stat.bgColor}`}
+            className={`bg-gradient-to-r ${stat.bgColor} border-none shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300`}
           >
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-black">
-                  {stat.name}
-                </p>
-                <p className="text-3xl font-bold mt-2 text-black">{stat.value}</p>
+            <div className="p-6">
+              <div className="flex items-center justify-between">
+                <div className={stat.textColor}>
+                  <p className="text-sm font-medium opacity-90">
+                    {stat.name}
+                  </p>
+                  <p className="text-3xl font-bold mt-2">{stat.value}</p>
+                </div>
+                <div className={`h-12 w-12 rounded-full bg-white/10 flex items-center justify-center ${stat.iconColor}`}>
+                  <Icon className="h-6 w-6" />
+                </div>
               </div>
-              <div className={`h-14 w-14 rounded-full ${stat.iconBgColor} flex items-center justify-center ${stat.iconColor}`}>
-                <Icon className="h-7 w-7" />
+              <div className="mt-4 flex items-center text-xs font-medium">
+                <span
+                  className={cn(
+                    stat.changeType === "positive"
+                      ? "text-green-200"
+                      : "text-red-200"
+                  )}
+                >
+                  {stat.change}
+                </span>
+                <span className={`${stat.textColor} ml-2 opacity-80`}>
+                  from last month
+                </span>
               </div>
-            </div>
-            <div className="mt-4">
-              <span
-                className={cn(
-                  "text-sm font-medium",
-                  stat.changeType === "positive"
-                    ? "text-green-600"
-                    : "text-red-600"
-                )}
-              >
-                {stat.change}
-              </span>
-              <span className="text-sm text-gray-700 ml-2">
-                from last month
-              </span>
             </div>
           </Card>
         );
