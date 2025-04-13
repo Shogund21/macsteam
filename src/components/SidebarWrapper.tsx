@@ -21,11 +21,13 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCompany } from "@/contexts/CompanyContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const SidebarWrapper = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentCompany } = useCompany();
+  const { signOut } = useAuth();
 
   const menuItems = [
     { 
@@ -57,6 +59,11 @@ export const SidebarWrapper = () => {
 
   const handleChangeCompany = () => {
     navigate("/");
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate("/auth");
   };
 
   return (
@@ -99,11 +106,20 @@ export const SidebarWrapper = () => {
           <Button 
             variant="outline" 
             size="sm" 
-            className="w-full flex items-center gap-2"
+            className="w-full flex items-center gap-2 mb-2"
             onClick={handleChangeCompany}
           >
-            <LogOut className="h-4 w-4" />
+            <Building className="h-4 w-4" />
             <span>Change Company</span>
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="w-full flex items-center gap-2 text-red-500 hover:text-red-600 hover:bg-red-50"
+            onClick={handleSignOut}
+          >
+            <LogOut className="h-4 w-4" />
+            <span>Sign Out</span>
           </Button>
         </div>
       </SidebarFooter>

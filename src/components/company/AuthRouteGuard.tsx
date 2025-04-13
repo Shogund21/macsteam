@@ -1,24 +1,24 @@
 
 import { useEffect } from "react";
 import { Outlet, Navigate, useLocation } from "react-router-dom";
-import { useCompany } from "@/contexts/CompanyContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
-export const CompanyRouteGuard = () => {
-  const { currentCompany, isLoading } = useCompany();
+export const AuthRouteGuard = () => {
+  const { user, isLoading } = useAuth();
   const { toast } = useToast();
   const location = useLocation();
 
   useEffect(() => {
-    if (!isLoading && !currentCompany) {
+    if (!isLoading && !user) {
       toast({
-        title: "Company Required",
-        description: "Please select a company to continue",
+        title: "Authentication Required",
+        description: "Please login to continue",
         variant: "destructive"
       });
     }
-  }, [currentCompany, isLoading, toast]);
+  }, [user, isLoading, toast]);
 
   // Don't redirect while still loading to prevent flash
   if (isLoading) {
@@ -29,11 +29,11 @@ export const CompanyRouteGuard = () => {
     );
   }
 
-  // If no company is selected, redirect to landing page
-  if (!currentCompany) {
-    return <Navigate to="/" state={{ from: location }} replace />;
+  // If no user is logged in, redirect to auth page
+  if (!user) {
+    return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
-  // Company is selected, allow access to protected routes
+  // User is authenticated, allow access to protected routes
   return <Outlet />;
 };
