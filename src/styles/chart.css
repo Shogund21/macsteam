@@ -43,12 +43,15 @@ text.recharts-text {
 /* Ensure legend items have enough spacing */
 .recharts-legend-wrapper {
   padding: 4px 0 !important;
+  max-width: 100% !important;
+  overflow: visible !important;
 }
 
 /* Better legend item spacing */
 .recharts-legend-item {
   margin-right: 10px !important;
   margin-bottom: 6px !important;
+  white-space: normal !important;
 }
 
 /* Make sure the pie chart segments are distinct */
@@ -62,12 +65,40 @@ text.recharts-text {
   width: 100% !important;
   height: 100% !important;
   min-height: 200px !important;
+  max-width: 100% !important;
+  overflow: visible !important;
 }
 
 /* Ensure the pie labels are visible */
 .recharts-pie text {
   font-weight: 600 !important;
   font-size: 12px !important;
+}
+
+/* Container for charts to ensure proper spacing and sizing */
+.chart-container {
+  width: 100%;
+  padding: 0.5rem;
+  overflow: visible;
+  position: relative;
+  height: auto !important;
+  min-height: 250px;
+}
+
+/* Fix for labels being cut off */
+.recharts-wrapper {
+  overflow: visible !important;
+}
+
+/* Better axis line styling */
+.recharts-cartesian-axis-line {
+  stroke: #e0e0e0 !important;
+}
+
+/* Better grid styling */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #f0f0f0 !important;
 }
 
 /* Mobile-specific styles */
@@ -99,10 +130,15 @@ text.recharts-text {
   }
   
   .recharts-responsive-container {
-    min-height: 160px !important;
+    min-height: 180px !important;
   }
   
   .recharts-pie text {
     font-size: 10px !important;
+  }
+  
+  .chart-container {
+    min-height: 200px;
+    padding: 0.25rem;
   }
 }

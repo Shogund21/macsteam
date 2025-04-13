@@ -76,20 +76,39 @@ const MaintenanceCompletionRate = () => {
   }
 
   return (
-    <div className="h-64 md:h-80 w-full">
+    <div className="h-72 md:h-96 w-full chart-container">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
-            cy="50%"
-            labelLine={false}
-            outerRadius={isMobile ? 70 : 90}
+            cy="45%" 
+            labelLine={true}
+            outerRadius={isMobile ? 65 : 85}
             innerRadius={isMobile ? 35 : 45}
             paddingAngle={2}
             fill="#8884d8"
             dataKey="value"
-            label={({ percent }) => `${(percent * 100).toFixed(0)}%`}
+            label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
+              const RADIAN = Math.PI / 180;
+              const radius = 25 + innerRadius + (outerRadius - innerRadius);
+              const x = cx + radius * Math.cos(-midAngle * RADIAN);
+              const y = cy + radius * Math.sin(-midAngle * RADIAN);
+              
+              return (
+                <text
+                  x={x}
+                  y={y}
+                  textAnchor={x > cx ? 'start' : 'end'}
+                  dominantBaseline="central"
+                  fill="#333"
+                  fontSize={12}
+                  fontWeight="bold"
+                >
+                  {`${(percent * 100).toFixed(0)}%`}
+                </text>
+              );
+            }}
           >
             {chartData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -110,7 +129,7 @@ const MaintenanceCompletionRate = () => {
             verticalAlign="bottom" 
             align="center"
             wrapperStyle={{
-              fontSize: isMobile ? '12px' : '14px',
+              fontSize: isMobile ? '11px' : '13px',
               fontWeight: 'medium',
               paddingTop: '20px',
               paddingBottom: '10px'

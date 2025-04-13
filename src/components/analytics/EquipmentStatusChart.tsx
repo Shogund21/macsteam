@@ -12,7 +12,7 @@ const COLORS = ['#4299E1', '#48BB78', '#F6AD55', '#F56565', '#805AD5', '#DD6B20'
 
 const EquipmentStatusChart = () => {
   const { dateRange } = useAnalyticsFilters();
-  const { companyId, applyCompanyFilter } = useCompanyFilter();
+  const { companyId } = useCompanyFilter();
   const [chartData, setChartData] = useState<any[]>([]);
   const isMobile = useIsMobile();
 
@@ -58,7 +58,7 @@ const EquipmentStatusChart = () => {
       data.sort((a, b) => b.value - a.value);
       
       // Limit to top statuses for mobile
-      setChartData(isMobile ? data.slice(0, 4) : data);
+      setChartData(isMobile ? data.slice(0, 4) : data.slice(0, 6));
     } else {
       // Sample data for preview when no data is available
       const sampleData = [
@@ -66,7 +66,8 @@ const EquipmentStatusChart = () => {
         { name: "Working", value: 25 },
         { name: "Offline", value: 15 },
         { name: "Unknown", value: 13 },
-        { name: "active", value: 7 }
+        { name: "active", value: 7 },
+        { name: "Maintenance", value: 5 }
       ];
       setChartData(isMobile ? sampleData.slice(0, 4) : sampleData);
     }
@@ -80,37 +81,40 @@ const EquipmentStatusChart = () => {
   const totalEquipment = chartData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="h-64 md:h-72 w-full">
+    <div className="h-72 md:h-96 w-full chart-container">
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <Pie
             data={chartData}
             cx="50%"
-            cy="50%"
-            labelLine={false}
-            outerRadius={isMobile ? 60 : 75}
+            cy="45%"
+            labelLine={true}
+            outerRadius={isMobile ? 65 : 85}
             innerRadius={0}
             paddingAngle={3}
             fill="#8884d8"
             dataKey="value"
-            label={({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
+            label={({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
               // Only show percentage for items that are significant enough (>5%)
               if (percent < 0.05) return null;
               
-              const radius = outerRadius * 0.8;
-              const radian = Math.PI / 180;
-              const x = cx + radius * Math.cos(-midAngle * radian);
-              const y = cy + radius * Math.sin(-midAngle * radian);
+              const RADIAN = Math.PI / 180;
+              const radius = 5 + outerRadius;
+              const x = cx + radius * Math.cos(-midAngle * RADIAN);
+              const y = cy + radius * Math.sin(-midAngle * RADIAN);
               
               return (
                 <text 
                   x={x} 
                   y={y} 
                   fill="#333"
-                  textAnchor="middle" 
+                  textAnchor={x > cx ? 'start' : 'end'}
                   dominantBaseline="central"
-                  className="font-semibold text-xs"
-                  style={{ textShadow: '0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white' }}
+                  className="font-semibold"
+                  style={{ 
+                    fontSize: isMobile ? 10 : 12,
+                    textShadow: '0 0 2px white, 0 0 2px white, 0 0 2px white, 0 0 2px white' 
+                  }}
                 >
                   {`${(percent * 100).toFixed(0)}%`}
                 </text>
@@ -140,12 +144,17 @@ const EquipmentStatusChart = () => {
             verticalAlign={isMobile ? "bottom" : "middle"}
             iconSize={10}
             iconType="circle"
+            formatter={(value, entry, index) => {
+              const limit = isMobile ? 8 : 12;
+              return value.length > limit ? `${value.slice(0, limit)}...` : value;
+            }}
             wrapperStyle={{
-              fontSize: isMobile ? '10px' : '13px',
+              fontSize: isMobile ? '10px' : '12px',
               fontWeight: 'medium',
               lineHeight: '1.2em',
               paddingLeft: isMobile ? '0' : '10px',
-              paddingTop: isMobile ? '10px' : '0'
+              paddingTop: isMobile ? '10px' : '0',
+              width: '100%'
             }}
           />
         </PieChart>

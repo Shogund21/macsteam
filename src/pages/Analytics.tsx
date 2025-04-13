@@ -47,15 +47,15 @@ const Analytics = () => {
   return (
     <Layout>
       <AnalyticsFilterProvider>
-        <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div className="space-y-8 max-w-full">
+          <div className="flex flex-col gap-4">
             <div>
-              <h1 className="text-3xl font-bold">Analytics & Reporting</h1>
+              <h1 className="text-2xl md:text-3xl font-bold">Analytics & Reporting</h1>
               <p className="text-muted-foreground mt-1">
                 View insights and track maintenance performance metrics
               </p>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full justify-between">
               <DatePickerWithRange defaultDateRange={defaultDateRange} />
               <div className="flex gap-2 w-full sm:w-auto">
                 <Button 
@@ -80,57 +80,57 @@ const Analytics = () => {
           </div>
 
           {/* Main Trends Chart */}
-          <Card>
+          <Card className="overflow-visible">
             <CardHeader className="pb-2">
               <CardTitle>Maintenance Trends over Time</CardTitle>
               <CardDescription>
                 Track historical maintenance activities and identify patterns
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-visible">
               <MaintenanceTrends />
             </CardContent>
           </Card>
 
           {/* First Row of Charts - Equipment Status and Maintenance Completion */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="h-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="h-full overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment Status</CardTitle>
                 <CardDescription>Current status of all equipment</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-visible">
                 <EquipmentStatusChart />
               </CardContent>
             </Card>
-            <Card className="h-full">
+            <Card className="h-full overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Maintenance Completion Rate</CardTitle>
                 <CardDescription>Breakdown of maintenance check statuses</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-visible">
                 <MaintenanceCompletionRate />
               </CardContent>
             </Card>
           </div>
 
           {/* Second Row of Charts - Technician Performance and Location Breakdown */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="h-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="h-full overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Technician Performance</CardTitle>
                 <CardDescription>Maintenance checks by technician</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-visible">
                 <TechnicianPerformance />
               </CardContent>
             </Card>
-            <Card className="h-full">
+            <Card className="h-full overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment by Location</CardTitle>
                 <CardDescription>Distribution of equipment across locations</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="overflow-visible">
                 <LocationBreakdown />
               </CardContent>
             </Card>

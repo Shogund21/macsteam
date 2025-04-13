@@ -141,16 +141,16 @@ const TechnicianPerformance = () => {
   }
 
   return (
-    <div className="h-64 md:h-80 w-full">
+    <div className="h-72 md:h-96 w-full chart-container">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
           layout="vertical"
           margin={{
-            top: 5,
-            right: isMobile ? 10 : 30,
-            left: isMobile ? 80 : 120,
-            bottom: 5,
+            top: 10,
+            right: isMobile ? 15 : 40,
+            left: isMobile ? 70 : 110,
+            bottom: 10,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -161,8 +161,15 @@ const TechnicianPerformance = () => {
           <YAxis 
             type="category" 
             dataKey="name" 
-            tick={{ fontSize: isMobile ? 10 : 13, fontWeight: 600, fill: '#333' }} 
-            width={isMobile ? 80 : 120}
+            tick={{ fontSize: isMobile ? 10 : 12, fontWeight: 600, fill: '#333' }} 
+            width={isMobile ? 70 : 110}
+            tickFormatter={(value) => {
+              // Truncate long names on mobile
+              if (isMobile && value.length > 9) {
+                return `${value.slice(0, 8)}...`;
+              }
+              return value;
+            }}
           />
           <Tooltip 
             contentStyle={{ 
@@ -175,10 +182,12 @@ const TechnicianPerformance = () => {
           />
           <Legend 
             wrapperStyle={{ 
-              fontSize: isMobile ? '10px' : '14px', 
+              fontSize: isMobile ? '10px' : '12px', 
               fontWeight: 'medium',
               paddingTop: '10px'
-            }} 
+            }}
+            verticalAlign="bottom"
+            align="center"
           />
           <Bar dataKey="completed" name="Completed" fill="#00C49F" />
           <Bar dataKey="pending" name="Pending" fill="#FFBB28" />
