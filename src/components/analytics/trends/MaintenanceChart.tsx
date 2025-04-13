@@ -25,23 +25,27 @@ const MaintenanceChart = ({ chartData }: MaintenanceChartProps) => {
             dataKey: "total",
             name: "Total Checks",
             stroke: "#8884d8",
+            strokeWidth: 3,
             activeDot: { r: 8 }
           },
           {
             dataKey: "completed",
             name: "Completed",
-            stroke: "#00C49F"
+            stroke: "#4CAF50",
+            strokeWidth: 2
           },
           {
             dataKey: "pending",
             name: "Pending",
-            stroke: "#FFBB28",
+            stroke: "#FFC107",
+            strokeWidth: 2,
             hiddenOnMobile: true
           },
           {
             dataKey: "issues",
             name: "Issues Found",
-            stroke: "#FF8042",
+            stroke: "#FF7043",
+            strokeWidth: 2,
             hiddenOnMobile: true
           }
         ]}

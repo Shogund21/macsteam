@@ -11,19 +11,20 @@ const LocationBreakdown = () => {
   }
 
   return (
-    <div className="w-full h-[400px] md:h-[450px] overflow-visible">
+    <div className="w-full h-[450px] overflow-visible">
       <BarChart 
         data={chartData}
         series={[
           {
             dataKey: "value",
             name: "Equipment Count",
-            fill: "#8884d8",
+            fill: "#7E69AB",  // More vibrant purple
             showLabel: true
           }
         ]}
         layout="vertical"
         tooltipFormatter={(value) => [`${value} equipment`, 'Count']}
+        height={450}
       />
     </div>
   );

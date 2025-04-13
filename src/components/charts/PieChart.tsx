@@ -51,11 +51,12 @@ const PieChart: React.FC<PieChartProps> = ({
     return value.length > limit ? `${value.slice(0, limit)}...` : value;
   };
   
+  // Improved margins for better visibility
   const margins = {
     top: 20,
     right: 20,
     left: 20,
-    bottom: isMobile ? 40 : 30,
+    bottom: isMobile ? 80 : 40,
   };
 
   return (
@@ -65,24 +66,26 @@ const PieChart: React.FC<PieChartProps> = ({
           <Pie
             data={data}
             cx="50%"
-            cy="40%" 
-            labelLine={false}
-            outerRadius={isMobile ? 90 : 120}
-            innerRadius={donut ? (isMobile ? 50 : 70) : 0}
-            paddingAngle={donut ? 2 : 1}
+            cy="45%" 
+            labelLine={donut}
+            outerRadius={isMobile ? 90 : 130}
+            innerRadius={donut ? (isMobile ? 60 : 85) : 0}
+            paddingAngle={donut ? 3 : 2}
             dataKey="value"
             label={({ name, percent }) => {
               // Only show label if segment is large enough
-              if (percent < 0.1) return null;
+              if (percent < 0.08) return null;
               return `${(percent * 100).toFixed(0)}%`;
             }}
+            fontWeight="bold"
           >
             {data.map((entry, index) => (
               <Cell 
                 key={`cell-${index}`} 
                 fill={colors[index % colors.length]} 
                 stroke="#fff"
-                strokeWidth={1}
+                strokeWidth={1.5}
+                strokeOpacity={1}
               />
             ))}
           </Pie>
@@ -98,14 +101,14 @@ const PieChart: React.FC<PieChartProps> = ({
             verticalAlign="bottom" 
             align="center"
             iconType="circle"
-            iconSize={8}
+            iconSize={10}
             formatter={(value) => truncateName(value)}
             wrapperStyle={{
-              fontSize: isMobile ? '10px' : '12px',
+              fontSize: isMobile ? '11px' : '12px',
               fontWeight: 'medium',
               paddingTop: '20px',
               width: '100%',
-              marginBottom: isMobile ? '10px' : '0'
+              marginBottom: isMobile ? '20px' : '0'
             }}
           />
         </RechartsPieChart>

@@ -8,7 +8,7 @@ import { useCompanyFilter } from "@/hooks/useCompanyFilter";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 // Updated colors for better contrast and visibility
-const COLORS = ['#4299E1', '#48BB78', '#F6AD55', '#F56565', '#805AD5', '#DD6B20', '#38B2AC'];
+const COLORS = ['#4299E1', '#48BB78', '#F6AD55', '#F56565', '#9B87F5', '#DD6B20', '#38B2AC'];
 
 const EquipmentStatusChart = () => {
   const { dateRange } = useAnalyticsFilters();

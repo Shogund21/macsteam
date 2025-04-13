@@ -11,28 +11,29 @@ const TechnicianPerformance = () => {
   }
 
   return (
-    <div className="w-full h-[400px] md:h-[450px] overflow-visible">
+    <div className="w-full h-[450px] overflow-visible">
       <BarChart 
         data={chartData}
         series={[
           {
             dataKey: "completed",
             name: "Completed",
-            fill: "#00C49F"
+            fill: "#4CAF50"  // Brighter green
           },
           {
             dataKey: "pending",
             name: "Pending",
-            fill: "#FFBB28"
+            fill: "#FFC107"  // Brighter yellow
           },
           {
             dataKey: "issues",
             name: "Issues Found",
-            fill: "#FF8042"
+            fill: "#FF7043"  // Brighter orange
           }
         ]}
         layout="vertical"
         tooltipFormatter={(value, name) => [`${value} maintenance checks`, name]}
+        height={450}
       />
     </div>
   );

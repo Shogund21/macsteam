@@ -51,18 +51,18 @@ const BarChart: React.FC<BarChartProps> = ({
   
   const isVertical = layout === "vertical";
   
-  // Adjusted margins based on layout
+  // Improved margins for better visibility
   const margins = {
     top: 20,
-    right: isVertical ? (isMobile ? 45 : 80) : 20,
-    left: isVertical ? (isMobile ? 150 : 180) : (isMobile ? 10 : 40),
-    bottom: isMobile ? 60 : 50,
+    right: isVertical ? (isMobile ? 60 : 100) : 30,
+    left: isVertical ? (isMobile ? 120 : 160) : (isMobile ? 20 : 50),
+    bottom: isMobile ? 80 : 60,
   };
   
   // Truncate long names for better readability
   const truncateName = (name: string): string => {
     if (!name || typeof name !== 'string') return '';
-    const limit = isMobile ? 12 : 18;
+    const limit = isMobile ? 10 : 15;
     return name.length > limit ? `${name.slice(0, limit)}...` : name;
   };
   
@@ -73,10 +73,11 @@ const BarChart: React.FC<BarChartProps> = ({
           data={data}
           layout={layout}
           margin={margins}
-          barGap={isMobile ? 2 : 4}
-          barSize={isVertical ? (isMobile ? 12 : 20) : undefined}
+          barGap={isMobile ? 2 : 6}
+          barCategoryGap={isMobile ? 5 : 10}
+          barSize={isVertical ? (isMobile ? 12 : 18) : undefined}
         >
-          <CartesianGrid strokeDasharray="3 3" stroke="#eee" />
+          <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
           
           {/* Configure X axis based on layout */}
           <XAxis 
@@ -85,9 +86,9 @@ const BarChart: React.FC<BarChartProps> = ({
             tick={{ 
               fontSize: isMobile ? 10 : 12, 
               fontWeight: 500,
-              fill: '#333'
+              fill: '#333333'
             }}
-            height={isMobile ? 60 : 30}
+            height={isMobile ? 70 : 50}
             domain={isVertical ? [0, 'dataMax + 5'] : undefined}
             angle={isMobile && !isVertical ? -45 : 0}
             textAnchor={isMobile && !isVertical ? "end" : "middle"}
@@ -95,14 +96,15 @@ const BarChart: React.FC<BarChartProps> = ({
             tickFormatter={
               isVertical ? undefined : truncateName
             }
-            axisLine={{ stroke: '#E0E0E0' }}
+            axisLine={{ stroke: '#cccccc', strokeWidth: 1 }}
+            tickLine={{ stroke: '#cccccc' }}
           >
             {xAxisLabel && !isMobile && (
               <Label 
                 value={xAxisLabel} 
                 position="insideBottom" 
-                offset={-10}
-                style={{ textAnchor: 'middle', fontSize: 12 }}
+                offset={-15}
+                style={{ textAnchor: 'middle', fontSize: 12, fill: '#555555', fontWeight: 600 }}
               />
             )}
           </XAxis>
@@ -111,29 +113,33 @@ const BarChart: React.FC<BarChartProps> = ({
           <YAxis 
             type={isVertical ? "category" : "number"}
             dataKey={isVertical ? "name" : undefined} 
-            width={isVertical ? (isMobile ? 140 : 170) : 50}
+            width={isVertical ? (isMobile ? 110 : 150) : (isMobile ? 40 : 50)}
             tick={{ 
               fontSize: isMobile ? 10 : 12,
               fontWeight: 500,
-              fill: '#333'
+              fill: '#333333'
             }}
             tickFormatter={
               isVertical ? truncateName : undefined
             }
-            axisLine={{ stroke: '#E0E0E0' }}
+            axisLine={{ stroke: '#cccccc', strokeWidth: 1 }}
+            tickLine={{ stroke: '#cccccc' }}
+            tickCount={7}
           >
             {yAxisLabel && !isMobile && (
               <Label 
                 value={yAxisLabel} 
                 angle={-90} 
                 position="insideLeft" 
-                style={{ textAnchor: 'middle', fontSize: 12 }}
+                offset={-10}
+                style={{ textAnchor: 'middle', fontSize: 12, fill: '#555555', fontWeight: 600 }}
               />
             )}
           </YAxis>
           
           <Tooltip 
             content={<ChartTooltip formatter={tooltipFormatter} />}
+            cursor={{ fill: 'rgba(0, 0, 0, 0.05)' }}
           />
           
           <Legend 
@@ -141,17 +147,16 @@ const BarChart: React.FC<BarChartProps> = ({
               fontSize: isMobile ? '11px' : '12px',
               fontWeight: 'medium',
               paddingTop: '15px',
-              width: '100%',
-              paddingBottom: isMobile ? '10px' : '5px'
+              paddingBottom: isMobile ? '20px' : '10px'
             }}
             verticalAlign="bottom"
             align="center"
             layout="horizontal"
             iconType="circle"
-            iconSize={8}
+            iconSize={10}
           />
           
-          {/* Render bars for each series */}
+          {/* Render bars for each series with better styling */}
           {series.map((s) => (
             <Bar 
               key={s.dataKey} 
@@ -161,12 +166,14 @@ const BarChart: React.FC<BarChartProps> = ({
               radius={[2, 2, 0, 0]}
               label={s.showLabel ? {
                 position: isVertical ? 'right' : 'top',
-                fontSize: isMobile ? 9 : 11,
+                fontSize: isMobile ? 10 : 11,
                 fontWeight: 'bold',
-                fill: '#333',
-                offset: isMobile ? 5 : 10,
+                fill: '#333333',
+                offset: 10,
                 formatter: (value) => value || ''
               } : false}
+              stroke="#ffffff"
+              strokeWidth={1}
             />
           ))}
         </RechartsBarChart>

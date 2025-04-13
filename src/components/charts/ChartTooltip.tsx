@@ -12,23 +12,32 @@ const ChartTooltip: React.FC<ChartTooltipProps> = ({ active, payload, label, for
   if (!active || !payload || payload.length === 0) return null;
 
   return (
-    <div className="bg-white p-3 border border-gray-200 rounded-md shadow-md max-w-[250px] z-[1000]">
-      {label && <p className="font-semibold text-gray-800 text-sm mb-1">{label}</p>}
-      <div className="space-y-1.5">
+    <div className="bg-white p-3 border border-gray-200 rounded-md shadow-lg max-w-[250px] z-[1000]">
+      {label && <p className="font-semibold text-gray-800 text-sm mb-2 border-b pb-1">{label}</p>}
+      <div className="space-y-2">
         {payload.map((entry, index) => {
           const [value, name] = formatter 
             ? formatter(entry.value, entry.name)
             : [entry.value, entry.name];
             
           return (
-            <p 
+            <div 
               key={index} 
-              style={{ color: entry.color }} 
-              className="text-xs flex items-center justify-between gap-2"
+              className="flex items-center justify-between gap-2"
             >
-              <span className="truncate max-w-[150px]">{name}:</span> 
-              <span className="font-semibold whitespace-nowrap">{value}</span>
-            </p>
+              <span className="flex items-center gap-1.5">
+                <span 
+                  className="w-3 h-3 rounded-sm inline-block" 
+                  style={{ backgroundColor: entry.color }}
+                />
+                <span className="text-xs font-medium text-gray-700 truncate max-w-[120px]">
+                  {name}:
+                </span>
+              </span>
+              <span className="text-xs font-bold whitespace-nowrap">
+                {value}
+              </span>
+            </div>
           );
         })}
       </div>

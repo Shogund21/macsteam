@@ -6,7 +6,7 @@ import { useAnalyticsFilters } from "./AnalyticsFilterContext";
 import { useState, useEffect } from "react";
 
 // Colors for the pie chart segments with improved contrast
-const COLORS = ['#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#4CAF50', '#FFC107', '#FF7043'];
 
 const MaintenanceCompletionRate = () => {
   const { dateRange } = useAnalyticsFilters();
