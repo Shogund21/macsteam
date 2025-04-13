@@ -154,6 +154,28 @@ text.recharts-text {
   z-index: 1000 !important;
 }
 
+/* Fix specifically for the right-side labels in horizontal bar charts */
+.recharts-label-list text.recharts-label {
+  text-anchor: start !important;
+  font-size: 11px !important;
+  font-weight: bold !important;
+}
+
+/* Ensure chart bars have enough space */
+.recharts-layer.recharts-bar-rectangles {
+  transform: translateX(0) !important;
+}
+
+/* Ensure YAxis has enough space for labels */
+.recharts-yAxis .recharts-cartesian-axis-tick-value {
+  text-anchor: end !important;
+}
+
+/* Prevent clipping issues */
+.recharts-wrapper .recharts-cartesian-grid {
+  overflow: visible !important;
+}
+
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .chart-container {
@@ -190,5 +212,10 @@ text.recharts-text {
   /* Ensure tooltips are visible on mobile */
   .recharts-tooltip-wrapper {
     z-index: 1000 !important;
+  }
+  
+  /* Improve mobile label visibility */
+  .recharts-label-list text {
+    font-size: 9px !important;
   }
 }

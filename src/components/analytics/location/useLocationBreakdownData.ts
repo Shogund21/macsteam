@@ -43,7 +43,7 @@ export const useLocationBreakdownData = () => {
       const data = Object.entries(locationCounts)
         .map(([name, value]) => ({ name, value }))
         .sort((a, b) => b.value - a.value)
-        .slice(0, isMobile ? 6 : 8); // Show more locations
+        .slice(0, isMobile ? 8 : 10); // Show more locations
       
       setChartData(data);
     }
@@ -58,8 +58,10 @@ export const useLocationBreakdownData = () => {
         { name: "West Block", value: 9 },
         { name: "Data Center", value: 6 },
         { name: "Warehouse", value: 5 },
-        { name: "Office Complex", value: 4 }
-      ].slice(0, isMobile ? 6 : 8);
+        { name: "Office Complex", value: 4 },
+        { name: "Server Room", value: 3 },
+        { name: "Conference Center", value: 2 }
+      ].slice(0, isMobile ? 8 : 10);
       setChartData(sampleData);
     }
   }, [equipmentData, isMobile]);
