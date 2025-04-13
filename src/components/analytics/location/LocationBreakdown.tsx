@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useLocationBreakdownData } from "./useLocationBreakdownData";
-import BarChart from "@/components/charts/BarChart";
+import LocationBreakdownChart from "./LocationBreakdownChart";
 
 const LocationBreakdown = () => {
   const { chartData, isLoading } = useLocationBreakdownData();
@@ -16,19 +16,7 @@ const LocationBreakdown = () => {
 
   return (
     <div className="h-full w-full">
-      <BarChart 
-        data={chartData}
-        series={[
-          {
-            dataKey: "value",
-            name: "Equipment Count",
-            fill: "#7E69AB",
-            showLabel: true
-          }
-        ]}
-        layout="vertical"
-        tooltipFormatter={(value) => [`${value} equipment`, 'Count']}
-      />
+      <LocationBreakdownChart data={chartData} />
     </div>
   );
 };

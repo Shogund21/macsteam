@@ -97,7 +97,7 @@ export function useTechnicianPerformanceData() {
           total: stats.completed + stats.pending + stats.issues
         }))
         .sort((a, b) => b.total - a.total)
-        .slice(0, isMobile ? 3 : 5); // Show fewer technicians on mobile
+        .slice(0, isMobile ? 5 : 7); // Show more technicians
       
       // If no data, add sample data for preview
       if (formattedData.length === 0) {
@@ -119,15 +119,17 @@ function getSampleData(isMobile: boolean): Array<TechnicianStats> {
   const sampleData = [
     { name: "Filip Carter", completed: 28, pending: 5, issues: 2, total: 35 },
     { name: "Emma Johnson", completed: 22, pending: 3, issues: 1, total: 26 },
-    { name: "David Smith", completed: 18, pending: 7, issues: 3, total: 28 }
+    { name: "David Smith", completed: 18, pending: 7, issues: 3, total: 28 },
+    { name: "Sarah Brown", completed: 15, pending: 2, issues: 0, total: 17 },
+    { name: "Michael Davis", completed: 12, pending: 4, issues: 1, total: 17 }
   ];
   
   if (!isMobile) {
     sampleData.push(
-      { name: "Sarah Brown", completed: 15, pending: 2, issues: 0, total: 17 },
-      { name: "Michael Davis", completed: 12, pending: 4, issues: 1, total: 17 }
+      { name: "Carlos Rodriguez", completed: 10, pending: 3, issues: 2, total: 15 },
+      { name: "Lisa Wilson", completed: 8, pending: 2, issues: 0, total: 10 }
     );
   }
   
-  return sampleData;
+  return sampleData.slice(0, isMobile ? 5 : 7);
 }

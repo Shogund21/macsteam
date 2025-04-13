@@ -8,23 +8,17 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer 
+  ResponsiveContainer,
+  LabelList
 } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { LocationBreakdownData } from "./useLocationBreakdownData";
 
-interface TechnicianStatsData {
-  name: string;
-  completed: number;
-  pending: number;
-  issues: number;
-  total: number;
+interface LocationBreakdownChartProps {
+  data: LocationBreakdownData[];
 }
 
-interface TechnicianPerformanceChartProps {
-  data: TechnicianStatsData[];
-}
-
-const TechnicianPerformanceChart: React.FC<TechnicianPerformanceChartProps> = ({ data }) => {
+const LocationBreakdownChart: React.FC<LocationBreakdownChartProps> = ({ data }) => {
   const isMobile = useIsMobile();
   
   return (
@@ -34,16 +28,16 @@ const TechnicianPerformanceChart: React.FC<TechnicianPerformanceChartProps> = ({
         layout="vertical"
         margin={{
           top: 20,
-          right: isMobile ? 30 : 80,
+          right: isMobile ? 40 : 90,
           left: isMobile ? 120 : 150,
-          bottom: isMobile ? 60 : 30,
+          bottom: isMobile ? 50 : 20,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis 
           type="number" 
           tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600 }}
-          domain={[0, 'dataMax + 10']} // Increase space on the right side
+          domain={[0, 'dataMax + 5']} // Add some extra space on the right
         />
         <YAxis 
           type="category" 
@@ -51,7 +45,7 @@ const TechnicianPerformanceChart: React.FC<TechnicianPerformanceChartProps> = ({
           tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }} 
           width={isMobile ? 120 : 150}
           tickFormatter={(value) => {
-            // Increase character limit for names to show more information
+            // Increase character limit to show more location information
             const limit = isMobile ? 15 : 20;
             return value.length > limit ? `${value.slice(0, limit)}...` : value;
           }}
@@ -64,23 +58,27 @@ const TechnicianPerformanceChart: React.FC<TechnicianPerformanceChartProps> = ({
             borderRadius: '8px',
             boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
           }} 
+          formatter={(value) => [`${value} equipment`, 'Count']}
         />
-        <Legend 
-          wrapperStyle={{ 
-            fontSize: isMobile ? '11px' : '13px', 
-            fontWeight: 'medium',
-            paddingTop: '25px'
-          }}
-          verticalAlign="bottom"
-          align="center"
-          layout="horizontal"
-        />
-        <Bar dataKey="completed" name="Completed" fill="#4CAF50" />
-        <Bar dataKey="pending" name="Pending" fill="#FFC107" />
-        <Bar dataKey="issues" name="Issues Found" fill="#FF7043" />
+        <Bar 
+          dataKey="value" 
+          name="Equipment Count" 
+          fill="#7E69AB" 
+          radius={[3, 3, 0, 0]}
+        >
+          <LabelList 
+            dataKey="value" 
+            position="right" 
+            style={{ 
+              fontSize: 11,
+              fontWeight: 'bold',
+              fill: '#333'
+            }}
+          />
+        </Bar>
       </BarChart>
     </ResponsiveContainer>
   );
 };
 
-export default TechnicianPerformanceChart;
+export default LocationBreakdownChart;

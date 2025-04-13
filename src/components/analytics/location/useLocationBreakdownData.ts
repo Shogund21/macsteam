@@ -1,6 +1,6 @@
 
-import { useQuery } from "@tanstack/react-query";
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { BarChartDataItem } from "@/components/charts/BarChart";
@@ -43,7 +43,7 @@ export const useLocationBreakdownData = () => {
       const data = Object.entries(locationCounts)
         .map(([name, value]) => ({ name, value }))
         .sort((a, b) => b.value - a.value)
-        .slice(0, isMobile ? 4 : 6); // Show fewer locations on mobile
+        .slice(0, isMobile ? 6 : 8); // Show more locations
       
       setChartData(data);
     }
@@ -55,9 +55,11 @@ export const useLocationBreakdownData = () => {
         { name: "North Wing", value: 18 },
         { name: "South Wing", value: 15 },
         { name: "East Block", value: 12 },
-        { name: isMobile ? "Others" : "West Block", value: 9 },
-        { name: "Data Center", value: 6 }
-      ].slice(0, isMobile ? 4 : 6);
+        { name: "West Block", value: 9 },
+        { name: "Data Center", value: 6 },
+        { name: "Warehouse", value: 5 },
+        { name: "Office Complex", value: 4 }
+      ].slice(0, isMobile ? 6 : 8);
       setChartData(sampleData);
     }
   }, [equipmentData, isMobile]);
