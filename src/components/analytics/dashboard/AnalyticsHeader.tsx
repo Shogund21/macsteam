@@ -26,7 +26,7 @@ const AnalyticsHeader = ({ activeView, setActiveView }: AnalyticsHeaderProps) =>
             variant={activeView === "charts" ? "default" : "outline"} 
             size="sm"
             onClick={() => setActiveView("charts")}
-            className="w-full sm:w-auto"
+            className={`w-full sm:w-auto ${activeView === "charts" ? 'bg-blue-500 hover:bg-blue-600' : ''}`}
           >
             <BarChart4 className="mr-2 h-4 w-4" />
             Charts
@@ -35,7 +35,7 @@ const AnalyticsHeader = ({ activeView, setActiveView }: AnalyticsHeaderProps) =>
             variant={activeView === "tables" ? "default" : "outline"} 
             size="sm"
             onClick={() => setActiveView("tables")}
-            className="w-full sm:w-auto"
+            className={`w-full sm:w-auto ${activeView === "tables" ? 'bg-blue-500 hover:bg-blue-600' : ''}`}
           >
             <ListFilter className="mr-2 h-4 w-4" />
             Tables
