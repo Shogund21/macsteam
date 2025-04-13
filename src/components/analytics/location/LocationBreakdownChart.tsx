@@ -27,16 +27,16 @@ const LocationBreakdownChart: React.FC<LocationBreakdownChartProps> = ({ data })
         layout="vertical"
         margin={{
           top: 20,
-          right: isMobile ? 60 : 100,
+          right: isMobile ? 70 : 120,
           left: isMobile ? 120 : 150,
-          bottom: isMobile ? 80 : 50,
+          bottom: isMobile ? 80 : 60,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
         <XAxis 
           type="number" 
           tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600 }}
-          domain={[0, 'dataMax + 5']} // Add some extra space on the right
+          domain={[0, 'dataMax + 5']} 
         />
         <YAxis 
           type="category" 
@@ -44,7 +44,6 @@ const LocationBreakdownChart: React.FC<LocationBreakdownChartProps> = ({ data })
           width={isMobile ? 120 : 150} 
           tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 600, fill: '#333' }}
           tickFormatter={(value) => {
-            // Truncate long location names
             const limit = isMobile ? 12 : 18;
             return value.length > limit ? `${value.slice(0, limit)}...` : value;
           }}
@@ -63,7 +62,9 @@ const LocationBreakdownChart: React.FC<LocationBreakdownChartProps> = ({ data })
           wrapperStyle={{ 
             fontSize: isMobile ? '11px' : '13px', 
             fontWeight: 'medium',
-            paddingTop: '25px'
+            paddingTop: '25px',
+            width: '100%',
+            paddingBottom: isMobile ? '15px' : '5px'
           }}
           verticalAlign="bottom"
           align="center"

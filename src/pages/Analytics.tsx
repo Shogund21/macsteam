@@ -95,7 +95,7 @@ const Analytics = () => {
           </Card>
 
           {/* Charts - Grid layout that stacks on mobile */}
-          <div className="grid grid-cols-1 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             <Card className="overflow-visible">
               <CardHeader className="pb-2">
                 <CardTitle>Equipment Status</CardTitle>

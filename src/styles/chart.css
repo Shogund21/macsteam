@@ -149,6 +149,11 @@ text.recharts-text {
   fill: #333 !important;
 }
 
+/* Important fix to prevent labels from being cut off */
+.recharts-surface {
+  overflow: visible !important;
+}
+
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .chart-container {

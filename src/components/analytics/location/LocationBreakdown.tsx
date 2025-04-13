@@ -11,7 +11,7 @@ const LocationBreakdown = () => {
   }
 
   return (
-    <div className="w-full h-[400px] md:h-[450px]">
+    <div className="w-full h-[400px] md:h-[450px] overflow-visible">
       <LocationBreakdownChart data={chartData} />
     </div>
   );
