@@ -4,6 +4,7 @@ import MaintenanceTrends from "@/components/analytics/MaintenanceTrends";
 import EquipmentStatusChart from "@/components/analytics/EquipmentStatusChart";
 import MaintenanceCompletionRate from "@/components/analytics/MaintenanceCompletionRate";
 import TechnicianPerformance from "@/components/analytics/technician/TechnicianPerformance";
+import EquipmentHealthMatrixWrapper from "@/components/analytics/health-matrix/EquipmentHealthMatrixWrapper";
 
 const ChartsView = () => {
   return (
@@ -51,6 +52,17 @@ const ChartsView = () => {
         >
           <div className="min-h-[300px] w-full">
             <TechnicianPerformance />
+          </div>
+        </AnalyticsCard>
+        
+        {/* Equipment Health Matrix */}
+        <AnalyticsCard
+          title="Equipment Health Matrix by Location"
+          description="Status and risk assessment by location"
+          tooltipContent="Detailed breakdown of equipment health metrics across locations"
+        >
+          <div className="min-h-[300px] w-full">
+            <EquipmentHealthMatrixWrapper />
           </div>
         </AnalyticsCard>
       </div>
