@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -44,7 +43,6 @@ export const useLocationBreakdownData = () => {
     },
   });
 
-  // Helper function to extract region or floor from location name if available
   const extractLocationInfo = (location: string): { 
     displayName: string, 
     region?: string,
@@ -84,16 +82,19 @@ export const useLocationBreakdownData = () => {
       { name: "776A", value: 5, region: "West" },
       { name: "776B", value: 3, region: "West" },
       { name: "Dadeland", value: 3, region: "North" },
-      { name: "806", value: 2, region: "South" },
-      { name: "Building A - Basement", value: 1, region: "Building A" },
-      { name: "Building B - Basement", value: 1, region: "Building B" }
+      { name: "806", value: 2, region: "South" }
     ].slice(0, isMobile ? 7 : 9);
     
     if (equipmentData && equipmentData.length > 0) {
+      // Filter out equipment from removed locations
+      const filteredEquipmentData = equipmentData.filter(eq => 
+        !['Building A - Basement', 'Building B - Basement'].includes(eq.location)
+      );
+
       // Group equipment by location including region/floor info if available
       const locationDataMap = new Map<string, LocationBreakdownData>();
       
-      equipmentData.forEach(eq => {
+      filteredEquipmentData.forEach(eq => {
         if (!eq.location) return;
         
         const locationInfo = extractLocationInfo(eq.location);
