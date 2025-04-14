@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { 
   BarChart, 
   Bar, 
@@ -12,6 +12,7 @@ import {
 } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { LocationBreakdownData } from "./useLocationBreakdownData";
+import { Tooltip as UITooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface LocationBreakdownChartProps {
   data: LocationBreakdownData[];
@@ -19,6 +20,70 @@ interface LocationBreakdownChartProps {
 
 const LocationBreakdownChart: React.FC<LocationBreakdownChartProps> = ({ data }) => {
   const isMobile = useIsMobile();
+  const [truncatedNames, setTruncatedNames] = useState<Record<string, boolean>>({});
+  
+  // Function to check if a name is truncated and store the result
+  const checkIfTruncated = (name: string) => {
+    const limit = isMobile ? 14 : 18;
+    const isTruncated = name.length > limit;
+    
+    if (truncatedNames[name] !== isTruncated) {
+      setTruncatedNames(prev => ({
+        ...prev,
+        [name]: isTruncated
+      }));
+    }
+    
+    return isTruncated;
+  };
+  
+  // Custom Y-axis Tick with Tooltip
+  const CustomYAxisTick = (props: any) => {
+    const { x, y, payload } = props;
+    const name = payload.value;
+    const limit = isMobile ? 14 : 18;
+    const displayName = name.length > limit ? `${name.slice(0, limit)}...` : name;
+    const isTruncated = checkIfTruncated(name);
+    
+    return (
+      <g transform={`translate(${x},${y})`}>
+        {isTruncated ? (
+          <TooltipProvider>
+            <UITooltip>
+              <TooltipTrigger asChild>
+                <text
+                  x={0}
+                  y={0}
+                  dy={4}
+                  textAnchor="end"
+                  fill="#333"
+                  fontSize={isMobile ? 11 : 12}
+                  fontWeight={500}
+                >
+                  {displayName}
+                </text>
+              </TooltipTrigger>
+              <TooltipContent side="left" className="z-50 font-medium">
+                {name}
+              </TooltipContent>
+            </UITooltip>
+          </TooltipProvider>
+        ) : (
+          <text
+            x={0}
+            y={0}
+            dy={4}
+            textAnchor="end"
+            fill="#333"
+            fontSize={isMobile ? 11 : 12}
+            fontWeight={500}
+          >
+            {displayName}
+          </text>
+        )}
+      </g>
+    );
+  };
   
   return (
     <div className="min-w-[400px] overflow-x-auto">
@@ -43,12 +108,8 @@ const LocationBreakdownChart: React.FC<LocationBreakdownChartProps> = ({ data })
           <YAxis 
             type="category" 
             dataKey="name" 
-            tick={{ fontSize: isMobile ? 11 : 12, fontWeight: 500, fill: '#333' }} 
+            tick={<CustomYAxisTick />}
             width={isMobile ? 120 : 150}
-            tickFormatter={(value) => {
-              const limit = isMobile ? 14 : 18;
-              return value.length > limit ? `${value.slice(0, limit)}...` : value;
-            }}
             scale="band"
           />
           <Tooltip 
