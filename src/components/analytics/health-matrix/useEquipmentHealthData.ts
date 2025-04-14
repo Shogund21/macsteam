@@ -18,8 +18,8 @@ export const useEquipmentHealthData = () => {
   const [healthData, setHealthData] = useState<EquipmentHealthItem[]>([]);
   const { dateRange } = useAnalyticsFilters();
   
-  // Query equipment data
-  const { data: equipmentData, isLoading } = useQuery({
+  // Query equipment data and locations
+  const { data: equipmentData, isLoading: equipmentLoading } = useQuery({
     queryKey: ['equipment_health_matrix', dateRange],
     queryFn: async () => {
       let query = supabase
@@ -39,6 +39,23 @@ export const useEquipmentHealthData = () => {
       
       if (error) {
         console.error('Error fetching equipment:', error);
+        throw error;
+      }
+      
+      return data || [];
+    },
+  });
+
+  // Query for locations
+  const { data: locationsData, isLoading: locationsLoading } = useQuery({
+    queryKey: ['locations_for_matrix'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('locations')
+        .select('*');
+      
+      if (error) {
+        console.error('Error fetching locations:', error);
         throw error;
       }
       
@@ -95,15 +112,6 @@ export const useEquipmentHealthData = () => {
           total: 12,
           riskScore: 75.0,
           riskLevel: "medium"
-        },
-        {
-          location: "Equipment Storage",
-          operational: 3,
-          needsMaintenance: 2,
-          outOfService: 5,
-          total: 10,
-          riskScore: 40.0,
-          riskLevel: "high"
         }
       ];
       
@@ -111,12 +119,32 @@ export const useEquipmentHealthData = () => {
       return;
     }
     
-    // Process real data
+    // Create a map based on locations from the database
     const locationMap = new Map<string, EquipmentHealthItem>();
     
+    // Initialize with real locations from the database
+    if (locationsData && locationsData.length > 0) {
+      locationsData.forEach(location => {
+        const locationName = location.name || location.store_number;
+        if (locationName) {
+          locationMap.set(locationName, {
+            location: locationName,
+            operational: 0,
+            needsMaintenance: 0,
+            outOfService: 0,
+            total: 0,
+            riskScore: 0,
+            riskLevel: "low"
+          });
+        }
+      });
+    }
+    
+    // Process equipment data and group by location
     equipmentData.forEach(equipment => {
       if (!equipment.location) return;
       
+      // Check if this location exists in our map
       if (!locationMap.has(equipment.location)) {
         locationMap.set(equipment.location, {
           location: equipment.location,
@@ -140,28 +168,35 @@ export const useEquipmentHealthData = () => {
       } else if (equipment.status === "Out of Service") {
         locationData.outOfService += 1;
       }
-      
-      // Calculate risk score (percentage of equipment that is operational)
-      locationData.riskScore = Math.round((locationData.operational / locationData.total) * 100);
-      
-      // Determine risk level
-      if (locationData.riskScore >= 80) {
-        locationData.riskLevel = "low";
-      } else if (locationData.riskScore >= 60) {
-        locationData.riskLevel = "medium";
-      } else {
-        locationData.riskLevel = "high";
+    });
+    
+    // Calculate risk scores and levels for each location
+    locationMap.forEach(location => {
+      if (location.total > 0) {
+        // Calculate risk score (percentage of equipment that is operational)
+        location.riskScore = Math.round((location.operational / location.total) * 100);
+        
+        // Determine risk level
+        if (location.riskScore >= 80) {
+          location.riskLevel = "low";
+        } else if (location.riskScore >= 60) {
+          location.riskLevel = "medium";
+        } else {
+          location.riskLevel = "high";
+        }
       }
     });
     
     // Convert map to array and sort by risk score (descending)
     const processedData = Array.from(locationMap.values())
+      .filter(item => item.total > 0) // Only show locations with equipment
       .sort((a, b) => b.riskScore - a.riskScore);
       
     if (processedData.length > 0) {
       setHealthData(processedData);
     }
-  }, [equipmentData]);
+  }, [equipmentData, locationsData]);
 
+  const isLoading = equipmentLoading || locationsLoading;
   return { healthData, isLoading };
 };
