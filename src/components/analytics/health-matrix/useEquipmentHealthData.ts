@@ -46,13 +46,13 @@ export const useEquipmentHealthData = () => {
     },
   });
 
-  // Query for locations to get store numbers only
+  // Query for locations to get store numbers
   const { data: locationsData, isLoading: locationsLoading } = useQuery({
     queryKey: ['locations_for_matrix'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('locations')
-        .select('id, store_number')
+        .select('id, store_number, name')
         .eq('is_active', true);
       
       if (error) {
@@ -75,10 +75,10 @@ export const useEquipmentHealthData = () => {
     
     // Initialize map with store numbers from database
     locationsData.forEach(location => {
-      const storeNumber = location.store_number;
+      if (!location.store_number) return;
       
-      storeNumberMap.set(storeNumber, {
-        location: storeNumber,
+      storeNumberMap.set(location.store_number, {
+        location: location.store_number,
         operational: 0,
         needsMaintenance: 0,
         outOfService: 0,
@@ -88,24 +88,44 @@ export const useEquipmentHealthData = () => {
       });
     });
     
+    // Create a map of location strings to store numbers for faster lookup
+    const locationToStoreNumberMap = new Map<string, string>();
+    
+    locationsData.forEach(location => {
+      if (location.store_number) {
+        // Map the location name to its store number
+        if (location.name) {
+          locationToStoreNumberMap.set(location.name.toLowerCase(), location.store_number);
+        }
+        // Also map the store number itself for exact matches
+        locationToStoreNumberMap.set(location.store_number.toLowerCase(), location.store_number);
+      }
+    });
+    
     // Process equipment data and map to store numbers
     equipmentData.forEach(equipment => {
       if (!equipment.location) return;
       
-      // Find a matching store number for this equipment
-      const matchingLocation = locationsData.find(location => {
-        // Exact match with store number
-        return equipment.location.includes(location.store_number);
-      });
+      // First try to find a direct match with store numbers
+      let matchedStoreNumber = locationToStoreNumberMap.get(equipment.location.toLowerCase());
       
-      if (!matchingLocation) return;
+      // If no direct match, search for partial matches
+      if (!matchedStoreNumber) {
+        for (const [locationKey, storeNumber] of locationToStoreNumberMap.entries()) {
+          // Check if the equipment location contains the location key
+          if (equipment.location.toLowerCase().includes(locationKey)) {
+            matchedStoreNumber = storeNumber;
+            break;
+          }
+        }
+      }
       
-      const storeNumber = matchingLocation.store_number;
+      if (!matchedStoreNumber) return;
       
       // Get or create the health data entry for this store number
-      if (!storeNumberMap.has(storeNumber)) {
-        storeNumberMap.set(storeNumber, {
-          location: storeNumber,
+      if (!storeNumberMap.has(matchedStoreNumber)) {
+        storeNumberMap.set(matchedStoreNumber, {
+          location: matchedStoreNumber,
           operational: 0,
           needsMaintenance: 0,
           outOfService: 0,
@@ -115,7 +135,7 @@ export const useEquipmentHealthData = () => {
         });
       }
       
-      const locationData = storeNumberMap.get(storeNumber)!;
+      const locationData = storeNumberMap.get(matchedStoreNumber)!;
       locationData.total += 1;
       
       // Count by status
