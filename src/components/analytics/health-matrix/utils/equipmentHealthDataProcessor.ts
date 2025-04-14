@@ -4,6 +4,7 @@ import { normalizeString } from "@/utils/locationMatching";
 
 /**
  * Matches equipment locations to store numbers from the database
+ * with enhanced pattern matching to handle different location formats
  */
 export const matchEquipmentToStoreNumber = (
   equipment: any, 
@@ -70,6 +71,7 @@ export const calculateRiskMetrics = (operational: number, total: number): { risk
 
 /**
  * Process equipment data and location data into health matrix format
+ * with improved matching logic to handle various location formats
  */
 export const processEquipmentHealthData = (
   equipmentData: any[],
