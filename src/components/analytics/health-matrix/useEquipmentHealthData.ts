@@ -33,11 +33,14 @@ export const useEquipmentHealthData = () => {
       const { data, error } = await query;
       
       if (error) {
-        console.error('Error fetching equipment:', error);
+        console.error('Error fetching equipment data:', error);
         throw error;
       }
       
       console.log('Fetched equipment data:', data?.length || 0, 'items');
+      if (data && data.length > 0) {
+        console.log('Sample equipment data:', data[0]);
+      }
       return data || [];
     },
   });

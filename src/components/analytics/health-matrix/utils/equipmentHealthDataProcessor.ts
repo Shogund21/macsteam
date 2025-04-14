@@ -15,7 +15,6 @@ export const matchEquipmentToStoreNumber = (
   }
   
   const normalizedEquipLocation = normalizeString(equipment.location);
-  let matchedStoreNumber: string | undefined;
   
   // Try direct match with store number first
   const directMatch = locationsData.find(loc => 

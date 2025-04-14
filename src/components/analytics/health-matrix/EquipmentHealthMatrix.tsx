@@ -62,7 +62,7 @@ const EquipmentHealthMatrix = () => {
   if (!healthData.length) {
     return (
       <div className="w-full py-8 text-center text-muted-foreground">
-        <p>No equipment data available. Please check your database configuration.</p>
+        <p>No equipment data available for locations. Make sure equipment is assigned to valid store numbers.</p>
       </div>
     );
   }
