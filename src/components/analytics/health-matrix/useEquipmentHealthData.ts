@@ -18,7 +18,7 @@ export const useEquipmentHealthData = () => {
   const [healthData, setHealthData] = useState<EquipmentHealthItem[]>([]);
   const { dateRange } = useAnalyticsFilters();
   
-  // Query equipment data and locations
+  // Query equipment data
   const { data: equipmentData, isLoading: equipmentLoading } = useQuery({
     queryKey: ['equipment_health_matrix', dateRange],
     queryFn: async () => {
@@ -46,13 +46,14 @@ export const useEquipmentHealthData = () => {
     },
   });
 
-  // Query for locations with store numbers
+  // Query for locations to get store numbers only
   const { data: locationsData, isLoading: locationsLoading } = useQuery({
     queryKey: ['locations_for_matrix'],
     queryFn: async () => {
       const { data, error } = await supabase
         .from('locations')
-        .select('*');
+        .select('id, store_number')
+        .eq('is_active', true);
       
       if (error) {
         console.error('Error fetching locations:', error);
@@ -63,106 +64,47 @@ export const useEquipmentHealthData = () => {
     },
   });
 
-  // Process equipment data into health matrix format
+  // Process equipment data into health matrix format using only store numbers
   useEffect(() => {
-    if (!equipmentData || !locationsData) {
-      // Sample data if no real data is available
-      const sampleData: EquipmentHealthItem[] = [
-        {
-          location: "1001",
-          operational: 12,
-          needsMaintenance: 3,
-          outOfService: 1,
-          total: 16,
-          riskScore: 87.5,
-          riskLevel: "low"
-        },
-        {
-          location: "1002",
-          operational: 8,
-          needsMaintenance: 5,
-          outOfService: 2,
-          total: 15,
-          riskScore: 73.3,
-          riskLevel: "medium"
-        },
-        {
-          location: "1003",
-          operational: 5,
-          needsMaintenance: 7,
-          outOfService: 4,
-          total: 16,
-          riskScore: 56.3,
-          riskLevel: "high"
-        },
-        {
-          location: "1004",
-          operational: 14,
-          needsMaintenance: 2,
-          outOfService: 0,
-          total: 16,
-          riskScore: 93.8,
-          riskLevel: "low"
-        },
-        {
-          location: "1005",
-          operational: 7,
-          needsMaintenance: 4,
-          outOfService: 1,
-          total: 12,
-          riskScore: 75.0,
-          riskLevel: "medium"
-        }
-      ];
-      
-      setHealthData(sampleData);
+    if (!equipmentData || !locationsData || equipmentData.length === 0) {
       return;
     }
     
-    // Create a map of store_number to EquipmentHealthItem
-    const locationMap = new Map<string, EquipmentHealthItem>();
+    // Create a map of store numbers to EquipmentHealthItem
+    const storeNumberMap = new Map<string, EquipmentHealthItem>();
     
-    // Build a lookup map from location names to store numbers
-    const locationLookup = new Map<string, string>();
-    
-    // Initialize with store numbers from the database
-    if (locationsData && locationsData.length > 0) {
-      locationsData.forEach(location => {
-        const storeNumber = location.store_number;
-        
-        // Store the mapping from location name to store number (if name exists)
-        if (location.name) {
-          locationLookup.set(location.name.toLowerCase(), storeNumber);
-        }
-        
-        // Initialize the health data for this store number
-        locationMap.set(storeNumber, {
-          location: storeNumber,
-          operational: 0,
-          needsMaintenance: 0,
-          outOfService: 0,
-          total: 0,
-          riskScore: 0,
-          riskLevel: "low"
-        });
+    // Initialize map with store numbers from database
+    locationsData.forEach(location => {
+      const storeNumber = location.store_number;
+      
+      storeNumberMap.set(storeNumber, {
+        location: storeNumber,
+        operational: 0,
+        needsMaintenance: 0,
+        outOfService: 0,
+        total: 0,
+        riskScore: 0,
+        riskLevel: "low"
       });
-    }
+    });
     
     // Process equipment data and map to store numbers
     equipmentData.forEach(equipment => {
       if (!equipment.location) return;
       
-      // Try to find a matching store number for this equipment location
-      let storeNumber = equipment.location;
+      // Find a matching store number for this equipment
+      const matchingLocation = locationsData.find(location => {
+        // Exact match with store number
+        return equipment.location.includes(location.store_number);
+      });
       
-      // If the location is not a store number, check if we have a mapping for it
-      if (locationLookup.has(equipment.location.toLowerCase())) {
-        storeNumber = locationLookup.get(equipment.location.toLowerCase())!;
-      }
+      if (!matchingLocation) return;
       
-      // If we still don't have a mapping in our locationMap, add it as is
-      if (!locationMap.has(storeNumber)) {
-        locationMap.set(storeNumber, {
+      const storeNumber = matchingLocation.store_number;
+      
+      // Get or create the health data entry for this store number
+      if (!storeNumberMap.has(storeNumber)) {
+        storeNumberMap.set(storeNumber, {
           location: storeNumber,
           operational: 0,
           needsMaintenance: 0,
@@ -173,7 +115,7 @@ export const useEquipmentHealthData = () => {
         });
       }
       
-      const locationData = locationMap.get(storeNumber)!;
+      const locationData = storeNumberMap.get(storeNumber)!;
       locationData.total += 1;
       
       // Count by status
@@ -187,7 +129,7 @@ export const useEquipmentHealthData = () => {
     });
     
     // Calculate risk scores and levels for each location
-    locationMap.forEach(location => {
+    storeNumberMap.forEach(location => {
       if (location.total > 0) {
         // Calculate risk score (percentage of equipment that is operational)
         location.riskScore = Math.round((location.operational / location.total) * 100);
@@ -204,13 +146,11 @@ export const useEquipmentHealthData = () => {
     });
     
     // Convert map to array and sort by risk score (descending)
-    const processedData = Array.from(locationMap.values())
-      .filter(item => item.total > 0) // Only show locations with equipment
+    const processedData = Array.from(storeNumberMap.values())
+      .filter(item => item.total > 0) // Only show store numbers with equipment
       .sort((a, b) => b.riskScore - a.riskScore);
       
-    if (processedData.length > 0) {
-      setHealthData(processedData);
-    }
+    setHealthData(processedData);
   }, [equipmentData, locationsData]);
 
   const isLoading = equipmentLoading || locationsLoading;

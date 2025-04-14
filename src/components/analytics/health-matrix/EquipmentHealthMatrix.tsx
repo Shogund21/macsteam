@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { useEquipmentHealthData, EquipmentHealthItem } from "./useEquipmentHealthData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { 
@@ -17,12 +17,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 const EquipmentHealthMatrix = () => {
   const { healthData, isLoading } = useEquipmentHealthData();
-  const isMobile = useIsMobile();
-  const [truncatedLocations, setTruncatedLocations] = useState<Record<string, boolean>>({});
   
   // Function to get risk emoji
   const getRiskEmoji = (level: EquipmentHealthItem["riskLevel"]) => {
@@ -76,90 +73,90 @@ const EquipmentHealthMatrix = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {healthData.map((item) => (
-              <TableRow 
-                key={item.location}
-                className="hover:bg-muted/50 transition-colors duration-200"
-              >
-                <TableCell>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="font-medium">
-                        {item.location}
-                      </span>
-                    </TooltipTrigger>
-                    <TooltipContent side="right" className="z-50">
-                      <p>Store #{item.location}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TableCell>
-                
-                <TableCell className="text-center">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex justify-center">
-                        <StatusBadge count={item.operational} variant="default" />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{item.operational} operational equipment</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TableCell>
-                
-                <TableCell className="text-center">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex justify-center">
-                        <StatusBadge count={item.needsMaintenance} variant="secondary" />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{item.needsMaintenance} equipment needing maintenance</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TableCell>
-                
-                <TableCell className="text-center">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex justify-center">
-                        <StatusBadge count={item.outOfService} variant="destructive" />
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>{item.outOfService} equipment out of service</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TableCell>
-                
-                <TableCell>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <div className="flex items-center justify-center space-x-2">
-                        <span className="text-sm">{getRiskEmoji(item.riskLevel)}</span>
-                        <Badge 
-                          variant="outline" 
-                          className={`${getRiskColorClass(item.riskLevel)} min-w-[50px] justify-center`}
-                        >
-                          {item.riskScore}%
-                        </Badge>
-                      </div>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Health score: {item.riskScore}% of equipment operational</p>
-                      <p>Total equipment: {item.total}</p>
-                      <p>Store Number: {item.location}</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TableCell>
-              </TableRow>
-            ))}
-
-            {healthData.length === 0 && (
+            {healthData.length > 0 ? (
+              healthData.map((item) => (
+                <TableRow 
+                  key={item.location}
+                  className="hover:bg-muted/50 transition-colors duration-200"
+                >
+                  <TableCell>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <span className="font-medium">
+                          {item.location}
+                        </span>
+                      </TooltipTrigger>
+                      <TooltipContent side="right" className="z-50">
+                        <p>Store #{item.location}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TableCell>
+                  
+                  <TableCell className="text-center">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex justify-center">
+                          <StatusBadge count={item.operational} variant="default" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{item.operational} operational equipment</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TableCell>
+                  
+                  <TableCell className="text-center">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex justify-center">
+                          <StatusBadge count={item.needsMaintenance} variant="secondary" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{item.needsMaintenance} equipment needing maintenance</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TableCell>
+                  
+                  <TableCell className="text-center">
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex justify-center">
+                          <StatusBadge count={item.outOfService} variant="destructive" />
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>{item.outOfService} equipment out of service</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TableCell>
+                  
+                  <TableCell>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center justify-center space-x-2">
+                          <span className="text-sm">{getRiskEmoji(item.riskLevel)}</span>
+                          <Badge 
+                            variant="outline" 
+                            className={`${getRiskColorClass(item.riskLevel)} min-w-[50px] justify-center`}
+                          >
+                            {item.riskScore}%
+                          </Badge>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Health score: {item.riskScore}% of equipment operational</p>
+                        <p>Total equipment: {item.total}</p>
+                        <p>Store Number: {item.location}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
               <TableRow>
                 <TableCell colSpan={5} className="text-center py-6 text-muted-foreground">
-                  No equipment data available for any locations.
+                  No equipment data available for any store locations.
                 </TableCell>
               </TableRow>
             )}
