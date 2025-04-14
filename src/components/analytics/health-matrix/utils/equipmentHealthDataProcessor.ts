@@ -84,6 +84,24 @@ export const processEquipmentHealthData = (
     equipmentCount: equipmentData.length,
     locationsCount: locationsData.length
   });
+
+  // Log sample equipment data to debug location issues
+  console.log('Sample equipment items:');
+  equipmentData.slice(0, 3).forEach(equip => {
+    console.log('Equipment:', {
+      name: equip.name,
+      location: equip.location,
+      status: equip.status
+    });
+  });
+  
+  console.log('Sample location items:');
+  locationsData.slice(0, 3).forEach(loc => {
+    console.log('Location:', {
+      name: loc.name,
+      storeNumber: loc.store_number
+    });
+  });
   
   // Create a map of store numbers to EquipmentHealthItem
   const storeNumberMap = new Map<string, EquipmentHealthItem>();
@@ -163,5 +181,9 @@ export const processEquipmentHealthData = (
     .sort((a, b) => a.riskScore - b.riskScore);
   
   console.log('Final processed health data:', processedData.length, 'locations with equipment');
+  processedData.forEach(data => {
+    console.log(`Store ${data.location}: ${data.operational} operational, ${data.needsMaintenance} needs maintenance, ${data.outOfService} out of service`);
+  });
+  
   return processedData;
 };

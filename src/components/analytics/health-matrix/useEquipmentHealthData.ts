@@ -39,7 +39,12 @@ export const useEquipmentHealthData = () => {
       
       console.log('Fetched equipment data:', data?.length || 0, 'items');
       if (data && data.length > 0) {
-        console.log('Sample equipment data:', data[0]);
+        console.log('Equipment locations sampling:');
+        data.slice(0, 5).forEach((item, index) => {
+          console.log(`Equipment #${index + 1} - Name: ${item.name}, Location: ${item.location}, Status: ${item.status}`);
+        });
+      } else {
+        console.log('No equipment data returned from database.');
       }
       return data || [];
     },
@@ -62,7 +67,12 @@ export const useEquipmentHealthData = () => {
       
       console.log('Fetched locations:', data?.length || 0, 'items');
       if (data && data.length > 0) {
-        console.log('Sample location data:', data[0]);
+        console.log('Locations sampling:');
+        data.slice(0, 5).forEach((item, index) => {
+          console.log(`Location #${index + 1} - Store #: ${item.store_number}, Name: ${item.name}`);
+        });
+      } else {
+        console.log('No location data returned from database.');
       }
       return data || [];
     },
