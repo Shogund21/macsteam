@@ -46,7 +46,7 @@ export const useEquipmentHealthData = () => {
     },
   });
 
-  // Query for locations
+  // Query for locations with store numbers
   const { data: locationsData, isLoading: locationsLoading } = useQuery({
     queryKey: ['locations_for_matrix'],
     queryFn: async () => {
@@ -65,11 +65,11 @@ export const useEquipmentHealthData = () => {
 
   // Process equipment data into health matrix format
   useEffect(() => {
-    if (!equipmentData) {
+    if (!equipmentData || !locationsData) {
       // Sample data if no real data is available
       const sampleData: EquipmentHealthItem[] = [
         {
-          location: "Building A - North Wing",
+          location: "1001",
           operational: 12,
           needsMaintenance: 3,
           outOfService: 1,
@@ -78,7 +78,7 @@ export const useEquipmentHealthData = () => {
           riskLevel: "low"
         },
         {
-          location: "Building B - Maintenance Floor",
+          location: "1002",
           operational: 8,
           needsMaintenance: 5,
           outOfService: 2,
@@ -87,7 +87,7 @@ export const useEquipmentHealthData = () => {
           riskLevel: "medium"
         },
         {
-          location: "Central Utility Plant",
+          location: "1003",
           operational: 5,
           needsMaintenance: 7,
           outOfService: 4,
@@ -96,7 +96,7 @@ export const useEquipmentHealthData = () => {
           riskLevel: "high"
         },
         {
-          location: "Building C - Main Floor",
+          location: "1004",
           operational: 14,
           needsMaintenance: 2,
           outOfService: 0,
@@ -105,7 +105,7 @@ export const useEquipmentHealthData = () => {
           riskLevel: "low"
         },
         {
-          location: "Dadeland Office",
+          location: "1005",
           operational: 7,
           needsMaintenance: 4,
           outOfService: 1,
@@ -119,35 +119,51 @@ export const useEquipmentHealthData = () => {
       return;
     }
     
-    // Create a map based on locations from the database
+    // Create a map of store_number to EquipmentHealthItem
     const locationMap = new Map<string, EquipmentHealthItem>();
     
-    // Initialize with real locations from the database
+    // Build a lookup map from location names to store numbers
+    const locationLookup = new Map<string, string>();
+    
+    // Initialize with store numbers from the database
     if (locationsData && locationsData.length > 0) {
       locationsData.forEach(location => {
-        const locationName = location.name || location.store_number;
-        if (locationName) {
-          locationMap.set(locationName, {
-            location: locationName,
-            operational: 0,
-            needsMaintenance: 0,
-            outOfService: 0,
-            total: 0,
-            riskScore: 0,
-            riskLevel: "low"
-          });
+        const storeNumber = location.store_number;
+        
+        // Store the mapping from location name to store number (if name exists)
+        if (location.name) {
+          locationLookup.set(location.name.toLowerCase(), storeNumber);
         }
+        
+        // Initialize the health data for this store number
+        locationMap.set(storeNumber, {
+          location: storeNumber,
+          operational: 0,
+          needsMaintenance: 0,
+          outOfService: 0,
+          total: 0,
+          riskScore: 0,
+          riskLevel: "low"
+        });
       });
     }
     
-    // Process equipment data and group by location
+    // Process equipment data and map to store numbers
     equipmentData.forEach(equipment => {
       if (!equipment.location) return;
       
-      // Check if this location exists in our map
-      if (!locationMap.has(equipment.location)) {
-        locationMap.set(equipment.location, {
-          location: equipment.location,
+      // Try to find a matching store number for this equipment location
+      let storeNumber = equipment.location;
+      
+      // If the location is not a store number, check if we have a mapping for it
+      if (locationLookup.has(equipment.location.toLowerCase())) {
+        storeNumber = locationLookup.get(equipment.location.toLowerCase())!;
+      }
+      
+      // If we still don't have a mapping in our locationMap, add it as is
+      if (!locationMap.has(storeNumber)) {
+        locationMap.set(storeNumber, {
+          location: storeNumber,
           operational: 0,
           needsMaintenance: 0,
           outOfService: 0,
@@ -157,7 +173,7 @@ export const useEquipmentHealthData = () => {
         });
       }
       
-      const locationData = locationMap.get(equipment.location)!;
+      const locationData = locationMap.get(storeNumber)!;
       locationData.total += 1;
       
       // Count by status
