@@ -7,8 +7,8 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  Legend, 
   ResponsiveContainer,
+  LabelList
 } from "recharts";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -18,6 +18,7 @@ interface TechnicianStatsData {
   pending: number;
   issues: number;
   total: number;
+  percentage?: number; // Added for percentage calculation
 }
 
 interface TechnicianPerformanceChartProps {
@@ -27,17 +28,24 @@ interface TechnicianPerformanceChartProps {
 const TechnicianPerformanceChart: React.FC<TechnicianPerformanceChartProps> = ({ data }) => {
   const isMobile = useIsMobile();
   
+  // Process data to include percentage
+  const totalCompleted = data.reduce((sum, tech) => sum + tech.completed, 0);
+  const processedData = data.map(tech => ({
+    ...tech,
+    percentage: totalCompleted > 0 ? Math.round((tech.completed / totalCompleted) * 100) : 0
+  }));
+  
   return (
     <div className="min-w-[400px] overflow-x-auto">
       <ResponsiveContainer width="100%" height={data.length * 45 + 50}>
         <BarChart
-          data={data}
+          data={processedData}
           layout="vertical"
           margin={{
             top: 20,
-            right: isMobile ? 60 : 100,
+            right: isMobile ? 80 : 120,
             left: isMobile ? 120 : 150,
-            bottom: 30,
+            bottom: 20,
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
@@ -65,40 +73,33 @@ const TechnicianPerformanceChart: React.FC<TechnicianPerformanceChartProps> = ({
               backgroundColor: 'white',
               borderRadius: '8px',
               boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+            }} 
+            formatter={(value, name) => {
+              if (name === "completed") {
+                return [`${value} tasks`, 'Completed Tasks'];
+              }
+              return [value, name];
             }}
             wrapperStyle={{ zIndex: 1000 }}
           />
-          <Legend 
-            wrapperStyle={{ 
-              fontSize: isMobile ? '11px' : '12px', 
-              fontWeight: 'medium',
-              paddingTop: '10px'
-            }}
-            verticalAlign="bottom"
-            align="center"
-            layout="horizontal"
-          />
           <Bar 
             dataKey="completed" 
-            name="Completed" 
+            name="Completed Tasks" 
             fill="#4CAF50" 
             radius={[3, 3, 0, 0]}
-            stackId="stack"
-          />
-          <Bar 
-            dataKey="pending" 
-            name="Pending" 
-            fill="#FFC107" 
-            radius={[3, 3, 0, 0]}
-            stackId="stack"
-          />
-          <Bar 
-            dataKey="issues" 
-            name="Issues Found" 
-            fill="#FF7043" 
-            radius={[3, 3, 0, 0]}
-            stackId="stack"
-          />
+          >
+            <LabelList 
+              dataKey="percentage" 
+              position="right" 
+              style={{ 
+                fontSize: 11,
+                fontWeight: 'bold',
+                fill: '#333'
+              }}
+              formatter={(value: number) => `${value}%`}
+              offset={16}
+            />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>

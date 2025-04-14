@@ -64,12 +64,12 @@ export function useTechnicianPerformanceData() {
   useEffect(() => {
     // Sample data that will be used when no data is available
     const sampleData = [
-      { name: "Jorge Salazar", completed: 15, pending: 8, issues: 6, total: 29 },
-      { name: "Jose Pizarro", completed: 12, pending: 6, issues: 2, total: 20 },
-      { name: "Maria Rodriguez", completed: 10, pending: 4, issues: 1, total: 15 },
-      { name: "Carlos Gomez", completed: 9, pending: 3, issues: 2, total: 14 },
-      { name: "Ana Martinez", completed: 8, pending: 2, issues: 0, total: 10 }
-    ].slice(0, isMobile ? 4 : 5);
+      { name: "Jorge Salazar", completed: 24, pending: 8, issues: 6, total: 38 },
+      { name: "Jose Pizarro", completed: 19, pending: 6, issues: 2, total: 27 },
+      { name: "Maria Rodriguez", completed: 15, pending: 4, issues: 1, total: 20 },
+      { name: "Carlos Gomez", completed: 12, pending: 3, issues: 2, total: 17 },
+      { name: "Ana Martinez", completed: 10, pending: 2, issues: 0, total: 12 }
+    ];
     
     if (maintenanceData && technicians) {
       // Process real data if available
@@ -100,15 +100,15 @@ export function useTechnicianPerformanceData() {
           }
         });
         
-        // Format for chart - convert to array, add names, and sort by total tasks
+        // Format for chart - convert to array, add names, and sort by completed tasks (not total)
         const formattedData = Object.entries(techPerformance)
           .map(([techId, stats]) => ({
             name: technicianMap.get(techId) || 'Unknown Technician',
             ...stats,
             total: stats.completed + stats.pending + stats.issues
           }))
-          .sort((a, b) => b.total - a.total)
-          .slice(0, isMobile ? 4 : 5); // Show fewer technicians on mobile
+          .sort((a, b) => b.completed - a.completed) // Sort by completed tasks, not total
+          .slice(0, 5); // Always show top 5 regardless of screen size
         
         if (formattedData.length > 0) {
           setChartData(formattedData);
