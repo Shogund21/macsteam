@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAnalyticsFilters } from "../AnalyticsFilterContext";
+import { normalizeString } from "@/utils/locationMatching";
 
 export interface EquipmentHealthItem {
   location: string;
@@ -60,6 +61,7 @@ export const useEquipmentHealthData = () => {
         throw error;
       }
       
+      console.log('Fetched locations:', data);
       return data || [];
     },
   });
@@ -69,6 +71,9 @@ export const useEquipmentHealthData = () => {
     if (!equipmentData || !locationsData || equipmentData.length === 0) {
       return;
     }
+    
+    console.log('Processing equipment data:', equipmentData.length, 'items');
+    console.log('Processing locations data:', locationsData.length, 'items');
     
     // Create a map of store numbers to EquipmentHealthItem
     const storeNumberMap = new Map<string, EquipmentHealthItem>();
@@ -88,39 +93,37 @@ export const useEquipmentHealthData = () => {
       });
     });
     
-    // Create a map of location strings to store numbers for faster lookup
-    const locationToStoreNumberMap = new Map<string, string>();
-    
-    locationsData.forEach(location => {
-      if (location.store_number) {
-        // Map the location name to its store number
-        if (location.name) {
-          locationToStoreNumberMap.set(location.name.toLowerCase(), location.store_number);
-        }
-        // Also map the store number itself for exact matches
-        locationToStoreNumberMap.set(location.store_number.toLowerCase(), location.store_number);
-      }
-    });
-    
-    // Process equipment data and map to store numbers
+    // Map equipment to store numbers using best match available
     equipmentData.forEach(equipment => {
       if (!equipment.location) return;
       
-      // First try to find a direct match with store numbers
-      let matchedStoreNumber = locationToStoreNumberMap.get(equipment.location.toLowerCase());
+      // Try to find a matching store number
+      let matchedStoreNumber: string | undefined;
       
-      // If no direct match, search for partial matches
+      // First, direct match with location
+      const normalizedEquipLocation = normalizeString(equipment.location);
+      
+      // Try to match with store number first (direct match)
+      matchedStoreNumber = locationsData.find(loc => 
+        normalizedEquipLocation === normalizeString(loc.store_number)
+      )?.store_number;
+      
+      // If no match, try to find a location where equipment location contains the store number
       if (!matchedStoreNumber) {
-        for (const [locationKey, storeNumber] of locationToStoreNumberMap.entries()) {
-          // Check if the equipment location contains the location key
-          if (equipment.location.toLowerCase().includes(locationKey)) {
-            matchedStoreNumber = storeNumber;
-            break;
-          }
-        }
+        matchedStoreNumber = locationsData.find(loc => 
+          loc.store_number && normalizedEquipLocation.includes(normalizeString(loc.store_number))
+        )?.store_number;
+      }
+      
+      // If still no match, try to match with location name
+      if (!matchedStoreNumber) {
+        matchedStoreNumber = locationsData.find(loc => 
+          loc.name && normalizedEquipLocation.includes(normalizeString(loc.name))
+        )?.store_number;
       }
       
       if (!matchedStoreNumber) return;
+      console.log(`Matched equipment "${equipment.name}" to store number: ${matchedStoreNumber}`);
       
       // Get or create the health data entry for this store number
       if (!storeNumberMap.has(matchedStoreNumber)) {
@@ -169,7 +172,8 @@ export const useEquipmentHealthData = () => {
     const processedData = Array.from(storeNumberMap.values())
       .filter(item => item.total > 0) // Only show store numbers with equipment
       .sort((a, b) => b.riskScore - a.riskScore);
-      
+    
+    console.log('Processed health data:', processedData);
     setHealthData(processedData);
   }, [equipmentData, locationsData]);
 

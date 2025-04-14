@@ -147,7 +147,6 @@ const EquipmentHealthMatrix = () => {
                       <TooltipContent>
                         <p>Health score: {item.riskScore}% of equipment operational</p>
                         <p>Total equipment: {item.total}</p>
-                        <p>Store Number: {item.location}</p>
                       </TooltipContent>
                     </Tooltip>
                   </TableCell>
