@@ -4,7 +4,6 @@ import MaintenanceTrends from "@/components/analytics/MaintenanceTrends";
 import EquipmentStatusChart from "@/components/analytics/EquipmentStatusChart";
 import MaintenanceCompletionRate from "@/components/analytics/MaintenanceCompletionRate";
 import TechnicianPerformance from "@/components/analytics/technician/TechnicianPerformance";
-import LocationBreakdown from "@/components/analytics/location/LocationBreakdown";
 
 const ChartsView = () => {
   return (
@@ -52,17 +51,6 @@ const ChartsView = () => {
         >
           <div className="min-h-[300px] w-full">
             <TechnicianPerformance />
-          </div>
-        </AnalyticsCard>
-        
-        {/* Equipment by Location */}
-        <AnalyticsCard
-          title="Equipment by Location"
-          description="Distribution across sites"
-          tooltipContent="Count of equipment items by location"
-        >
-          <div className="min-h-[300px] w-full">
-            <LocationBreakdown />
           </div>
         </AnalyticsCard>
       </div>
