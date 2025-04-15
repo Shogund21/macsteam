@@ -2,6 +2,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { 
+  Sidebar as SidebarComponent,
   SidebarContent, 
   SidebarMenu, 
   SidebarMenuItem, 
@@ -29,27 +30,29 @@ export const Sidebar = () => {
   ];
 
   return (
-    <SidebarContent>
-      <SidebarMenu>
-        {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton 
-                asChild 
-                tooltip={item.title}
-                className={isActive ? "bg-secondary text-primary" : ""}
-              >
-                <Link to={item.path} className="flex items-center gap-2">
-                  <item.icon className="h-5 w-5" />
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          );
-        })}
-      </SidebarMenu>
-    </SidebarContent>
+    <SidebarComponent>
+      <SidebarContent>
+        <SidebarMenu>
+          {menuItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <SidebarMenuItem key={item.title}>
+                <SidebarMenuButton 
+                  asChild 
+                  tooltip={item.title}
+                  className={isActive ? "bg-secondary text-primary" : ""}
+                >
+                  <Link to={item.path} className="flex items-center gap-2">
+                    <item.icon className="h-5 w-5" />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
+      </SidebarContent>
+    </SidebarComponent>
   );
 };
 
