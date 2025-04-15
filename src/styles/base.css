@@ -65,4 +65,25 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 212.7 26.8% 83.9%;
   }
+
+  /* Fix for mobile scrolling issues */
+  html, body {
+    overflow: hidden;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  /* Prevent content from causing horizontal overflow */
+  .overflow-container {
+    max-width: 100%;
+    overflow-x: hidden;
+  }
 }

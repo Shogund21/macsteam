@@ -7,7 +7,13 @@ interface CustomLayoutProps {
 }
 
 export const CustomLayout = ({ children }: CustomLayoutProps) => {
-  return <Layout>{children}</Layout>;
+  return (
+    <Layout>
+      <div className="overflow-container">
+        {children}
+      </div>
+    </Layout>
+  );
 };
 
 export default CustomLayout;
