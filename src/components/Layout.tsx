@@ -3,6 +3,7 @@ import React from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import Sidebar from "@/components/Sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
+import MobileHint from "./MobileHint";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,11 +15,14 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <SidebarProvider defaultOpen={!isMobile}>
       <div className="flex h-screen w-full overflow-hidden">
-        {/* Mobile sidebar toggle button - only visible on mobile */}
+        {/* Mobile sidebar toggle button and hint - only visible on mobile */}
         {isMobile && (
-          <div className="fixed top-4 left-4 z-50">
-            <SidebarTrigger />
-          </div>
+          <>
+            <div className="fixed top-4 left-4 z-50">
+              <SidebarTrigger />
+            </div>
+            <MobileHint />
+          </>
         )}
         
         {/* Sidebar with fixed width - hidden on mobile initially but can be opened */}
