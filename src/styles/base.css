@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,12 +100,12 @@
   [data-state=open][data-mobile=true] {
     width: 100% !important;
     max-width: 85% !important;
-    z-index: 60 !important;
+    z-index: 50 !important;
   }
 
-  /* Ensure the sidebar overlay doesn't cover the content */
+  /* Z-index fixes for overlay and sidebar */
   [data-radix-sheet-overlay] {
-    z-index: 50 !important;
+    z-index: 40 !important; /* Backdrop overlay z-index */
   }
 }
 
