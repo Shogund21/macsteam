@@ -4,6 +4,7 @@ import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/s
 import Sidebar from "@/components/Sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileHint from "./MobileHint";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface LayoutProps {
   children: React.ReactNode;

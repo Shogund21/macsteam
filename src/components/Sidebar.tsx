@@ -16,9 +16,12 @@ import {
   BarChart4, 
   Settings 
 } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 export const Sidebar = () => {
   const location = useLocation();
+  const isMobile = useIsMobile();
   
   const menuItems = [
     { title: "Dashboard", icon: LayoutDashboard, path: "/" },
@@ -31,27 +34,29 @@ export const Sidebar = () => {
 
   return (
     <SidebarComponent>
-      <SidebarContent>
-        <SidebarMenu>
-          {menuItems.map((item) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton 
-                  asChild 
-                  tooltip={item.title}
-                  className={isActive ? "bg-secondary text-primary" : ""}
-                >
-                  <Link to={item.path} className="flex items-center gap-2">
-                    <item.icon className="h-5 w-5" />
-                    <span>{item.title}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            );
-          })}
-        </SidebarMenu>
-      </SidebarContent>
+      <ScrollArea className="h-full">
+        <SidebarContent className={isMobile ? "mobile-sidebar-content" : ""}>
+          <SidebarMenu>
+            {menuItems.map((item) => {
+              const isActive = location.pathname === item.path;
+              return (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton 
+                    asChild 
+                    tooltip={item.title}
+                    className={isActive ? "bg-secondary text-primary" : ""}
+                  >
+                    <Link to={item.path} className="flex items-center gap-2">
+                      <item.icon className="h-5 w-5" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
+          </SidebarMenu>
+        </SidebarContent>
+      </ScrollArea>
     </SidebarComponent>
   );
 };

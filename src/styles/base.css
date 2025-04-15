@@ -101,6 +101,8 @@
     width: 100% !important;
     max-width: 85% !important;
     z-index: 50 !important;
+    overflow-y: auto !important;
+    height: 100vh !important;
   }
 
   /* Z-index fixes for overlay and sidebar */
@@ -118,7 +120,24 @@
 }
 
 @layer components {
-  /* Add any custom component styles here */
+  /* Mobile sidebar styles */
+  .mobile-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    width: 85% !important;
+    max-width: 300px !important;
+    overflow-y: auto !important;
+    background-color: white !important;
+    z-index: 50 !important;
+  }
+  
+  .mobile-sidebar-content {
+    height: 100% !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
 }
 
 @layer utilities {
