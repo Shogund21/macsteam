@@ -42,17 +42,17 @@ const DocumentManager = ({
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-semibold`}>
+        <h2 className={`${isMobile ? 'text-lg' : 'text-2xl'} font-semibold`}>
           {isRepositoryView ? "Document Repository" : "Documents"}
         </h2>
         <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
           <DialogTrigger asChild>
-            <Button className={isMobile ? "px-3" : ""}>
+            <Button className={isMobile ? "px-3 py-1 h-8" : ""} size={isMobile ? "sm" : "default"}>
               <Plus className="h-4 w-4 mr-1" />
               {isMobile ? "" : "Upload"}
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl max-h-[90dvh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Upload Documents</DialogTitle>
             </DialogHeader>
@@ -72,17 +72,19 @@ const DocumentManager = ({
           onValueChange={setActiveCategory}
           className="w-full"
         >
-          <TabsList className={`${isMobile ? 'flex flex-wrap' : ''}`}>
-            {categories.map(category => (
-              <TabsTrigger 
-                key={category.id} 
-                value={category.id}
-                className={`${isMobile ? 'text-xs py-1 px-2' : ''}`}
-              >
-                {category.name}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          <div className="overflow-x-auto pb-2">
+            <TabsList className={`${isMobile ? 'flex-wrap min-w-max' : ''}`}>
+              {categories.map(category => (
+                <TabsTrigger 
+                  key={category.id} 
+                  value={category.id}
+                  className={`${isMobile ? 'text-xs py-1 px-2' : ''}`}
+                >
+                  {category.name}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
           <TabsContent value={activeCategory} className="mt-4">
             <DocumentList
               equipmentId={equipmentId}
