@@ -153,7 +153,10 @@ const MaintenanceCheckForm = ({
       isMobile={isMobile}
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6">
+        <form 
+          onSubmit={form.handleSubmit(onSubmitForm)} 
+          className={`space-y-6 ${isMobile ? 'mobile-form-container' : ''}`}
+        >
           <div className="grid gap-6">
             <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
             <MaintenanceFormBody />

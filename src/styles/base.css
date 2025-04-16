@@ -66,19 +66,46 @@
     --ring: 212.7 26.8% 83.9%;
   }
 
-  /* Fix for mobile scrolling issues */
+  /* Updated mobile scrolling fixes */
   html, body {
-    overflow: hidden;
-    position: fixed;
+    -webkit-overflow-scrolling: touch;
     height: 100%;
     width: 100%;
-    -webkit-overflow-scrolling: touch;
   }
 
-  #root {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
+  /* For iOS Safari and mobile browsers */
+  @supports (-webkit-touch-callout: none) {
+    html, body {
+      /* Use 100% instead of fixed, overflow auto instead of hidden for iOS */
+      height: 100%;
+      width: 100%;
+      position: relative;
+      overflow: auto;
+    }
+    
+    #root {
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  
+  /* For other browsers - keep previous setup */
+  @supports not (-webkit-touch-callout: none) {
+    html, body {
+      overflow: hidden;
+      position: fixed;
+      height: 100%;
+      width: 100%;
+    }
+    
+    #root {
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
   }
 
   /* Prevent content from causing horizontal overflow */
@@ -108,6 +135,22 @@
   /* Z-index fixes for overlay and sidebar */
   [data-radix-sheet-overlay] {
     z-index: 40 !important; /* Backdrop overlay z-index */
+  }
+  
+  /* Fix for long forms on mobile */
+  .mobile-form-container {
+    padding-bottom: 80px; /* Add space for fixed buttons */
+  }
+  
+  /* Sticky buttons container for mobile */
+  .sticky-form-actions {
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    z-index: 10;
+    padding: 0.5rem 0;
+    margin-top: 1rem;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
   }
 }
 

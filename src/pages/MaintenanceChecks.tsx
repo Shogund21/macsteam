@@ -24,7 +24,7 @@ const MaintenanceChecks = () => {
 
   return (
     <Layout>
-      <div className="space-y-4 animate-fade-in">
+      <div className="space-y-4 animate-fade-in pb-16">
         <div className={`flex flex-col ${isMobile ? 'gap-3' : 'md:flex-row'} justify-between items-start md:items-center gap-4 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 md:p-6 rounded-lg shadow-sm`}>
           <div>
             <h1 className={`${isMobile ? 'text-xl' : 'text-2xl md:text-3xl'} font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600`}>

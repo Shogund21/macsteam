@@ -1,5 +1,6 @@
 
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface FormActionsProps {
   onCancel: () => void;
@@ -14,7 +15,7 @@ const FormActions = ({
   isSubmitting = false,
   onSubmit
 }: FormActionsProps) => {
-  console.log('FormActions render:', { isEditing, isSubmitting });
+  const isMobile = useIsMobile();
   
   const handleClick = () => {
     console.log('Submit button clicked, onSubmit handler exists:', !!onSubmit);
@@ -24,7 +25,7 @@ const FormActions = ({
   };
   
   return (
-    <div className="flex flex-col md:flex-row justify-end gap-2 pt-4 border-t">
+    <div className="flex flex-col md:flex-row justify-end gap-2 pt-4 border-t sticky bottom-0 bg-white pb-4 px-2 z-10 shadow-md">
       <Button
         type="button"
         variant="outline"
@@ -38,11 +39,11 @@ const FormActions = ({
       <Button 
         type={onSubmit ? "button" : "submit"}
         onClick={onSubmit ? handleClick : undefined}
-        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white text-base font-medium"
+        className={`${isMobile ? 'w-full' : ''} bg-[#1EAEDB] hover:bg-[#33C3F0] text-white text-base font-medium`}
         disabled={isSubmitting}
       >
         {isSubmitting ? (
-          <div className="flex items-center">
+          <div className="flex items-center justify-center">
             <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
             <span>{isEditing ? 'Updating...' : 'Saving...'}</span>
           </div>
