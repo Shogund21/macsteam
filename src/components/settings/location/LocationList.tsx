@@ -5,7 +5,6 @@ import { useLocationList } from "./hooks/useLocationList";
 import { LocationListHeader } from "./components/LocationListHeader";
 import { LocationListLoading } from "./components/LocationListLoading";
 import { LocationFormDialog } from "./components/LocationFormDialog";
-import { useEffect } from "react";
 
 export const LocationList = () => {
   const { 
@@ -18,14 +17,8 @@ export const LocationList = () => {
     handleEdit, 
     handleSuccess, 
     openAddDialog, 
-    closeDialog,
-    refetch
+    closeDialog 
   } = useLocationList();
-
-  // Force refresh data on component mount
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
 
   return (
     <div className="space-y-4">
