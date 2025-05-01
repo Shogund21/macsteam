@@ -4,6 +4,7 @@ import { Equipment, Technician } from "@/types/maintenance";
 import LocationSelect from "./selectors/LocationSelect";
 import EquipmentSelect from "./selectors/EquipmentSelect";
 import TechnicianSelect from "./selectors/TechnicianSelect";
+import { useEffect } from "react";
 
 interface MaintenanceBasicInfoProps {
   form: UseFormReturn<any>;
@@ -21,6 +22,17 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
     equipmentId,
     values: form.getValues() 
   });
+
+  // Monitor location changes to debug issues
+  useEffect(() => {
+    const subscription = form.watch((value, { name }) => {
+      if (name === 'location_id') {
+        console.log('Location ID changed to:', value.location_id);
+      }
+    });
+    
+    return () => subscription.unsubscribe();
+  }, [form]);
 
   return (
     <div className="space-y-6">

@@ -39,6 +39,29 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
     console.log('LocationSelect: Selected location details:', selectedLocation);
   }
 
+  const handleLocationChange = (value: string) => {
+    console.log('LocationSelect: Explicitly changing location_id to:', value);
+    
+    // Prevent changing if the value is already set (helps prevent odd behavior)
+    if (selectedLocationId === value) {
+      console.log('LocationSelect: Value unchanged, no update needed');
+      return;
+    }
+    
+    // Update only location_id, leaving other fields untouched
+    form.setValue('location_id', value, { 
+      shouldDirty: true, 
+      shouldTouch: true,
+      shouldValidate: true 
+    });
+    
+    // Clear equipment selection when location changes
+    form.setValue('equipment_id', '', { 
+      shouldDirty: true, 
+      shouldTouch: true 
+    });
+  };
+
   return (
     <FormField
       control={form.control}
@@ -47,10 +70,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
         <FormItem>
           <FormLabel className="text-base font-semibold text-gray-700">Location</FormLabel>
           <Select
-            onValueChange={(value) => {
-              console.log('LocationSelect: Value changed to:', value);
-              field.onChange(value);
-            }}
+            onValueChange={handleLocationChange}
             value={field.value || ""}
             defaultValue={field.value || ""}
           >

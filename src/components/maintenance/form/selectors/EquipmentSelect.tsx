@@ -11,12 +11,24 @@ interface EquipmentSelectProps {
 
 const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   const { data: equipmentList = [], isLoading } = useEquipmentQuery(locationId);
+  const currentEquipmentId = form.watch('equipment_id');
 
   console.log('Equipment Select Render:', {
     locationId,
     equipmentCount: equipmentList?.length,
-    equipment: equipmentList
+    equipment: equipmentList,
+    currentEquipmentId
   });
+
+  const handleEquipmentChange = (value: string) => {
+    console.log('EquipmentSelect: Setting equipment_id to:', value);
+    // Only change equipment_id, preserve location_id
+    form.setValue('equipment_id', value, { 
+      shouldDirty: true, 
+      shouldTouch: true,
+      shouldValidate: true 
+    });
+  };
 
   return (
     <FormField
@@ -26,13 +38,10 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         <FormItem>
           <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
           <Select
-            onValueChange={(value) => {
-              console.log('EquipmentSelect: Setting equipment_id to', value);
-              // Only change equipment_id, don't touch location_id
-              field.onChange(value);
-            }}
+            onValueChange={handleEquipmentChange}
             value={field.value || ""}
             defaultValue={field.value || ""}
+            disabled={!locationId}
           >
             <FormControl>
               <SelectTrigger 
