@@ -24,7 +24,7 @@ export const mapMaintenanceData = (
     technician_id: values.technician_id,
     equipment_type: equipmentType,
     status: 'completed' as const,
-    // Explicitly set location_id from form values
+    // Always include location_id from form values
     location_id: values.location_id
   };
 

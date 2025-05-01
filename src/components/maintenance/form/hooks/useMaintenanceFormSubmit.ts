@@ -57,24 +57,18 @@ export const useMaintenanceFormSubmit = (
         throw new Error('Technician is required');
       }
       
-      if (initialData) {
-        console.log('Initial data ID for update:', initialData.id);
-        console.log('Initial data location_id:', initialData.location_id);
-      }
-      
       // Get equipment details to determine type
       const equipment = await maintenanceDbService.getEquipment(values.equipment_id);
       console.log('Retrieved equipment details:', equipment);
       
-      // Verify equipment belongs to selected location
-      if (equipment.location !== values.location_id) {
-        console.warn('Equipment location mismatch:', {
-          equipment_location: equipment.location,
-          selected_location: values.location_id
+      if (!equipment) {
+        console.error('Equipment not found with ID:', values.equipment_id);
+        toast({
+          variant: "destructive",
+          title: "Equipment Not Found",
+          description: "The selected equipment could not be found. Please try again.",
         });
-        
-        // We'll allow this but log a warning - the form should prevent this situation
-        console.warn('Proceeding with submission despite location mismatch');
+        throw new Error('Equipment not found');
       }
       
       // Determine equipment type from name
@@ -87,7 +81,7 @@ export const useMaintenanceFormSubmit = (
         throw new Error('Invalid equipment type');
       }
       
-      // Map form data to database schema
+      // Map form data to database schema - always passing the location_id
       const submissionData = mapMaintenanceData(values, equipmentType, !!initialData);
       
       console.log('Final submission data:', JSON.stringify(submissionData, null, 2));
