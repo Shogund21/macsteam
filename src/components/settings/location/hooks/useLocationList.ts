@@ -30,7 +30,7 @@ export const useLocationList = () => {
       
       const filteredQuery = applyCompanyFilter(query);
       
-      const { data, error } = await filteredQuery.order("name");
+      const { data, error } = await filteredQuery.order("created_at", { ascending: false });
       
       if (error) {
         console.error("Error fetching locations:", error);
