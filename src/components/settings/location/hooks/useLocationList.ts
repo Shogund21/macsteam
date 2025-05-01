@@ -24,13 +24,13 @@ export const useLocationList = () => {
         return [];
       }
 
-      let query = supabase
+      const query = supabase
         .from("locations")
         .select("*");
       
-      query = applyCompanyFilter(query);
+      const filteredQuery = applyCompanyFilter(query);
       
-      const { data, error } = await query.order("name");
+      const { data, error } = await filteredQuery.order("name");
       
       if (error) {
         console.error("Error fetching locations:", error);
@@ -40,9 +40,6 @@ export const useLocationList = () => {
       console.log('Fetched locations:', data);
       return data || [];
     },
-    refetchOnWindowFocus: true,
-    staleTime: 0,
-    gcTime: 0,
     enabled: !!currentCompany?.id,
   });
 
@@ -74,8 +71,7 @@ export const useLocationList = () => {
   const handleSuccess = async () => {
     console.log("Success callback triggered, refetching data");
     try {
-      const result = await refetch();
-      console.log("Data refetch result:", result);
+      await refetch();
       setIsDialogOpen(false);
       setEditLocation(null);
     } catch (error) {

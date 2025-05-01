@@ -8,7 +8,9 @@ export const useCompanyFilter = () => {
   const [companyId, setCompanyId] = useState<string | null>(null);
 
   useEffect(() => {
-    setCompanyId(currentCompany?.id || null);
+    if (currentCompany?.id) {
+      setCompanyId(currentCompany.id);
+    }
   }, [currentCompany]);
 
   const applyCompanyFilter = <T>(

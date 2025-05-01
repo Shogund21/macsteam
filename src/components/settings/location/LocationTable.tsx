@@ -37,7 +37,7 @@ export const LocationTable = ({ locations, onEdit, onDelete, onSuccess }: Locati
           </TableRow>
         </TableHeader>
         <TableBody>
-          {locations?.length ? (
+          {locations && locations.length > 0 ? (
             locations.map((location) => (
               <TableRow key={location.id}>
                 <TableCell className="font-medium">{location.store_number}</TableCell>
@@ -49,7 +49,9 @@ export const LocationTable = ({ locations, onEdit, onDelete, onSuccess }: Locati
                     {location.is_active !== false ? 'Active' : 'Inactive'}
                   </span>
                 </TableCell>
-                <TableCell>{location.updated_at ? new Date(location.updated_at).toLocaleDateString() : 'N/A'}</TableCell>
+                <TableCell>
+                  {location.updated_at ? new Date(location.updated_at).toLocaleDateString() : 'N/A'}
+                </TableCell>
                 <TableCell className="text-right">
                   <LocationActions
                     location={location}

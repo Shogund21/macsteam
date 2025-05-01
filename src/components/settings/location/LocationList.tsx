@@ -5,8 +5,10 @@ import { useLocationList } from "./hooks/useLocationList";
 import { LocationListHeader } from "./components/LocationListHeader";
 import { LocationListLoading } from "./components/LocationListLoading";
 import { LocationFormDialog } from "./components/LocationFormDialog";
+import { useCompany } from "@/contexts/CompanyContext";
 
 export const LocationList = () => {
+  const { currentCompany } = useCompany();
   const { 
     locations, 
     isLoading, 
@@ -50,7 +52,11 @@ export const LocationList = () => {
         />
       </Dialog>
 
-      {isLoading ? (
+      {!currentCompany ? (
+        <div className="text-center py-6 text-gray-500">
+          Please select a company to view locations.
+        </div>
+      ) : isLoading ? (
         <LocationListLoading />
       ) : (
         <LocationTable
