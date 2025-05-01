@@ -15,4 +15,7 @@ export interface LocationData {
   name?: string;
   is_active?: boolean;
   company_id?: string;
+  created_by?: string;
+  created_at?: string;
+  updated_at?: string;
 }

@@ -17,16 +17,23 @@ export const useLocationList = () => {
   });
 
   const { data: locations, refetch, isLoading } = useQuery({
-    queryKey: ["locations"],
+    queryKey: ["locations", currentCompany?.id],
     queryFn: async () => {
-      console.log('Fetching all locations');
+      console.log('Fetching locations with company filter:', currentCompany?.id);
       
       try {
-        // Fetch all locations without company filtering
-        const { data, error } = await supabase
-          .from("locations")
-          .select("*")
-          .order("created_at", { ascending: false });
+        // Start with the base query
+        let query = supabase.from("locations").select("*");
+        
+        // If we have a company ID, filter by it
+        if (currentCompany?.id) {
+          query = query.eq("company_id", currentCompany.id);
+        }
+        
+        // Order by creation date
+        query = query.order("created_at", { ascending: false });
+        
+        const { data, error } = await query;
         
         if (error) {
           console.error("Error fetching locations:", error);
@@ -45,7 +52,7 @@ export const useLocationList = () => {
         return [];
       }
     },
-    // Always enable the query
+    // Enable the query when we have auth (RLS requires auth)
     enabled: true,
   });
 

@@ -5,8 +5,12 @@ import { useLocationList } from "./hooks/useLocationList";
 import { LocationListHeader } from "./components/LocationListHeader";
 import { LocationListLoading } from "./components/LocationListLoading";
 import { LocationFormDialog } from "./components/LocationFormDialog";
+import { useCompany } from "@/contexts/CompanyContext";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export const LocationList = () => {
+  const { currentCompany } = useCompany();
   const { 
     locations, 
     isLoading, 
@@ -20,17 +24,30 @@ export const LocationList = () => {
     closeDialog
   } = useLocationList();
 
+  const noCompanySelected = !currentCompany?.id;
+
   console.log('LocationList rendering with:', { 
     locationsCount: locations?.length, 
     isLoading,
-    dialogOpen: isDialogOpen
+    dialogOpen: isDialogOpen,
+    companySelected: !noCompanySelected
   });
 
   return (
     <div className="space-y-4">
+      {noCompanySelected && (
+        <Alert variant="warning" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            No company selected. Location management may be limited.
+          </AlertDescription>
+        </Alert>
+      )}
+      
       <LocationListHeader 
         locationsCount={locations?.length || 0} 
         onAddClick={openAddDialog} 
+        disabled={noCompanySelected}
       />
       
       <Dialog 

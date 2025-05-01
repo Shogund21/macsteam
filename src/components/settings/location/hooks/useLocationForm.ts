@@ -1,10 +1,11 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LocationFormValues, LocationData } from "../schemas/locationSchema";
 import { useCompany } from "@/contexts/CompanyContext";
+import { PostgrestError } from "@supabase/supabase-js";
 
 export const useLocationForm = (
   form: UseFormReturn<LocationFormValues>,
@@ -15,6 +16,22 @@ export const useLocationForm = (
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { currentCompany } = useCompany();
 
+  // Parse Supabase error messages into user-friendly format
+  const parseSupabaseError = (error: PostgrestError): string => {
+    // Handle duplicate store number error (constraint violation)
+    if (error.code === "23505" && error.message.includes("unique_store_number_per_company")) {
+      return "Store number already exists for this company.";
+    }
+    
+    // Handle permission errors
+    if (error.code === "42501" || error.message.includes("permission denied")) {
+      return "You don't have permission to perform this action.";
+    }
+    
+    // Return the original error message for other cases
+    return error.message || "An unexpected error occurred.";
+  };
+
   const onSubmit = async (values: LocationFormValues) => {
     try {
       setIsSubmitting(true);
@@ -23,16 +40,28 @@ export const useLocationForm = (
       // Use the store_number as the name if name is empty or just whitespace
       const locationName = values.name?.trim() || values.store_number;
       
-      // Get the company_id from initialData or from the CompanyContext (but make it optional)
-      const company_id = initialData?.company_id || currentCompany?.id || null;
-      console.log("Using company_id:", company_id);
+      // Get authenticated user from supabase
+      const { data: sessionData } = await supabase.auth.getSession();
+      const user = sessionData?.session?.user;
+      
+      if (!user) {
+        throw new Error("You must be logged in to perform this action.");
+      }
+      
+      // Get the company_id from initialData, context, or fail
+      const company_id = initialData?.company_id || currentCompany?.id;
+      
+      if (!company_id) {
+        throw new Error("Company ID is required. Please select a company.");
+      }
       
       const locationData = {
         store_number: values.store_number,
         name: locationName,
         is_active: values.is_active,
-        // Only include company_id if it exists
-        ...(company_id ? { company_id } : {})
+        company_id,
+        // Only add created_by on new records, not updates
+        ...(initialData?.id ? {} : { created_by: user.id })
       };
 
       console.log("Prepared location data:", locationData);
@@ -88,7 +117,7 @@ export const useLocationForm = (
       toast({
         variant: "destructive",
         title: "Error",
-        description: error.message || "Failed to save location. Please try again.",
+        description: error.code ? parseSupabaseError(error) : error.message || "Failed to save location. Please try again.",
       });
     } finally {
       setIsSubmitting(false);
