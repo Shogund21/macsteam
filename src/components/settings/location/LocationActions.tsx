@@ -19,18 +19,35 @@ interface LocationActionsProps {
 
 export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: LocationActionsProps) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
   return (
     <div className="flex justify-end space-x-2">
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => onEdit(location)}
-        className="h-8 w-8"
-      >
-        <Pencil className="h-4 w-4" />
-        <span className="sr-only">Edit</span>
-      </Button>
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsEditDialogOpen(true)}
+            className="h-8 w-8"
+          >
+            <Pencil className="h-4 w-4" />
+            <span className="sr-only">Edit</span>
+          </Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Location</DialogTitle>
+          </DialogHeader>
+          <LocationForm 
+            initialData={location} 
+            onSuccess={() => {
+              onSuccess();
+              setIsEditDialogOpen(false);
+            }} 
+          />
+        </DialogContent>
+      </Dialog>
       
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogTrigger asChild>

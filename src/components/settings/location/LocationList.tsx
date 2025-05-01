@@ -11,8 +11,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 
 export const LocationList = () => {
   const { toast } = useToast();
-  const [editLocation, setEditLocation] = useState<any>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+  const [editLocation, setEditLocation] = useState<any>(null);
 
   const { data: locations, refetch, isLoading } = useQuery({
     queryKey: ["locations"],
