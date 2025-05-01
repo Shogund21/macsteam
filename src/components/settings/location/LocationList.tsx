@@ -1,7 +1,9 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { LocationForm } from "./LocationForm";
 import { LocationTable } from "./LocationTable";
@@ -10,16 +12,24 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 export const LocationList = () => {
   const { toast } = useToast();
   const [editLocation, setEditLocation] = useState<any>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
 
-  const { data: locations, refetch } = useQuery({
+  const { data: locations, refetch, isLoading } = useQuery({
     queryKey: ["locations"],
     queryFn: async () => {
+      console.log('Fetching locations...');
       const { data, error } = await supabase
         .from("locations")
         .select("*")
         .order("name");
-      if (error) throw error;
-      return data;
+      
+      if (error) {
+        console.error("Error fetching locations:", error);
+        throw error;
+      }
+      
+      console.log('Fetched locations:', data);
+      return data || [];
     },
   });
 
@@ -39,31 +49,64 @@ export const LocationList = () => {
     }
   };
 
+  const handleSuccess = () => {
+    refetch();
+    setIsDialogOpen(false);
+    setEditLocation(null);
+  };
+
   return (
     <div className="space-y-4">
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="bg-blue-600 text-white hover:bg-blue-700">
-            Add New Location
-          </Button>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Add New Location</DialogTitle>
-          </DialogHeader>
-          <LocationForm onSuccess={() => { refetch(); }} />
-        </DialogContent>
-      </Dialog>
+      <div className="flex justify-between items-center">
+        <div>
+          <h3 className="text-lg font-medium">All Locations</h3>
+          <p className="text-sm text-gray-500">
+            {locations?.length || 0} locations found
+          </p>
+        </div>
+        
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger asChild>
+            <Button 
+              className="bg-blue-600 text-white hover:bg-blue-700"
+              onClick={() => {
+                setEditLocation(null);
+                setIsDialogOpen(true);
+              }}
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              Add Location
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>
+                {editLocation ? "Edit Location" : "Add New Location"}
+              </DialogTitle>
+            </DialogHeader>
+            <LocationForm 
+              initialData={editLocation} 
+              onSuccess={handleSuccess} 
+            />
+          </DialogContent>
+        </Dialog>
+      </div>
 
-      <LocationTable
-        locations={locations || []}
-        onEdit={setEditLocation}
-        onDelete={handleDelete}
-        onSuccess={() => {
-          refetch();
-          setEditLocation(null);
-        }}
-      />
+      {isLoading ? (
+        <div className="flex justify-center items-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+        </div>
+      ) : (
+        <LocationTable
+          locations={locations || []}
+          onEdit={(location) => {
+            setEditLocation(location);
+            setIsDialogOpen(true);
+          }}
+          onDelete={handleDelete}
+          onSuccess={handleSuccess}
+        />
+      )}
     </div>
   );
 };

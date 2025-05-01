@@ -1,12 +1,16 @@
+
 import { Button } from "@/components/ui/button";
 import { Pencil, Trash2 } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
+import { useState } from "react";
 import { LocationForm } from "./LocationForm";
 
 interface LocationActionsProps {
   location: {
     id: string;
     store_number: string;
+    name?: string;
+    is_active?: boolean;
   };
   onEdit: (location: any) => void;
   onDelete: (id: string) => void;
@@ -14,35 +18,58 @@ interface LocationActionsProps {
 }
 
 export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: LocationActionsProps) => {
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  
   return (
-    <div className="space-x-2">
-      <Dialog>
+    <div className="flex justify-end space-x-2">
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={() => onEdit(location)}
+        className="h-8 w-8"
+      >
+        <Pencil className="h-4 w-4" />
+        <span className="sr-only">Edit</span>
+      </Button>
+      
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => onEdit(location)}
+            className="h-8 w-8"
           >
-            <Pencil className="h-4 w-4" />
+            <Trash2 className="h-4 w-4" />
+            <span className="sr-only">Delete</span>
           </Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Edit Location</DialogTitle>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete the location "{location.name || location.store_number}"? 
+              This action cannot be undone.
+            </DialogDescription>
           </DialogHeader>
-          <LocationForm
-            initialData={location}
-            onSuccess={onSuccess}
-          />
+          <DialogFooter>
+            <Button 
+              variant="outline" 
+              onClick={() => setIsDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button 
+              variant="destructive"
+              onClick={() => {
+                onDelete(location.id);
+                setIsDeleteDialogOpen(false);
+              }}
+            >
+              Delete
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => onDelete(location.id)}
-      >
-        <Trash2 className="h-4 w-4" />
-      </Button>
     </div>
   );
 };
