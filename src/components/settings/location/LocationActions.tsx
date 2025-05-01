@@ -21,6 +21,11 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
+  const handleEditSuccess = () => {
+    onSuccess();
+    setIsEditDialogOpen(false);
+  };
+
   return (
     <div className="flex justify-end space-x-2">
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
@@ -28,7 +33,10 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => setIsEditDialogOpen(true)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsEditDialogOpen(true);
+            }}
             className="h-8 w-8"
           >
             <Pencil className="h-4 w-4" />
@@ -41,10 +49,7 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
           </DialogHeader>
           <LocationForm 
             initialData={location} 
-            onSuccess={() => {
-              onSuccess();
-              setIsEditDialogOpen(false);
-            }} 
+            onSuccess={handleEditSuccess} 
           />
         </DialogContent>
       </Dialog>
@@ -55,6 +60,7 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
             variant="ghost"
             size="icon"
             className="h-8 w-8"
+            onClick={(e) => e.stopPropagation()}
           >
             <Trash2 className="h-4 w-4" />
             <span className="sr-only">Delete</span>
