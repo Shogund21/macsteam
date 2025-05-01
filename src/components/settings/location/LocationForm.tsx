@@ -70,8 +70,16 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       if (!company_id) {
         // If no company_id is available, try to get one from the user session
         // In a real-world application, you might want to fetch this from a user profile or context
-        const { data: { company } } = await supabase.rpc('get_user_company');
-        company_id = company?.id;
+        const { data, error } = await supabase.rpc('get_user_company');
+        
+        if (error) {
+          console.error("Error fetching user company:", error);
+          throw new Error("Failed to retrieve company information. Please try again.");
+        }
+        
+        if (data) {
+          company_id = data.id;
+        }
       }
 
       if (!company_id) {

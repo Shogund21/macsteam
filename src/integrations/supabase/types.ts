@@ -628,6 +628,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_user_company: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          company: Json
+        }[]
+      }
       is_member_of: {
         Args: { company_id: string }
         Returns: boolean
