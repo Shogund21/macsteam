@@ -5,13 +5,11 @@ import { Plus } from "lucide-react";
 interface LocationListHeaderProps {
   locationsCount: number;
   onAddClick: () => void;
-  disabled?: boolean;
 }
 
 export const LocationListHeader = ({ 
   locationsCount, 
-  onAddClick,
-  disabled = false
+  onAddClick
 }: LocationListHeaderProps) => {
   return (
     <div className="flex justify-between items-center">
@@ -26,7 +24,6 @@ export const LocationListHeader = ({
         onClick={onAddClick}
         variant="default"
         className="bg-blue-600 hover:bg-blue-700 text-white"
-        disabled={disabled}
       >
         <Plus className="w-4 h-4 mr-2" />
         Add Location

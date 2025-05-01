@@ -48,12 +48,8 @@ export const useLocationForm = (
         throw new Error("You must be logged in to perform this action.");
       }
       
-      // Get the company_id from initialData, context, or fail
-      const company_id = initialData?.company_id || currentCompany?.id;
-      
-      if (!company_id) {
-        throw new Error("Company ID is required. Please select a company.");
-      }
+      // Get the company_id from initialData, context, or use null
+      const company_id = initialData?.company_id || currentCompany?.id || null;
       
       const locationData = {
         store_number: values.store_number,

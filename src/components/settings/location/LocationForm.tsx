@@ -8,9 +8,6 @@ import { StoreNumberField } from "./components/StoreNumberField";
 import { LocationNameField } from "./components/LocationNameField";
 import { ActiveStatusField } from "./components/ActiveStatusField";
 import { useLocationForm } from "./hooks/useLocationForm";
-import { useCompany } from "@/contexts/CompanyContext";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 
 interface LocationFormProps {
   onSuccess?: () => void;
@@ -18,9 +15,6 @@ interface LocationFormProps {
 }
 
 export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
-  const { currentCompany } = useCompany();
-  const showCompanyWarning = !currentCompany?.id && !initialData?.company_id;
-
   const form = useForm<LocationFormValues>({
     resolver: zodResolver(locationSchema),
     defaultValues: {
@@ -35,15 +29,6 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        {showCompanyWarning && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              No company selected. Please select a company before adding a location.
-            </AlertDescription>
-          </Alert>
-        )}
-        
         <StoreNumberField form={form} />
         <LocationNameField form={form} />
         <ActiveStatusField form={form} />
@@ -51,7 +36,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
         <Button 
           type="submit"
           className="bg-blue-600 text-white hover:bg-blue-700 w-full"
-          disabled={isSubmitting || showCompanyWarning}
+          disabled={isSubmitting}
         >
           {isSubmitting ? "Saving..." : initialData ? "Update Location" : "Add Location"}
         </Button>
