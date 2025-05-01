@@ -29,7 +29,14 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
 
   return (
     <div className="flex justify-end space-x-2">
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+      <Dialog open={isEditDialogOpen} onOpenChange={(open) => {
+        setIsEditDialogOpen(open);
+        if (!open) {
+          // Force refresh when dialog is closed
+          console.log("Dialog closed, triggering refresh");
+          onSuccess();
+        }
+      }}>
         <DialogTrigger asChild>
           <Button
             variant="ghost"

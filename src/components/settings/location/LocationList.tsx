@@ -31,6 +31,7 @@ export const LocationList = () => {
       console.log('Fetched locations:', data);
       return data || [];
     },
+    refetchOnWindowFocus: false,
   });
 
   const handleDelete = async (id: string) => {
@@ -38,7 +39,7 @@ export const LocationList = () => {
       const { error } = await supabase.from("locations").delete().eq("id", id);
       if (error) throw error;
       toast({ title: "Success", description: "Location deleted successfully" });
-      refetch();
+      await refetch();
     } catch (error) {
       console.error("Error deleting location:", error);
       toast({
@@ -55,11 +56,15 @@ export const LocationList = () => {
     setIsDialogOpen(true);
   };
 
-  const handleSuccess = () => {
+  const handleSuccess = async () => {
     console.log("Success callback triggered, refetching data");
-    refetch();
-    setIsDialogOpen(false);
-    setEditLocation(null);
+    try {
+      await refetch();
+      setIsDialogOpen(false);
+      setEditLocation(null);
+    } catch (error) {
+      console.error("Error refetching data after success:", error);
+    }
   };
 
   return (
@@ -72,7 +77,14 @@ export const LocationList = () => {
           </p>
         </div>
         
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={(open) => {
+          setIsDialogOpen(open);
+          if (!open) {
+            setEditLocation(null);
+            // Force a refetch when dialog is closed
+            refetch();
+          }
+        }}>
           <DialogTrigger asChild>
             <Button 
               className="bg-blue-600 text-white hover:bg-blue-700"

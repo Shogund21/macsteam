@@ -51,7 +51,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       
       if (initialData?.id) {
         console.log("Updating location with ID:", initialData.id);
-        const { error, data } = await supabase
+        const { error } = await supabase
           .from("locations")
           .update({
             store_number: values.store_number,
@@ -59,27 +59,31 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
             is_active: values.is_active,
             updated_at: new Date().toISOString(),
           })
-          .eq("id", initialData.id)
-          .select();
+          .eq("id", initialData.id);
 
         if (error) throw error;
-        console.log("Location updated successfully:", data);
+        console.log("Location updated successfully!");
         toast({ title: "Success", description: "Location updated successfully" });
       } else {
         console.log("Creating new location");
-        const { error, data } = await supabase.from("locations").insert({
+        const { error } = await supabase.from("locations").insert({
           store_number: values.store_number,
           name: locationName,
           is_active: values.is_active,
-        }).select();
+        });
 
         if (error) throw error;
-        console.log("Location added successfully:", data);
+        console.log("Location added successfully!");
         toast({ title: "Success", description: "Location added successfully" });
       }
 
       form.reset();
-      onSuccess?.();
+      
+      // Make sure we call onSuccess to trigger a refresh of the location data
+      if (onSuccess) {
+        console.log("Calling onSuccess callback to refresh data");
+        onSuccess();
+      }
     } catch (error) {
       console.error("Error saving location:", error);
       toast({
