@@ -1,7 +1,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import { DialogTrigger } from "@/components/ui/dialog";
 
 interface LocationListHeaderProps {
   locationsCount: number;
@@ -23,17 +22,15 @@ export const LocationListHeader = ({
         </p>
       </div>
       
-      <DialogTrigger asChild disabled={disabled}>
-        <Button 
-          onClick={onAddClick}
-          variant="default"
-          className="bg-blue-600 hover:bg-blue-700 text-white"
-          disabled={disabled}
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Add Location
-        </Button>
-      </DialogTrigger>
+      <Button 
+        onClick={onAddClick}
+        variant="default"
+        className="bg-blue-600 hover:bg-blue-700 text-white"
+        disabled={disabled}
+      >
+        <Plus className="w-4 h-4 mr-2" />
+        Add Location
+      </Button>
     </div>
   );
 };
