@@ -178,6 +178,7 @@ export type Database = {
           hand_dryer_status: string | null
           id: string
           images: string[] | null
+          location_id: string | null
           maintenance_recommendations: string | null
           motor_condition: string | null
           motor_lubrication_status: string | null
@@ -246,6 +247,7 @@ export type Database = {
           hand_dryer_status?: string | null
           id?: string
           images?: string[] | null
+          location_id?: string | null
           maintenance_recommendations?: string | null
           motor_condition?: string | null
           motor_lubrication_status?: string | null
@@ -316,6 +318,7 @@ export type Database = {
           hand_dryer_status?: string | null
           id?: string
           images?: string[] | null
+          location_id?: string | null
           maintenance_recommendations?: string | null
           motor_condition?: string | null
           motor_lubrication_status?: string | null
