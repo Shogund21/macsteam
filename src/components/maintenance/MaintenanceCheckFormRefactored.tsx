@@ -35,6 +35,13 @@ const MaintenanceCheckForm = ({
   const validateForm = useFormValidation();
   const isMobile = useIsMobile();
 
+  // Track form value changes for debugging
+  const locationId = form.watch('location_id');
+
+  useEffect(() => {
+    console.log('Location ID changed:', locationId);
+  }, [locationId]);
+
   // Log initialData to help with debugging
   useEffect(() => {
     if (initialData) {
@@ -133,6 +140,7 @@ const MaintenanceCheckForm = ({
   // Manual form submission handler for the button click
   const manualSubmit = () => {
     console.log('Manual submit triggered');
+    console.log('Current form values:', form.getValues());
     form.handleSubmit(onSubmitForm)();
   };
 

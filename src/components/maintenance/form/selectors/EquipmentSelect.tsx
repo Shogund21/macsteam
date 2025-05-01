@@ -27,7 +27,8 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
           <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
           <Select
             onValueChange={(value) => {
-              // When equipment changes, retain the current locationId
+              console.log('EquipmentSelect: Setting equipment_id to', value);
+              // Only change equipment_id, don't touch location_id
               field.onChange(value);
             }}
             value={field.value || ""}

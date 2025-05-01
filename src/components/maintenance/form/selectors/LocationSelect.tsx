@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
@@ -9,6 +10,8 @@ interface LocationSelectProps {
 }
 
 const LocationSelect = ({ form }: LocationSelectProps) => {
+  const selectedLocationId = form.watch('location_id');
+
   const { data: locations = [], isLoading } = useQuery({
     queryKey: ['locations'],
     queryFn: async () => {
@@ -29,6 +32,13 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
     },
   });
 
+  // Log current selection to help with debugging
+  console.log('LocationSelect: Selected location ID:', selectedLocationId);
+  if (selectedLocationId) {
+    const selectedLocation = locations.find(loc => loc.id === selectedLocationId);
+    console.log('LocationSelect: Selected location details:', selectedLocation);
+  }
+
   return (
     <FormField
       control={form.control}
@@ -37,9 +47,12 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
         <FormItem>
           <FormLabel className="text-base font-semibold text-gray-700">Location</FormLabel>
           <Select
-            onValueChange={field.onChange}
+            onValueChange={(value) => {
+              console.log('LocationSelect: Value changed to:', value);
+              field.onChange(value);
+            }}
             value={field.value || ""}
-            defaultValue=""
+            defaultValue={field.value || ""}
           >
             <FormControl>
               <SelectTrigger 

@@ -90,5 +90,8 @@ export const useEquipmentQuery = (locationId: string) => {
       return matchedEquipment;
     },
     enabled: !!locationId,
+    // Don't refetch unnecessarily - this helps prevent UI flickering
+    staleTime: 60000, // 1 minute
+    refetchOnWindowFocus: false,
   });
 };

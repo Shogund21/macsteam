@@ -16,12 +16,16 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
   const locationId = form.watch('location_id');
   const equipmentId = form.watch('equipment_id');
   
-  console.log('MaintenanceBasicInfo render:', { locationId, equipmentId });
+  console.log('MaintenanceBasicInfo render:', { 
+    locationId, 
+    equipmentId,
+    values: form.getValues() 
+  });
 
   return (
     <div className="space-y-6">
       <LocationSelect form={form} />
-      <EquipmentSelect form={form} locationId={locationId} />
+      <EquipmentSelect form={form} locationId={locationId || ''} />
       <TechnicianSelect form={form} technicians={technicians} />
     </div>
   );
