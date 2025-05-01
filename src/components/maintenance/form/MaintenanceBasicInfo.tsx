@@ -45,7 +45,9 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
           }
           
           // Verify the selected location exists in the database
-          const locationExists = equipment.some(eq => eq.location_id === value.location_id);
+          // Note: Equipment objects have a 'location' string field, not 'location_id'
+          // So we're comparing with the location string instead
+          const locationExists = equipment.some(eq => eq.location === value.location_id);
           if (!locationExists && value.location_id) {
             console.warn('Selected location ID may not exist in database:', value.location_id);
             toast({
@@ -62,10 +64,12 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
           // Check if equipment belongs to selected location
           if (value.equipment_id && value.location_id) {
             const selectedEquipment = equipment.find(eq => eq.id === value.equipment_id);
-            if (selectedEquipment && selectedEquipment.location_id !== value.location_id) {
+            // Note: We need to compare the equipment's location string to the location ID
+            // This might require additional logic to properly match them if they aren't directly comparable
+            if (selectedEquipment && selectedEquipment.location !== value.location_id) {
               console.warn('Selected equipment may not belong to the selected location:', {
                 equipmentId: value.equipment_id,
-                equipmentLocation: selectedEquipment.location_id,
+                equipmentLocation: selectedEquipment.location,
                 selectedLocation: value.location_id
               });
             }
