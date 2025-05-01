@@ -3,6 +3,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { useEquipmentQuery } from "@/hooks/useEquipmentQuery";
+import { toast } from "@/hooks/use-toast";
 
 interface EquipmentSelectProps {
   form: UseFormReturn<any>;
@@ -10,7 +11,7 @@ interface EquipmentSelectProps {
 }
 
 const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
-  const { data: equipmentList = [], isLoading } = useEquipmentQuery(locationId);
+  const { data: equipmentList = [], isLoading, error } = useEquipmentQuery(locationId);
   const currentEquipmentId = form.watch('equipment_id');
 
   console.log('Equipment Select Render:', {
@@ -20,14 +21,60 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     currentEquipmentId
   });
 
-  const handleEquipmentChange = (value: string) => {
-    console.log('EquipmentSelect: Setting equipment_id to:', value);
-    // Only change equipment_id, preserve location_id
-    form.setValue('equipment_id', value, { 
-      shouldDirty: true, 
-      shouldTouch: true,
-      shouldValidate: true 
+  // Log any errors from equipment query
+  if (error) {
+    console.error('Error fetching equipment:', error);
+    toast({
+      title: "Error loading equipment",
+      description: error instanceof Error ? error.message : "Failed to load equipment for this location",
+      variant: "destructive",
     });
+  }
+
+  const handleEquipmentChange = (value: string) => {
+    try {
+      console.log('EquipmentSelect: Setting equipment_id to:', value);
+      
+      // Log form state before change
+      console.log('EquipmentSelect: Form state before change:', {
+        locationId: form.getValues('location_id'),
+        oldEquipmentId: form.getValues('equipment_id')
+      });
+      
+      // Only change equipment_id, preserve location_id
+      form.setValue('equipment_id', value, { 
+        shouldDirty: true, 
+        shouldTouch: true,
+        shouldValidate: true 
+      });
+      
+      // Verify the change was applied correctly
+      const updatedEquipmentId = form.getValues('equipment_id');
+      console.log('EquipmentSelect: Updated equipment_id:', updatedEquipmentId);
+      
+      if (updatedEquipmentId !== value) {
+        console.error('Equipment ID was not set correctly. Expected:', value, 'Got:', updatedEquipmentId);
+        toast({
+          title: "Warning",
+          description: "Equipment selection may not have been saved correctly",
+          variant: "destructive",
+        });
+      } else {
+        // Show a success toast for debugging
+        const selectedEquipment = equipmentList.find(e => e.id === value);
+        toast({
+          title: "Equipment selected",
+          description: `${selectedEquipment?.name || value}`,
+        });
+      }
+    } catch (error) {
+      console.error('Error in handleEquipmentChange:', error);
+      toast({
+        title: "Error selecting equipment",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

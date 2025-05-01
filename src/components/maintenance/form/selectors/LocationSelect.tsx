@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UseFormReturn } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 interface LocationSelectProps {
   form: UseFormReturn<any>;
@@ -24,6 +25,11 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       
       if (error) {
         console.error('Error fetching locations:', error);
+        toast({
+          title: "Error loading locations",
+          description: error.message,
+          variant: "destructive",
+        });
         throw error;
       }
       
@@ -42,24 +48,53 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
   const handleLocationChange = (value: string) => {
     console.log('LocationSelect: Explicitly changing location_id to:', value);
     
-    // Prevent changing if the value is already set (helps prevent odd behavior)
-    if (selectedLocationId === value) {
-      console.log('LocationSelect: Value unchanged, no update needed');
-      return;
+    try {
+      // Prevent changing if the value is already set (helps prevent odd behavior)
+      if (selectedLocationId === value) {
+        console.log('LocationSelect: Value unchanged, no update needed');
+        return;
+      }
+      
+      // Log the current form state before making changes
+      console.log('LocationSelect: Form state before change:', {
+        formValues: form.getValues(),
+        dirtyFields: form.formState.dirtyFields,
+        touchedFields: form.formState.touchedFields
+      });
+      
+      // Update only location_id, leaving other fields untouched
+      form.setValue('location_id', value, { 
+        shouldDirty: true, 
+        shouldTouch: true,
+        shouldValidate: true 
+      });
+      
+      // Clear equipment selection when location changes
+      form.setValue('equipment_id', '', { 
+        shouldDirty: true, 
+        shouldTouch: true 
+      });
+      
+      // Log the form state after making changes
+      console.log('LocationSelect: Form state after change:', {
+        formValues: form.getValues(),
+        location_id: form.getValues('location_id'),
+        equipment_id: form.getValues('equipment_id')
+      });
+      
+      // Show a success toast for debugging
+      toast({
+        title: "Location selected",
+        description: `Location ID: ${value}`,
+      });
+    } catch (error) {
+      console.error('Error in handleLocationChange:', error);
+      toast({
+        title: "Error selecting location",
+        description: error instanceof Error ? error.message : "An unknown error occurred",
+        variant: "destructive",
+      });
     }
-    
-    // Update only location_id, leaving other fields untouched
-    form.setValue('location_id', value, { 
-      shouldDirty: true, 
-      shouldTouch: true,
-      shouldValidate: true 
-    });
-    
-    // Clear equipment selection when location changes
-    form.setValue('equipment_id', '', { 
-      shouldDirty: true, 
-      shouldTouch: true 
-    });
   };
 
   return (
