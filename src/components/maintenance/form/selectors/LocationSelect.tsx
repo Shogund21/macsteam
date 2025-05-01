@@ -33,7 +33,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
         throw error;
       }
       
-      console.log('Locations fetched:', data);
+      console.log('Locations fetched:', data?.length || 0, 'locations');
       return data || [];
     },
   });
@@ -46,46 +46,26 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
   }
 
   const handleLocationChange = (value: string) => {
-    console.log('LocationSelect: Explicitly changing location_id to:', value);
+    console.log('LocationSelect: Changing location_id to:', value);
     
     try {
-      // Prevent changing if the value is already set (helps prevent odd behavior)
-      if (selectedLocationId === value) {
-        console.log('LocationSelect: Value unchanged, no update needed');
-        return;
-      }
-      
-      // Log the current form state before making changes
-      console.log('LocationSelect: Form state before change:', {
-        formValues: form.getValues(),
-        dirtyFields: form.formState.dirtyFields,
-        touchedFields: form.formState.touchedFields
-      });
-      
-      // Update only location_id, leaving other fields untouched
+      // Update location_id in the form
       form.setValue('location_id', value, { 
         shouldDirty: true, 
         shouldTouch: true,
         shouldValidate: true 
       });
       
-      // Clear equipment selection when location changes
-      form.setValue('equipment_id', '', { 
-        shouldDirty: true, 
-        shouldTouch: true 
-      });
-      
       // Log the form state after making changes
       console.log('LocationSelect: Form state after change:', {
-        formValues: form.getValues(),
         location_id: form.getValues('location_id'),
         equipment_id: form.getValues('equipment_id')
       });
       
-      // Show a success toast for debugging
-      toast({
-        title: "Location selected",
-        description: `Location ID: ${value}`,
+      // Clear equipment selection when location changes
+      form.setValue('equipment_id', '', { 
+        shouldDirty: true, 
+        shouldTouch: true 
       });
     } catch (error) {
       console.error('Error in handleLocationChange:', error);
@@ -114,7 +94,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                 className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               >
                 <SelectValue 
-                  placeholder="Select location" 
+                  placeholder={isLoading ? "Loading locations..." : "Select location"} 
                   className="text-gray-600"
                 />
               </SelectTrigger>
@@ -122,7 +102,15 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
             <SelectContent 
               className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
             >
-              {locations && locations.length > 0 ? (
+              {isLoading ? (
+                <SelectItem 
+                  value="loading" 
+                  disabled 
+                  className="py-3 px-4 text-sm text-gray-500"
+                >
+                  Loading locations...
+                </SelectItem>
+              ) : locations.length > 0 ? (
                 locations.map((loc) => (
                   <SelectItem 
                     key={loc.id} 
@@ -139,7 +127,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                 ))
               ) : (
                 <SelectItem 
-                  value="no-location-available" 
+                  value="no-locations-available" 
                   disabled 
                   className="py-3 text-sm text-gray-500"
                 >

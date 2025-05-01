@@ -4,6 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UseFormReturn } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 interface EquipmentSelectProps {
   form: UseFormReturn<any>;
@@ -13,6 +14,7 @@ interface EquipmentSelectProps {
 const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   const [equipment, setEquipment] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   // Load equipment for selected location
   useEffect(() => {
@@ -30,9 +32,18 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
           .select('*')
           .eq('location', locationId);
         
-        if (error) throw error;
+        if (error) {
+          console.error('Error fetching equipment:', error);
+          toast({
+            variant: "destructive",
+            title: "Error loading equipment",
+            description: error.message
+          });
+          throw error;
+        }
         
-        console.log('Found equipment items:', data?.length || 0);
+        console.log('Found equipment items:', data?.length || 0, 'items for location', locationId);
+        console.log('Equipment data:', data);
         setEquipment(data || []);
       } catch (error) {
         console.error('Error fetching equipment:', error);
@@ -42,7 +53,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     };
     
     fetchEquipment();
-  }, [locationId]);
+  }, [locationId, toast]);
 
   // Don't clear equipment selection when location changes, only update available options
   // and clear if the current selection isn't valid for the new location
@@ -53,7 +64,10 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
       const isValidForLocation = equipment.some(eq => eq.id === currentEquipmentId);
       if (!isValidForLocation) {
         // Only clear if the equipment is not valid for this location
+        console.log('Clearing equipment_id because current selection is not valid for this location');
         form.setValue('equipment_id', '', { shouldValidate: true });
+      } else {
+        console.log('Keeping equipment_id as it is valid for this location:', currentEquipmentId);
       }
     }
   }, [equipment, form]);
@@ -69,7 +83,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
             onValueChange={field.onChange}
             value={field.value || ""}
             defaultValue={field.value || ""}
-            disabled={!locationId || equipment.length === 0}
+            disabled={!locationId || loading}
           >
             <FormControl>
               <SelectTrigger 
@@ -92,7 +106,15 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
             <SelectContent 
               className="bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
             >
-              {equipment.length > 0 ? (
+              {loading ? (
+                <SelectItem 
+                  value="loading" 
+                  disabled 
+                  className="py-3 px-4 text-sm text-gray-500"
+                >
+                  Loading equipment...
+                </SelectItem>
+              ) : equipment.length > 0 ? (
                 equipment.map((item) => (
                   <SelectItem 
                     key={item.id} 
@@ -117,9 +139,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                 >
                   {!locationId 
                     ? "Select a location first" 
-                    : loading 
-                      ? "Loading equipment..." 
-                      : "No equipment found for this location"
+                    : "No equipment found for this location"
                   }
                 </SelectItem>
               )}

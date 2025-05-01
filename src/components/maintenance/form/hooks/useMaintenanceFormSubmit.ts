@@ -20,11 +20,23 @@ export const useMaintenanceFormSubmit = (
    */
   const handleSubmit = async (values: MaintenanceFormValues) => {
     try {
-      console.log('Submitting form with values:', values);
+      console.log('Submitting form with values:', JSON.stringify(values, null, 2));
       console.log('Update mode:', !!initialData);
+      console.log('Location ID in form values:', values.location_id);
+      
+      if (!values.location_id) {
+        console.error('No location_id provided in form values');
+        toast({
+          variant: "destructive",
+          title: "Missing Location",
+          description: "Please select a location before submitting.",
+        });
+        throw new Error('Location is required');
+      }
       
       if (initialData) {
         console.log('Initial data ID for update:', initialData.id);
+        console.log('Initial data location_id:', initialData.location_id);
       }
       
       // Get equipment details to determine type
@@ -33,6 +45,8 @@ export const useMaintenanceFormSubmit = (
       // Determine equipment type from name
       const equipmentType = detectEquipmentType(equipment.name);
       console.log('Detected equipment type:', equipmentType);
+      console.log('Equipment associated with location:', equipment.location);
+      console.log('Form location_id:', values.location_id);
       
       // Validate equipment type
       if (!isValidEquipmentType(equipmentType)) {
@@ -43,16 +57,14 @@ export const useMaintenanceFormSubmit = (
       // Map form data to database schema
       const submissionData = mapMaintenanceData(values, equipmentType, !!initialData);
       
-      // Explicitly ensure location_id is included in submission data
-      if (values.location_id) {
+      // Ensure location_id is in the submission data
+      if (!submissionData.location_id) {
+        console.error('No location_id in submission data after mapping');
         submissionData.location_id = values.location_id;
-        console.log('Setting location_id in submission data:', values.location_id);
-      } else if (initialData && initialData.location_id) {
-        submissionData.location_id = initialData.location_id;
-        console.log('Using initial location_id:', initialData.location_id);
+        console.log('Manually added location_id to submission data:', values.location_id);
       }
       
-      console.log('Final submission data:', submissionData);
+      console.log('Final submission data:', JSON.stringify(submissionData, null, 2));
       
       // Submit to database (update or create)
       let dbResponse;
@@ -62,6 +74,7 @@ export const useMaintenanceFormSubmit = (
         console.log('Update response:', dbResponse);
       } else {
         dbResponse = await maintenanceDbService.createMaintenanceCheck(submissionData);
+        console.log('Create response:', dbResponse);
       }
       
       // Handle errors
