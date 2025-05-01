@@ -11,6 +11,7 @@ interface LocationActionsProps {
     store_number: string;
     name?: string;
     is_active?: boolean;
+    company_id?: string;
   };
   onEdit: (location: any) => void;
   onDelete: (id: string) => void;

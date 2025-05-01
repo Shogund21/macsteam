@@ -4,20 +4,33 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LocationData } from "../schemas/locationSchema";
+import { useCompany } from "@/contexts/CompanyContext";
+import { useCompanyFilter } from "@/hooks/useCompanyFilter";
 
 export const useLocationList = () => {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editLocation, setEditLocation] = useState<LocationData | null>(null);
+  const { currentCompany } = useCompany();
+  const { applyCompanyFilter } = useCompanyFilter();
 
   const { data: locations, refetch, isLoading } = useQuery({
-    queryKey: ["locations"],
+    queryKey: ["locations", currentCompany?.id],
     queryFn: async () => {
-      console.log('Fetching locations...');
-      const { data, error } = await supabase
+      console.log('Fetching locations for company:', currentCompany?.id);
+      
+      if (!currentCompany?.id) {
+        console.warn('No company ID available, cannot fetch locations');
+        return [];
+      }
+
+      let query = supabase
         .from("locations")
-        .select("*")
-        .order("name");
+        .select("*");
+      
+      query = applyCompanyFilter(query);
+      
+      const { data, error } = await query.order("name");
       
       if (error) {
         console.error("Error fetching locations:", error);
@@ -30,6 +43,7 @@ export const useLocationList = () => {
     refetchOnWindowFocus: true,
     staleTime: 0,
     gcTime: 0,
+    enabled: !!currentCompany?.id,
   });
 
   const handleDelete = async (id: string) => {

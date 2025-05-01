@@ -4,6 +4,7 @@ import { UseFormReturn } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LocationFormValues, LocationData } from "../schemas/locationSchema";
+import { useCompany } from "@/contexts/CompanyContext";
 
 export const useLocationForm = (
   form: UseFormReturn<LocationFormValues>,
@@ -12,19 +13,7 @@ export const useLocationForm = (
 ) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-
-  // Get current session to determine user/company
-  useEffect(() => {
-    const fetchCurrentSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data?.session?.user) {
-        setCurrentUser(data.session.user);
-      }
-    };
-
-    fetchCurrentSession();
-  }, []);
+  const { currentCompany } = useCompany(); // Use the CompanyContext to get the current company
 
   const onSubmit = async (values: LocationFormValues) => {
     try {
@@ -34,41 +23,21 @@ export const useLocationForm = (
       // Use the store_number as the name if name is empty or just whitespace
       const locationName = values.name?.trim() || values.store_number;
       
-      // Get the user's company_id or use the initialData's company_id
-      // This is crucial for RLS policies
-      let company_id = initialData?.company_id;
-
+      // Get the company_id from initialData or from the CompanyContext
+      let company_id = initialData?.company_id || currentCompany?.id;
+      
       if (!company_id) {
-        // If no company_id is available, try to get one from the user session
-        const { data, error } = await supabase.rpc('get_user_company');
-        
-        if (error) {
-          console.error("Error fetching user company:", error);
-          throw new Error("Failed to retrieve company information. Please try again.");
-        }
-        
-        // The function returns an array with a single object containing a company property
-        // which is a JSON object with id and name
-        if (data && data.length > 0 && data[0].company) {
-          // Parse the JSON company object if needed (it might already be parsed)
-          const companyData = typeof data[0].company === 'string' 
-            ? JSON.parse(data[0].company) 
-            : data[0].company;
-          
-          company_id = companyData.id;
-          console.log("Retrieved company_id:", company_id);
-        }
-      }
-
-      if (!company_id) {
+        console.error("No company ID available from context or initial data");
         throw new Error("Unable to determine company ID. Please ensure you're logged in correctly.");
       }
 
+      console.log("Using company_id:", company_id);
+      
       const locationData = {
         store_number: values.store_number,
         name: locationName,
         is_active: values.is_active,
-        company_id: company_id, // Add company_id to satisfy RLS policies
+        company_id: company_id,
       };
 
       console.log("Prepared location data:", locationData);

@@ -23,7 +23,7 @@ export const LocationListHeader = ({
       
       <DialogTrigger asChild>
         <Button 
-          className="bg-blue-600 text-white hover:bg-blue-700"
+          className="bg-primary text-primary-foreground hover:bg-primary/90"
           onClick={onAddClick}
         >
           <Plus className="w-4 h-4 mr-2" />
