@@ -10,6 +10,8 @@ export const useCompanyFilter = () => {
   useEffect(() => {
     if (currentCompany?.id) {
       setCompanyId(currentCompany.id);
+    } else {
+      setCompanyId(null);
     }
   }, [currentCompany]);
 

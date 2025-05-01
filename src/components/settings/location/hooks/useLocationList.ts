@@ -11,7 +11,7 @@ export const useLocationList = () => {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editLocation, setEditLocation] = useState<LocationData | null>(null);
-  const { currentCompany } = useCompany();
+  const { currentCompany, companies } = useCompany();
   const { applyCompanyFilter } = useCompanyFilter();
 
   const { data: locations, refetch, isLoading } = useQuery({
@@ -106,6 +106,8 @@ export const useLocationList = () => {
     handleSuccess,
     openAddDialog,
     closeDialog,
-    refetch
+    refetch,
+    hasCompanies: companies.length > 0,
+    currentCompany
   };
 };

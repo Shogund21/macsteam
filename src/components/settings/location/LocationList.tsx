@@ -5,10 +5,12 @@ import { useLocationList } from "./hooks/useLocationList";
 import { LocationListHeader } from "./components/LocationListHeader";
 import { LocationListLoading } from "./components/LocationListLoading";
 import { LocationFormDialog } from "./components/LocationFormDialog";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 import { useCompany } from "@/contexts/CompanyContext";
 
 export const LocationList = () => {
-  const { currentCompany } = useCompany();
+  const { companies } = useCompany();
   const { 
     locations, 
     isLoading, 
@@ -19,7 +21,8 @@ export const LocationList = () => {
     handleEdit, 
     handleSuccess, 
     openAddDialog, 
-    closeDialog 
+    closeDialog,
+    currentCompany
   } = useLocationList();
 
   return (
@@ -52,7 +55,19 @@ export const LocationList = () => {
         />
       </Dialog>
 
-      {!currentCompany ? (
+      {companies.length === 0 ? (
+        <div className="text-center py-6 bg-gray-50 rounded-md border p-4">
+          <p className="text-gray-600 mb-4">No companies found. Please add a company first.</p>
+          <Button 
+            variant="default"
+            className="bg-blue-600 hover:bg-blue-700 text-white"
+            onClick={() => window.location.href = '/settings?tab=companies'}
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Add Company
+          </Button>
+        </div>
+      ) : !currentCompany ? (
         <div className="text-center py-6 text-gray-500">
           Please select a company to view locations.
         </div>
