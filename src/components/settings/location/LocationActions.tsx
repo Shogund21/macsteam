@@ -22,6 +22,7 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
   const handleEditSuccess = () => {
+    console.log("Edit successful, calling onSuccess");
     onSuccess();
     setIsEditDialogOpen(false);
   };
@@ -46,6 +47,9 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Location</DialogTitle>
+            <DialogDescription>
+              Update the location information below.
+            </DialogDescription>
           </DialogHeader>
           <LocationForm 
             initialData={location} 

@@ -7,7 +7,7 @@ import { Plus } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { LocationForm } from "./LocationForm";
 import { LocationTable } from "./LocationTable";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 export const LocationList = () => {
   const { toast } = useToast();
@@ -49,7 +49,14 @@ export const LocationList = () => {
     }
   };
 
+  const handleEdit = (location: any) => {
+    console.log("Editing location:", location);
+    setEditLocation(location);
+    setIsDialogOpen(true);
+  };
+
   const handleSuccess = () => {
+    console.log("Success callback triggered, refetching data");
     refetch();
     setIsDialogOpen(false);
     setEditLocation(null);
@@ -83,6 +90,11 @@ export const LocationList = () => {
               <DialogTitle>
                 {editLocation ? "Edit Location" : "Add New Location"}
               </DialogTitle>
+              <DialogDescription>
+                {editLocation 
+                  ? "Update the location information below." 
+                  : "Enter the details for the new location."}
+              </DialogDescription>
             </DialogHeader>
             <LocationForm 
               initialData={editLocation} 
@@ -99,10 +111,7 @@ export const LocationList = () => {
       ) : (
         <LocationTable
           locations={locations || []}
-          onEdit={(location) => {
-            setEditLocation(location);
-            setIsDialogOpen(true);
-          }}
+          onEdit={handleEdit}
           onDelete={handleDelete}
           onSuccess={handleSuccess}
         />

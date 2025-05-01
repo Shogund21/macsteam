@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
 
 const locationSchema = z.object({
   store_number: z.string().min(1, "Store number is required"),
@@ -29,6 +30,7 @@ interface LocationFormProps {
 
 export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
   const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<LocationFormValues>({
     resolver: zodResolver(locationSchema),
@@ -41,11 +43,15 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
 
   const onSubmit = async (values: LocationFormValues) => {
     try {
+      setIsSubmitting(true);
+      console.log("Submitting location with values:", values);
+      
       // Use the name if provided, otherwise use store_number
       const locationName = values.name || values.store_number;
       
       if (initialData?.id) {
-        const { error } = await supabase
+        console.log("Updating location with ID:", initialData.id);
+        const { error, data } = await supabase
           .from("locations")
           .update({
             store_number: values.store_number,
@@ -53,18 +59,22 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
             is_active: values.is_active,
             updated_at: new Date().toISOString(),
           })
-          .eq("id", initialData.id);
+          .eq("id", initialData.id)
+          .select();
 
         if (error) throw error;
+        console.log("Location updated successfully:", data);
         toast({ title: "Success", description: "Location updated successfully" });
       } else {
-        const { error } = await supabase.from("locations").insert({
+        console.log("Creating new location");
+        const { error, data } = await supabase.from("locations").insert({
           store_number: values.store_number,
           name: locationName,
           is_active: values.is_active,
-        });
+        }).select();
 
         if (error) throw error;
+        console.log("Location added successfully:", data);
         toast({ title: "Success", description: "Location added successfully" });
       }
 
@@ -77,6 +87,8 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
         title: "Error",
         description: "Failed to save location. Please try again.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -137,8 +149,9 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
         <Button 
           type="submit"
           className="bg-blue-600 text-white hover:bg-blue-700 w-full"
+          disabled={isSubmitting}
         >
-          {initialData ? "Update Location" : "Add Location"}
+          {isSubmitting ? "Saving..." : initialData ? "Update Location" : "Add Location"}
         </Button>
       </form>
     </Form>
