@@ -33,7 +33,7 @@ export const LocationList = () => {
     },
     refetchOnWindowFocus: true, // Enable automatic refetch when window regains focus
     staleTime: 0, // Consider data immediately stale
-    cacheTime: 0, // Don't cache the data
+    gcTime: 0, // Don't cache the data (renamed from cacheTime in react-query v5)
   });
 
   const handleDelete = async (id: string) => {
