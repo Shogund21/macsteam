@@ -26,6 +26,7 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
     try {
       // Ensure data is refetched after successful edit
       await onSuccess();
+      console.log("Data refreshed successfully after edit");
       setIsEditDialogOpen(false);
     } catch (error) {
       console.error("Error in handleEditSuccess:", error);
@@ -34,20 +35,24 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
 
   return (
     <div className="flex justify-end space-x-2">
-      <Dialog open={isEditDialogOpen} onOpenChange={(open) => {
-        setIsEditDialogOpen(open);
-        if (!open) {
-          // Force refresh when dialog is closed
-          console.log("Edit dialog closed, triggering refresh");
-          onSuccess();
-        }
-      }}>
+      <Dialog 
+        open={isEditDialogOpen} 
+        onOpenChange={(open) => {
+          setIsEditDialogOpen(open);
+          if (!open) {
+            // Force refresh when dialog is closed
+            console.log("Edit dialog closed, triggering refresh");
+            onSuccess();
+          }
+        }}
+      >
         <DialogTrigger asChild>
           <Button
             variant="ghost"
             size="icon"
             onClick={(e) => {
               e.stopPropagation();
+              console.log("Edit button clicked for location:", location);
               setIsEditDialogOpen(true);
             }}
             className="h-8 w-8"
@@ -86,7 +91,7 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete the location "{location.name || location.store_number}"? 
+              Are you sure you want to delete the location "{location.name?.trim() || location.store_number}"? 
               This action cannot be undone.
             </DialogDescription>
           </DialogHeader>

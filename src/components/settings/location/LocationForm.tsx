@@ -49,57 +49,66 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       // Use the store_number as the name if name is empty or just whitespace
       const locationName = values.name?.trim() || values.store_number;
       
+      const locationData = {
+        store_number: values.store_number,
+        name: locationName,
+        is_active: values.is_active,
+      };
+
+      console.log("Prepared location data:", locationData);
+      
       if (initialData?.id) {
         console.log("Updating location with ID:", initialData.id);
         const { error } = await supabase
           .from("locations")
           .update({
-            store_number: values.store_number,
-            name: locationName,
-            is_active: values.is_active,
+            ...locationData,
             updated_at: new Date().toISOString(),
-            company_id: null // Explicitly set company_id for RLS policy
           })
           .eq("id", initialData.id);
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error updating location:", error);
+          throw error;
+        }
+        
         console.log("Location updated successfully!");
         toast({ title: "Success", description: "Location updated successfully" });
       } else {
         console.log("Creating new location");
-        const { error } = await supabase.from("locations").insert({
-          store_number: values.store_number,
-          name: locationName,
-          is_active: values.is_active,
-          company_id: null // Explicitly set company_id for RLS policy
-        });
+        const { error } = await supabase
+          .from("locations")
+          .insert(locationData);
 
         if (error) {
-          console.error("Error details:", error);
+          console.error("Error creating location:", error);
           throw error;
         }
+        
         console.log("Location added successfully!");
         toast({ title: "Success", description: "Location added successfully" });
       }
 
-      // Reset the form
-      form.reset({
-        store_number: "",
-        name: "",
-        is_active: true
-      });
+      // Reset the form if it's a new location
+      if (!initialData) {
+        form.reset({
+          store_number: "",
+          name: "",
+          is_active: true
+        });
+      }
       
       // Explicitly call onSuccess callback to trigger immediate data refresh
       if (onSuccess) {
         console.log("Calling onSuccess callback to refresh data");
         await onSuccess(); // Use await to ensure the refresh completes
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving location:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to save location. Please try again.",
+        description: error.message || "Failed to save location. Please try again.",
       });
     } finally {
       setIsSubmitting(false);

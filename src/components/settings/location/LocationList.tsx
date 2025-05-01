@@ -31,7 +31,9 @@ export const LocationList = () => {
       console.log('Fetched locations:', data);
       return data || [];
     },
-    refetchOnWindowFocus: false,
+    refetchOnWindowFocus: true, // Enable automatic refetch when window regains focus
+    staleTime: 0, // Consider data immediately stale
+    cacheTime: 0, // Don't cache the data
   });
 
   const handleDelete = async (id: string) => {
@@ -43,12 +45,12 @@ export const LocationList = () => {
       }
       toast({ title: "Success", description: "Location deleted successfully" });
       await refetch(); // Force refetch after deletion
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting location:", error);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to delete location. Please try again.",
+        description: error.message || "Failed to delete location. Please try again.",
       });
     }
   };
@@ -63,7 +65,8 @@ export const LocationList = () => {
     console.log("Success callback triggered, refetching data");
     try {
       // Force a complete refetch to get fresh data from the database
-      await refetch();
+      const result = await refetch();
+      console.log("Data refetch result:", result);
       setIsDialogOpen(false);
       setEditLocation(null);
     } catch (error) {
