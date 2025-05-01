@@ -36,7 +36,7 @@ export const LocationList = () => {
   return (
     <div className="space-y-4">
       {noCompanySelected && (
-        <Alert variant="warning" className="mb-4">
+        <Alert variant="destructive" className="mb-4 bg-amber-50 border-amber-200 text-amber-800">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
             No company selected. Location management may be limited.
