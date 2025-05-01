@@ -16,14 +16,13 @@ export const LocationListHeader = ({
     <div className="flex justify-between items-center">
       <div>
         <h3 className="text-lg font-medium">All Locations</h3>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           {locationsCount} locations found
         </p>
       </div>
       
       <DialogTrigger asChild>
         <Button 
-          className="bg-primary text-primary-foreground hover:bg-primary/90"
           onClick={onAddClick}
         >
           <Plus className="w-4 h-4 mr-2" />

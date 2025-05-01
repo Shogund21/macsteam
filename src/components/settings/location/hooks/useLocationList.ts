@@ -38,12 +38,14 @@ export const useLocationList = () => {
       }
       
       console.log('Fetched locations:', data);
+      console.log('Number of locations:', data?.length || 0);
       return data || [];
     },
-    refetchOnWindowFocus: true,
-    staleTime: 0,
-    gcTime: 0,
     enabled: !!currentCompany?.id,
+    staleTime: 1000, // 1 second
+    refetchOnWindowFocus: true,
+    gcTime: 0,
+    retry: 1,
   });
 
   const handleDelete = async (id: string) => {

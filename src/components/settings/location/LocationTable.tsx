@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { LocationActions } from "./LocationActions";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface LocationTableProps {
   locations: Array<{
@@ -37,7 +38,7 @@ export const LocationTable = ({ locations, onEdit, onDelete, onSuccess }: Locati
           </TableRow>
         </TableHeader>
         <TableBody>
-          {locations?.length ? (
+          {locations && locations.length > 0 ? (
             locations.map((location) => (
               <TableRow key={location.id}>
                 <TableCell className="font-medium">{location.store_number}</TableCell>

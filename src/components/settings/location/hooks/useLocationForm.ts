@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -13,7 +13,7 @@ export const useLocationForm = (
 ) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { currentCompany } = useCompany(); // Use the CompanyContext to get the current company
+  const { currentCompany } = useCompany();
 
   const onSubmit = async (values: LocationFormValues) => {
     try {
@@ -27,7 +27,7 @@ export const useLocationForm = (
       let company_id = initialData?.company_id || currentCompany?.id;
       
       if (!company_id) {
-        console.error("No company ID available from context or initial data");
+        console.error("No company ID available from context:", currentCompany);
         throw new Error("Unable to determine company ID. Please ensure you're logged in correctly.");
       }
 
