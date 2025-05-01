@@ -4,6 +4,8 @@ import { Pencil, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { useState } from "react";
 import { LocationForm } from "./LocationForm";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface LocationActionsProps {
   location: {
@@ -21,6 +23,27 @@ interface LocationActionsProps {
 export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: LocationActionsProps) => {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const { toast } = useToast();
+  
+  // Check authentication status before opening edit dialog
+  const handleEditClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    // Get current auth session
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    
+    if (sessionError || !sessionData.session) {
+      toast({
+        variant: "destructive",
+        title: "Authentication required",
+        description: "You must be logged in to edit locations."
+      });
+      return;
+    }
+    
+    console.log("Edit button clicked for location:", location);
+    setIsEditDialogOpen(true);
+  };
   
   const handleEditSuccess = async () => {
     console.log("Edit successful, calling onSuccess");
@@ -50,11 +73,7 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
         <Button
           variant="ghost"
           size="icon"
-          onClick={(e) => {
-            e.stopPropagation();
-            console.log("Edit button clicked for location:", location);
-            setIsEditDialogOpen(true);
-          }}
+          onClick={handleEditClick}
           className="h-8 w-8"
         >
           <Pencil className="h-4 w-4" />

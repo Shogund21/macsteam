@@ -21,9 +21,16 @@ interface LocationTableProps {
   onEdit: (location: any) => void;
   onDelete: (id: string) => void;
   onSuccess: () => void;
+  isAuthenticated?: boolean;
 }
 
-export const LocationTable = ({ locations, onEdit, onDelete, onSuccess }: LocationTableProps) => {
+export const LocationTable = ({ 
+  locations, 
+  onEdit, 
+  onDelete, 
+  onSuccess,
+  isAuthenticated = true
+}: LocationTableProps) => {
   return (
     <div className="rounded-md border overflow-hidden">
       <Table>
@@ -53,19 +60,23 @@ export const LocationTable = ({ locations, onEdit, onDelete, onSuccess }: Locati
                   {location.updated_at ? new Date(location.updated_at).toLocaleDateString() : 'N/A'}
                 </TableCell>
                 <TableCell className="text-right">
-                  <LocationActions
-                    location={location}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                    onSuccess={onSuccess}
-                  />
+                  {isAuthenticated ? (
+                    <LocationActions
+                      location={location}
+                      onEdit={onEdit}
+                      onDelete={onDelete}
+                      onSuccess={onSuccess}
+                    />
+                  ) : (
+                    <span className="text-gray-400 text-sm">Login required</span>
+                  )}
                 </TableCell>
               </TableRow>
             ))
           ) : (
             <TableRow>
               <TableCell colSpan={5} className="text-center py-6 text-gray-500">
-                No locations found. Add a location to get started.
+                No locations found. {isAuthenticated ? 'Add a location to get started.' : 'Login to manage locations.'}
               </TableCell>
             </TableRow>
           )}

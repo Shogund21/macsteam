@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { UseFormReturn } from "react-hook-form";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -14,7 +14,18 @@ export const useLocationForm = (
 ) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { currentCompany } = useCompany();
+
+  // Check authentication status on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      setIsAuthenticated(!!data.session && !error);
+    };
+    
+    checkAuth();
+  }, []);
 
   // Parse Supabase error messages into user-friendly format
   const parseSupabaseError = (error: PostgrestError): string => {
@@ -34,6 +45,17 @@ export const useLocationForm = (
 
   const onSubmit = async (values: LocationFormValues) => {
     try {
+      // Verify authentication
+      const { data: sessionData } = await supabase.auth.getSession();
+      if (!sessionData.session) {
+        toast({ 
+          variant: "destructive", 
+          title: "Authentication Required", 
+          description: "You must be logged in to save locations."
+        });
+        return;
+      }
+
       setIsSubmitting(true);
       console.log("Submitting location with values:", values);
       
@@ -41,12 +63,7 @@ export const useLocationForm = (
       const locationName = values.name?.trim() || values.store_number;
       
       // Get authenticated user from supabase
-      const { data: sessionData } = await supabase.auth.getSession();
-      const user = sessionData?.session?.user;
-      
-      if (!user) {
-        throw new Error("You must be logged in to perform this action.");
-      }
+      const user = sessionData.session.user;
       
       // Get the company_id from initialData, context, or use null
       const company_id = initialData?.company_id || currentCompany?.id || null;
@@ -122,6 +139,7 @@ export const useLocationForm = (
 
   return {
     isSubmitting,
+    isAuthenticated,
     onSubmit
   };
 };
