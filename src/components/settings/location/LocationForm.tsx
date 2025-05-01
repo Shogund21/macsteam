@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const locationSchema = z.object({
   store_number: z.string().min(1, "Store number is required"),
@@ -25,12 +25,26 @@ interface LocationFormProps {
     store_number: string;
     name?: string;
     is_active?: boolean;
+    company_id?: string;
   };
 }
 
 export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+
+  // Get current session to determine user/company
+  useEffect(() => {
+    const fetchCurrentSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      if (data?.session?.user) {
+        setCurrentUser(data.session.user);
+      }
+    };
+
+    fetchCurrentSession();
+  }, []);
 
   const form = useForm<LocationFormValues>({
     resolver: zodResolver(locationSchema),
@@ -49,10 +63,26 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       // Use the store_number as the name if name is empty or just whitespace
       const locationName = values.name?.trim() || values.store_number;
       
+      // Get the user's company_id or use the initialData's company_id
+      // This is crucial for RLS policies
+      let company_id = initialData?.company_id;
+
+      if (!company_id) {
+        // If no company_id is available, try to get one from the user session
+        // In a real-world application, you might want to fetch this from a user profile or context
+        const { data: { company } } = await supabase.rpc('get_user_company');
+        company_id = company?.id;
+      }
+
+      if (!company_id) {
+        throw new Error("Unable to determine company ID. Please ensure you're logged in correctly.");
+      }
+
       const locationData = {
         store_number: values.store_number,
         name: locationName,
         is_active: values.is_active,
+        company_id: company_id, // Add company_id to satisfy RLS policies
       };
 
       console.log("Prepared location data:", locationData);
@@ -75,7 +105,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
         console.log("Location updated successfully!");
         toast({ title: "Success", description: "Location updated successfully" });
       } else {
-        console.log("Creating new location");
+        console.log("Creating new location with data:", locationData);
         const { error } = await supabase
           .from("locations")
           .insert(locationData);
