@@ -77,9 +77,14 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
         toast({ title: "Success", description: "Location added successfully" });
       }
 
-      form.reset();
+      // Reset the form
+      form.reset({
+        store_number: "",
+        name: "",
+        is_active: true
+      });
       
-      // Make sure we call onSuccess to trigger a refresh of the location data
+      // Explicitly call onSuccess callback to trigger data refresh
       if (onSuccess) {
         console.log("Calling onSuccess callback to refresh data");
         onSuccess();
