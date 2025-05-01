@@ -5,7 +5,6 @@ import LocationSelect from "./selectors/LocationSelect";
 import EquipmentSelect from "./selectors/EquipmentSelect";
 import TechnicianSelect from "./selectors/TechnicianSelect";
 import { useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
 
 interface MaintenanceBasicInfoProps {
   form: UseFormReturn<any>;
@@ -24,7 +23,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
     values: form.getValues() 
   });
 
-  // Monitor location changes to debug issues
+  // Monitor form values to debug issues
   useEffect(() => {
     try {
       const subscription = form.watch((value, { name, type }) => {
@@ -53,8 +52,12 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
 
   return (
     <div className="space-y-6">
+      {/* Make sure we pass the form to the LocationSelect component */}
       <LocationSelect form={form} />
+      
+      {/* Only pass the locationId to EquipmentSelect if it exists */}
       <EquipmentSelect form={form} locationId={locationId || ''} />
+      
       <TechnicianSelect form={form} technicians={technicians} />
     </div>
   );

@@ -12,6 +12,7 @@ export const mapMaintenanceData = (
   equipmentType: string,
   isUpdate: boolean
 ) => {
+  // IMPORTANT: Log the location ID at the start of mapping to verify it's present
   console.log('Mapping maintenance data with location_id:', values.location_id);
   
   if (!values.location_id) {

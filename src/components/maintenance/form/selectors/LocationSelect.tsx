@@ -5,6 +5,7 @@ import { UseFormReturn } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useEffect } from "react";
 
 interface LocationSelectProps {
   form: UseFormReturn<any>;
@@ -13,6 +14,11 @@ interface LocationSelectProps {
 const LocationSelect = ({ form }: LocationSelectProps) => {
   const selectedLocationId = form.watch('location_id');
   const { toast } = useToast();
+
+  // Log current selection for debugging
+  useEffect(() => {
+    console.log('LocationSelect: Current location_id value:', selectedLocationId);
+  }, [selectedLocationId]);
 
   const { data: locations = [], isLoading } = useQuery({
     queryKey: ['locations'],
@@ -39,13 +45,6 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
     },
   });
 
-  // Log current selection to help with debugging
-  console.log('LocationSelect: Selected location ID:', selectedLocationId);
-  if (selectedLocationId) {
-    const selectedLocation = locations.find(loc => loc.id === selectedLocationId);
-    console.log('LocationSelect: Selected location details:', selectedLocation);
-  }
-
   const handleLocationChange = (value: string) => {
     console.log('LocationSelect: Changing location_id to:', value);
     
@@ -64,7 +63,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
         console.log('Valid location selected:', selectedLocation.name);
       }
       
-      // Update location_id in the form
+      // IMPORTANT: Set the location_id in the form directly to ensure it's correctly captured
       form.setValue('location_id', value, { 
         shouldDirty: true, 
         shouldTouch: true,
@@ -78,10 +77,12 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       });
       
       // Log the form state after making changes
-      console.log('LocationSelect: Form state after change:', {
-        location_id: form.getValues('location_id'),
-        equipment_id: form.getValues('equipment_id')
-      });
+      setTimeout(() => {
+        console.log('LocationSelect: Form state after change (delayed):', {
+          location_id: form.getValues('location_id'),
+          equipment_id: form.getValues('equipment_id')
+        });
+      }, 100);
     } catch (error) {
       console.error('Error in handleLocationChange:', error);
       toast({

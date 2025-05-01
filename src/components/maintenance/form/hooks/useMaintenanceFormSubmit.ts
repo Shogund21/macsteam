@@ -20,11 +20,12 @@ export const useMaintenanceFormSubmit = (
    */
   const handleSubmit = async (values: MaintenanceFormValues) => {
     try {
+      // Log complete form values for debugging
       console.log('Submitting form with values:', JSON.stringify(values, null, 2));
       console.log('Update mode:', !!initialData);
       console.log('Location ID in form values:', values.location_id);
       
-      // Validate location is present
+      // IMPORTANT: Validate location is present
       if (!values.location_id) {
         console.error('No location_id provided in form values');
         toast({
@@ -81,10 +82,15 @@ export const useMaintenanceFormSubmit = (
         throw new Error('Invalid equipment type');
       }
       
+      // Create a copy of values to ensure we don't lose the location_id
+      const secureValues = { ...values };
+      console.log('Secure values before mapping:', secureValues);
+      
       // Map form data to database schema - always passing the location_id
-      const submissionData = mapMaintenanceData(values, equipmentType, !!initialData);
+      const submissionData = mapMaintenanceData(secureValues, equipmentType, !!initialData);
       
       console.log('Final submission data:', JSON.stringify(submissionData, null, 2));
+      console.log('Verifying location_id is in final data:', submissionData.location_id);
       
       // Submit to database (update or create)
       let dbResponse;
