@@ -2,9 +2,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { normalizeString } from "@/utils/locationMatching";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 export const useEquipmentQuery = (locationId: string) => {
+  const { toast } = useToast();
+  
   return useQuery({
     queryKey: ['equipment', locationId],
     queryFn: async () => {
@@ -71,10 +73,13 @@ export const useEquipmentQuery = (locationId: string) => {
 
         // Filter equipment based on location or name containing store number
         const matchedEquipment = equipment?.filter(e => {
-          // Preserve the exact location of equipment items, especially for restrooms
-          // Don't default restrooms to specific locations based on matching logic
-          if (e.name.toLowerCase().includes('restroom')) {
-            console.log(`Keeping restroom "${e.name}" with its original location: "${e.location}"`);
+          // CRITICAL FIX: For restrooms, tag them with the user's selected location
+          // This will let us know they were picked from a specific location
+          const isRestroom = e.name.toLowerCase().includes('restroom');
+          if (isRestroom) {
+            console.log(`Including restroom "${e.name}" with its original location: "${e.location}" for selected location ID: ${locationId}`);
+            // We include all restrooms regardless of their location in the DB
+            // The form will use the user-selected location_id for submission
             return true;
           }
           

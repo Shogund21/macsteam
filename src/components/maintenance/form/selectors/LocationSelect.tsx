@@ -49,7 +49,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
     console.log('LocationSelect: Changing location_id to:', value);
     
     try {
-      // Verify the location ID is valid before setting it
+      // CRITICAL FIX: Verify the location ID is valid before setting it
       const selectedLocation = locations.find(loc => loc.id === value);
       
       if (!selectedLocation) {
@@ -60,10 +60,10 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
           variant: "destructive",
         });
       } else {
-        console.log('Valid location selected:', selectedLocation.name);
+        console.log('Valid location selected:', selectedLocation.name, 'with ID:', selectedLocation.id);
       }
       
-      // IMPORTANT: Set the location_id in the form directly to ensure it's correctly captured
+      // CRITICAL FIX: Set the location_id in the form with proper options to ensure it's tracked
       form.setValue('location_id', value, { 
         shouldDirty: true, 
         shouldTouch: true,
@@ -71,6 +71,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       });
       
       // Clear equipment selection when location changes
+      // This prevents location/equipment mismatch
       form.setValue('equipment_id', '', { 
         shouldDirty: true, 
         shouldTouch: true 

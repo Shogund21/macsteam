@@ -25,8 +25,9 @@ export const mapMaintenanceData = (
     technician_id: values.technician_id,
     equipment_type: equipmentType,
     status: 'completed' as const,
-    // Always include location_id from form values
-    location_id: values.location_id
+    // CRITICAL FIX: Always use the user-selected location_id from form values
+    // This ensures we don't override with equipment's default location
+    location_id: values.location_id 
   };
 
   // Add check_date for new entries only
@@ -36,6 +37,7 @@ export const mapMaintenanceData = (
   console.log('Base maintenance data:', baseData);
 
   // Combine base data with equipment-specific data
+  // The equipment-specific mappers should NOT override location_id
   return {
     ...baseData,
     ...dateData,

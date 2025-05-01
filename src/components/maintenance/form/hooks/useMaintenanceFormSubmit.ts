@@ -25,8 +25,11 @@ export const useMaintenanceFormSubmit = (
       console.log('Update mode:', !!initialData);
       console.log('Location ID in form values:', values.location_id);
       
+      // CRITICAL FIX: Create a stable copy of the form values to prevent any reference issues
+      const formValues = { ...values };
+      
       // IMPORTANT: Validate location is present
-      if (!values.location_id) {
+      if (!formValues.location_id) {
         console.error('No location_id provided in form values');
         toast({
           variant: "destructive",
@@ -36,8 +39,12 @@ export const useMaintenanceFormSubmit = (
         throw new Error('Location is required');
       }
       
+      // Store the original location_id for verification later
+      const originalLocationId = formValues.location_id;
+      console.log('Original selected location_id:', originalLocationId);
+      
       // Validate that equipment is selected
-      if (!values.equipment_id) {
+      if (!formValues.equipment_id) {
         console.error('No equipment_id provided in form values');
         toast({
           variant: "destructive",
@@ -48,7 +55,7 @@ export const useMaintenanceFormSubmit = (
       }
       
       // Validate that technician is selected
-      if (!values.technician_id) {
+      if (!formValues.technician_id) {
         console.error('No technician_id provided in form values');
         toast({
           variant: "destructive",
@@ -59,11 +66,11 @@ export const useMaintenanceFormSubmit = (
       }
       
       // Get equipment details to determine type
-      const equipment = await maintenanceDbService.getEquipment(values.equipment_id);
+      const equipment = await maintenanceDbService.getEquipment(formValues.equipment_id);
       console.log('Retrieved equipment details:', equipment);
       
       if (!equipment) {
-        console.error('Equipment not found with ID:', values.equipment_id);
+        console.error('Equipment not found with ID:', formValues.equipment_id);
         toast({
           variant: "destructive",
           title: "Equipment Not Found",
@@ -71,6 +78,10 @@ export const useMaintenanceFormSubmit = (
         });
         throw new Error('Equipment not found');
       }
+      
+      // Log equipment's stored location vs user-selected location
+      console.log('Equipment database location:', equipment.location);
+      console.log('User-selected location ID:', formValues.location_id);
       
       // Determine equipment type from name
       const equipmentType = detectEquipmentType(equipment.name);
@@ -82,15 +93,24 @@ export const useMaintenanceFormSubmit = (
         throw new Error('Invalid equipment type');
       }
       
-      // Create a copy of values to ensure we don't lose the location_id
-      const secureValues = { ...values };
-      console.log('Secure values before mapping:', secureValues);
+      // CRITICAL FIX: Ensure we're using the original selected location_id
+      // This prevents any equipment location from overriding the user selection
+      console.log('Ensuring location_id is preserved:', originalLocationId);
+      formValues.location_id = originalLocationId;
       
-      // Map form data to database schema - always passing the location_id
-      const submissionData = mapMaintenanceData(secureValues, equipmentType, !!initialData);
+      // Map form data to database schema - using our protected location_id
+      const submissionData = mapMaintenanceData(formValues, equipmentType, !!initialData);
+      
+      // CRITICAL FIX: Verify location_id was not changed during mapping
+      console.log('Final submission data location_id:', submissionData.location_id);
+      console.log('Original location_id:', originalLocationId);
+      
+      if (submissionData.location_id !== originalLocationId) {
+        console.error('Location ID was changed during mapping! Restoring original value.');
+        submissionData.location_id = originalLocationId;
+      }
       
       console.log('Final submission data:', JSON.stringify(submissionData, null, 2));
-      console.log('Verifying location_id is in final data:', submissionData.location_id);
       
       // Submit to database (update or create)
       let dbResponse;

@@ -23,7 +23,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
     values: form.getValues() 
   });
 
-  // Monitor form values to debug issues
+  // CRITICAL FIX: Monitor form values to debug issues with location_id
   useEffect(() => {
     try {
       const subscription = form.watch((value, { name, type }) => {
@@ -41,6 +41,9 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
         
         if (name === 'equipment_id') {
           console.log('Equipment ID changed to:', value.equipment_id, 'Event type:', type);
+          
+          // CRITICAL FIX: Check if location_id is still intact after equipment selection
+          console.log('Current location_id after equipment change:', form.getValues('location_id'));
         }
       });
       

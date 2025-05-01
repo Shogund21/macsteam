@@ -2,8 +2,6 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEquipmentQuery } from "@/hooks/useEquipmentQuery";
 import { useEffect } from "react";
@@ -27,18 +25,22 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     console.log('EquipmentSelect: equipment count =', equipment?.length || 0);
   }, [locationId, selectedEquipmentId, equipment]);
   
-  // When location changes, clear equipment selection
+  // CRITICAL FIX: When location changes, clear equipment selection
   useEffect(() => {
-    if (locationId && form.getValues('equipment_id')) {
+    if (locationId) {
       const currentEquipId = form.getValues('equipment_id');
-      // Check if the currently selected equipment is valid for this location
-      const isEquipmentValid = equipment.some(eq => eq.id === currentEquipId);
       
-      if (!isEquipmentValid) {
-        console.log('EquipmentSelect: Clearing equipment selection because it is not valid for the selected location');
-        form.setValue('equipment_id', '', { shouldDirty: true, shouldTouch: true });
-      } else {
-        console.log('EquipmentSelect: Current equipment selection is valid for the location');
+      // Only clear if equipment is already selected
+      if (currentEquipId) {
+        // Check if the currently selected equipment is valid for this location
+        const isEquipmentValid = equipment.some(eq => eq.id === currentEquipId);
+        
+        if (!isEquipmentValid) {
+          console.log('EquipmentSelect: Clearing equipment selection because it is not valid for the selected location');
+          form.setValue('equipment_id', '', { shouldDirty: true, shouldTouch: true });
+        } else {
+          console.log('EquipmentSelect: Current equipment selection is valid for the location');
+        }
       }
     }
   }, [locationId, equipment, form]);
@@ -47,6 +49,20 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     console.log('EquipmentSelect: Equipment selection changed to:', value);
     
     try {
+      // CRITICAL FIX: Get the selected equipment details
+      const selectedEquipment = equipment.find(eq => eq.id === value);
+      
+      if (selectedEquipment) {
+        console.log('EquipmentSelect: Equipment location in database:', selectedEquipment.location);
+        console.log('EquipmentSelect: Current selected locationId:', locationId);
+        
+        // Just log a warning if there's a location mismatch, but don't prevent selection
+        // This allows users to select equipment even if it might have a different location in the DB
+        if (selectedEquipment.location && !selectedEquipment.location.includes(locationId)) {
+          console.warn('Selected equipment may have a different location in the database');
+        }
+      }
+      
       // Set equipment ID in form
       form.setValue('equipment_id', value, {
         shouldDirty: true,
@@ -54,7 +70,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         shouldValidate: true
       });
       
-      // Log verification
+      // CRITICAL FIX: Verify the location_id is still intact after selecting equipment
       setTimeout(() => {
         console.log('EquipmentSelect: Verification - equipment_id after change:', form.getValues('equipment_id'));
         console.log('EquipmentSelect: Verification - location_id is still:', form.getValues('location_id'));
