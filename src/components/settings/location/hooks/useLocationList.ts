@@ -5,14 +5,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { LocationData } from "../schemas/locationSchema";
 import { useCompany } from "@/contexts/CompanyContext";
-import { useCompanyFilter } from "@/hooks/useCompanyFilter";
 
 export const useLocationList = () => {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editLocation, setEditLocation] = useState<LocationData | null>(null);
   const { currentCompany, companies } = useCompany();
-  const { applyCompanyFilter } = useCompanyFilter();
 
   // Check if we have companies data
   const hasCompanies = Array.isArray(companies) && companies.length > 0;
@@ -30,26 +28,22 @@ export const useLocationList = () => {
       console.log('Fetching locations for company:', currentCompany?.id);
       
       try {
-        // Create base query
-        const query = supabase.from("locations").select("*");
-        
-        // Apply company filter if a company is selected
-        let filteredQuery;
-        if (currentCompany?.id) {
-          console.log('Filtering by company ID:', currentCompany.id);
-          filteredQuery = query.eq('company_id', currentCompany.id);
-        } else {
-          // If no company is selected but we have companies, don't fetch any data
-          if (hasCompanies) {
-            console.log('No company selected but companies exist');
-            return [];
-          }
-          // If no companies exist at all, fetch all locations (for admin view)
-          console.log('No companies exist, fetching all locations');
-          filteredQuery = query;
+        // If no company is selected but we have companies, don't fetch any data
+        if (hasCompanies && !currentCompany?.id) {
+          console.log('No company selected but companies exist');
+          return [];
         }
         
-        const { data, error } = await filteredQuery.order("created_at", { ascending: false });
+        // Create base query
+        let query = supabase.from("locations").select("*");
+        
+        // Apply company filter if a company is selected
+        if (currentCompany?.id) {
+          console.log('Filtering by company ID:', currentCompany.id);
+          query = query.eq('company_id', currentCompany.id);
+        }
+        
+        const { data, error } = await query.order("created_at", { ascending: false });
         
         if (error) {
           console.error("Error fetching locations:", error);

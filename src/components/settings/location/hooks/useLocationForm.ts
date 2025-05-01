@@ -28,7 +28,7 @@ export const useLocationForm = (
       
       if (!company_id) {
         console.error("No company ID available from context or initial data");
-        throw new Error("Unable to determine company ID. Please ensure you're logged in correctly.");
+        throw new Error("Unable to determine company ID. Please ensure you have selected a company.");
       }
 
       console.log("Using company_id:", company_id);
