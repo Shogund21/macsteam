@@ -21,9 +21,10 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   
-  const handleEditSuccess = () => {
+  const handleEditSuccess = async () => {
     console.log("Edit successful, calling onSuccess");
-    onSuccess();
+    // Ensure data is refetched after successful edit
+    await onSuccess();
     setIsEditDialogOpen(false);
   };
 
@@ -33,7 +34,7 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
         setIsEditDialogOpen(open);
         if (!open) {
           // Force refresh when dialog is closed
-          console.log("Dialog closed, triggering refresh");
+          console.log("Edit dialog closed, triggering refresh");
           onSuccess();
         }
       }}>

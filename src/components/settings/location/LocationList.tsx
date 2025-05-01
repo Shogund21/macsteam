@@ -59,7 +59,7 @@ export const LocationList = () => {
   const handleSuccess = async () => {
     console.log("Success callback triggered, refetching data");
     try {
-      // Using await to ensure refetch completes before proceeding
+      // Force a complete refetch to get fresh data from the database
       await refetch();
       setIsDialogOpen(false);
       setEditLocation(null);
@@ -82,7 +82,8 @@ export const LocationList = () => {
           setIsDialogOpen(open);
           if (!open) {
             setEditLocation(null);
-            // Force a refetch when dialog is closed to ensure data is fresh
+            // Always force a refetch when dialog is closed
+            console.log("Dialog closed - forcing data refetch");
             refetch();
           }
         }}>

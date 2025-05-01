@@ -46,8 +46,8 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       setIsSubmitting(true);
       console.log("Submitting location with values:", values);
       
-      // Use the name if provided, otherwise use store_number
-      const locationName = values.name || values.store_number;
+      // Use the store_number as the name if name is empty
+      const locationName = values.name?.trim() || values.store_number;
       
       if (initialData?.id) {
         console.log("Updating location with ID:", initialData.id);
@@ -84,7 +84,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
         is_active: true
       });
       
-      // Explicitly call onSuccess callback to trigger data refresh
+      // Explicitly call onSuccess callback to trigger immediate data refresh
       if (onSuccess) {
         console.log("Calling onSuccess callback to refresh data");
         onSuccess();

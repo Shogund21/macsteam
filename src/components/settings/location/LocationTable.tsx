@@ -13,7 +13,7 @@ interface LocationTableProps {
   locations: Array<{
     id: string;
     store_number: string;
-    name: string;
+    name?: string;
     is_active?: boolean;
     created_at?: string;
     updated_at?: string;
