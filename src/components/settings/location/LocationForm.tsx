@@ -46,7 +46,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       setIsSubmitting(true);
       console.log("Submitting location with values:", values);
       
-      // Use the store_number as the name if name is empty
+      // Use the store_number as the name if name is empty or just whitespace
       const locationName = values.name?.trim() || values.store_number;
       
       if (initialData?.id) {
@@ -58,6 +58,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
             name: locationName,
             is_active: values.is_active,
             updated_at: new Date().toISOString(),
+            company_id: null // Explicitly set company_id for RLS policy
           })
           .eq("id", initialData.id);
 
@@ -70,9 +71,13 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
           store_number: values.store_number,
           name: locationName,
           is_active: values.is_active,
+          company_id: null // Explicitly set company_id for RLS policy
         });
 
-        if (error) throw error;
+        if (error) {
+          console.error("Error details:", error);
+          throw error;
+        }
         console.log("Location added successfully!");
         toast({ title: "Success", description: "Location added successfully" });
       }
@@ -87,7 +92,7 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
       // Explicitly call onSuccess callback to trigger immediate data refresh
       if (onSuccess) {
         console.log("Calling onSuccess callback to refresh data");
-        onSuccess();
+        await onSuccess(); // Use await to ensure the refresh completes
       }
     } catch (error) {
       console.error("Error saving location:", error);

@@ -41,7 +41,7 @@ export const LocationTable = ({ locations, onEdit, onDelete, onSuccess }: Locati
             locations.map((location) => (
               <TableRow key={location.id}>
                 <TableCell className="font-medium">{location.store_number}</TableCell>
-                <TableCell>{location.name || location.store_number}</TableCell>
+                <TableCell>{location.name?.trim() || location.store_number}</TableCell>
                 <TableCell>
                   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                     location.is_active !== false ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'

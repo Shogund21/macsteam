@@ -23,9 +23,13 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
   
   const handleEditSuccess = async () => {
     console.log("Edit successful, calling onSuccess");
-    // Ensure data is refetched after successful edit
-    await onSuccess();
-    setIsEditDialogOpen(false);
+    try {
+      // Ensure data is refetched after successful edit
+      await onSuccess();
+      setIsEditDialogOpen(false);
+    } catch (error) {
+      console.error("Error in handleEditSuccess:", error);
+    }
   };
 
   return (
