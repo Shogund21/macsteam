@@ -14,24 +14,40 @@ export const useLocationList = () => {
   const { currentCompany, companies } = useCompany();
   const { applyCompanyFilter } = useCompanyFilter();
 
+  // Check if we have companies data
+  const hasCompanies = Array.isArray(companies) && companies.length > 0;
+
+  // Log the company context for debugging
+  console.log('useLocationList context:', { 
+    currentCompanyId: currentCompany?.id, 
+    hasCompanies, 
+    companiesCount: companies?.length 
+  });
+
   const { data: locations, refetch, isLoading } = useQuery({
     queryKey: ["locations", currentCompany?.id],
     queryFn: async () => {
       console.log('Fetching locations for company:', currentCompany?.id);
       
-      if (!currentCompany?.id && companies.length > 0) {
-        console.warn('No company selected but companies exist, cannot fetch locations');
-        return [];
-      }
-
       try {
-        const query = supabase
-          .from("locations")
-          .select("*");
+        // Create base query
+        const query = supabase.from("locations").select("*");
         
-        const filteredQuery = currentCompany?.id ? 
-          query.eq('company_id', currentCompany.id) : 
-          query;
+        // Apply company filter if a company is selected
+        let filteredQuery;
+        if (currentCompany?.id) {
+          console.log('Filtering by company ID:', currentCompany.id);
+          filteredQuery = query.eq('company_id', currentCompany.id);
+        } else {
+          // If no company is selected but we have companies, don't fetch any data
+          if (hasCompanies) {
+            console.log('No company selected but companies exist');
+            return [];
+          }
+          // If no companies exist at all, fetch all locations (for admin view)
+          console.log('No companies exist, fetching all locations');
+          filteredQuery = query;
+        }
         
         const { data, error } = await filteredQuery.order("created_at", { ascending: false });
         
@@ -40,19 +56,20 @@ export const useLocationList = () => {
           throw error;
         }
         
-        console.log('Fetched locations:', data);
+        console.log('Fetched locations:', data?.length || 0);
         return data || [];
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error in location query:", error);
         toast({
           variant: "destructive",
-          title: "Error",
-          description: "Failed to fetch locations. Please try again.",
+          title: "Error fetching locations",
+          description: error.message || "Failed to fetch locations. Please try again.",
         });
         return [];
       }
     },
-    enabled: companies.length > 0,
+    // Always enable the query to properly handle all states
+    enabled: true,
   });
 
   const handleDelete = async (id: string) => {
@@ -119,7 +136,8 @@ export const useLocationList = () => {
     openAddDialog,
     closeDialog,
     refetch,
-    hasCompanies: companies.length > 0,
-    currentCompany
+    hasCompanies,
+    currentCompany,
+    companies
   };
 };

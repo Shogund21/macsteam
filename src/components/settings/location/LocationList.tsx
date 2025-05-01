@@ -32,6 +32,12 @@ export const LocationList = () => {
     currentCompanyId: currentCompany?.id 
   });
 
+  // Check if we need to show the "Add Company First" message
+  const showAddCompanyMessage = companies.length === 0;
+  
+  // Check if we need to show the "Select Company" message
+  const showSelectCompanyMessage = !showAddCompanyMessage && !currentCompany;
+
   return (
     <div className="space-y-4">
       <Dialog 
@@ -46,6 +52,7 @@ export const LocationList = () => {
         <LocationListHeader 
           locationsCount={locations?.length || 0} 
           onAddClick={openAddDialog} 
+          disabled={showAddCompanyMessage || showSelectCompanyMessage}
         />
         
         <LocationFormDialog
@@ -62,7 +69,7 @@ export const LocationList = () => {
         />
       </Dialog>
 
-      {companies.length === 0 ? (
+      {showAddCompanyMessage ? (
         <div className="text-center py-6 bg-gray-50 rounded-md border p-4">
           <p className="text-gray-600 mb-4">No companies found. Please add a company first.</p>
           <Button 
@@ -74,8 +81,8 @@ export const LocationList = () => {
             Add Company
           </Button>
         </div>
-      ) : !currentCompany ? (
-        <div className="text-center py-6 text-gray-500">
+      ) : showSelectCompanyMessage ? (
+        <div className="text-center py-6 bg-gray-50 rounded-md border p-4 text-gray-500">
           Please select a company to view locations.
         </div>
       ) : isLoading ? (

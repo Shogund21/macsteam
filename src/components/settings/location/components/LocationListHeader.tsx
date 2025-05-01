@@ -6,11 +6,13 @@ import { DialogTrigger } from "@/components/ui/dialog";
 interface LocationListHeaderProps {
   locationsCount: number;
   onAddClick: () => void;
+  disabled?: boolean;
 }
 
 export const LocationListHeader = ({ 
   locationsCount, 
-  onAddClick 
+  onAddClick,
+  disabled = false
 }: LocationListHeaderProps) => {
   return (
     <div className="flex justify-between items-center">
@@ -21,11 +23,12 @@ export const LocationListHeader = ({
         </p>
       </div>
       
-      <DialogTrigger asChild>
+      <DialogTrigger asChild disabled={disabled}>
         <Button 
           onClick={onAddClick}
           variant="default"
           className="bg-blue-600 hover:bg-blue-700 text-white"
+          disabled={disabled}
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Location
