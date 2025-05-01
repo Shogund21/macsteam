@@ -1,3 +1,4 @@
+
 import {
   Dialog,
   DialogContent,
@@ -21,7 +22,8 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
     return `${check.technician.firstName} ${check.technician.lastName}`;
   };
 
-  const isAHU = check.equipment_type === 'ahu';
+  // Determine equipment type
+  const equipmentType = check.equipment_type || 'general';
 
   const basicFields = [
     { label: "Date", value: new Date(check.check_date || "") },
@@ -30,6 +32,7 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
     { label: "Technician", value: getTechnicianName() },
   ];
 
+  // AHU-specific fields
   const ahuFields = [
     { label: "Air Filter Cleaned", value: check.air_filter_cleaned },
     { label: "Fan Belt Condition", value: check.fan_belt_condition },
@@ -49,13 +52,47 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
     });
   }
 
+  // Elevator-specific fields
+  const elevatorFields = [
+    { label: "Elevator Operation", value: check.elevator_operation },
+    { label: "Door Operation", value: check.door_operation },
+    { label: "Emergency Phone", value: check.emergency_phone },
+    { label: "Elevator Lighting", value: check.elevator_lighting },
+    { label: "Safety Features Status", value: check.safety_features_status },
+  ].filter(field => field.value);
+
+  // Restroom-specific fields
+  const restroomFields = [
+    { label: "Sink Status", value: check.sink_status },
+    { label: "Toilet Status", value: check.toilet_status },
+    { label: "Urinal Status", value: check.urinal_status },
+    { label: "Hand Dryer Status", value: check.hand_dryer_status },
+    { label: "Cleanliness Level", value: check.cleanliness_level },
+    { label: "Soap Supply", value: check.soap_supply },
+    { label: "Toilet Paper Supply", value: check.toilet_paper_supply },
+    { label: "Floor Condition", value: check.floor_condition },
+  ].filter(field => field.value);
+
+  // Cooling Tower fields
+  const coolingTowerFields = [
+    { label: "Fill Media Condition", value: check.fill_media_condition },
+    { label: "Drift Eliminators Condition", value: check.drift_eliminators_condition },
+    { label: "Fan Assembly Status", value: check.fan_assembly_status },
+    { label: "Motor Lubrication Status", value: check.motor_lubrication_status },
+    { label: "Pump Seals Condition", value: check.pump_seals_condition },
+    { label: "Strainer Status", value: check.strainer_status },
+    { label: "Sump Basin Condition", value: check.sump_basin_condition },
+    { label: "Water System Status", value: check.water_system_status },
+  ].filter(field => field.value);
+
+  // Standard HVAC fields (chiller and general)
   const standardFields = [
     { label: "Chiller Pressure (PSI)", value: check.chiller_pressure_reading },
     { label: "Chiller Temperature (°F)", value: check.chiller_temperature_reading },
     { label: "Air Filter Status", value: check.air_filter_status },
     { label: "Belt Condition", value: check.belt_condition },
     { label: "Refrigerant Level", value: check.refrigerant_level },
-  ];
+  ].filter(field => field.value);
 
   const observationFields = [
     { label: "Unusual Noise", value: check.unusual_noise },
@@ -64,13 +101,63 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
     ...(check.vibration_observed ? [{ label: "Vibration Description", value: check.vibration_description }] : []),
     { label: "Oil Level Status", value: check.oil_level_status },
     { label: "Condenser Condition", value: check.condenser_condition },
-  ];
+  ].filter(field => field.value);
 
   const notesFields = [
     { label: "Troubleshooting Notes", value: check.troubleshooting_notes },
     { label: "Corrective Actions", value: check.corrective_actions },
     { label: "Maintenance Recommendations", value: check.maintenance_recommendations },
+    { label: "Restroom Notes", value: check.restroom_notes },
+    { label: "Elevator Notes", value: check.elevator_notes },
   ].filter(field => field.value);
+
+  const getNotes = () => {
+    if (equipmentType === 'restroom' && check.restroom_notes) {
+      return [{ label: "Notes", value: check.restroom_notes }];
+    }
+    if (equipmentType === 'elevator' && check.elevator_notes) {
+      return [{ label: "Notes", value: check.elevator_notes }];
+    }
+    if (check.notes) {
+      return [{ label: "Notes", value: check.notes }];
+    }
+    return [];
+  };
+
+  // Get the appropriate fields based on equipment type
+  const getEquipmentSpecificFields = () => {
+    switch (equipmentType.toLowerCase()) {
+      case 'ahu':
+        return (
+          <MaintenanceDetailsSection title="AHU Specific Checks" fields={ahuFields} />
+        );
+      case 'elevator':
+        return (
+          <MaintenanceDetailsSection title="Elevator Inspection" fields={elevatorFields} />
+        );
+      case 'restroom':
+        return (
+          <MaintenanceDetailsSection title="Restroom Inspection" fields={restroomFields} />
+        );
+      case 'cooling_tower':
+        return (
+          <MaintenanceDetailsSection title="Cooling Tower Inspection" fields={coolingTowerFields} />
+        );
+      case 'chiller':
+      case 'general':
+      default:
+        return (
+          <>
+            {standardFields.length > 0 && (
+              <MaintenanceDetailsSection title="Equipment Readings" fields={standardFields} />
+            )}
+            {observationFields.length > 0 && (
+              <MaintenanceDetailsSection title="Observations" fields={observationFields} />
+            )}
+          </>
+        );
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -89,29 +176,13 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
         <ScrollArea className="max-h-[60vh] px-1">
           <div className="space-y-6">
             <MaintenanceDetailsSection title="Basic Information" fields={basicFields} />
-
-            {isAHU ? (
-              <>
-                <MaintenanceDetailsSection title="AHU Specific Checks" fields={ahuFields} />
-                {notesFields.length > 0 && (
-                  <MaintenanceDetailsSection title="Notes and Recommendations" fields={notesFields} />
-                )}
-              </>
-            ) : (
-              <>
-                <MaintenanceDetailsSection title="Equipment Readings" fields={standardFields} />
-                <MaintenanceDetailsSection title="Observations" fields={observationFields} />
-                {notesFields.length > 0 && (
-                  <MaintenanceDetailsSection title="Notes and Recommendations" fields={notesFields} />
-                )}
-              </>
-            )}
             
-            {check.notes && (
-              <MaintenanceDetailsSection 
-                title="Additional Notes" 
-                fields={[{ label: "Notes", value: check.notes }]} 
-              />
+            {/* Show only equipment-specific fields */}
+            {getEquipmentSpecificFields()}
+            
+            {/* Show notes if any */}
+            {notesFields.length > 0 && (
+              <MaintenanceDetailsSection title="Notes and Recommendations" fields={notesFields} />
             )}
           </div>
         </ScrollArea>

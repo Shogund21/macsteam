@@ -40,6 +40,21 @@ const MaintenanceTableRow = ({
     }
   };
 
+  const getEquipmentTypeDisplay = (type: string | null) => {
+    if (!type) return "";
+    
+    const typeMap: Record<string, string> = {
+      ahu: "AHU",
+      chiller: "Chiller",
+      cooling_tower: "Cooling Tower",
+      elevator: "Elevator",
+      restroom: "Restroom",
+      general: "General"
+    };
+    
+    return typeMap[type] || type.charAt(0).toUpperCase() + type.slice(1);
+  };
+
   const getTechnicianName = () => {
     if (!check.technician) return "Unassigned";
     return `${check.technician.firstName} ${check.technician.lastName}`;
@@ -50,9 +65,16 @@ const MaintenanceTableRow = ({
       <div className="border rounded-lg p-4 space-y-4 bg-white shadow-sm hover:shadow transition-shadow duration-200">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-2 w-full md:w-auto">
-            <h3 className="font-semibold">
-              {check.equipment?.name || "Equipment Not Available"}
-            </h3>
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-semibold">
+                {check.equipment?.name || "Equipment Not Available"}
+              </h3>
+              {check.equipment_type && (
+                <Badge variant="outline" className="bg-gray-100 text-gray-700 border-gray-300">
+                  {getEquipmentTypeDisplay(check.equipment_type)}
+                </Badge>
+              )}
+            </div>
             <div className="text-sm text-gray-600 space-y-1">
               <p>Date: {format(new Date(check.check_date || ""), "PPP")}</p>
               <p>Location: {check.equipment?.location || "Location Not Available"}</p>
