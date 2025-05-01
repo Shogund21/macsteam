@@ -21,6 +21,8 @@ export const useCompanyFilter = () => {
     if (companyId) {
       return query.eq('company_id', companyId);
     }
+    // If no company ID is selected, don't apply any filter
+    // This allows fetching all locations if needed
     return query;
   };
 

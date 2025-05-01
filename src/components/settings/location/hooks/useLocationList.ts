@@ -19,28 +19,40 @@ export const useLocationList = () => {
     queryFn: async () => {
       console.log('Fetching locations for company:', currentCompany?.id);
       
-      if (!currentCompany?.id) {
-        console.warn('No company ID available, cannot fetch locations');
+      if (!currentCompany?.id && companies.length > 0) {
+        console.warn('No company selected but companies exist, cannot fetch locations');
         return [];
       }
 
-      const query = supabase
-        .from("locations")
-        .select("*");
-      
-      const filteredQuery = applyCompanyFilter(query);
-      
-      const { data, error } = await filteredQuery.order("created_at", { ascending: false });
-      
-      if (error) {
-        console.error("Error fetching locations:", error);
-        throw error;
+      try {
+        const query = supabase
+          .from("locations")
+          .select("*");
+        
+        const filteredQuery = currentCompany?.id ? 
+          query.eq('company_id', currentCompany.id) : 
+          query;
+        
+        const { data, error } = await filteredQuery.order("created_at", { ascending: false });
+        
+        if (error) {
+          console.error("Error fetching locations:", error);
+          throw error;
+        }
+        
+        console.log('Fetched locations:', data);
+        return data || [];
+      } catch (error) {
+        console.error("Error in location query:", error);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: "Failed to fetch locations. Please try again.",
+        });
+        return [];
       }
-      
-      console.log('Fetched locations:', data);
-      return data || [];
     },
-    enabled: !!currentCompany?.id,
+    enabled: companies.length > 0,
   });
 
   const handleDelete = async (id: string) => {

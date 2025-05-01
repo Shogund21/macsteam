@@ -25,6 +25,13 @@ export const LocationList = () => {
     currentCompany
   } = useLocationList();
 
+  console.log('LocationList rendering with:', { 
+    locationsCount: locations?.length, 
+    isLoading, 
+    hasCompanies: companies.length > 0,
+    currentCompanyId: currentCompany?.id 
+  });
+
   return (
     <div className="space-y-4">
       <Dialog 
