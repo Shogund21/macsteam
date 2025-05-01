@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,28 +11,17 @@ export const useLocationList = () => {
   const [editLocation, setEditLocation] = useState<LocationData | null>(null);
   const { currentCompany, companies } = useCompany();
 
-  // Check if we have companies data
-  const hasCompanies = Array.isArray(companies) && companies.length > 0;
-
-  // Log the company context for debugging
   console.log('useLocationList context:', { 
     currentCompanyId: currentCompany?.id, 
-    hasCompanies, 
     companiesCount: companies?.length 
   });
 
   const { data: locations, refetch, isLoading } = useQuery({
     queryKey: ["locations", currentCompany?.id],
     queryFn: async () => {
-      console.log('Fetching locations for company:', currentCompany?.id);
+      console.log('Fetching locations');
       
       try {
-        // If no company is selected but we have companies, don't fetch any data
-        if (hasCompanies && !currentCompany?.id) {
-          console.log('No company selected but companies exist');
-          return [];
-        }
-        
         // Create base query
         let query = supabase.from("locations").select("*");
         
@@ -62,7 +50,7 @@ export const useLocationList = () => {
         return [];
       }
     },
-    // Always enable the query to properly handle all states
+    // Always enable the query
     enabled: true,
   });
 
@@ -130,8 +118,6 @@ export const useLocationList = () => {
     openAddDialog,
     closeDialog,
     refetch,
-    hasCompanies,
-    currentCompany,
-    companies
+    currentCompany
   };
 };

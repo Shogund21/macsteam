@@ -18,12 +18,19 @@ export const useCompanyFilter = () => {
   }, [currentCompany]);
 
   const applyCompanyFilter = <T>(
-    query: PostgrestFilterBuilder<any, any, T[]>
+    query: PostgrestFilterBuilder<any, any, T[]>,
+    skipFilter = false
   ): PostgrestFilterBuilder<any, any, T[]> => {
+    if (skipFilter) {
+      console.log('applyCompanyFilter: Skipping filter as requested');
+      return query;
+    }
+    
     if (companyId) {
       console.log('applyCompanyFilter: Applying filter for company', companyId);
       return query.eq('company_id', companyId);
     }
+    
     // If no company ID is selected, don't apply any filter
     console.log('applyCompanyFilter: No company ID to filter by');
     return query;

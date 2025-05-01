@@ -13,7 +13,7 @@ export const useLocationForm = (
 ) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { currentCompany } = useCompany(); // Use the CompanyContext to get the current company
+  const { currentCompany } = useCompany();
 
   const onSubmit = async (values: LocationFormValues) => {
     try {
@@ -24,13 +24,7 @@ export const useLocationForm = (
       const locationName = values.name?.trim() || values.store_number;
       
       // Get the company_id from initialData or from the CompanyContext
-      let company_id = initialData?.company_id || currentCompany?.id;
-      
-      if (!company_id) {
-        console.error("No company ID available from context or initial data");
-        throw new Error("Unable to determine company ID. Please ensure you have selected a company.");
-      }
-
+      let company_id = initialData?.company_id || currentCompany?.id || null;
       console.log("Using company_id:", company_id);
       
       const locationData = {
@@ -86,7 +80,7 @@ export const useLocationForm = (
       // Explicitly call onSuccess callback to trigger immediate data refresh
       if (onSuccess) {
         console.log("Calling onSuccess callback to refresh data");
-        await onSuccess(); // Use await to ensure the refresh completes
+        await onSuccess();
       }
     } catch (error: any) {
       console.error("Error saving location:", error);
