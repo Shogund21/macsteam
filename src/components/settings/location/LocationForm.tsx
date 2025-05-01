@@ -77,8 +77,16 @@ export const LocationForm = ({ onSuccess, initialData }: LocationFormProps) => {
           throw new Error("Failed to retrieve company information. Please try again.");
         }
         
-        if (data) {
-          company_id = data.id;
+        // The function returns an array with a single object containing a company property
+        // which is a JSON object with id and name
+        if (data && data.length > 0 && data[0].company) {
+          // Parse the JSON company object if needed (it might already be parsed)
+          const companyData = typeof data[0].company === 'string' 
+            ? JSON.parse(data[0].company) 
+            : data[0].company;
+          
+          company_id = companyData.id;
+          console.log("Retrieved company_id:", company_id);
         }
       }
 
