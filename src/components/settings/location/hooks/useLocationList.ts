@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,29 +10,23 @@ export const useLocationList = () => {
   const { toast } = useToast();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [editLocation, setEditLocation] = useState<LocationData | null>(null);
-  const { currentCompany, companies } = useCompany();
+  const { currentCompany } = useCompany();
 
   console.log('useLocationList context:', { 
-    currentCompanyId: currentCompany?.id, 
-    companiesCount: companies?.length 
+    currentCompanyId: currentCompany?.id
   });
 
   const { data: locations, refetch, isLoading } = useQuery({
-    queryKey: ["locations", currentCompany?.id],
+    queryKey: ["locations"],
     queryFn: async () => {
-      console.log('Fetching locations');
+      console.log('Fetching all locations');
       
       try {
-        // Create base query
-        let query = supabase.from("locations").select("*");
-        
-        // Apply company filter if a company is selected
-        if (currentCompany?.id) {
-          console.log('Filtering by company ID:', currentCompany.id);
-          query = query.eq('company_id', currentCompany.id);
-        }
-        
-        const { data, error } = await query.order("created_at", { ascending: false });
+        // Fetch all locations without company filtering
+        const { data, error } = await supabase
+          .from("locations")
+          .select("*")
+          .order("created_at", { ascending: false });
         
         if (error) {
           console.error("Error fetching locations:", error);

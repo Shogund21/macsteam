@@ -23,15 +23,16 @@ export const useLocationForm = (
       // Use the store_number as the name if name is empty or just whitespace
       const locationName = values.name?.trim() || values.store_number;
       
-      // Get the company_id from initialData or from the CompanyContext
-      let company_id = initialData?.company_id || currentCompany?.id || null;
+      // Get the company_id from initialData or from the CompanyContext (but make it optional)
+      const company_id = initialData?.company_id || currentCompany?.id || null;
       console.log("Using company_id:", company_id);
       
       const locationData = {
         store_number: values.store_number,
         name: locationName,
         is_active: values.is_active,
-        company_id: company_id,
+        // Only include company_id if it exists
+        ...(company_id ? { company_id } : {})
       };
 
       console.log("Prepared location data:", locationData);

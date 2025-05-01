@@ -47,21 +47,20 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
           }
         }}
       >
-        <DialogTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation();
-              console.log("Edit button clicked for location:", location);
-              setIsEditDialogOpen(true);
-            }}
-            className="h-8 w-8"
-          >
-            <Pencil className="h-4 w-4" />
-            <span className="sr-only">Edit</span>
-          </Button>
-        </DialogTrigger>
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={(e) => {
+            e.stopPropagation();
+            console.log("Edit button clicked for location:", location);
+            setIsEditDialogOpen(true);
+          }}
+          className="h-8 w-8"
+        >
+          <Pencil className="h-4 w-4" />
+          <span className="sr-only">Edit</span>
+        </Button>
+        
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Edit Location</DialogTitle>
@@ -77,17 +76,19 @@ export const LocationActions = ({ location, onEdit, onDelete, onSuccess }: Locat
       </Dialog>
       
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-        <DialogTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Trash2 className="h-4 w-4" />
-            <span className="sr-only">Delete</span>
-          </Button>
-        </DialogTrigger>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsDeleteDialogOpen(true);
+          }}
+        >
+          <Trash2 className="h-4 w-4" />
+          <span className="sr-only">Delete</span>
+        </Button>
+        
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>

@@ -22,11 +22,17 @@ export const LocationList = () => {
 
   console.log('LocationList rendering with:', { 
     locationsCount: locations?.length, 
-    isLoading
+    isLoading,
+    dialogOpen: isDialogOpen
   });
 
   return (
     <div className="space-y-4">
+      <LocationListHeader 
+        locationsCount={locations?.length || 0} 
+        onAddClick={openAddDialog} 
+      />
+      
       <Dialog 
         open={isDialogOpen} 
         onOpenChange={(open) => {
@@ -36,11 +42,6 @@ export const LocationList = () => {
           }
         }}
       >
-        <LocationListHeader 
-          locationsCount={locations?.length || 0} 
-          onAddClick={openAddDialog} 
-        />
-        
         <LocationFormDialog
           isOpen={isDialogOpen}
           onOpenChange={setIsDialogOpen}

@@ -19,7 +19,7 @@ export const useCompanyFilter = () => {
 
   const applyCompanyFilter = <T>(
     query: PostgrestFilterBuilder<any, any, T[]>,
-    skipFilter = false
+    skipFilter = true // Default to skipping the filter
   ): PostgrestFilterBuilder<any, any, T[]> => {
     if (skipFilter) {
       console.log('applyCompanyFilter: Skipping filter as requested');
