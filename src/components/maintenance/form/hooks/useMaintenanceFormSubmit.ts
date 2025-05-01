@@ -24,6 +24,7 @@ export const useMaintenanceFormSubmit = (
       console.log('Update mode:', !!initialData);
       console.log('Location ID in form values:', values.location_id);
       
+      // Validate location is present
       if (!values.location_id) {
         console.error('No location_id provided in form values');
         toast({
@@ -34,6 +35,28 @@ export const useMaintenanceFormSubmit = (
         throw new Error('Location is required');
       }
       
+      // Validate that equipment is selected
+      if (!values.equipment_id) {
+        console.error('No equipment_id provided in form values');
+        toast({
+          variant: "destructive",
+          title: "Missing Equipment",
+          description: "Please select equipment before submitting.",
+        });
+        throw new Error('Equipment is required');
+      }
+      
+      // Validate that technician is selected
+      if (!values.technician_id) {
+        console.error('No technician_id provided in form values');
+        toast({
+          variant: "destructive",
+          title: "Missing Technician",
+          description: "Please select a technician before submitting.",
+        });
+        throw new Error('Technician is required');
+      }
+      
       if (initialData) {
         console.log('Initial data ID for update:', initialData.id);
         console.log('Initial data location_id:', initialData.location_id);
@@ -41,12 +64,22 @@ export const useMaintenanceFormSubmit = (
       
       // Get equipment details to determine type
       const equipment = await maintenanceDbService.getEquipment(values.equipment_id);
+      console.log('Retrieved equipment details:', equipment);
+      
+      // Verify equipment belongs to selected location
+      if (equipment.location !== values.location_id) {
+        console.warn('Equipment location mismatch:', {
+          equipment_location: equipment.location,
+          selected_location: values.location_id
+        });
+        
+        // We'll allow this but log a warning - the form should prevent this situation
+        console.warn('Proceeding with submission despite location mismatch');
+      }
       
       // Determine equipment type from name
       const equipmentType = detectEquipmentType(equipment.name);
       console.log('Detected equipment type:', equipmentType);
-      console.log('Equipment associated with location:', equipment.location);
-      console.log('Form location_id:', values.location_id);
       
       // Validate equipment type
       if (!isValidEquipmentType(equipmentType)) {
@@ -56,13 +89,6 @@ export const useMaintenanceFormSubmit = (
       
       // Map form data to database schema
       const submissionData = mapMaintenanceData(values, equipmentType, !!initialData);
-      
-      // Ensure location_id is in the submission data
-      if (!submissionData.location_id) {
-        console.error('No location_id in submission data after mapping');
-        submissionData.location_id = values.location_id;
-        console.log('Manually added location_id to submission data:', values.location_id);
-      }
       
       console.log('Final submission data:', JSON.stringify(submissionData, null, 2));
       

@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UseFormReturn } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface LocationSelectProps {
   form: UseFormReturn<any>;
@@ -12,6 +12,7 @@ interface LocationSelectProps {
 
 const LocationSelect = ({ form }: LocationSelectProps) => {
   const selectedLocationId = form.watch('location_id');
+  const { toast } = useToast();
 
   const { data: locations = [], isLoading } = useQuery({
     queryKey: ['locations'],
@@ -49,6 +50,20 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
     console.log('LocationSelect: Changing location_id to:', value);
     
     try {
+      // Verify the location ID is valid before setting it
+      const selectedLocation = locations.find(loc => loc.id === value);
+      
+      if (!selectedLocation) {
+        console.warn('Selected location ID not found in available locations:', value);
+        toast({
+          title: "Warning",
+          description: "The selected location may not be valid",
+          variant: "destructive",
+        });
+      } else {
+        console.log('Valid location selected:', selectedLocation.name);
+      }
+      
       // Update location_id in the form
       form.setValue('location_id', value, { 
         shouldDirty: true, 
@@ -56,16 +71,16 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
         shouldValidate: true 
       });
       
-      // Log the form state after making changes
-      console.log('LocationSelect: Form state after change:', {
-        location_id: form.getValues('location_id'),
-        equipment_id: form.getValues('equipment_id')
-      });
-      
       // Clear equipment selection when location changes
       form.setValue('equipment_id', '', { 
         shouldDirty: true, 
         shouldTouch: true 
+      });
+      
+      // Log the form state after making changes
+      console.log('LocationSelect: Form state after change:', {
+        location_id: form.getValues('location_id'),
+        equipment_id: form.getValues('equipment_id')
       });
     } catch (error) {
       console.error('Error in handleLocationChange:', error);

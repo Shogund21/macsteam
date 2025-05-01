@@ -20,13 +20,14 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   useEffect(() => {
     const fetchEquipment = async () => {
       if (!locationId) {
+        console.log('No location selected, clearing equipment list');
         setEquipment([]);
         return;
       }
 
       setLoading(true);
       try {
-        console.log('Fetching equipment for location:', locationId);
+        console.log('Fetching equipment for location ID:', locationId);
         const { data, error } = await supabase
           .from('equipment')
           .select('*')
@@ -43,7 +44,13 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         }
         
         console.log('Found equipment items:', data?.length || 0, 'items for location', locationId);
-        console.log('Equipment data:', data);
+        
+        if (data && data.length === 0) {
+          console.log('No equipment found for location:', locationId);
+        } else {
+          console.log('Equipment data:', data);
+        }
+        
         setEquipment(data || []);
       } catch (error) {
         console.error('Error fetching equipment:', error);
@@ -55,22 +62,38 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     fetchEquipment();
   }, [locationId, toast]);
 
-  // Don't clear equipment selection when location changes, only update available options
-  // and clear if the current selection isn't valid for the new location
+  // Clear equipment selection when location changes
   useEffect(() => {
     const currentEquipmentId = form.getValues('equipment_id');
-    if (currentEquipmentId && equipment.length > 0) {
-      // Check if current equipment is valid for this location
-      const isValidForLocation = equipment.some(eq => eq.id === currentEquipmentId);
-      if (!isValidForLocation) {
-        // Only clear if the equipment is not valid for this location
-        console.log('Clearing equipment_id because current selection is not valid for this location');
+    
+    if (currentEquipmentId) {
+      if (!locationId) {
+        // If location is cleared, clear equipment as well
+        console.log('Clearing equipment selection because location was cleared');
         form.setValue('equipment_id', '', { shouldValidate: true });
-      } else {
-        console.log('Keeping equipment_id as it is valid for this location:', currentEquipmentId);
+      } else if (equipment.length > 0) {
+        // Check if current equipment is valid for this location
+        const isValidForLocation = equipment.some(eq => eq.id === currentEquipmentId);
+        if (!isValidForLocation) {
+          // Only clear if the equipment is not valid for this location
+          console.log('Clearing equipment_id because current selection is not valid for this location');
+          form.setValue('equipment_id', '', { shouldValidate: true });
+        } else {
+          console.log('Keeping equipment_id as it is valid for this location:', currentEquipmentId);
+        }
       }
     }
-  }, [equipment, form]);
+  }, [equipment, form, locationId]);
+
+  // Equipment selection handler
+  const handleEquipmentChange = (value: string) => {
+    console.log('Selecting equipment:', value);
+    form.setValue('equipment_id', value, { 
+      shouldDirty: true, 
+      shouldTouch: true,
+      shouldValidate: true 
+    });
+  };
 
   return (
     <FormField
@@ -80,7 +103,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         <FormItem>
           <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
           <Select
-            onValueChange={field.onChange}
+            onValueChange={handleEquipmentChange}
             value={field.value || ""}
             defaultValue={field.value || ""}
             disabled={!locationId || loading}

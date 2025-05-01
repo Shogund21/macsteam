@@ -5,7 +5,7 @@ import LocationSelect from "./selectors/LocationSelect";
 import EquipmentSelect from "./selectors/EquipmentSelect";
 import TechnicianSelect from "./selectors/TechnicianSelect";
 import { useEffect } from "react";
-import { toast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface MaintenanceBasicInfoProps {
   form: UseFormReturn<any>;
@@ -38,42 +38,10 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
             touchedFields: form.formState.touchedFields,
             errors: form.formState.errors
           });
-          
-          // If location changed but no value is present, show warning
-          if (!value.location_id) {
-            console.warn('Location ID was cleared or set to empty value');
-          }
-          
-          // Verify the selected location exists in the database
-          // Note: Equipment objects have a 'location' string field, not 'location_id'
-          // So we're comparing with the location string instead
-          const locationExists = equipment.some(eq => eq.location === value.location_id);
-          if (!locationExists && value.location_id) {
-            console.warn('Selected location ID may not exist in database:', value.location_id);
-            toast({
-              title: "Warning",
-              description: "The selected location ID may not be valid",
-              variant: "destructive",
-            });
-          }
         }
         
         if (name === 'equipment_id') {
           console.log('Equipment ID changed to:', value.equipment_id, 'Event type:', type);
-          
-          // Check if equipment belongs to selected location
-          if (value.equipment_id && value.location_id) {
-            const selectedEquipment = equipment.find(eq => eq.id === value.equipment_id);
-            // Note: We need to compare the equipment's location string to the location ID
-            // This might require additional logic to properly match them if they aren't directly comparable
-            if (selectedEquipment && selectedEquipment.location !== value.location_id) {
-              console.warn('Selected equipment may not belong to the selected location:', {
-                equipmentId: value.equipment_id,
-                equipmentLocation: selectedEquipment.location,
-                selectedLocation: value.location_id
-              });
-            }
-          }
         }
       });
       
@@ -81,7 +49,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
     } catch (error) {
       console.error('Error in form watch subscription:', error);
     }
-  }, [form, equipment]);
+  }, [form]);
 
   return (
     <div className="space-y-6">

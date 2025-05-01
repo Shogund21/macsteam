@@ -14,14 +14,17 @@ export const mapMaintenanceData = (
 ) => {
   console.log('Mapping maintenance data with location_id:', values.location_id);
   
+  if (!values.location_id) {
+    console.error('WARNING: No location_id provided in form values during mapping');
+  }
+  
   // Base data common to all equipment types
-  // Always include location_id - this is a required field now
   const baseData = {
     equipment_id: values.equipment_id,
     technician_id: values.technician_id,
     equipment_type: equipmentType,
     status: 'completed' as const,
-    // Ensure location_id is always included
+    // Explicitly set location_id from form values
     location_id: values.location_id
   };
 
