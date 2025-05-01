@@ -2,8 +2,8 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { useEquipmentQuery } from "@/hooks/useEquipmentQuery";
-import { toast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface EquipmentSelectProps {
   form: UseFormReturn<any>;
@@ -11,71 +11,52 @@ interface EquipmentSelectProps {
 }
 
 const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
-  const { data: equipmentList = [], isLoading, error } = useEquipmentQuery(locationId);
-  const currentEquipmentId = form.watch('equipment_id');
+  const [equipment, setEquipment] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
-  console.log('Equipment Select Render:', {
-    locationId,
-    equipmentCount: equipmentList?.length,
-    equipment: equipmentList,
-    currentEquipmentId
-  });
-
-  // Log any errors from equipment query
-  if (error) {
-    console.error('Error fetching equipment:', error);
-    toast({
-      title: "Error loading equipment",
-      description: error instanceof Error ? error.message : "Failed to load equipment for this location",
-      variant: "destructive",
-    });
-  }
-
-  const handleEquipmentChange = (value: string) => {
-    try {
-      console.log('EquipmentSelect: Setting equipment_id to:', value);
-      
-      // Log form state before change
-      console.log('EquipmentSelect: Form state before change:', {
-        locationId: form.getValues('location_id'),
-        oldEquipmentId: form.getValues('equipment_id')
-      });
-      
-      // Only change equipment_id, preserve location_id
-      form.setValue('equipment_id', value, { 
-        shouldDirty: true, 
-        shouldTouch: true,
-        shouldValidate: true 
-      });
-      
-      // Verify the change was applied correctly
-      const updatedEquipmentId = form.getValues('equipment_id');
-      console.log('EquipmentSelect: Updated equipment_id:', updatedEquipmentId);
-      
-      if (updatedEquipmentId !== value) {
-        console.error('Equipment ID was not set correctly. Expected:', value, 'Got:', updatedEquipmentId);
-        toast({
-          title: "Warning",
-          description: "Equipment selection may not have been saved correctly",
-          variant: "destructive",
-        });
-      } else {
-        // Show a success toast for debugging
-        const selectedEquipment = equipmentList.find(e => e.id === value);
-        toast({
-          title: "Equipment selected",
-          description: `${selectedEquipment?.name || value}`,
-        });
+  // Load equipment for selected location
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      if (!locationId) {
+        setEquipment([]);
+        return;
       }
-    } catch (error) {
-      console.error('Error in handleEquipmentChange:', error);
-      toast({
-        title: "Error selecting equipment",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
-      });
+
+      setLoading(true);
+      try {
+        console.log('Fetching equipment for location:', locationId);
+        const { data, error } = await supabase
+          .from('equipment')
+          .select('*')
+          .eq('location', locationId);
+        
+        if (error) throw error;
+        
+        console.log('Found equipment items:', data?.length || 0);
+        setEquipment(data || []);
+      } catch (error) {
+        console.error('Error fetching equipment:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchEquipment();
+  }, [locationId]);
+
+  // Don't clear equipment selection when location changes, only update available options
+  // and clear if the current selection isn't valid for the new location
+  useEffect(() => {
+    const currentEquipmentId = form.getValues('equipment_id');
+    if (currentEquipmentId && equipment.length > 0) {
+      // Check if current equipment is valid for this location
+      const isValidForLocation = equipment.some(eq => eq.id === currentEquipmentId);
+      if (!isValidForLocation) {
+        // Only clear if the equipment is not valid for this location
+        form.setValue('equipment_id', '', { shouldValidate: true });
+      }
     }
-  };
+  }, [equipment, form]);
 
   return (
     <FormField
@@ -85,17 +66,25 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         <FormItem>
           <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
           <Select
-            onValueChange={handleEquipmentChange}
+            onValueChange={field.onChange}
             value={field.value || ""}
             defaultValue={field.value || ""}
-            disabled={!locationId}
+            disabled={!locationId || equipment.length === 0}
           >
             <FormControl>
               <SelectTrigger 
                 className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               >
                 <SelectValue 
-                  placeholder={locationId ? "Select equipment" : "Please select a location first"}
+                  placeholder={
+                    !locationId 
+                      ? "Select location first" 
+                      : loading 
+                        ? "Loading equipment..." 
+                        : equipment.length === 0 
+                          ? "No equipment found" 
+                          : "Select equipment"
+                  }
                   className="text-gray-600"
                 />
               </SelectTrigger>
@@ -103,38 +92,35 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
             <SelectContent 
               className="bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
             >
-              {!isLoading ? (
-                equipmentList.length > 0 ? (
-                  equipmentList.map((item) => (
-                    <SelectItem 
-                      key={item.id} 
-                      value={item.id}
-                      className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
-                    >
-                      <div className="flex flex-col">
-                        <span className="font-medium text-gray-900">{item.name}</span>
-                        <span className="text-sm text-gray-500">
-                          {item.model}
-                        </span>
-                      </div>
-                    </SelectItem>
-                  ))
-                ) : (
+              {equipment.length > 0 ? (
+                equipment.map((item) => (
                   <SelectItem 
-                    value="no-equipment" 
-                    disabled 
-                    className="py-3 text-sm text-gray-500"
+                    key={item.id} 
+                    value={item.id}
+                    className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
                   >
-                    {locationId ? "No equipment found for this location" : "Please select a location first"}
+                    <div className="flex flex-col">
+                      <span className="font-medium text-gray-900">
+                        {item.name}
+                      </span>
+                      <span className="text-sm text-gray-500">
+                        {item.model || 'No model specified'}
+                      </span>
+                    </div>
                   </SelectItem>
-                )
+                ))
               ) : (
                 <SelectItem 
-                  value="loading" 
+                  value="no-equipment" 
                   disabled 
-                  className="py-3 text-sm text-gray-500"
+                  className="py-3 px-4 text-sm text-gray-500"
                 >
-                  Loading equipment...
+                  {!locationId 
+                    ? "Select a location first" 
+                    : loading 
+                      ? "Loading equipment..." 
+                      : "No equipment found for this location"
+                  }
                 </SelectItem>
               )}
             </SelectContent>

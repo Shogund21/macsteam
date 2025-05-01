@@ -37,10 +37,14 @@ const MaintenanceCheckForm = ({
 
   // Track form value changes for debugging
   const locationId = form.watch('location_id');
+  const equipmentId = form.watch('equipment_id');
 
   useEffect(() => {
-    console.log('Location ID changed:', locationId);
-  }, [locationId]);
+    console.log('Form values changed:', { 
+      locationId, 
+      equipmentId 
+    });
+  }, [locationId, equipmentId]);
 
   // Log initialData to help with debugging
   useEffect(() => {
@@ -122,11 +126,11 @@ const MaintenanceCheckForm = ({
     
     setIsSubmitting(true);
     try {
-      // Ensure location_id is preserved for updates
-      if (initialData && initialData.location_id && !values.location_id) {
-        console.log('Preserving original location_id:', initialData.location_id);
-        values.location_id = initialData.location_id;
-      }
+      // Log values before submission to verify location_id is present
+      console.log('Form values before submission:', {
+        ...values,
+        location_id_present: !!values.location_id
+      });
       
       await handleSubmit(values);
     } catch (error) {

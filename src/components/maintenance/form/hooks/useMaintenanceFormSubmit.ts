@@ -42,6 +42,16 @@ export const useMaintenanceFormSubmit = (
       
       // Map form data to database schema
       const submissionData = mapMaintenanceData(values, equipmentType, !!initialData);
+      
+      // Explicitly ensure location_id is included in submission data
+      if (values.location_id) {
+        submissionData.location_id = values.location_id;
+        console.log('Setting location_id in submission data:', values.location_id);
+      } else if (initialData && initialData.location_id) {
+        submissionData.location_id = initialData.location_id;
+        console.log('Using initial location_id:', initialData.location_id);
+      }
+      
       console.log('Final submission data:', submissionData);
       
       // Submit to database (update or create)
