@@ -1,5 +1,5 @@
 
-import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { TabsContent } from "@/components/ui/tabs";
 import { GeneralSection } from "./sections/GeneralSection";
 import { NotificationsSection } from "./sections/NotificationsSection";
 import { LocationsSection } from "./sections/LocationsSection";
@@ -16,32 +16,30 @@ interface SettingsTabsContentProps {
 const SettingsTabsContent = ({ isMobile }: SettingsTabsContentProps) => {
   return (
     <div className={`${isMobile ? 'mt-0' : 'mt-2'}`}>
-      <Tabs defaultValue="general">
-        <TabsContent value="general" className="mt-0">
-          <GeneralSection />
-        </TabsContent>
-        <TabsContent value="notifications" className="mt-0">
-          <NotificationsSection />
-        </TabsContent>
-        <TabsContent value="locations" className="mt-0">
-          <LocationsSection />
-        </TabsContent>
-        <TabsContent value="companies" className="mt-0">
-          <CompaniesSection />
-        </TabsContent>
-        <TabsContent value="features" className="mt-0">
-          <FeaturesSection />
-        </TabsContent>
-        <TabsContent value="maintenance" className="mt-0">
-          <MaintenanceSection />
-        </TabsContent>
-        <TabsContent value="appearance" className="mt-0">
-          <AppearanceSection />
-        </TabsContent>
-        <TabsContent value="documentation" className="mt-0">
-          <DocumentationSection />
-        </TabsContent>
-      </Tabs>
+      <TabsContent value="general" className="mt-0">
+        <GeneralSection />
+      </TabsContent>
+      <TabsContent value="notifications" className="mt-0">
+        <NotificationsSection />
+      </TabsContent>
+      <TabsContent value="locations" className="mt-0">
+        <LocationsSection />
+      </TabsContent>
+      <TabsContent value="companies" className="mt-0">
+        <CompaniesSection />
+      </TabsContent>
+      <TabsContent value="features" className="mt-0">
+        <FeaturesSection />
+      </TabsContent>
+      <TabsContent value="maintenance" className="mt-0">
+        <MaintenanceSection />
+      </TabsContent>
+      <TabsContent value="appearance" className="mt-0">
+        <AppearanceSection />
+      </TabsContent>
+      <TabsContent value="documentation" className="mt-0">
+        <DocumentationSection />
+      </TabsContent>
     </div>
   );
 };
