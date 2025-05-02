@@ -7,6 +7,7 @@ import { useEquipmentQuery } from "@/hooks/useEquipmentQuery";
 import { useEffect } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
+import { Equipment } from "@/types/equipment";
 
 interface EquipmentSelectProps {
   form: UseFormReturn<any>;
@@ -27,8 +28,8 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     console.log('EquipmentSelect: equipment count =', equipment?.length || 0);
   }, [locationId, selectedEquipmentId, equipment]);
 
-  // Find currently selected equipment 
-  const selectedEquipment = equipment.find(eq => eq.id === selectedEquipmentId);
+  // Find currently selected equipment - explicitly cast the found item to Equipment type
+  const selectedEquipment = equipment.find(eq => eq.id === selectedEquipmentId) as Equipment | undefined;
   const showLocationWarning = selectedEquipment?.displayWarning;
   
   // CRITICAL FIX: When location changes, clear equipment selection
@@ -55,8 +56,8 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     console.log('EquipmentSelect: Equipment selection changed to:', value);
     
     try {
-      // CRITICAL FIX: Get the selected equipment details
-      const selectedEquipment = equipment.find(eq => eq.id === value);
+      // CRITICAL FIX: Get the selected equipment details - explicitly cast to Equipment
+      const selectedEquipment = equipment.find(eq => eq.id === value) as Equipment | undefined;
       
       if (selectedEquipment) {
         console.log('EquipmentSelect: Equipment location in database:', selectedEquipment.location);
@@ -143,25 +144,29 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                     Error loading equipment
                   </SelectItem>
                 ) : equipment.length > 0 ? (
-                  equipment.map((eq) => (
-                    <SelectItem 
-                      key={eq.id} 
-                      value={eq.id}
-                      className={`py-3 px-4 cursor-pointer focus:bg-blue-50 focus:text-blue-600 ${
-                        eq.displayWarning ? 'hover:bg-amber-50' : 'hover:bg-blue-50'
-                      }`}
-                    >
-                      <div className="flex flex-col">
-                        <span className="font-medium text-gray-900">
-                          {eq.name}
-                          {eq.displayWarning && ' (*)'}
-                        </span>
-                        <span className="text-sm text-gray-500">
-                          {eq.model ? `Model: ${eq.model}` : 'No model specified'}
-                        </span>
-                      </div>
-                    </SelectItem>
-                  ))
+                  equipment.map((eq) => {
+                    // Explicitly cast equipment to correct type to ensure TypeScript knows about displayWarning property
+                    const typedEquipment = eq as Equipment;
+                    return (
+                      <SelectItem 
+                        key={typedEquipment.id} 
+                        value={typedEquipment.id}
+                        className={`py-3 px-4 cursor-pointer focus:bg-blue-50 focus:text-blue-600 ${
+                          typedEquipment.displayWarning ? 'hover:bg-amber-50' : 'hover:bg-blue-50'
+                        }`}
+                      >
+                        <div className="flex flex-col">
+                          <span className="font-medium text-gray-900">
+                            {typedEquipment.name}
+                            {typedEquipment.displayWarning && ' (*)'}
+                          </span>
+                          <span className="text-sm text-gray-500">
+                            {typedEquipment.model ? `Model: ${typedEquipment.model}` : 'No model specified'}
+                          </span>
+                        </div>
+                      </SelectItem>
+                    );
+                  })
                 ) : (
                   <SelectItem value="no-equipment" disabled className="py-3 px-4 text-sm text-gray-500">
                     No equipment available for this location
