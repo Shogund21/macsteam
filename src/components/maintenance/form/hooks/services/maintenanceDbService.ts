@@ -52,6 +52,9 @@ export const maintenanceDbService = {
     // Add updated_at timestamp
     data.updated_at = new Date().toISOString();
     
+    // CRITICAL VERIFICATION: Log the exact location_id we're about to submit
+    console.log('FINAL LOCATION ID FOR UPDATE:', data.location_id);
+    
     try {
       const { data: result, error } = await supabase
         .from('hvac_maintenance_checks')
@@ -65,6 +68,18 @@ export const maintenanceDbService = {
       }
       
       console.log('Update successful, affected rows:', result?.length || 0);
+      console.log('Updated record:', result?.[0]);
+      
+      // Verify that the location_id was correctly saved
+      if (result && result.length > 0 && result[0].location_id !== data.location_id) {
+        console.error('CRITICAL ERROR: Location ID mismatch after update!', {
+          expected: data.location_id,
+          actual: result[0].location_id
+        });
+      } else {
+        console.log('Location ID successfully saved as:', data.location_id);
+      }
+      
       return { data: result, error: null };
     } catch (error: any) {
       console.error('Exception during update operation:', error);
@@ -87,6 +102,9 @@ export const maintenanceDbService = {
       }
     });
     
+    // CRITICAL VERIFICATION: Log the exact location_id we're about to submit
+    console.log('FINAL LOCATION ID FOR CREATION:', data.location_id);
+    
     try {
       const { data: result, error } = await supabase
         .from('hvac_maintenance_checks')
@@ -99,6 +117,17 @@ export const maintenanceDbService = {
       }
       
       console.log('Creation successful, new record:', result);
+      
+      // Verify that the location_id was correctly saved
+      if (result && result.length > 0 && result[0].location_id !== data.location_id) {
+        console.error('CRITICAL ERROR: Location ID mismatch after creation!', {
+          expected: data.location_id,
+          actual: result[0].location_id
+        });
+      } else {
+        console.log('Location ID successfully saved as:', data.location_id);
+      }
+      
       return { data: result, error: null };
     } catch (error: any) {
       console.error('Exception during create operation:', error);

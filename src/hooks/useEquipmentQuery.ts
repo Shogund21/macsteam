@@ -74,7 +74,7 @@ export const useEquipmentQuery = (locationId: string) => {
 
         // Filter equipment based on location or name containing store number
         const matchedEquipment = equipment?.filter(e => {
-          // CRITICAL FIX: For restrooms, flag and log their original location for transparency
+          // For restrooms, still flag their original location internally but don't show warnings
           const isRestroom = e.name.toLowerCase().includes('restroom');
           if (isRestroom) {
             // Add a property to indicate this is a restroom with a potentially different location

@@ -1,12 +1,9 @@
-
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { useEquipmentQuery } from "@/hooks/useEquipmentQuery";
 import { useEffect } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 import { Equipment } from "@/types/equipment";
 
 interface EquipmentSelectProps {
@@ -30,7 +27,6 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
 
   // Find currently selected equipment - explicitly cast the found item to Equipment type
   const selectedEquipment = equipment.find(eq => eq.id === selectedEquipmentId) as Equipment | undefined;
-  const showLocationWarning = selectedEquipment?.displayWarning;
   
   // CRITICAL FIX: When location changes, clear equipment selection
   useEffect(() => {
@@ -63,14 +59,10 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         console.log('EquipmentSelect: Equipment location in database:', selectedEquipment.location);
         console.log('EquipmentSelect: Current selected locationId:', locationId);
         
-        // Show a warning toast if there's a location mismatch with restrooms
+        // Keep logging the location mismatch but don't show any UI warnings
         if (selectedEquipment.displayWarning) {
-          toast({
-            title: "Location Warning",
-            description: `This ${selectedEquipment.name} is normally associated with a different location in the database, but your selected location will be used.`,
-            // Fixed: Use "destructive" variant instead of "warning"
-            variant: "destructive",
-          });
+          console.log('EquipmentSelect: Location mismatch detected - equipment has location', 
+            selectedEquipment.location, 'but user selected', locationId);
         }
       }
       
@@ -151,14 +143,11 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                       <SelectItem 
                         key={typedEquipment.id} 
                         value={typedEquipment.id}
-                        className={`py-3 px-4 cursor-pointer focus:bg-blue-50 focus:text-blue-600 ${
-                          typedEquipment.displayWarning ? 'hover:bg-amber-50' : 'hover:bg-blue-50'
-                        }`}
+                        className="py-3 px-4 cursor-pointer hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-600"
                       >
                         <div className="flex flex-col">
                           <span className="font-medium text-gray-900">
                             {typedEquipment.name}
-                            {typedEquipment.displayWarning && ' (*)'}
                           </span>
                           <span className="text-sm text-gray-500">
                             {typedEquipment.model ? `Model: ${typedEquipment.model}` : 'No model specified'}
@@ -178,16 +167,6 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
           </FormItem>
         )}
       />
-      {showLocationWarning && (
-        <Alert variant="destructive" className="mt-2 bg-amber-50 border-amber-200">
-          <AlertCircle className="h-4 w-4 text-amber-600" />
-          <AlertTitle className="text-amber-800 text-sm font-medium">Location Mismatch</AlertTitle>
-          <AlertDescription className="text-amber-700 text-xs">
-            This equipment is typically associated with a different location in the database. 
-            Your selected location will be used for this maintenance check.
-          </AlertDescription>
-        </Alert>
-      )}
     </>
   );
 };
