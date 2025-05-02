@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { normalizeString } from "@/utils/locationMatching";
 import { useToast } from "@/hooks/use-toast";
+import { Equipment } from "@/types/equipment";
 
 export const useEquipmentQuery = (locationId: string) => {
   const { toast } = useToast();
@@ -77,9 +78,9 @@ export const useEquipmentQuery = (locationId: string) => {
           const isRestroom = e.name.toLowerCase().includes('restroom');
           if (isRestroom) {
             // Add a property to indicate this is a restroom with a potentially different location
-            e.isSpecialLocation = true;
-            e.originalLocationId = e.location; // Store original location for reference
-            e.displayWarning = e.location !== locationId;
+            (e as Equipment).isSpecialLocation = true;
+            (e as Equipment).originalLocationId = e.location; // Store original location for reference
+            (e as Equipment).displayWarning = e.location !== locationId;
             
             console.log(`Restroom "${e.name}" has database location "${e.location}" but will use selected location ID: ${locationId}`);
             // We include all restrooms regardless of their location in the DB
@@ -112,7 +113,7 @@ export const useEquipmentQuery = (locationId: string) => {
         }
 
         console.log(`Found ${matchedEquipment.length} equipment items for location ${locationData.name}`);
-        return matchedEquipment;
+        return matchedEquipment as Equipment[];
       } catch (error) {
         console.error('Error in useEquipmentQuery:', error);
         toast({

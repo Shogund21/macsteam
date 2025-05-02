@@ -67,7 +67,8 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
           toast({
             title: "Location Warning",
             description: `This ${selectedEquipment.name} is normally associated with a different location in the database, but your selected location will be used.`,
-            variant: "warning",
+            // Fixed: Use "destructive" variant instead of "warning"
+            variant: "destructive",
           });
         }
       }
@@ -173,7 +174,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         )}
       />
       {showLocationWarning && (
-        <Alert variant="warning" className="mt-2 bg-amber-50 border-amber-200">
+        <Alert variant="destructive" className="mt-2 bg-amber-50 border-amber-200">
           <AlertCircle className="h-4 w-4 text-amber-600" />
           <AlertTitle className="text-amber-800 text-sm font-medium">Location Mismatch</AlertTitle>
           <AlertDescription className="text-amber-700 text-xs">
