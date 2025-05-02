@@ -22,13 +22,25 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
     return `${check.technician.firstName} ${check.technician.lastName}`;
   };
 
+  const getLocationName = () => {
+    // First try to get from the location object (from location_id)
+    if (check.location?.name) {
+      return check.location.store_number 
+        ? `${check.location.name} (${check.location.store_number})`
+        : check.location.name;
+    }
+    
+    // Fallback to equipment location if location object is not available
+    return check.equipment?.location || "Location Not Available";
+  };
+
   // Determine equipment type
   const equipmentType = check.equipment_type || 'general';
 
   const basicFields = [
     { label: "Date", value: new Date(check.check_date || "") },
     { label: "Equipment", value: check.equipment?.name || "Equipment Not Available" },
-    { label: "Location", value: check.equipment?.location || "Location Not Available" },
+    { label: "Location", value: getLocationName() },
     { label: "Technician", value: getTechnicianName() },
   ];
 
@@ -170,7 +182,7 @@ const MaintenanceCheckDetails = ({ check, open, onOpenChange }: MaintenanceCheck
             <MaintenanceStatusBadge status={check.status} />
           </div>
           <div className="text-sm text-gray-600">
-            Location: {check.equipment?.location || 'Location Not Available'}
+            Location: {getLocationName()}
           </div>
         </DialogHeader>
         <ScrollArea className="max-h-[60vh] px-1">

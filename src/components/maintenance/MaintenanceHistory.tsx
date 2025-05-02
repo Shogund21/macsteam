@@ -26,12 +26,18 @@ const MaintenanceHistory = () => {
           technician:technician_id (
             firstName,
             lastName
+          ),
+          location:location_id (
+            name,
+            store_number
           )
         `)
         .order("check_date", { ascending: false });
 
       if (error) throw error;
 
+      // Log the response data to help with debugging
+      console.log("Maintenance checks with locations:", data);
       setMaintenanceChecks(data || []);
     } catch (error) {
       console.error("Error fetching maintenance checks:", error);

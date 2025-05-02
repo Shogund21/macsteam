@@ -40,6 +40,12 @@ export interface MaintenanceTechnician {
   lastName: string;
 }
 
+// Location type for maintenance checks
+export interface MaintenanceLocation {
+  name: string;
+  store_number?: string;
+}
+
 export interface MaintenanceDocument {
   id: string;
   file_name: string;
@@ -128,4 +134,5 @@ export interface MaintenanceCheck {
   // References
   equipment?: MaintenanceEquipment;
   technician?: MaintenanceTechnician;
+  location?: MaintenanceLocation;
 }

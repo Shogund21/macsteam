@@ -60,6 +60,19 @@ const MaintenanceTableRow = ({
     return `${check.technician.firstName} ${check.technician.lastName}`;
   };
 
+  // Get location name from location object, with fallback to equipment location as last resort
+  const getLocationName = () => {
+    // First try to get from the location object (from location_id)
+    if (check.location?.name) {
+      return check.location.store_number 
+        ? `${check.location.name} (${check.location.store_number})`
+        : check.location.name;
+    }
+    
+    // Fallback to equipment location if location object is not available
+    return check.equipment?.location || "Location Not Available";
+  };
+
   return (
     <>
       <div className="border rounded-lg p-4 space-y-4 bg-white shadow-sm hover:shadow transition-shadow duration-200">
@@ -77,7 +90,7 @@ const MaintenanceTableRow = ({
             </div>
             <div className="text-sm text-gray-600 space-y-1">
               <p>Date: {format(new Date(check.check_date || ""), "PPP")}</p>
-              <p>Location: {check.equipment?.location || "Location Not Available"}</p>
+              <p>Location: {getLocationName()}</p>
               <p>Technician: {getTechnicianName()}</p>
             </div>
           </div>
