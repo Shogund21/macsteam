@@ -25,8 +25,8 @@ export const useMaintenanceFormSubmit = (
       console.log('Update mode:', !!initialData);
       console.log('Location ID in form values:', values.location_id);
       
-      // CRITICAL FIX: Create a stable copy of the form values to prevent any reference issues
-      const formValues = { ...values };
+      // CRITICAL FIX: Create a stable deep copy of the form values to prevent any reference issues
+      const formValues = JSON.parse(JSON.stringify(values));
       
       // IMPORTANT: Validate location is present
       if (!formValues.location_id) {
@@ -93,24 +93,32 @@ export const useMaintenanceFormSubmit = (
         throw new Error('Invalid equipment type');
       }
       
-      // CRITICAL FIX: Ensure we're using the original selected location_id
-      // This prevents any equipment location from overriding the user selection
-      console.log('Ensuring location_id is preserved:', originalLocationId);
-      formValues.location_id = originalLocationId;
+      // CRITICAL FIX: Track database and user-selected locations - especially for restrooms
+      const isRestroom = equipmentType === 'restroom';
+      const hasLocationMismatch = isRestroom && equipment.location !== originalLocationId;
       
-      // Map form data to database schema - using our protected location_id
-      const submissionData = mapMaintenanceData(formValues, equipmentType, !!initialData);
-      
-      // CRITICAL FIX: Verify location_id was not changed during mapping
-      console.log('Final submission data location_id:', submissionData.location_id);
-      console.log('Original location_id:', originalLocationId);
-      
-      if (submissionData.location_id !== originalLocationId) {
-        console.error('Location ID was changed during mapping! Restoring original value.');
-        submissionData.location_id = originalLocationId;
+      if (hasLocationMismatch) {
+        console.warn(`Location mismatch detected: Equipment "${equipment.name}" has database location "${equipment.location}" but user selected "${originalLocationId}"`);
+        console.log('CRITICAL: Using user-selected location for submission:', originalLocationId);
       }
       
+      // Map form data to database schema - using the original user-selected location_id
+      // Make sure to pass the user-selected location_id in the values
+      const submissionData = mapMaintenanceData({
+        ...formValues,
+        location_id: originalLocationId // Ensure user selection is used
+      }, equipmentType, !!initialData);
+      
+      // CRITICAL FIX: Final verification before database submission
       console.log('Final submission data:', JSON.stringify(submissionData, null, 2));
+      console.log('Final location_id to be submitted:', submissionData.location_id);
+      console.log('Original user-selected location_id:', originalLocationId);
+      
+      // Extra safeguard to ensure location_id is preserved
+      if (submissionData.location_id !== originalLocationId) {
+        console.error('CRITICAL ISSUE: Location ID was changed during mapping! Restoring user selection.');
+        submissionData.location_id = originalLocationId;
+      }
       
       // Submit to database (update or create)
       let dbResponse;
@@ -129,8 +137,6 @@ export const useMaintenanceFormSubmit = (
         throw dbResponse.error;
       }
 
-      console.log('Submission successful!', dbResponse);
-      
       // Show success toast and complete
       toast({
         title: "Success",

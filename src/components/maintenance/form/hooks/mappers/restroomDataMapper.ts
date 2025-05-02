@@ -9,8 +9,9 @@ export const mapRestroomData = (values: MaintenanceFormValues, equipmentType: st
   if (equipmentType !== 'restroom') return {};
   
   // CRITICAL FIX: Log the location_id to ensure it's not being overridden
-  console.log('In restroomDataMapper - location_id:', values.location_id);
+  console.log('In restroomDataMapper - Using user-selected location_id:', values.location_id);
 
+  // Only map restroom-specific fields, NEVER override location_id here
   return {
     // Map restroom-specific fields to database columns
     sink_status: processField(values.sink_status),
@@ -24,6 +25,6 @@ export const mapRestroomData = (values: MaintenanceFormValues, equipmentType: st
     restroom_notes: processField(values.restroom_notes),
     // Store restroom notes in the general notes field as well
     notes: processField(values.restroom_notes)
-    // CRITICAL FIX: Removed any location_id assignment that would override user selection
+    // CRITICAL FIX: Restroom mapper should NEVER assign location_id
   };
 };

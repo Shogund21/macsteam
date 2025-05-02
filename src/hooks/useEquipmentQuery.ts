@@ -73,13 +73,16 @@ export const useEquipmentQuery = (locationId: string) => {
 
         // Filter equipment based on location or name containing store number
         const matchedEquipment = equipment?.filter(e => {
-          // CRITICAL FIX: For restrooms, tag them with the user's selected location
-          // This will let us know they were picked from a specific location
+          // CRITICAL FIX: For restrooms, flag and log their original location for transparency
           const isRestroom = e.name.toLowerCase().includes('restroom');
           if (isRestroom) {
-            console.log(`Including restroom "${e.name}" with its original location: "${e.location}" for selected location ID: ${locationId}`);
+            // Add a property to indicate this is a restroom with a potentially different location
+            e.isSpecialLocation = true;
+            e.originalLocationId = e.location; // Store original location for reference
+            e.displayWarning = e.location !== locationId;
+            
+            console.log(`Restroom "${e.name}" has database location "${e.location}" but will use selected location ID: ${locationId}`);
             // We include all restrooms regardless of their location in the DB
-            // The form will use the user-selected location_id for submission
             return true;
           }
           
@@ -96,16 +99,9 @@ export const useEquipmentQuery = (locationId: string) => {
                         normalizedLocation.includes('dadeland home') ||
                         isElevator;
 
-          console.log('Equipment match check:', {
-            equipmentName: e.name,
-            equipmentLocation: e.location,
-            storeNumber: locationData.store_number,
-            normalizedLocation,
-            normalizedStoreNumber,
-            normalizedName,
-            isElevator,
-            isMatch
-          });
+          if (isMatch) {
+            console.log(`Equipment "${e.name}" matches location ${locationData.name}`);
+          }
 
           return isMatch;
         });

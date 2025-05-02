@@ -5,6 +5,8 @@ import { UseFormReturn } from "react-hook-form";
 import { useToast } from "@/hooks/use-toast";
 import { useEquipmentQuery } from "@/hooks/useEquipmentQuery";
 import { useEffect } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface EquipmentSelectProps {
   form: UseFormReturn<any>;
@@ -24,6 +26,10 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     console.log('EquipmentSelect: selectedEquipmentId =', selectedEquipmentId);
     console.log('EquipmentSelect: equipment count =', equipment?.length || 0);
   }, [locationId, selectedEquipmentId, equipment]);
+
+  // Find currently selected equipment 
+  const selectedEquipment = equipment.find(eq => eq.id === selectedEquipmentId);
+  const showLocationWarning = selectedEquipment?.displayWarning;
   
   // CRITICAL FIX: When location changes, clear equipment selection
   useEffect(() => {
@@ -56,10 +62,13 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         console.log('EquipmentSelect: Equipment location in database:', selectedEquipment.location);
         console.log('EquipmentSelect: Current selected locationId:', locationId);
         
-        // Just log a warning if there's a location mismatch, but don't prevent selection
-        // This allows users to select equipment even if it might have a different location in the DB
-        if (selectedEquipment.location && !selectedEquipment.location.includes(locationId)) {
-          console.warn('Selected equipment may have a different location in the database');
+        // Show a warning toast if there's a location mismatch with restrooms
+        if (selectedEquipment.displayWarning) {
+          toast({
+            title: "Location Warning",
+            description: `This ${selectedEquipment.name} is normally associated with a different location in the database, but your selected location will be used.`,
+            variant: "warning",
+          });
         }
       }
       
@@ -90,73 +99,90 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   const isDisabled = !locationId;
 
   return (
-    <FormField
-      control={form.control}
-      name="equipment_id"
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
-          <Select
-            onValueChange={handleEquipmentChange}
-            value={field.value || ''}
-            defaultValue={field.value || ''}
-            disabled={isDisabled}
-          >
-            <FormControl>
-              <SelectTrigger 
-                className={`w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 transition-colors ${
-                  isDisabled ? 'opacity-60 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
-                }`}
-              >
-                <SelectValue 
-                  placeholder={
-                    isDisabled 
-                      ? "Select a location first" 
-                      : isLoading 
-                      ? "Loading equipment..." 
-                      : "Select equipment"
-                  } 
-                  className="text-gray-600"
-                />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent 
-              className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+    <>
+      <FormField
+        control={form.control}
+        name="equipment_id"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel className="text-base font-semibold text-gray-700">Equipment</FormLabel>
+            <Select
+              onValueChange={handleEquipmentChange}
+              value={field.value || ''}
+              defaultValue={field.value || ''}
+              disabled={isDisabled}
             >
-              {isLoading ? (
-                <SelectItem value="loading" disabled className="py-3 px-4 text-sm text-gray-500">
-                  Loading equipment...
-                </SelectItem>
-              ) : isError ? (
-                <SelectItem value="error" disabled className="py-3 px-4 text-sm text-red-500">
-                  Error loading equipment
-                </SelectItem>
-              ) : equipment.length > 0 ? (
-                equipment.map((eq) => (
-                  <SelectItem 
-                    key={eq.id} 
-                    value={eq.id}
-                    className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
-                  >
-                    <div className="flex flex-col">
-                      <span className="font-medium text-gray-900">{eq.name}</span>
-                      <span className="text-sm text-gray-500">
-                        {eq.model ? `Model: ${eq.model}` : 'No model specified'}
-                      </span>
-                    </div>
+              <FormControl>
+                <SelectTrigger 
+                  className={`w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 transition-colors ${
+                    isDisabled ? 'opacity-60 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                  }`}
+                >
+                  <SelectValue 
+                    placeholder={
+                      isDisabled 
+                        ? "Select a location first" 
+                        : isLoading 
+                        ? "Loading equipment..." 
+                        : "Select equipment"
+                    } 
+                    className="text-gray-600"
+                  />
+                </SelectTrigger>
+              </FormControl>
+              <SelectContent 
+                className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+              >
+                {isLoading ? (
+                  <SelectItem value="loading" disabled className="py-3 px-4 text-sm text-gray-500">
+                    Loading equipment...
                   </SelectItem>
-                ))
-              ) : (
-                <SelectItem value="no-equipment" disabled className="py-3 px-4 text-sm text-gray-500">
-                  No equipment available for this location
-                </SelectItem>
-              )}
-            </SelectContent>
-          </Select>
-          <FormMessage className="text-sm text-red-500" />
-        </FormItem>
+                ) : isError ? (
+                  <SelectItem value="error" disabled className="py-3 px-4 text-sm text-red-500">
+                    Error loading equipment
+                  </SelectItem>
+                ) : equipment.length > 0 ? (
+                  equipment.map((eq) => (
+                    <SelectItem 
+                      key={eq.id} 
+                      value={eq.id}
+                      className={`py-3 px-4 cursor-pointer focus:bg-blue-50 focus:text-blue-600 ${
+                        eq.displayWarning ? 'hover:bg-amber-50' : 'hover:bg-blue-50'
+                      }`}
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-medium text-gray-900">
+                          {eq.name}
+                          {eq.displayWarning && ' (*)'}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {eq.model ? `Model: ${eq.model}` : 'No model specified'}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="no-equipment" disabled className="py-3 px-4 text-sm text-gray-500">
+                    No equipment available for this location
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+            <FormMessage className="text-sm text-red-500" />
+          </FormItem>
+        )}
+      />
+      {showLocationWarning && (
+        <Alert variant="warning" className="mt-2 bg-amber-50 border-amber-200">
+          <AlertCircle className="h-4 w-4 text-amber-600" />
+          <AlertTitle className="text-amber-800 text-sm font-medium">Location Mismatch</AlertTitle>
+          <AlertDescription className="text-amber-700 text-xs">
+            This equipment is typically associated with a different location in the database. 
+            Your selected location will be used for this maintenance check.
+          </AlertDescription>
+        </Alert>
       )}
-    />
+    </>
   );
 };
 
