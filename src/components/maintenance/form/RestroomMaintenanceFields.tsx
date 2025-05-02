@@ -22,8 +22,9 @@ const RestroomMaintenanceFields = ({ form }: RestroomMaintenanceFieldsProps) => 
       form.register('restroom_notes');
     }
     
-    // CRITICAL FIX: Log selected location to confirm it's being tracked correctly
+    // Log selected location to track it correctly
     console.log('Restroom component with equipment ID:', equipmentId, 'and location ID:', locationId);
+    // No need to check for location mismatches anymore - all equipment is available for all locations
     
   }, [form, equipmentId, locationId]);
   

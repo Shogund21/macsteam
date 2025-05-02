@@ -31,7 +31,7 @@ export const mapMaintenanceData = (
     technician_id: formValues.technician_id,
     equipment_type: equipmentType,
     status: 'completed' as const,
-    // CRITICAL FIX: Always use the user-selected location_id 
+    // CRITICAL: Always use the user-selected location_id regardless of equipment's original location
     location_id: userSelectedLocationId
   };
 
@@ -50,11 +50,11 @@ export const mapMaintenanceData = (
     ...mapRestroomData(formValues, equipmentType)
   };
   
-  // CRITICAL FIX: Final verification to ensure location_id wasn't overwritten by any mapper
+  // CRITICAL VERIFICATION: Final verification to ensure location_id wasn't overwritten
   console.log('Final data after mapping, location_id:', result.location_id);
   console.log('Original user-selected location_id:', userSelectedLocationId);
   
-  // EXTRA SAFETY - force the user-selected location_id
+  // EXTRA SAFETY - force the user-selected location_id again
   result.location_id = userSelectedLocationId;
   
   console.log('FINAL GUARANTEED location_id to be used:', result.location_id);

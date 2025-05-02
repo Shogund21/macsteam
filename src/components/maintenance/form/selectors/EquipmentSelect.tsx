@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
@@ -25,44 +26,23 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     console.log('EquipmentSelect: equipment count =', equipment?.length || 0);
   }, [locationId, selectedEquipmentId, equipment]);
 
-  // Find currently selected equipment - explicitly cast the found item to Equipment type
-  const selectedEquipment = equipment.find(eq => eq.id === selectedEquipmentId) as Equipment | undefined;
-  
-  // CRITICAL FIX: When location changes, clear equipment selection
-  useEffect(() => {
-    if (locationId) {
-      const currentEquipId = form.getValues('equipment_id');
-      
-      // Only clear if equipment is already selected
-      if (currentEquipId) {
-        // Check if the currently selected equipment is valid for this location
-        const isEquipmentValid = equipment.some(eq => eq.id === currentEquipId);
-        
-        if (!isEquipmentValid) {
-          console.log('EquipmentSelect: Clearing equipment selection because it is not valid for the selected location');
-          form.setValue('equipment_id', '', { shouldDirty: true, shouldTouch: true });
-        } else {
-          console.log('EquipmentSelect: Current equipment selection is valid for the location');
-        }
-      }
-    }
-  }, [locationId, equipment, form]);
+  // REMOVED: Code that clears equipment selection when location changes
 
   const handleEquipmentChange = (value: string) => {
     console.log('EquipmentSelect: Equipment selection changed to:', value);
     
     try {
-      // CRITICAL FIX: Get the selected equipment details - explicitly cast to Equipment
+      // Get the selected equipment details
       const selectedEquipment = equipment.find(eq => eq.id === value) as Equipment | undefined;
       
       if (selectedEquipment) {
-        console.log('EquipmentSelect: Equipment location in database:', selectedEquipment.location);
+        console.log('EquipmentSelect: Equipment database location:', selectedEquipment.location);
         console.log('EquipmentSelect: Current selected locationId:', locationId);
         
-        // Keep logging the location mismatch but don't show any UI warnings
-        if (selectedEquipment.displayWarning) {
-          console.log('EquipmentSelect: Location mismatch detected - equipment has location', 
-            selectedEquipment.location, 'but user selected', locationId);
+        // Log, but don't warn about location mismatches
+        if (selectedEquipment.location !== locationId) {
+          console.log('EquipmentSelect: Equipment has database location', 
+            selectedEquipment.location, 'but will use user-selected location', locationId);
         }
       }
       
@@ -73,7 +53,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         shouldValidate: true
       });
       
-      // CRITICAL FIX: Verify the location_id is still intact after selecting equipment
+      // Verify location_id is still intact after selecting equipment
       setTimeout(() => {
         console.log('EquipmentSelect: Verification - equipment_id after change:', form.getValues('equipment_id'));
         console.log('EquipmentSelect: Verification - location_id is still:', form.getValues('location_id'));
@@ -136,29 +116,25 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                     Error loading equipment
                   </SelectItem>
                 ) : equipment.length > 0 ? (
-                  equipment.map((eq) => {
-                    // Explicitly cast equipment to correct type to ensure TypeScript knows about displayWarning property
-                    const typedEquipment = eq as Equipment;
-                    return (
-                      <SelectItem 
-                        key={typedEquipment.id} 
-                        value={typedEquipment.id}
-                        className="py-3 px-4 cursor-pointer hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-600"
-                      >
-                        <div className="flex flex-col">
-                          <span className="font-medium text-gray-900">
-                            {typedEquipment.name}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {typedEquipment.model ? `Model: ${typedEquipment.model}` : 'No model specified'}
-                          </span>
-                        </div>
-                      </SelectItem>
-                    );
-                  })
+                  equipment.map((eq) => (
+                    <SelectItem 
+                      key={eq.id} 
+                      value={eq.id}
+                      className="py-3 px-4 cursor-pointer hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-600"
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-medium text-gray-900">
+                          {eq.name}
+                        </span>
+                        <span className="text-sm text-gray-500">
+                          {eq.model ? `Model: ${eq.model}` : 'No model specified'}
+                        </span>
+                      </div>
+                    </SelectItem>
+                  ))
                 ) : (
                   <SelectItem value="no-equipment" disabled className="py-3 px-4 text-sm text-gray-500">
-                    No equipment available for this location
+                    No equipment available
                   </SelectItem>
                 )}
               </SelectContent>

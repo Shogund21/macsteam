@@ -9,8 +9,8 @@ export interface Equipment {
   nextMaintenance?: string;
   status: string;
   
-  // Properties for location handling in the UI (kept internally but won't display warnings)
+  // Properties for cross-location compatibility (internal tracking)
   isSpecialLocation?: boolean;
   originalLocationId?: string; 
-  displayWarning?: boolean;
+  displayWarning?: boolean; // Always false now - no warnings shown
 }

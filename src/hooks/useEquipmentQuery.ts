@@ -16,10 +16,10 @@ export const useEquipmentQuery = (locationId: string) => {
         return [];
       }
 
-      console.log('Fetching equipment for location:', locationId);
+      console.log('Fetching all equipment, selected location:', locationId);
 
       try {
-        // Get location data first
+        // Get location data first (still useful for logging purposes)
         const { data: locationData, error: locationError } = await supabase
           .from('locations')
           .select('*')
@@ -48,7 +48,7 @@ export const useEquipmentQuery = (locationId: string) => {
 
         console.log('Location data retrieved successfully:', locationData);
 
-        // Fetch all equipment
+        // Fetch all equipment - NO FILTERING BY LOCATION
         const { data: equipment, error: equipmentError } = await supabase
           .from('equipment')
           .select('*')
@@ -69,51 +69,31 @@ export const useEquipmentQuery = (locationId: string) => {
           return [];
         }
 
-        console.log('Location data:', locationData);
-        console.log('All equipment before filtering:', equipment);
-
-        // Filter equipment based on location or name containing store number
-        const matchedEquipment = equipment?.filter(e => {
-          // For restrooms, still flag their original location internally but don't show warnings
+        console.log(`Retrieved ${equipment.length} equipment items`);
+        
+        // Mark special equipment types but return ALL equipment
+        const processedEquipment = equipment.map(e => {
+          // Store original location for reference but don't restrict selection
           const isRestroom = e.name.toLowerCase().includes('restroom');
-          if (isRestroom) {
-            // Add a property to indicate this is a restroom with a potentially different location
-            (e as Equipment).isSpecialLocation = true;
-            (e as Equipment).originalLocationId = e.location; // Store original location for reference
-            (e as Equipment).displayWarning = e.location !== locationId;
-            
-            console.log(`Restroom "${e.name}" has database location "${e.location}" but will use selected location ID: ${locationId}`);
-            // We include all restrooms regardless of their location in the DB
-            return true;
-          }
-          
-          const normalizedLocation = normalizeString(e.location);
-          const normalizedStoreNumber = normalizeString(locationData.store_number);
-          const normalizedName = normalizeString(e.name);
-          
-          // Match if location contains store number OR name contains store number
-          // Also include elevators for any location
           const isElevator = e.name.toLowerCase().includes('elevator');
           
-          const isMatch = normalizedLocation.includes(normalizedStoreNumber) || 
-                        normalizedName.includes(normalizedStoreNumber) ||
-                        normalizedLocation.includes('dadeland home') ||
-                        isElevator;
-
-          if (isMatch) {
-            console.log(`Equipment "${e.name}" matches location ${locationData.name}`);
+          // Add internal tracking properties but don't display warnings
+          const equipmentWithMeta = {
+            ...e,
+            isSpecialLocation: isRestroom || isElevator,
+            originalLocationId: e.location,
+            displayWarning: false // Never show warnings
+          };
+          
+          if (isRestroom || isElevator) {
+            console.log(`Special equipment "${e.name}" has database location "${e.location}" but will be available for all locations`);
           }
-
-          return isMatch;
+          
+          return equipmentWithMeta as Equipment;
         });
 
-        if (!matchedEquipment?.length) {
-          console.log('No equipment matches found for location:', locationData.name);
-          return equipment || [];
-        }
-
-        console.log(`Found ${matchedEquipment.length} equipment items for location ${locationData.name}`);
-        return matchedEquipment as Equipment[];
+        console.log(`Returning all ${processedEquipment.length} equipment items for location ${locationData.name}`);
+        return processedEquipment;
       } catch (error) {
         console.error('Error in useEquipmentQuery:', error);
         toast({
