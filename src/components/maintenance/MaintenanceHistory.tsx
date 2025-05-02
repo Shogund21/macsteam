@@ -15,6 +15,7 @@ const MaintenanceHistory = () => {
 
   const fetchMaintenanceChecks = async () => {
     try {
+      // First query to get maintenance checks with equipment and technician details
       const { data, error } = await supabase
         .from("hvac_maintenance_checks")
         .select(`
@@ -26,18 +27,54 @@ const MaintenanceHistory = () => {
           technician:technician_id (
             firstName,
             lastName
-          ),
-          location:location_id (
-            name,
-            store_number
           )
         `)
         .order("check_date", { ascending: false });
 
       if (error) throw error;
 
-      // Log the response data to help with debugging
-      console.log("Maintenance checks with locations:", data);
+      // If we have location_ids, fetch the location data separately
+      if (data && data.length > 0) {
+        // Get unique location IDs that are not null
+        const locationIds = [...new Set(data.filter(check => check.location_id).map(check => check.location_id))];
+        
+        if (locationIds.length > 0) {
+          const { data: locationsData, error: locationsError } = await supabase
+            .from("locations")
+            .select("id, name, store_number")
+            .in("id", locationIds);
+            
+          if (locationsError) {
+            console.error("Error fetching locations:", locationsError);
+            // Continue with the process, we'll just use equipment locations as fallback
+          } else if (locationsData) {
+            // Create a map of location data for quick lookup
+            const locationMap = locationsData.reduce((acc, location) => {
+              acc[location.id] = location;
+              return acc;
+            }, {} as Record<string, any>);
+            
+            // Enrich maintenance checks with location data
+            const enrichedData = data.map(check => {
+              if (check.location_id && locationMap[check.location_id]) {
+                return {
+                  ...check,
+                  location: locationMap[check.location_id]
+                };
+              }
+              return check;
+            });
+            
+            console.log("Enriched maintenance checks with locations:", enrichedData);
+            setMaintenanceChecks(enrichedData as MaintenanceCheck[]);
+            setLoading(false);
+            return;
+          }
+        }
+      }
+      
+      // If we didn't have any location_ids or the location fetching failed
+      console.log("Maintenance checks without location enrichment:", data);
       setMaintenanceChecks(data || []);
     } catch (error) {
       console.error("Error fetching maintenance checks:", error);
