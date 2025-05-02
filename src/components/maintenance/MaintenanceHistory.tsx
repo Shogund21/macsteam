@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import { MaintenanceCheck } from "@/types/maintenance";
+import { MaintenanceCheck, MaintenanceLocation } from "@/types/maintenance";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import MaintenanceTableRow from "./table/MaintenanceTableRow";
@@ -50,16 +50,23 @@ const MaintenanceHistory = () => {
           } else if (locationsData) {
             // Create a map of location data for quick lookup
             const locationMap = locationsData.reduce((acc, location) => {
-              acc[location.id] = location;
+              acc[location.id] = {
+                name: location.name,
+                store_number: location.store_number
+              };
               return acc;
-            }, {} as Record<string, any>);
+            }, {} as Record<string, MaintenanceLocation>);
             
-            // Enrich maintenance checks with location data
+            // Enrich maintenance checks with properly structured location data
             const enrichedData = data.map(check => {
               if (check.location_id && locationMap[check.location_id]) {
+                const locationData = locationMap[check.location_id];
                 return {
                   ...check,
-                  location: locationMap[check.location_id]
+                  location: {
+                    name: locationData.name || "",
+                    store_number: locationData.store_number
+                  }
                 };
               }
               return check;

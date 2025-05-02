@@ -60,17 +60,25 @@ const MaintenanceTableRow = ({
     return `${check.technician.firstName} ${check.technician.lastName}`;
   };
 
-  // Get location name from location object, with fallback to equipment location as last resort
+  // Updated getLocationName function to prioritize location object from check.location
   const getLocationName = () => {
     // First try to get from the location object (from location_id)
-    if (check.location?.name) {
+    if (check.location && typeof check.location === 'object' && 'name' in check.location) {
+      // Debug log to verify the location data structure
+      console.log('Using check.location:', check.location);
+      
       return check.location.store_number 
         ? `${check.location.name} (${check.location.store_number})`
         : check.location.name;
     }
     
     // Fallback to equipment location if location object is not available
-    return check.equipment?.location || "Location Not Available";
+    if (check.equipment?.location) {
+      console.log('Falling back to equipment.location:', check.equipment.location);
+      return check.equipment.location;
+    }
+    
+    return "Location Not Available";
   };
 
   return (
