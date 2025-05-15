@@ -9,6 +9,7 @@ import AddEquipment from "@/pages/AddEquipment";
 import Projects from "@/pages/Projects";
 import AddProject from "@/pages/AddProject";
 import MaintenanceChecks from "@/pages/MaintenanceChecks";
+import FilterChanges from "@/pages/FilterChanges";
 import Analytics from "@/pages/Analytics";
 import Settings from "@/pages/Settings";
 import PrintView from "@/pages/PrintView";
@@ -38,6 +39,7 @@ function AnimatedRoutes() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/add-project" element={<AddProject />} />
         <Route path="/maintenance-checks" element={<MaintenanceChecks />} />
+        <Route path="/filter-changes" element={<FilterChanges />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/print" element={<PrintView />} />

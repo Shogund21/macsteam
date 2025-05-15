@@ -139,6 +139,66 @@ export type Database = {
           },
         ]
       }
+      filter_changes: {
+        Row: {
+          created_at: string
+          due_date: string
+          equipment_id: string
+          filter_condition: string | null
+          filter_size: string
+          filter_type: string
+          id: string
+          installation_date: string
+          notes: string | null
+          status: Database["public"]["Enums"]["filter_change_status"]
+          technician_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          due_date: string
+          equipment_id: string
+          filter_condition?: string | null
+          filter_size: string
+          filter_type: string
+          id?: string
+          installation_date?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["filter_change_status"]
+          technician_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          due_date?: string
+          equipment_id?: string
+          filter_condition?: string | null
+          filter_size?: string
+          filter_type?: string
+          id?: string
+          installation_date?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["filter_change_status"]
+          technician_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "filter_changes_equipment_id_fkey"
+            columns: ["equipment_id"]
+            isOneToOne: false
+            referencedRelation: "equipment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "filter_changes_technician_id_fkey"
+            columns: ["technician_id"]
+            isOneToOne: false
+            referencedRelation: "technicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hvac_maintenance_checks: {
         Row: {
           air_filter_cleaned: boolean | null
@@ -628,9 +688,75 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      filter_changes_view: {
+        Row: {
+          created_at: string | null
+          due_date: string | null
+          equipment_id: string | null
+          filter_condition: string | null
+          filter_size: string | null
+          filter_type: string | null
+          id: string | null
+          installation_date: string | null
+          notes: string | null
+          status: Database["public"]["Enums"]["filter_change_status"] | null
+          status_calc: string | null
+          technician_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          due_date?: string | null
+          equipment_id?: string | null
+          filter_condition?: string | null
+          filter_size?: string | null
+          filter_type?: string | null
+          id?: string | null
+          installation_date?: string | null
+          notes?: string | null
+          status?: Database["public"]["Enums"]["filter_change_status"] | null
+          status_calc?: never
+          technician_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          due_date?: string | null
+          equipment_id?: string | null
+          filter_condition?: string | null
+          filter_size?: string | null
+          filter_type?: string | null
+          id?: string | null
+          installation_date?: string | null
+          notes?: string | null
+          status?: Database["public"]["Enums"]["filter_change_status"] | null
+          status_calc?: never
+          technician_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "filter_changes_equipment_id_fkey"
+            columns: ["equipment_id"]
+            isOneToOne: false
+            referencedRelation: "equipment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "filter_changes_technician_id_fkey"
+            columns: ["technician_id"]
+            isOneToOne: false
+            referencedRelation: "technicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
+      calculate_filter_status: {
+        Args: { p_due: string }
+        Returns: string
+      }
       get_user_company: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -647,6 +773,7 @@ export type Database = {
       }
     }
     Enums: {
+      filter_change_status: "active" | "completed" | "overdue"
       maintenance_check_status: "completed" | "pending" | "issue_found"
     }
     CompositeTypes: {
@@ -763,6 +890,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      filter_change_status: ["active", "completed", "overdue"],
       maintenance_check_status: ["completed", "pending", "issue_found"],
     },
   },

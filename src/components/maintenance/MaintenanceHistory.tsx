@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { MaintenanceCheck, MaintenanceLocation } from "@/types/maintenance";
 import { supabase } from "@/integrations/supabase/client";
