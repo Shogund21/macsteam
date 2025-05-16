@@ -1,3 +1,4 @@
+
 import { Form } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,10 +9,13 @@ import LocationSelect from "./LocationSelect";
 import FormFields from "./FormFields";
 import FormActions from "./FormActions";
 import { EquipmentFormSchema, EquipmentFormValues } from "./types";
+import { Button } from "@/components/ui/button";
+import { Loader2 } from "lucide-react";
 
 const EquipmentForm = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<EquipmentFormValues>({
     resolver: zodResolver(EquipmentFormSchema),
@@ -28,6 +32,7 @@ const EquipmentForm = () => {
 
   const onSubmit = async (values: EquipmentFormValues) => {
     try {
+      setIsSubmitting(true);
       const { error } = await supabase.from("equipment").insert({
         name: values.name,
         model: values.model,
@@ -52,6 +57,8 @@ const EquipmentForm = () => {
         title: "Error",
         description: "Failed to add equipment. Please try again.",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -60,7 +67,31 @@ const EquipmentForm = () => {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormFields form={form} />
         <LocationSelect form={form} />
-        <FormActions />
+        
+        <div className="flex justify-end space-x-4">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => navigate("/equipment")}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button 
+            type="submit"
+            disabled={isSubmitting} 
+            className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white"
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              "Add Equipment"
+            )}
+          </Button>
+        </div>
       </form>
     </Form>
   );

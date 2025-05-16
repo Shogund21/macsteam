@@ -61,7 +61,7 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
                 ))
               ) : (
                 <SelectItem 
-                  value="no-technician-available" 
+                  value="no-technicians" 
                   disabled 
                   className="py-3 text-sm text-gray-500"
                 >

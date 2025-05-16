@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FilterChange, FilterChangeFormValues } from "@/types/filterChanges";
@@ -14,7 +15,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 
 interface FilterChangeFormDialogProps {
   filterChange?: FilterChange;
@@ -134,11 +135,17 @@ const FilterChangeFormDialog = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {equipment.map((item) => (
-                        <SelectItem key={item.id} value={item.id}>
-                          {item.name}
+                      {equipment.length > 0 ? (
+                        equipment.map((item) => (
+                          <SelectItem key={item.id} value={item.id}>
+                            {item.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-equipment" disabled>
+                          No equipment available
                         </SelectItem>
-                      ))}
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -275,11 +282,17 @@ const FilterChangeFormDialog = ({
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="unassigned">Not assigned</SelectItem>
-                      {technicians.map((tech) => (
-                        <SelectItem key={tech.id} value={tech.id}>
-                          {tech.firstName} {tech.lastName}
+                      {technicians.length > 0 ? (
+                        technicians.map((tech) => (
+                          <SelectItem key={tech.id} value={tech.id}>
+                            {tech.firstName} {tech.lastName}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-technicians-available" disabled>
+                          No technicians available
                         </SelectItem>
-                      ))}
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -362,8 +375,16 @@ const FilterChangeFormDialog = ({
               <Button 
                 type="submit"
                 disabled={create.isPending || update.isPending}
+                className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white"
               >
-                {isEditing ? "Update" : "Add"} Filter Change
+                {(create.isPending || update.isPending) ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    {isEditing ? "Updating..." : "Adding..."}
+                  </>
+                ) : (
+                  <>{isEditing ? "Update" : "Add"} Filter Change</>
+                )}
               </Button>
             </div>
           </form>

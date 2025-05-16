@@ -28,7 +28,7 @@ const FilterChanges = () => {
           
           <Button 
             onClick={() => setShowAddDialog(true)}
-            className={`${isMobile ? 'w-full py-2 text-sm' : ''} bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow transition-all duration-200`}
+            className={`${isMobile ? 'w-full py-2 text-sm' : ''} bg-[#1EAEDB] hover:bg-[#33C3F0] text-white shadow transition-all duration-200`}
             size={isMobile ? "default" : "lg"}
           >
             <Plus className={`${isMobile ? 'mr-1 h-4 w-4' : 'mr-2 h-5 w-5'}`} /> New Filter Change

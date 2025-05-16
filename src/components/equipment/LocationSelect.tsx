@@ -54,7 +54,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
             </FormControl>
             <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
               {isLoading ? (
-                <SelectItem value="loading-placeholder" disabled className="py-3 text-sm">
+                <SelectItem value="loading" disabled className="py-3 text-sm">
                   Loading locations...
                 </SelectItem>
               ) : locations && locations.length > 0 ? (
@@ -68,7 +68,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                   </SelectItem>
                 ))
               ) : (
-                <SelectItem value="no-locations-placeholder" disabled className="py-3 text-sm">
+                <SelectItem value="no-locations" disabled className="py-3 text-sm">
                   No locations available
                 </SelectItem>
               )}

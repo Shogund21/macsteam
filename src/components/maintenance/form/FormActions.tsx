@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Loader2 } from "lucide-react";
 
 interface FormActionsProps {
   onCancel: () => void;
@@ -44,7 +45,7 @@ const FormActions = ({
       >
         {isSubmitting ? (
           <div className="flex items-center justify-center">
-            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             <span>{isEditing ? 'Updating...' : 'Saving...'}</span>
           </div>
         ) : (
