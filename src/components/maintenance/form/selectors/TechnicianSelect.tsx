@@ -1,3 +1,4 @@
+
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
@@ -18,8 +19,8 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
           <FormLabel className="text-base font-semibold text-gray-700">Technician</FormLabel>
           <Select
             onValueChange={field.onChange}
-            value={field.value || ""}
-            defaultValue=""
+            value={field.value || "no-technician"}
+            defaultValue={field.value || "no-technician"}
           >
             <FormControl>
               <SelectTrigger 
@@ -34,6 +35,13 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
             <SelectContent 
               className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
             >
+              <SelectItem 
+                value="no-technician" 
+                className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+              >
+                No technician selected
+              </SelectItem>
+              
               {technicians && technicians.length > 0 ? (
                 technicians.map((tech) => (
                   <SelectItem 

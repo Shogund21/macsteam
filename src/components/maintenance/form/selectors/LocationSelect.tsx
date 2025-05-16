@@ -121,7 +121,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
             >
               {isLoading ? (
                 <SelectItem 
-                  value="loading" 
+                  value="loading-placeholder" 
                   disabled 
                   className="py-3 px-4 text-sm text-gray-500"
                 >
@@ -144,7 +144,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                 ))
               ) : (
                 <SelectItem 
-                  value="no-locations-available" 
+                  value="no-locations-placeholder" 
                   disabled 
                   className="py-3 text-sm text-gray-500"
                 >

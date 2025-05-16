@@ -1,3 +1,4 @@
+
 import {
   FormControl,
   FormField,
@@ -43,8 +44,8 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
           <FormLabel className="text-base font-semibold">Location</FormLabel>
           <Select 
             onValueChange={field.onChange} 
-            value={field.value}
-            defaultValue={field.value}
+            value={field.value || ""}
+            defaultValue={field.value || ""}
           >
             <FormControl>
               <SelectTrigger className="w-full bg-white border-gray-200 h-12">
@@ -52,15 +53,25 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent className="max-h-[300px] overflow-y-auto bg-white">
-              {locations?.map((location) => (
-                <SelectItem 
-                  key={location.id} 
-                  value={location.name}
-                  className="py-3 text-sm cursor-pointer hover:bg-gray-100"
-                >
-                  {location.name} - {location.store_number}
+              {isLoading ? (
+                <SelectItem value="loading-placeholder" disabled className="py-3 text-sm">
+                  Loading locations...
                 </SelectItem>
-              ))}
+              ) : locations && locations.length > 0 ? (
+                locations.map((location) => (
+                  <SelectItem 
+                    key={location.id} 
+                    value={location.name}
+                    className="py-3 text-sm cursor-pointer hover:bg-gray-100"
+                  >
+                    {location.name} - {location.store_number}
+                  </SelectItem>
+                ))
+              ) : (
+                <SelectItem value="no-locations-placeholder" disabled className="py-3 text-sm">
+                  No locations available
+                </SelectItem>
+              )}
             </SelectContent>
           </Select>
           <FormMessage />

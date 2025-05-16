@@ -108,11 +108,11 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                 className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
               >
                 {isLoading ? (
-                  <SelectItem value="loading" disabled className="py-3 px-4 text-sm text-gray-500">
+                  <SelectItem value="loading-placeholder" disabled className="py-3 px-4 text-sm text-gray-500">
                     Loading equipment...
                   </SelectItem>
                 ) : isError ? (
-                  <SelectItem value="error" disabled className="py-3 px-4 text-sm text-red-500">
+                  <SelectItem value="error-placeholder" disabled className="py-3 px-4 text-sm text-red-500">
                     Error loading equipment
                   </SelectItem>
                 ) : equipment.length > 0 ? (
@@ -133,7 +133,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                     </SelectItem>
                   ))
                 ) : (
-                  <SelectItem value="no-equipment" disabled className="py-3 px-4 text-sm text-gray-500">
+                  <SelectItem value="no-equipment-placeholder" disabled className="py-3 px-4 text-sm text-gray-500">
                     No equipment available
                   </SelectItem>
                 )}

@@ -1,4 +1,3 @@
-
 import { useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { FilterChange, FilterChangeFormValues } from "@/types/filterChanges";
@@ -266,8 +265,8 @@ const FilterChangeFormDialog = ({
                 <FormItem>
                   <FormLabel>Technician</FormLabel>
                   <Select 
-                    value={field.value || ""} 
-                    onValueChange={(value) => field.onChange(value || null)}
+                    value={field.value || "unassigned"} 
+                    onValueChange={(value) => field.onChange(value === "unassigned" ? null : value)}
                   >
                     <FormControl>
                       <SelectTrigger>
@@ -275,7 +274,7 @@ const FilterChangeFormDialog = ({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">Not assigned</SelectItem>
+                      <SelectItem value="unassigned">Not assigned</SelectItem>
                       {technicians.map((tech) => (
                         <SelectItem key={tech.id} value={tech.id}>
                           {tech.firstName} {tech.lastName}
