@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SidebarHeader } from "./sidebar/SidebarHeader";
 import { SidebarNav } from "./sidebar/SidebarNav";
@@ -31,30 +30,29 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
   };
 
   return (
-    <aside
-      className={cn(
-        "fixed left-0 top-0 z-40 h-screen w-56 border-r border-gray-200 bg-white transition-transform",
-        isCollapsed ? "-translate-x-full" : "",
-        className
-      )}
-      {...props}
-    >
-      <Sheet open={isCollapsed} onOpenChange={setIsCollapsed}>
-        {/* Static sidebar header */}
+    <>
+      {/* Desktop sidebar */}
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-40 h-screen w-52 border-r border-gray-200 bg-white transition-all md:translate-x-0",
+          isCollapsed ? "-translate-x-full" : "",
+          className
+        )}
+        {...props}
+      >
         <SidebarHeader isMobile={isMobile} />
+        <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
+      </aside>
 
-        {/* Sheet content (mobile view) */}
-        <SheetContent side="left" className="p-0">
+      {/* Mobile sidebar with sheet */}
+      <Sheet open={!isCollapsed && isMobile} onOpenChange={setIsCollapsed}>
+        <SheetContent side="left" className="p-0 w-64">
           <SidebarHeader isMobile={isMobile} />
-          
           <div className="space-y-4 py-4">
             <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
           </div>
         </SheetContent>
-        
-        {/* Regular sidebar content (desktop view) */}
-        <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
       </Sheet>
-    </aside>
+    </>
   );
 }

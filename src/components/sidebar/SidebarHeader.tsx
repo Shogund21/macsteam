@@ -14,10 +14,10 @@ export function SidebarHeader({ isMobile }: SidebarHeaderProps) {
   const { currentCompany } = useCompany();
   
   return (
-    <div className="flex h-[60px] items-center justify-between border-b px-6">
+    <div className="flex h-[60px] items-center justify-between border-b px-4">
       <Link to="/" className="flex items-center gap-2 font-semibold">
-        <Building2 className="h-6 w-6" />
-        <span className="truncate">{currentCompany?.name || "Your Company"}</span>
+        <Building2 className="h-5 w-5 flex-shrink-0" />
+        <span className="truncate max-w-[120px]">{currentCompany?.name || "Your Company"}</span>
       </Link>
       {isMobile ? (
         <SheetTrigger asChild>

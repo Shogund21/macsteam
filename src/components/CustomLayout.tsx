@@ -9,7 +9,7 @@ interface CustomLayoutProps {
 export const CustomLayout = ({ children }: CustomLayoutProps) => {
   return (
     <Layout>
-      <div className="overflow-container">
+      <div className="overflow-container w-full">
         {children}
       </div>
     </Layout>

@@ -26,11 +26,11 @@ const Layout = ({ children }: LayoutProps) => {
           </>
         )}
         
-        {/* Sidebar with fixed width - hidden on mobile initially but can be opened */}
+        {/* Sidebar with fixed width */}
         <Sidebar />
 
-        {/* Main content takes remaining space */}
-        <SidebarInset className="flex-1 bg-gray-50 h-screen overflow-hidden">
+        {/* Main content with proper margin to prevent overlap */}
+        <SidebarInset className="flex-1 bg-gray-50 h-screen overflow-hidden ml-0 md:ml-52">
           <ScrollArea className="h-full">
             <div className="w-full max-w-full p-3 sm:p-4 md:p-6">
               {/* Application header with logo and name */}
