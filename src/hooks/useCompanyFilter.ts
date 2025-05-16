@@ -1,7 +1,6 @@
 
 import { useCompany } from "@/contexts/CompanyContext";
 import { useEffect, useState } from "react";
-import { PostgrestFilterBuilder } from "@supabase/postgrest-js";
 
 export const useCompanyFilter = () => {
   const { currentCompany } = useCompany();
@@ -18,9 +17,9 @@ export const useCompanyFilter = () => {
   }, [currentCompany]);
 
   const applyCompanyFilter = <T>(
-    query: PostgrestFilterBuilder<any, any, T[]>,
+    query: any,
     skipFilter = true // Default to skipping the filter
-  ): PostgrestFilterBuilder<any, any, T[]> => {
+  ): any => {
     if (skipFilter) {
       console.log('applyCompanyFilter: Skipping filter as requested');
       return query;

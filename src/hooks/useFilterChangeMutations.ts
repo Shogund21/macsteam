@@ -50,12 +50,22 @@ export function useFilterChangeMutations() {
       const { id, values } = data;
 
       // Format dates if they exist
-      const formattedValues = { ...values };
-      if (formattedValues.installation_date instanceof Date) {
-        formattedValues.installation_date = formattedValues.installation_date.toISOString();
+      const formattedValues: Record<string, any> = {};
+      
+      // Copy all non-date values
+      Object.entries(values).forEach(([key, value]) => {
+        if (key !== 'installation_date' && key !== 'due_date') {
+          formattedValues[key] = value;
+        }
+      });
+      
+      // Handle dates separately
+      if (values.installation_date instanceof Date) {
+        formattedValues.installation_date = values.installation_date.toISOString();
       }
-      if (formattedValues.due_date instanceof Date) {
-        formattedValues.due_date = formattedValues.due_date.toISOString();
+      
+      if (values.due_date instanceof Date) {
+        formattedValues.due_date = values.due_date.toISOString();
       }
 
       const { data: updatedData, error } = await supabase

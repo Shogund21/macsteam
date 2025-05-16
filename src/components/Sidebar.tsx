@@ -36,7 +36,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
   const [isCollapsed, setIsCollapsed] = useState(false);
   const isMobile = useIsMobile();
   const [mounted, setMounted] = useState(false);
-  const { company } = useCompany();
+  const { currentCompany } = useCompany();
 
   useEffect(() => {
     setMounted(true);
@@ -65,7 +65,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
         <div className="flex h-[60px] items-center justify-between border-b px-6">
           <Link to="/" className="flex items-center gap-2 font-semibold">
             <Building2 className="h-6 w-6" />
-            <span>{company?.name || "Your Company"}</span>
+            <span>{currentCompany?.name || "Your Company"}</span>
           </Link>
           {isMobile ? (
             <SheetTrigger asChild>
@@ -79,7 +79,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
           <div className="flex h-[60px] items-center justify-between border-b px-6">
             <Link to="/" className="flex items-center gap-2 font-semibold">
               <Building2 className="h-6 w-6" />
-              <span>{company?.name || "Your Company"}</span>
+              <span>{currentCompany?.name || "Your Company"}</span>
             </Link>
             {isMobile ? (
               <SheetTrigger asChild>
@@ -195,7 +195,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
       <div className="flex h-[60px] items-center justify-between border-b px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <Building2 className="h-6 w-6" />
-          <span>{company?.name || "Your Company"}</span>
+          <span>{currentCompany?.name || "Your Company"}</span>
         </Link>
         {isMobile ? (
           <SheetTrigger asChild>
