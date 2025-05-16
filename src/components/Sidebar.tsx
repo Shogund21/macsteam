@@ -1,3 +1,4 @@
+
 import {
   ActivityIcon,
   BarChart3,
@@ -55,7 +56,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
   return (
     <aside
       className={cn(
-        "fixed left-0 top-0 z-40 h-screen w-64 border-r border-gray-200 bg-white transition-transform",
+        "fixed left-0 top-0 z-40 h-screen w-56 border-r border-gray-200 bg-white transition-transform",
         isCollapsed ? "-translate-x-full" : "",
         className
       )}
@@ -65,7 +66,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
         <div className="flex h-[60px] items-center justify-between border-b px-6">
           <Link to="/" className="flex items-center gap-2 font-semibold">
             <Building2 className="h-6 w-6" />
-            <span>{currentCompany?.name || "Your Company"}</span>
+            <span className="truncate">{currentCompany?.name || "Your Company"}</span>
           </Link>
           {isMobile ? (
             <SheetTrigger asChild>
@@ -79,7 +80,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
           <div className="flex h-[60px] items-center justify-between border-b px-6">
             <Link to="/" className="flex items-center gap-2 font-semibold">
               <Building2 className="h-6 w-6" />
-              <span>{currentCompany?.name || "Your Company"}</span>
+              <span className="truncate">{currentCompany?.name || "Your Company"}</span>
             </Link>
             {isMobile ? (
               <SheetTrigger asChild>
@@ -195,7 +196,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
       <div className="flex h-[60px] items-center justify-between border-b px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <Building2 className="h-6 w-6" />
-          <span>{currentCompany?.name || "Your Company"}</span>
+          <span className="truncate">{currentCompany?.name || "Your Company"}</span>
         </Link>
         {isMobile ? (
           <SheetTrigger asChild>

@@ -6,7 +6,7 @@ import DocumentManager from "@/components/maintenance/documents/DocumentManager"
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowLeft, Plus } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import FormSection from "@/components/maintenance/form/FormSection";
 
@@ -14,6 +14,11 @@ const MaintenanceChecks = () => {
   const [showForm, setShowForm] = useState(false);
   const [activeTab, setActiveTab] = useState("history");
   const isMobile = useIsMobile();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -21,6 +26,8 @@ const MaintenanceChecks = () => {
       setShowForm(false);
     }
   };
+
+  if (!mounted) return null;
 
   return (
     <Layout>

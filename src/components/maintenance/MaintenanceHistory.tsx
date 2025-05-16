@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { MaintenanceCheck, MaintenanceLocation } from "@/types/maintenance";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,9 +12,14 @@ const MaintenanceHistory = () => {
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   const fetchMaintenanceChecks = async () => {
     try {
+      setLoading(true);
+      setFetchError(null);
+      console.log("Fetching maintenance checks...");
+      
       // First query to get maintenance checks with equipment and technician details
       const { data, error } = await supabase
         .from("hvac_maintenance_checks")
@@ -30,7 +36,13 @@ const MaintenanceHistory = () => {
         `)
         .order("check_date", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching maintenance checks:", error);
+        setFetchError(error.message);
+        throw error;
+      }
+
+      console.log("Fetched maintenance data:", data);
 
       // If we have location_ids, fetch the location data separately
       if (data && data.length > 0) {
@@ -83,7 +95,7 @@ const MaintenanceHistory = () => {
       console.log("Maintenance checks without location enrichment:", data);
       setMaintenanceChecks(data || []);
     } catch (error) {
-      console.error("Error fetching maintenance checks:", error);
+      console.error("Error in fetchMaintenanceChecks:", error);
       toast({
         title: "Error fetching maintenance checks",
         description: "Please try again later.",
@@ -131,13 +143,20 @@ const MaintenanceHistory = () => {
       <h2 className={`text-xl ${isMobile ? 'text-center' : 'text-2xl'} font-bold`}>
         Maintenance History
       </h2>
+      
+      {fetchError && (
+        <div className="p-4 bg-red-50 text-red-600 rounded-md">
+          Error loading data: {fetchError}
+        </div>
+      )}
+      
       <div className="space-y-4">
         {loading ? (
           Array.from({ length: 3 }).map((_, index) => (
             <Skeleton key={index} className="h-24 w-full" />
           ))
         ) : maintenanceChecks.length === 0 ? (
-          <p className="text-muted-foreground text-center">No maintenance checks found.</p>
+          <p className="text-muted-foreground text-center py-8">No maintenance checks found.</p>
         ) : (
           maintenanceChecks.map((check) => (
             <MaintenanceTableRow
