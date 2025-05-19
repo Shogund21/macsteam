@@ -1,3 +1,5 @@
+
+import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -7,7 +9,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 interface DeleteEquipmentDialogProps {
@@ -16,11 +17,13 @@ interface DeleteEquipmentDialogProps {
 }
 
 export const DeleteEquipmentDialog = ({ children, onDelete }: DeleteEquipmentDialogProps) => {
+  const [open, setOpen] = useState(false);
+  
   return (
-    <AlertDialog>
-      <AlertDialogTrigger asChild>
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <div onClick={() => setOpen(true)}>
         {children}
-      </AlertDialogTrigger>
+      </div>
       <AlertDialogContent className="bg-white max-w-[90vw] w-[400px] rounded-lg">
         <AlertDialogHeader>
           <AlertDialogTitle>Delete Equipment</AlertDialogTitle>

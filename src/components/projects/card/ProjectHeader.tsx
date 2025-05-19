@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import {
@@ -11,6 +12,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useState } from "react";
 
 interface ProjectHeaderProps {
   name: string;
@@ -18,15 +20,20 @@ interface ProjectHeaderProps {
 }
 
 export const ProjectHeader = ({ name, onDelete }: ProjectHeaderProps) => {
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  
   return (
     <div className="flex justify-between items-start">
       <h3 className="text-lg font-semibold">{name}</h3>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
-          <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50">
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        </AlertDialogTrigger>
+      <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="text-red-500 hover:text-red-600 hover:bg-red-50"
+          onClick={() => setIsAlertOpen(true)}
+        >
+          <Trash2 className="h-4 w-4" />
+        </Button>
         <AlertDialogContent className="bg-white">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Project</AlertDialogTitle>

@@ -154,7 +154,7 @@ export const CompanyList = ({ onSuccess }: CompanyListProps) => {
         </DialogContent>
       </Dialog>
 
-      <AlertDialog open={!!isDeletingCompany} onOpenChange={() => setIsDeletingCompany(null)}>
+      <AlertDialog open={!!isDeletingCompany} onOpenChange={(open) => !open && setIsDeletingCompany(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure you want to delete this company?</AlertDialogTitle>
