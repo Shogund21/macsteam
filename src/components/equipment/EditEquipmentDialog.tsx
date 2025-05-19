@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Equipment } from "@/types/equipment";
 import { EquipmentFormSchema, EquipmentFormValues } from "./types";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -75,19 +75,20 @@ export const EditEquipmentDialog = ({ equipment, children }: EditEquipmentDialog
     }
   };
 
+  const triggerButton = children || (
+    <Button 
+      variant="ghost" 
+      size="icon" 
+      className="text-blue-500 hover:text-blue-600 hover:bg-blue-50"
+      onClick={() => setOpen(true)}
+    >
+      <Pen className="h-4 w-4" />
+    </Button>
+  );
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        {children || (
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            className="text-blue-500 hover:text-blue-600 hover:bg-blue-50"
-          >
-            <Pen className="h-4 w-4" />
-          </Button>
-        )}
-      </DialogTrigger>
+      {triggerButton}
       <DialogContent className="sm:max-w-[550px] bg-white">
         <DialogHeader>
           <DialogTitle>Edit Equipment</DialogTitle>
