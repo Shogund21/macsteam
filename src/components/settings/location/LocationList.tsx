@@ -1,5 +1,4 @@
 
-import { Dialog } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -77,28 +76,18 @@ export const LocationList = () => {
         isAuthenticated={isAuthenticated}
       />
       
-      <Dialog 
-        open={isDialogOpen} 
-        onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          if (!open) {
-            closeDialog();
-          }
-        }}
-      >
-        <LocationFormDialog
-          isOpen={isDialogOpen}
-          onOpenChange={setIsDialogOpen}
-          initialData={editLocation || undefined}
-          onSuccess={handleSuccess}
-          title={editLocation ? "Edit Location" : "Add New Location"}
-          description={
-            editLocation 
-              ? "Update the location information below." 
-              : "Enter the details for the new location."
-          }
-        />
-      </Dialog>
+      <LocationFormDialog
+        isOpen={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        initialData={editLocation || undefined}
+        onSuccess={handleSuccess}
+        title={editLocation ? "Edit Location" : "Add New Location"}
+        description={
+          editLocation 
+            ? "Update the location information below." 
+            : "Enter the details for the new location."
+        }
+      />
 
       {isLoading ? (
         <LocationListLoading />

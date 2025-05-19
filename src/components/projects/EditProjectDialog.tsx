@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -7,10 +8,10 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Pencil } from "lucide-react";
 import { ProjectForm } from "./ProjectForm";
+import { useState } from "react";
 
 const projectSchema = z.object({
   name: z.string().min(1, "Project name is required"),
@@ -28,6 +29,7 @@ interface EditProjectDialogProps {
 }
 
 export const EditProjectDialog = ({ project, onEdit }: EditProjectDialogProps) => {
+  const [open, setOpen] = useState(false);
   const form = useForm<z.infer<typeof projectSchema>>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
@@ -42,12 +44,10 @@ export const EditProjectDialog = ({ project, onEdit }: EditProjectDialogProps) =
   });
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" size="icon">
-          <Pencil className="h-4 w-4" />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
+        <Pencil className="h-4 w-4" />
+      </Button>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Edit Project</DialogTitle>

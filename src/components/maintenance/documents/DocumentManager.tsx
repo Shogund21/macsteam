@@ -8,7 +8,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
@@ -46,12 +45,14 @@ const DocumentManager = ({
           {isRepositoryView ? "Document Repository" : "Documents"}
         </h2>
         <Dialog open={isUploadOpen} onOpenChange={setIsUploadOpen}>
-          <DialogTrigger asChild>
-            <Button className={isMobile ? "px-3 py-1 h-8" : ""} size={isMobile ? "sm" : "default"}>
-              <Plus className="h-4 w-4 mr-1" />
-              {isMobile ? "" : "Upload"}
-            </Button>
-          </DialogTrigger>
+          <Button 
+            className={isMobile ? "px-3 py-1 h-8" : ""} 
+            size={isMobile ? "sm" : "default"}
+            onClick={() => setIsUploadOpen(true)}
+          >
+            <Plus className="h-4 w-4 mr-1" />
+            {isMobile ? "" : "Upload"}
+          </Button>
           <DialogContent className="max-w-2xl max-h-[90dvh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Upload Documents</DialogTitle>
