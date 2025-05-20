@@ -33,15 +33,15 @@ export const ProjectHeader = ({ name, onDelete }: ProjectHeaderProps) => {
         >
           <Trash2 className="h-4 w-4" />
         </Button>
-        <AlertDialogContent className="bg-white">
+        <AlertDialogContent className="bg-white max-w-[90vw] sm:max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Project</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to delete this project? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogFooter className="flex-col sm:flex-row">
+            <AlertDialogCancel className="mb-2 sm:mb-0">Cancel</AlertDialogCancel>
             <AlertDialogAction 
               onClick={onDelete}
               className="bg-red-500 hover:bg-red-600 text-white"

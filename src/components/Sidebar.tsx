@@ -45,14 +45,16 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
       </aside>
 
       {/* Mobile sidebar with sheet */}
-      <Sheet open={!isCollapsed && isMobile} onOpenChange={setIsCollapsed}>
-        <SheetContent side="left" className="p-0 w-64">
-          <SidebarHeader isMobile={isMobile} />
-          <div className="space-y-4 py-4">
-            <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
-          </div>
-        </SheetContent>
-      </Sheet>
+      {isMobile && (
+        <Sheet open={!isCollapsed} onOpenChange={setIsCollapsed}>
+          <SheetContent side="left" className="p-0 w-64 max-w-[85%]">
+            <SidebarHeader isMobile={isMobile} />
+            <div className="space-y-4 py-4">
+              <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
+            </div>
+          </SheetContent>
+        </Sheet>
+      )}
     </>
   );
 }

@@ -18,12 +18,9 @@ const Layout = ({ children }: LayoutProps) => {
       <div className="flex h-screen w-full overflow-hidden">
         {/* Mobile sidebar toggle button and hint - only visible on mobile */}
         {isMobile && (
-          <>
-            <div className="fixed top-4 left-4 z-50">
-              <SidebarTrigger />
-            </div>
-            <MobileHint />
-          </>
+          <div className="fixed top-4 left-4 z-50">
+            <SidebarTrigger />
+          </div>
         )}
         
         {/* Sidebar with fixed width */}

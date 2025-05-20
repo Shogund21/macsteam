@@ -2,9 +2,9 @@
 import { Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { SheetTrigger } from "@/components/ui/sheet";
 import { useCompany } from "@/contexts/CompanyContext";
 import { UserDropdown } from "./UserDropdown";
+import { useState } from "react";
 
 interface SidebarHeaderProps {
   isMobile: boolean;
@@ -12,6 +12,7 @@ interface SidebarHeaderProps {
 
 export function SidebarHeader({ isMobile }: SidebarHeaderProps) {
   const { currentCompany } = useCompany();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   return (
     <div className="flex h-[60px] items-center justify-between border-b px-4">
@@ -20,11 +21,14 @@ export function SidebarHeader({ isMobile }: SidebarHeaderProps) {
         <span className="truncate max-w-[120px]">{currentCompany?.name || "Your Company"}</span>
       </Link>
       {isMobile ? (
-        <SheetTrigger asChild>
-          <Button variant="ghost" size="sm">
-            Menu
-          </Button>
-        </SheetTrigger>
+        <Button 
+          variant="ghost" 
+          size="sm" 
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          className="focus:outline-none"
+        >
+          Menu
+        </Button>
       ) : (
         <UserDropdown />
       )}

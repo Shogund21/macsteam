@@ -48,3 +48,34 @@
   background-color: white !important;
   z-index: 1000 !important;
 }
+
+/* Mobile dialog improvements */
+@media (max-width: 640px) {
+  [role="dialog"] {
+    width: 95% !important;
+    max-width: 95% !important;
+  }
+  
+  [role="alertdialog"] {
+    width: 92% !important;
+    max-width: 92% !important;
+  }
+}
+
+/* Fix for dialog content overflow on mobile */
+[role="dialog"] [data-state="open"] {
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Ensure all dialog overlays have consistent z-index */
+[data-radix-dialog-overlay],
+[data-radix-alert-dialog-overlay] {
+  z-index: 999 !important;
+}
+
+/* Ensure all dialog content has consistent z-index */
+[data-radix-dialog-content],
+[data-radix-alert-dialog-content] {
+  z-index: 1000 !important;
+}
