@@ -1,0 +1,52 @@
+
+/* Critical visibility fixes for mobile and all devices */
+html, body, #root {
+  height: 100% !important;
+  width: 100% !important;
+  margin: 0;
+  padding: 0;
+  display: block !important;
+  visibility: visible !important;
+  overflow: auto !important;
+}
+
+#root > div, 
+[data-radix-sidebar-root],
+[data-radix-sidebar-content],
+[data-radix-sidebar-inset],
+.dashboard-content,
+.overflow-container {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 200px !important;
+}
+
+/* Fix for iOS Safari 100vh issues */
+.h-screen {
+  height: calc(var(--vh, 1vh) * 100) !important;
+  min-height: calc(var(--vh, 1vh) * 100) !important;
+}
+
+/* Force content visibility */
+[style*="visibility: hidden"],
+[style*="display: none"],
+.invisible,
+.hidden {
+  visibility: visible !important;
+  display: block !important;
+  opacity: 1 !important;
+}
+
+/* Z-index fixes */
+[data-radix-popper-content-wrapper] {
+  z-index: 10000 !important;
+}
+
+/* Ensure dialogs appear properly */
+[data-radix-dialog-overlay],
+[data-radix-dialog-content],
+[data-radix-alert-dialog-overlay],
+[data-radix-alert-dialog-content] {
+  z-index: 10000 !important;
+}

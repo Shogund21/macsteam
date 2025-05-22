@@ -20,6 +20,7 @@
         padding: 0;
         display: block !important;
         visibility: visible !important;
+        overflow: auto !important;
       }
       
       /* Fix for blank page issue */
@@ -33,6 +34,22 @@
       .overflow-container {
         display: block !important;
         visibility: visible !important;
+        min-height: 200px !important;
+      }
+
+      /* Critical immediate render fixes */
+      #root > div, 
+      [data-radix-sidebar-root],
+      [data-radix-sidebar-content] {
+        display: block !important;
+        visibility: visible !important;
+      }
+
+      /* Emergency override for any content that might be hidden */
+      .hidden, .invisible, [hidden] {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
       }
     </style>
   </head>

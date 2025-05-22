@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import CustomLayout from "@/components/CustomLayout";
 import Stats from "@/components/dashboard/Stats";
 import RecentActivities from "@/components/dashboard/RecentActivities";
@@ -12,38 +12,43 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [contentVisible, setContentVisible] = useState(true);
+  const [renderAttempt, setRenderAttempt] = useState(0);
 
-  // Force content visibility and handle errors
+  // Force content to render with multiple attempts
+  const forceRender = useCallback(() => {
+    setContentVisible(true);
+    window.dispatchEvent(new Event('resize'));
+    
+    // Force all dashboard content to be visible
+    document.querySelectorAll('.dashboard-content, .overflow-container').forEach(el => {
+      if (el instanceof HTMLElement) {
+        el.style.display = 'block';
+        el.style.visibility = 'visible';
+        el.style.opacity = '1';
+      }
+    });
+  }, []);
+
+  // Force content visibility and handle errors with multiple attempts
   useEffect(() => {
     try {
       // Set content as visible immediately
       setContentVisible(true);
+      forceRender();
       
-      // Force multiple re-renders to ensure display
-      const timer1 = setTimeout(() => {
-        window.dispatchEvent(new Event('resize'));
-        setIsLoading(false);
-        setContentVisible(true);
-      }, 100);
-      
-      // Additional safety checks
-      const timer2 = setTimeout(() => {
-        setContentVisible(true);
-        if (document.querySelector('.dashboard-content')?.clientHeight === 0) {
-          console.log('Force rerender due to zero height');
-          window.dispatchEvent(new Event('resize'));
-        }
-      }, 500);
-      
-      // Final check
-      const timer3 = setTimeout(() => {
-        setContentVisible(true);
-      }, 1000);
+      // Schedule multiple re-render attempts
+      const timers = [];
+      for (let i = 1; i <= 5; i++) {
+        timers.push(setTimeout(() => {
+          setIsLoading(false);
+          setContentVisible(true);
+          forceRender();
+          setRenderAttempt(prev => prev + 1);
+        }, i * 200)); // Try at 200ms, 400ms, 600ms, 800ms, 1000ms
+      }
       
       return () => {
-        clearTimeout(timer1);
-        clearTimeout(timer2);
-        clearTimeout(timer3);
+        timers.forEach(timer => clearTimeout(timer));
       };
     } catch (error) {
       console.error("Error in Index component:", error);
@@ -55,11 +60,27 @@ const Index = () => {
         variant: "destructive",
       });
     }
-  }, []);
+  }, [forceRender]);
+
+  // Fix visibility issues if content height is zero (another attempt)
+  useEffect(() => {
+    const checkContentHeight = () => {
+      const dashboardContent = document.querySelector('.dashboard-content');
+      if (dashboardContent && dashboardContent.clientHeight === 0) {
+        console.log('Dashboard content has zero height. Forcing rerender.');
+        forceRender();
+        setRenderAttempt(prev => prev + 1);
+      }
+    };
+    
+    // Check after a delay
+    const timer = setTimeout(checkContentHeight, 500);
+    return () => clearTimeout(timer);
+  }, [forceRender, renderAttempt]);
 
   return (
     <CustomLayout>
-      <div className="dashboard-content min-h-[400px] block visible" style={{ display: "block", visibility: "visible" }}>
+      <div className="dashboard-content min-h-[400px] block visible" style={{ display: "block", visibility: "visible", opacity: 1 }}>
         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
         
         {/* Simple content that always shows regardless of data loading state */}
@@ -88,7 +109,7 @@ const Index = () => {
             </div>
           </div>
         ) : (
-          <div className={contentVisible ? "block" : "hidden"}>
+          <div style={{ display: "block", visibility: "visible", opacity: 1 }}>
             <div className="my-6">
               <Stats />
             </div>

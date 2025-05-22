@@ -16,8 +16,9 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
-  const [isContentVisible, setIsContentVisible] = useState(true); // Start with visible content
+  const [isContentVisible, setIsContentVisible] = useState(true); 
   const [layoutError, setLayoutError] = useState<Error | null>(null);
+  const [renderCount, setRenderCount] = useState(0);
   
   // Fix for mobile Safari: Handle viewport height properly
   useEffect(() => {
@@ -34,16 +35,28 @@ const Layout = ({ children }: LayoutProps) => {
     setIsContentVisible(true);
     
     // Force multiple re-renders to ensure display
-    setTimeout(setViewportHeight, 100);
-    setTimeout(setViewportHeight, 300);
-    setTimeout(setViewportHeight, 500);
-    setTimeout(() => {
-      setIsContentVisible(true);
-      window.dispatchEvent(new Event('resize'));
-    }, 800);
+    const timers = [];
+    for (let i = 1; i <= 5; i++) {
+      timers.push(setTimeout(() => {
+        setViewportHeight();
+        setIsContentVisible(true);
+        setRenderCount(prev => prev + 1);
+        window.dispatchEvent(new Event('resize'));
+        
+        // Force visibility of all main content containers
+        document.querySelectorAll('.dashboard-content, .overflow-container, [data-radix-sidebar-inset], [data-radix-sidebar-content]').forEach(el => {
+          if (el instanceof HTMLElement) {
+            el.style.display = 'block';
+            el.style.visibility = 'visible';
+            el.style.opacity = '1';
+          }
+        });
+      }, i * 200)); // Try at 200ms, 400ms, 600ms, 800ms, 1000ms
+    }
     
     return () => {
       window.removeEventListener('resize', setViewportHeight);
+      timers.forEach(timer => clearTimeout(timer));
     };
   }, []);
 
@@ -61,7 +74,7 @@ const Layout = ({ children }: LayoutProps) => {
         variant: "destructive"
       });
     }
-  }, []);
+  }, [renderCount]);
 
   // Show fallback UI if layout fails
   if (layoutError) {
@@ -80,7 +93,13 @@ const Layout = ({ children }: LayoutProps) => {
     <SidebarProvider defaultOpen={!isMobile}>
       <div 
         className="flex h-screen w-full overflow-hidden flex-col md:flex-row visible" 
-        style={{ height: 'calc(var(--vh, 1vh) * 100)', minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+        style={{ 
+          height: 'calc(var(--vh, 1vh) * 100)', 
+          minHeight: 'calc(var(--vh, 1vh) * 100)',
+          display: "block",
+          visibility: "visible",
+          opacity: 1
+        }}
       >
         {/* Mobile sidebar toggle button - only visible on mobile */}
         {isMobile && (
@@ -111,11 +130,13 @@ const Layout = ({ children }: LayoutProps) => {
             height: 'calc(var(--vh, 1vh) * 100)', 
             minHeight: 'calc(var(--vh, 1vh) * 100)',
             visibility: "visible",
-            display: "block"
+            display: "block",
+            opacity: 1
           }}
+          data-testid="sidebar-inset"
         >
-          <div className="h-full w-full visible" style={{ display: "block" }}>
-            <div className="w-full p-3 sm:p-4 md:p-6 visible">
+          <div className="h-full w-full visible" style={{ display: "block", visibility: "visible" }}>
+            <div className="w-full p-3 sm:p-4 md:p-6 visible" style={{ display: "block", visibility: "visible" }}>
               {/* Application header with logo, name, and mobile-friendly controls */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
                 <div className="flex items-center">
@@ -140,8 +161,8 @@ const Layout = ({ children }: LayoutProps) => {
               </div>
               
               {/* Render children with fallback */}
-              <div className="min-h-[200px] block visible" style={{ display: "block", visibility: "visible" }}>
-                {children || (
+              <div className="min-h-[200px] block visible" style={{ display: "block", visibility: "visible", opacity: 1 }}>
+                {isContentVisible && children ? children : (
                   <div className="flex items-center justify-center h-64">
                     <p className="text-gray-500">Loading content...</p>
                   </div>
