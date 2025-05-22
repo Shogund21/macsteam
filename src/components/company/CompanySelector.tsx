@@ -43,12 +43,7 @@ export const CompanySelector = () => {
         open={open}
         onOpenChange={setOpen}
       >
-        <SelectTrigger 
-          className={`h-8 bg-white border border-gray-200 rounded-md px-3`}
-          style={{ maxWidth }}
-        >
-          <SelectValue placeholder="Select company" className="truncate max-w-full" />
-        </SelectTrigger>
+        <SelectTrigger className={`h-8 bg-white border border-gray-200 rounded-md px-3`} style={{ maxWidth }}><SelectValue placeholder="Select company" className="truncate max-w-full" /></SelectTrigger>
         <SelectContent 
           className="bg-white border border-gray-200 shadow-md"
           position={isMobile ? "popper" : "item-aligned"}

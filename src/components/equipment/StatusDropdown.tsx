@@ -29,9 +29,7 @@ export const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="w-[150px] justify-between">
-          {status}
-        </Button>
+        <Button variant="outline" className="w-[150px] justify-between">{status}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         className="bg-white shadow-md"

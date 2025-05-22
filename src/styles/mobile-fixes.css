@@ -54,6 +54,11 @@
       visibility: visible !important;
       opacity: 1 !important;
     }
+
+    /* Additional z-index fix for dropdown menus */
+    [data-radix-dropdown-menu-content] {
+      z-index: 1000 !important;
+    }
   }
 }
 
