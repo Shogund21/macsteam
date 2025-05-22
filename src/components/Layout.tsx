@@ -5,6 +5,8 @@ import Sidebar from "@/components/Sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileHint from "./MobileHint";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -28,10 +30,19 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <SidebarProvider defaultOpen={!isMobile}>
       <div className="flex h-screen w-full overflow-hidden" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
-        {/* Mobile sidebar toggle button and hint - only visible on mobile */}
+        {/* Mobile sidebar toggle button - only visible on mobile */}
         {isMobile && (
           <div className="fixed top-4 left-4 z-50">
-            <SidebarTrigger />
+            <SidebarTrigger asChild>
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                className="bg-white/80 backdrop-blur-sm shadow-sm"
+                aria-label="Toggle Menu"
+              >
+                <Menu className="h-4 w-4" />
+              </Button>
+            </SidebarTrigger>
           </div>
         )}
         

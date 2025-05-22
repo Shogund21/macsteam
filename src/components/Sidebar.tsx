@@ -20,6 +20,15 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     setMounted(true);
   }, []);
 
+  // Handle opening/closing sidebar when device type changes
+  useEffect(() => {
+    if (!isMobile) {
+      setOpen(true); // Always show sidebar on desktop
+    } else {
+      setOpen(false); // Hide sidebar by default on mobile
+    }
+  }, [isMobile, setOpen]);
+
   if (!mounted) {
     return null;
   }

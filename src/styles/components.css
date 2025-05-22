@@ -96,13 +96,30 @@
   }
 }
 
-/* Fix mobile sheet size */
+/* Fix mobile sheet size and z-index */
 [data-radix-sheet-content] {
   max-width: 100% !important;
   height: 100% !important;
+  z-index: 1100 !important;
 }
 
 /* Fix overlapping z-index issues */
+[data-radix-sheet-overlay] {
+  z-index: 1001 !important;
+}
+
+/* Ensure dropdown menus have proper z-index */
+[data-radix-dropdown-menu-content] {
+  z-index: 1200 !important;
+  background-color: white !important;
+}
+
+/* Fix mobile navigation issues */
+.mobile-nav-trigger {
+  z-index: 1300 !important;
+}
+
+/* Fix sheet component for mobile */
 .radix-sheet-overlay {
   z-index: 1001 !important;
 }

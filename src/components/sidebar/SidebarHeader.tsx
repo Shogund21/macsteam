@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCompany } from "@/contexts/CompanyContext";
 import { UserDropdown } from "./UserDropdown";
-import { useState, useEffect } from "react";
 import { useSidebar } from "../ui/sidebar";
 
 interface SidebarHeaderProps {
