@@ -15,7 +15,6 @@ const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
   const [isContentVisible, setIsContentVisible] = useState(true); 
   const [layoutError, setLayoutError] = useState<Error | null>(null);
-  const [renderCount, setRenderCount] = useState(0);
   
   // Apply viewport height adjustment
   useViewportHeight();
@@ -25,16 +24,27 @@ const Layout = ({ children }: LayoutProps) => {
   
   // Force content visibility
   useEffect(() => {
+    // Immediate render
     setIsContentVisible(true);
     
-    // Force multiple re-renders to ensure display
-    const timers = [];
-    for (let i = 1; i <= 5; i++) {
-      timers.push(setTimeout(() => {
-        setIsContentVisible(true);
-        setRenderCount(prev => prev + 1);
-      }, i * 200));
-    }
+    // Force critical elements to be visible
+    const forceElementsVisible = () => {
+      document.querySelectorAll(
+        '#root, #root > div, .dashboard-content, [data-radix-sidebar-root], [data-radix-sidebar-content], [data-radix-sidebar-inset]'
+      ).forEach(el => {
+        if (el instanceof HTMLElement) {
+          el.style.display = 'block';
+          el.style.visibility = 'visible';
+          el.style.opacity = '1';
+        }
+      });
+    };
+    
+    // Apply multiple times to ensure visibility
+    forceElementsVisible();
+    const timers = [100, 300, 500, 1000].map(delay => 
+      setTimeout(forceElementsVisible, delay)
+    );
     
     return () => {
       timers.forEach(timer => clearTimeout(timer));
@@ -46,10 +56,16 @@ const Layout = ({ children }: LayoutProps) => {
     try {
       // Force re-render to ensure content is visible
       window.dispatchEvent(new Event('resize'));
+      
+      // Emergency browser repaint
+      document.body.style.display = 'none';
+      document.body.offsetHeight; // Force reflow
+      document.body.style.display = '';
+      
     } catch (err) {
       setLayoutError(handleLayoutError(err));
     }
-  }, [renderCount]);
+  }, []);
 
   // Show fallback UI if layout fails
   if (layoutError) {

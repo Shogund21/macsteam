@@ -13,17 +13,33 @@ html, body, #root {
   position: relative !important;
 }
 
-/* Force everything visible */
+/* Force everything visible - extremely aggressive */
 #root > div, 
 [data-radix-sidebar-root],
 [data-radix-sidebar-content],
 [data-radix-sidebar-inset],
 .dashboard-content,
-.overflow-container {
+.overflow-container,
+.visible,
+.block,
+.flex,
+.flex-1,
+.h-full,
+.w-full,
+.min-h-[200px],
+[data-testid="sidebar-inset"],
+[data-testid="mobile-content"] {
   display: block !important;
   visibility: visible !important;
   opacity: 1 !important;
   min-height: 100px !important;
+}
+
+/* Ensure flex layouts work properly */
+@media (min-width: 768px) {
+  .flex, .flex-1 {
+    display: flex !important;
+  }
 }
 
 /* Fix for iOS Safari 100vh issues */
@@ -98,7 +114,7 @@ html, body, #root {
 /* iOS specific fixes */
 @supports (-webkit-touch-callout: none) {
   html, body, #root {
-    height: 100% !important;
+    height: -webkit-fill-available !important;
     width: 100% !important;
     overflow: auto !important;
     position: relative !important;
@@ -117,5 +133,36 @@ html, body, #root {
   .h-screen {
     height: 100% !important;
     min-height: 100% !important;
+    height: -webkit-fill-available !important;
   }
+  
+  /* Fix iOS Safari sticky positioning */
+  .sticky {
+    position: -webkit-sticky !important;
+    position: sticky !important;
+  }
+  
+  /* Force browser repaint - iOS Safari specific */
+  #root:after {
+    content: '';
+    display: block;
+    height: 1px;
+    width: 1px;
+  }
+}
+
+/* Extra overrides for critical UI elements */
+.min-h-[200px] {
+  min-height: 200px !important;
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* Emergency fix for invisible layouts */
+.dashboard-content:empty:before {
+  content: 'Loading content...';
+  display: block;
+  text-align: center;
+  padding: 40px;
+  color: #666;
 }
