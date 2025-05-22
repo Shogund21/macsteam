@@ -27,7 +27,7 @@ export function UserDropdown() {
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-8 w-8 p-0 rounded-full"><Avatar className="h-8 w-8"><AvatarImage src="/avatars/01.png" alt="Avatar" /><AvatarFallback>OM</AvatarFallback></Avatar></Button>
+        <Button variant="ghost" className="h-8 w-8 p-0 rounded-full"><Avatar className="h-8 w-8"><AvatarImage src="/placeholder.svg" alt="Avatar" /><AvatarFallback>OM</AvatarFallback></Avatar></Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end"

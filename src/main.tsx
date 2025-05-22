@@ -3,6 +3,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './styles/index.css'
+import './index.css' // Ensure index.css is imported directly
 
 // Get root element
 const rootElement = document.getElementById('root');
@@ -27,3 +28,6 @@ const setViewportHeight = () => {
 // Set viewport height once and on resize
 setViewportHeight();
 window.addEventListener('resize', setViewportHeight);
+
+// Log successful initialization
+console.log('Application successfully initialized');

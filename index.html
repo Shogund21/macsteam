@@ -81,18 +81,8 @@
         text-align: center;
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       }
-      
-      /* Check if React content isn't visible and show fallback */
-      @keyframes checkForContent {
-        to { opacity: 1; }
-      }
-      
-      @media (max-width: 768px) {
-        .flex {
-          display: block !important;
-        }
-      }
     </style>
+    <!-- Use dynamic imports for CSS to prevent hardcoded hashed filenames -->
   </head>
   <body>
     <div id="root">
@@ -138,6 +128,5 @@
       setTimeout(forceContentVisibility, 1500);
     </script>
     <script type="module" src="/src/main.tsx"></script>
-    <script type="module" src="https://cdn.gpteng.co/gptengineer.js"></script>
   </body>
 </html>

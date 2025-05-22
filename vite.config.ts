@@ -13,7 +13,7 @@ export default defineConfig(({ mode }) => ({
   preview: {
     port: 8080,
   },
-  base: "/",
+  base: "/", // Ensures assets are loaded from root path
   plugins: [
     react(),
     mode === 'development' &&
@@ -31,6 +31,16 @@ export default defineConfig(({ mode }) => ({
         manualChunks: {
           vendor: ['react', 'react-dom'],
         },
+        // Ensures asset filenames are consistent between builds
+        assetFileNames: (assetInfo) => {
+          let extType = assetInfo.name.split('.').at(1);
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+            extType = 'img';
+          }
+          return `assets/${extType}/[name]-[hash][extname]`;
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
       },
     },
   },
