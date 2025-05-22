@@ -70,6 +70,14 @@
       display: block !important;
       visibility: visible !important;
     }
+    
+    /* Fix for sidebar trigger on mobile */
+    [data-sidebar="trigger"] {
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: transparent !important;
+      z-index: 9999 !important;
+      position: relative !important;
+    }
   }
 }
 

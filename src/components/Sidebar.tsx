@@ -24,9 +24,8 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
   useEffect(() => {
     if (!isMobile) {
       setOpen(true); // Always show sidebar on desktop
-    } else {
-      setOpen(false); // Hide sidebar by default on mobile
     }
+    // Don't automatically close on mobile to avoid conditional rendering issues
   }, [isMobile, setOpen]);
 
   // Don't attempt to render before mounting to avoid hydration mismatch
@@ -60,7 +59,13 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
   // For mobile: use sheet component for slide-out effect
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
-      <SheetContent side="left" className="p-0 w-64 max-w-[85%] overflow-y-auto">
+      <SheetContent 
+        side="left" 
+        className="p-0 w-64 max-w-[85%] overflow-y-auto"
+        onInteractOutside={(e) => {
+          e.preventDefault(); // Prevent default behavior
+        }}
+      >
         <SidebarHeader isMobile={isMobile} />
         <div className="space-y-4 py-4">
           <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />

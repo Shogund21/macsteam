@@ -23,9 +23,7 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
             size="sm" 
             className="bg-white/80 backdrop-blur-sm shadow-sm"
             aria-label="Toggle Menu"
-          >
-            <Menu className="h-4 w-4" />
-          </Button>
+          ><Menu className="h-4 w-4" /></Button>
         </SidebarTrigger>
       </div>
       
