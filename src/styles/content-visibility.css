@@ -1,15 +1,30 @@
 
+/* Core visibility fixes for all layouts */
 @layer base {
-  /* Critical fix - force content visibility */
-  .overflow-container,
-  .dashboard-content,
-  [data-radix-sidebar-inset],
-  [data-radix-sidebar-content] {
-    max-width: 100%;
-    overflow-x: hidden;
+  /* Force visibility on critical elements */
+  html, body, #root {
+    height: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
     display: block !important;
     visibility: visible !important;
-    min-height: 200px;
+    opacity: 1 !important;
+    overflow: auto !important;
+  }
+
+  /* Critical content visibility for app container elements */
+  .dashboard-content,
+  .overflow-container,
+  [data-radix-sidebar-inset],
+  [data-radix-sidebar-content],
+  .min-h-[200px] {
+    display: block !important;
+    visibility: visible !important;
+    min-height: 200px !important;
+    opacity: 1 !important;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   /* Preserve flex layouts where needed */
@@ -25,5 +40,52 @@
     .flex-col {
       flex-direction: column !important;
     }
+
+    /* Desktop-specific fixes */
+    [data-radix-sidebar-inset] {
+      flex: 1 !important;
+      display: block !important;
+    }
+  }
+
+  /* Mobile-specific overrides */
+  @media (max-width: 767px) {
+    .dashboard-content,
+    [data-testid="mobile-content"] {
+      display: block !important;
+      visibility: visible !important;
+    }
+    
+    /* Mobile fallback */
+    #root > div {
+      display: block !important;
+      visibility: visible !important; 
+    }
+  }
+
+  /* iOS specific fixes */
+  @supports (-webkit-touch-callout: none) {
+    html, body {
+      height: -webkit-fill-available !important;
+    }
+    
+    .h-screen {
+      height: -webkit-fill-available !important;
+    }
+  }
+
+  /* Z-index fixes */
+  [data-radix-popper-content-wrapper],
+  [data-radix-dialog-overlay],
+  [data-radix-dialog-content] {
+    z-index: 999 !important;
+  }
+
+  /* Fallback content */
+  .dashboard-content:empty:before {
+    content: 'Loading content...';
+    display: block;
+    padding: 20px;
+    text-align: center;
   }
 }

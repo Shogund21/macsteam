@@ -29,6 +29,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     }
   }, [isMobile, setOpen]);
 
+  // Don't attempt to render before mounting to avoid hydration mismatch
   if (!mounted) {
     return null;
   }
@@ -39,34 +40,32 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     }
   };
 
+  // For desktop: standard sidebar in page layout
+  if (!isMobile) {
+    return (
+      <aside
+        className={cn(
+          "fixed left-0 top-0 z-40 h-screen w-52 border-r border-gray-200 bg-white transition-all md:translate-x-0",
+          !isOpen ? "-translate-x-full" : "",
+          className
+        )}
+        {...props}
+      >
+        <SidebarHeader isMobile={isMobile} />
+        <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
+      </aside>
+    );
+  }
+  
+  // For mobile: use sheet component for slide-out effect
   return (
-    <>
-      {/* Desktop sidebar */}
-      {!isMobile && (
-        <aside
-          className={cn(
-            "fixed left-0 top-0 z-40 h-screen w-52 border-r border-gray-200 bg-white transition-all md:translate-x-0",
-            !isOpen ? "-translate-x-full" : "",
-            className
-          )}
-          {...props}
-        >
-          <SidebarHeader isMobile={isMobile} />
+    <Sheet open={isOpen} onOpenChange={setOpen}>
+      <SheetContent side="left" className="p-0 w-64 max-w-[85%] overflow-y-auto">
+        <SidebarHeader isMobile={isMobile} />
+        <div className="space-y-4 py-4">
           <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
-        </aside>
-      )}
-
-      {/* Mobile sidebar with sheet */}
-      {isMobile && (
-        <Sheet open={isOpen} onOpenChange={setOpen}>
-          <SheetContent side="left" className="p-0 w-64 max-w-[85%] overflow-y-auto">
-            <SidebarHeader isMobile={isMobile} />
-            <div className="space-y-4 py-4">
-              <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
-            </div>
-          </SheetContent>
-        </Sheet>
-      )}
-    </>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }

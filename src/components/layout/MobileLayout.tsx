@@ -14,13 +14,7 @@ interface MobileLayoutProps {
 
 export const MobileLayout = ({ children }: MobileLayoutProps) => {
   return (
-    <div 
-      className="block h-screen w-full overflow-auto visible" 
-      style={{ 
-        display: "block",
-        visibility: "visible"
-      }}
-    >
+    <div className="block h-screen w-full overflow-auto">
       {/* Mobile sidebar toggle button */}
       <div className="fixed top-4 left-4 z-50">
         <SidebarTrigger asChild>
@@ -41,17 +35,12 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
       {/* Sidebar with fixed width */}
       <Sidebar />
 
-      {/* Main content area with critical display properties */}
+      {/* Main content area */}
       <div 
-        className="bg-gray-50 min-h-screen w-full overflow-y-auto block visible" 
-        style={{ 
-          display: "block",
-          visibility: "visible",
-          paddingTop: "1rem"
-        }}
+        className="bg-gray-50 min-h-screen w-full overflow-y-auto"
         data-testid="mobile-content"
       >
-        <div className="h-full w-full p-3 sm:p-4">
+        <div className="h-full w-full p-3 sm:p-4" style={{paddingTop: "1rem"}}>
           {/* Application header with logo and controls */}
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <div className="flex items-center">

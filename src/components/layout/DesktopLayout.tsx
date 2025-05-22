@@ -9,23 +9,13 @@ interface DesktopLayoutProps {
 
 export const DesktopLayout = ({ children }: DesktopLayoutProps) => {
   return (
-    <div 
-      className="flex h-screen w-full overflow-hidden visible" 
-      style={{ 
-        display: "flex",
-        visibility: "visible"
-      }}
-    >
+    <div className="flex w-full overflow-hidden min-h-screen">
       {/* Sidebar with fixed width */}
       <Sidebar />
 
       {/* Main content with proper margin to prevent overlap */}
       <SidebarInset 
-        className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto block visible" 
-        style={{ 
-          display: "block",
-          visibility: "visible"
-        }}
+        className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto" 
         data-testid="sidebar-inset"
       >
         <div className="w-full p-3 sm:p-4 md:p-6">

@@ -21,35 +21,24 @@ export const useViewportHeight = () => {
   }, []);
 };
 
-// Force visibility of key elements with more targeted approach
+// Force content visibility on important elements
 export const useForceVisibility = () => {
   useEffect(() => {
-    const forceContentVisibility = () => {
-      // Target critical content elements
-      const criticalSelectors = [
-        '.dashboard-content',
-        '.overflow-container',
-        '[data-radix-sidebar-inset]',
-        '[data-radix-sidebar-content]',
-        '.min-h-[200px]'
-      ];
-      
-      // Apply visibility without disrupting flex layouts
-      document.querySelectorAll(criticalSelectors.join(', ')).forEach(el => {
+    // Force visibility of critical elements
+    const forceVisibility = () => {
+      document.querySelectorAll('.dashboard-content, .overflow-container').forEach(el => {
         if (el instanceof HTMLElement) {
-          if (!el.classList.contains('flex') && !el.classList.contains('flex-1')) {
-            el.style.display = 'block';
-          }
+          el.style.display = 'block';
           el.style.visibility = 'visible';
           el.style.opacity = '1';
         }
       });
     };
     
-    // Apply twice with delay to ensure rendering
-    forceContentVisibility();
-    const timer = setTimeout(forceContentVisibility, 300);
+    // Apply multiple times to ensure content appears
+    forceVisibility();
+    const timers = [100, 300, 500].map(delay => setTimeout(forceVisibility, delay));
     
-    return () => clearTimeout(timer);
+    return () => timers.forEach(clearTimeout);
   }, []);
 };

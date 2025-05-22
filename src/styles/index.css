@@ -3,8 +3,17 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* Import core CSS files in proper order */
+@import './variables.css';
 @import './base.css';
+@import './device-fixes.css';
+@import './content-visibility.css';
 @import './components.css';
+@import './ui-fixes.css';
+@import './mobile-fixes.css';
+@import './mobile-components.css';
+@import './utilities.css';
 @import './print.css';
 @import './chart.css';
-@import './visibility-fix.css';
+
+/* Remove duplicate import of visibility-fix.css since we're consolidating visibility fixes */

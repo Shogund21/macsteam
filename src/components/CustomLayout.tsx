@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React from "react";
 import Layout from "@/components/Layout";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -8,25 +8,6 @@ interface CustomLayoutProps {
 }
 
 export const CustomLayout = ({ children }: CustomLayoutProps) => {
-  // Force visibility on mount
-  useEffect(() => {
-    const forceVisible = () => {
-      document.querySelectorAll('.dashboard-content, .overflow-container').forEach(el => {
-        if (el instanceof HTMLElement) {
-          el.style.display = 'block';
-          el.style.visibility = 'visible';
-          el.style.opacity = '1';
-        }
-      });
-    };
-    
-    // Apply multiple times to ensure content appears
-    forceVisible();
-    const timers = [100, 300, 500].map(delay => setTimeout(forceVisible, delay));
-    
-    return () => timers.forEach(clearTimeout);
-  }, []);
-  
   return (
     <>
       <Layout>

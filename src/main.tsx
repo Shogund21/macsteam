@@ -18,23 +18,6 @@ if (!rootElement) {
 // Get root element and render directly without StrictMode
 ReactDOM.createRoot(rootElement || document.getElementById('root')!).render(<App />);
 
-// Force visibility multiple times
-const forceVisibility = () => {
-  document.querySelectorAll('#root, #root > div, .dashboard-content, .overflow-container').forEach(el => {
-    if (el instanceof HTMLElement) {
-      el.style.display = 'block';
-      el.style.visibility = 'visible';
-      el.style.opacity = '1';
-    }
-  });
-};
-
-// Apply visibility fixes immediately and multiple times
-forceVisibility();
-setTimeout(forceVisibility, 100);
-setTimeout(forceVisibility, 500);
-setTimeout(forceVisibility, 1000);
-
 // Set viewport height for mobile devices
 const setViewportHeight = () => {
   const vh = window.innerHeight * 0.01;
@@ -44,3 +27,11 @@ const setViewportHeight = () => {
 // Set viewport height once and on resize
 setViewportHeight();
 window.addEventListener('resize', setViewportHeight);
+
+// Simple immediate checks to fix rendering
+document.querySelectorAll('#root, #root > div, .dashboard-content').forEach(el => {
+  if (el instanceof HTMLElement) {
+    el.style.display = 'block';
+    el.style.visibility = 'visible';
+  }
+});
