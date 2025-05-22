@@ -17,7 +17,7 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
     <div className="block h-screen w-full overflow-auto">
       {/* Mobile sidebar toggle button */}
       <div className="fixed top-4 left-4 z-50">
-        <SidebarTrigger asChild>
+        <SidebarTrigger>
           <Button 
             variant="ghost" 
             size="sm" 
