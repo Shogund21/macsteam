@@ -11,4 +11,19 @@
     visibility: visible !important;
     min-height: 200px;
   }
+
+  /* Preserve flex layouts where needed */
+  @media (min-width: 768px) {
+    .flex {
+      display: flex !important;
+    }
+    
+    .flex-1 {
+      flex: 1 1 0% !important;
+    }
+    
+    .flex-col {
+      flex-direction: column !important;
+    }
+  }
 }

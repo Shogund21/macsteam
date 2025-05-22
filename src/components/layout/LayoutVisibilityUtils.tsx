@@ -21,61 +21,35 @@ export const useViewportHeight = () => {
   }, []);
 };
 
-// Force visibility of key elements
+// Force visibility of key elements with more targeted approach
 export const useForceVisibility = () => {
   useEffect(() => {
     const forceContentVisibility = () => {
-      // Target all critical content elements
-      const selectors = [
+      // Target critical content elements
+      const criticalSelectors = [
         '.dashboard-content',
         '.overflow-container',
         '[data-radix-sidebar-inset]',
         '[data-radix-sidebar-content]',
-        '[data-radix-sidebar-root]',
-        '#root > div',
-        '.min-h-[200px]',
-        '.visible',
-        '[data-testid="sidebar-inset"]',
-        '[data-testid="mobile-content"]'
+        '.min-h-[200px]'
       ];
       
-      // Apply visibility to all matching elements
-      document.querySelectorAll(selectors.join(', ')).forEach(el => {
+      // Apply visibility without disrupting flex layouts
+      document.querySelectorAll(criticalSelectors.join(', ')).forEach(el => {
         if (el instanceof HTMLElement) {
-          el.style.display = 'block';
+          if (!el.classList.contains('flex') && !el.classList.contains('flex-1')) {
+            el.style.display = 'block';
+          }
           el.style.visibility = 'visible';
           el.style.opacity = '1';
         }
       });
-      
-      // Special handling for flex containers
-      document.querySelectorAll('.flex, .flex-1').forEach(el => {
-        if (el instanceof HTMLElement && window.innerWidth < 768) {
-          // On mobile, convert flex to block for more reliable rendering
-          el.style.display = 'block';
-        } else if (el instanceof HTMLElement) {
-          // On desktop, ensure flex is working
-          el.style.display = 'flex';
-        }
-      });
-      
-      // Force browser repaint
-      document.body.style.display = 'none';
-      document.body.offsetHeight; // Force reflow
-      document.body.style.display = 'block';
     };
     
-    // Apply multiple times to ensure visibility
-    const times = [0, 150, 500, 1000, 2000];
-    const timers = times.map(time => setTimeout(forceContentVisibility, time));
+    // Apply twice with delay to ensure rendering
+    forceContentVisibility();
+    const timer = setTimeout(forceContentVisibility, 300);
     
-    // Force resize events to trigger responsive handlers
-    const resizeTimers = times.map(time => 
-      setTimeout(() => window.dispatchEvent(new Event('resize')), time)
-    );
-    
-    return () => {
-      [...timers, ...resizeTimers].forEach(timer => clearTimeout(timer));
-    };
+    return () => clearTimeout(timer);
   }, []);
 };

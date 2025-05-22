@@ -8,26 +8,22 @@ import { FilterChangesOverview } from "@/components/dashboard/FilterChangesOverv
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const isMobile = useIsMobile();
 
-  // Force content to render
+  // Force content to render and stop loading state
   useEffect(() => {
-    // Ensure content is visible on first render
-    document.querySelectorAll('.dashboard-content, .overflow-container').forEach(el => {
-      if (el instanceof HTMLElement) {
-        el.style.display = 'block';
-        el.style.visibility = 'visible';
-        el.style.opacity = '1';
-      }
-    });
+    // Short timeout to ensure components have time to initialize
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 200);
     
-    setIsLoading(false);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <CustomLayout>
-      <div className="dashboard-content min-h-[200px]" style={{ display: "block", visibility: "visible", opacity: 1 }}>
+      <div className="dashboard-content min-h-[200px]">
         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
         
         {/* Simple welcome panel that always shows */}
@@ -42,7 +38,7 @@ const Index = () => {
             <div className="h-64 bg-gray-200 rounded"></div>
           </div>
         ) : (
-          <div style={{ display: "block", visibility: "visible", opacity: 1 }}>
+          <div>
             <div className="my-6">
               <Stats />
             </div>
