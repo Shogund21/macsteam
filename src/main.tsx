@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './styles/index.css'
 
-// Ensure root element exists
+// Get root element
 const rootElement = document.getElementById('root');
 
 if (!rootElement) {
@@ -15,33 +15,25 @@ if (!rootElement) {
   console.error("Root element was missing - created fallback root");
 }
 
-// Get root element and render immediately
-const root = ReactDOM.createRoot(rootElement || document.getElementById('root')!);
+// Get root element and render directly without StrictMode
+ReactDOM.createRoot(rootElement || document.getElementById('root')!).render(<App />);
 
-// Sync render without React.StrictMode to avoid double-rendering issues
-root.render(<App />);
-
-// Critical - force visibility multiple times
+// Force visibility multiple times
 const forceVisibility = () => {
-  document.querySelectorAll('#root, #root > div, .dashboard-content, .overflow-container, [data-radix-sidebar-inset], [data-radix-sidebar-content]').forEach(el => {
+  document.querySelectorAll('#root, #root > div, .dashboard-content, .overflow-container').forEach(el => {
     if (el instanceof HTMLElement) {
       el.style.display = 'block';
       el.style.visibility = 'visible';
       el.style.opacity = '1';
     }
   });
-  
-  // Force resize event to trigger responsive adjustments
-  window.dispatchEvent(new Event('resize'));
 };
 
 // Apply visibility fixes immediately and multiple times
 forceVisibility();
-
-// Multiple attempts over time
-[50, 100, 200, 500, 1000, 2000].forEach(delay => {
-  setTimeout(forceVisibility, delay);
-});
+setTimeout(forceVisibility, 100);
+setTimeout(forceVisibility, 500);
+setTimeout(forceVisibility, 1000);
 
 // Set viewport height for mobile devices
 const setViewportHeight = () => {
@@ -49,6 +41,6 @@ const setViewportHeight = () => {
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 };
 
-// Set it once immediately and on resize
+// Set viewport height once and on resize
 setViewportHeight();
 window.addEventListener('resize', setViewportHeight);
