@@ -83,13 +83,15 @@ const SelectContent = React.forwardRef<
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
           className
         )}
-        position={isMobile ? "item-aligned" : position}
+        position={position}
         style={{ 
           backgroundColor: "white",
           borderColor: "rgba(0,0,0,0.1)",
           borderWidth: "1px",
           zIndex: 9999 
         }}
+        avoidCollisions={!isMobile}
+        collisionPadding={isMobile ? 0 : 16}
         {...props}
       >
         <SelectScrollUpButton />

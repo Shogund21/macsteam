@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"
@@ -66,21 +65,21 @@ const DropdownMenuContent = React.forwardRef<
     <DropdownMenuPrimitive.Portal>
       <DropdownMenuPrimitive.Content
         ref={ref}
-        sideOffset={isMobile ? 8 : sideOffset} // Increased offset for mobile
-        align={isMobile ? "center" : "end"} // Center align on mobile
+        sideOffset={isMobile ? 8 : sideOffset}
+        align={isMobile ? "center" : "end"}
         className={cn(
           "z-[50] min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           isMobile && "fixed w-[80%] max-w-[300px] top-[auto] bottom-[20%] left-[50%] transform translate-x-[-50%] max-h-[70vh] overflow-y-auto",
           className
         )}
-        // Force higher z-index on mobile
         style={{ 
           zIndex: 9999,
           backgroundColor: "white",
           borderColor: "rgba(0,0,0,0.1)",
           borderWidth: "1px",
         }}
-        avoidCollisions={isMobile ? false : true}
+        avoidCollisions={!isMobile}
+        collisionPadding={isMobile ? 0 : 8}
         {...props}
       />
     </DropdownMenuPrimitive.Portal>

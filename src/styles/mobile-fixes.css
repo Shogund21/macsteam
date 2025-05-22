@@ -18,12 +18,17 @@
   
   /* Critical fixes for dropdowns on mobile */
   @media (max-width: 767px) {
+    /* Force higher z-index and proper positioning for dropdown wrappers */
     [data-radix-popper-content-wrapper] {
       position: fixed !important;
       z-index: 9999 !important;
       width: 80% !important;
       max-width: 300px !important;
       transform: none !important;
+      left: 50% !important;
+      margin-left: -150px !important; /* Half of max-width for centering */
+      top: auto !important; 
+      bottom: 20% !important;
     }
     
     /* Dropdown positioning */
@@ -57,7 +62,13 @@
 
     /* Additional z-index fix for dropdown menus */
     [data-radix-dropdown-menu-content] {
-      z-index: 1000 !important;
+      z-index: 9999 !important;
+    }
+
+    /* Additional selector to prevent hidden dropdowns */
+    [data-radix-popper-content] {
+      display: block !important;
+      visibility: visible !important;
     }
   }
 }
