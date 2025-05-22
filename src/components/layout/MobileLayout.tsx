@@ -15,15 +15,17 @@ interface MobileLayoutProps {
 export const MobileLayout = ({ children }: MobileLayoutProps) => {
   return (
     <div className="block h-screen w-full overflow-auto">
-      {/* Mobile sidebar toggle button */}
-      <div className="fixed top-4 left-4 z-50">
+      {/* Mobile sidebar toggle button with increased z-index and tap area */}
+      <div className="fixed top-4 left-4 z-[100]">
         <SidebarTrigger>
           <Button 
             variant="ghost" 
             size="sm" 
-            className="bg-white/80 backdrop-blur-sm shadow-sm"
+            className="bg-white/80 backdrop-blur-sm shadow-sm h-10 w-10 touch-manipulation"
             aria-label="Toggle Menu"
-          ><Menu className="h-4 w-4" /></Button>
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
         </SidebarTrigger>
       </div>
       

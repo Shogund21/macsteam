@@ -56,14 +56,21 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     );
   }
   
-  // For mobile: use sheet component for slide-out effect
+  // For mobile: use sheet component for slide-out effect with improved touch handling
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent 
         side="left" 
         className="p-0 w-64 max-w-[85%] overflow-y-auto"
         onInteractOutside={(e) => {
-          e.preventDefault(); // Prevent default behavior
+          // Only prevent default for certain events
+          if (e.target && (e.target as HTMLElement).closest('[data-sidebar="trigger"]')) {
+            e.preventDefault();
+          }
+        }}
+        style={{
+          touchAction: "pan-y",
+          WebkitOverflowScrolling: "touch"
         }}
       >
         <SidebarHeader isMobile={isMobile} />

@@ -77,6 +77,26 @@
       -webkit-tap-highlight-color: transparent !important;
       z-index: 9999 !important;
       position: relative !important;
+      min-width: 40px !important;
+      min-height: 40px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    /* Ensure touch targets are large enough */
+    button, 
+    a, 
+    [role="button"],
+    [type="button"] {
+      min-height: 36px;
+      min-width: 36px;
+    }
+
+    /* Improve tap target areas */
+    .touch-manipulation {
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: transparent !important;
     }
   }
 }
