@@ -21,24 +21,11 @@ export const useViewportHeight = () => {
   }, []);
 };
 
-// Force content visibility on important elements
+// This hook is no longer needed as we're relying on CSS for visibility
 export const useForceVisibility = () => {
+  // Empty implementation - we're now using CSS-based visibility
   useEffect(() => {
-    // Force visibility of critical elements
-    const forceVisibility = () => {
-      document.querySelectorAll('.dashboard-content, .overflow-container').forEach(el => {
-        if (el instanceof HTMLElement) {
-          el.style.display = 'block';
-          el.style.visibility = 'visible';
-          el.style.opacity = '1';
-        }
-      });
-    };
-    
-    // Apply multiple times to ensure content appears
-    forceVisibility();
-    const timers = [100, 300, 500].map(delay => setTimeout(forceVisibility, delay));
-    
-    return () => timers.forEach(clearTimeout);
+    // No-op - CSS handles visibility now
+    return () => {};
   }, []);
 };

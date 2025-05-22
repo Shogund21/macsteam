@@ -15,7 +15,7 @@ if (!rootElement) {
   console.error("Root element was missing - created fallback root");
 }
 
-// Get root element and render directly without StrictMode
+// Get root element and render App within React's control
 ReactDOM.createRoot(rootElement || document.getElementById('root')!).render(<App />);
 
 // Set viewport height for mobile devices
@@ -27,11 +27,3 @@ const setViewportHeight = () => {
 // Set viewport height once and on resize
 setViewportHeight();
 window.addEventListener('resize', setViewportHeight);
-
-// Simple immediate checks to fix rendering
-document.querySelectorAll('#root, #root > div, .dashboard-content').forEach(el => {
-  if (el instanceof HTMLElement) {
-    el.style.display = 'block';
-    el.style.visibility = 'visible';
-  }
-});
