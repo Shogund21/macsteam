@@ -37,6 +37,7 @@
   z-index: 9000 !important; /* Increase z-index to be above all other elements */
   max-width: 95vw !important; /* Prevent overflow on mobile */
   background-color: transparent !important;
+  position: absolute !important;
 }
 
 .radix-select-content {
@@ -80,6 +81,7 @@
     max-width: 95% !important;
     z-index: 9000 !important;
     position: fixed !important;
+    transform: none !important; /* Prevent transform issues on iOS */
   }
   
   /* Ensure dropdown menus are properly positioned on mobile */
@@ -97,6 +99,18 @@
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+  }
+  
+  /* Fix empty page issue by ensuring content is visible */
+  .dashboard-content {
+    min-height: 200px;
+    display: block !important;
+  }
+  
+  /* Fix SidebarInset rendering on mobile */
+  .sidebar-inset {
+    display: block !important;
+    min-height: calc(100vh - 60px) !important;
   }
 }
 
@@ -121,7 +135,20 @@
 /* Fix iOS Safari 100vh issue */
 @supports (-webkit-touch-callout: none) {
   .h-screen {
-    height: calc(var(--vh, 1vh) * 100);
+    height: calc(var(--vh, 1vh) * 100) !important;
+    min-height: calc(var(--vh, 1vh) * 100) !important;
+  }
+  
+  /* Force content to display on iOS */
+  #root, body, html {
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow: auto !important;
+  }
+  
+  .dashboard-content {
+    display: block !important;
+    visibility: visible !important;
   }
 }
 
@@ -172,5 +199,19 @@
     transform: translateX(-50%) !important;
     width: 90% !important;
     max-width: 90% !important;
+  }
+  
+  /* Fix content display issues */
+  body, html, #root {
+    height: 100% !important;
+    min-height: 100% !important;
+    overflow: auto !important;
+  }
+  
+  /* Ensure content is visible */
+  .dashboard-content, .overflow-container {
+    display: block !important;
+    min-height: 200px !important;
+    visibility: visible !important;
   }
 }

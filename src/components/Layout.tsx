@@ -30,6 +30,8 @@ const Layout = ({ children }: LayoutProps) => {
     // Force a small delay for layout calculations to complete
     const timeout = setTimeout(() => {
       setViewportHeight();
+      // Add an additional delayed check to ensure content rendering
+      setTimeout(() => setViewportHeight(), 300);
     }, 100);
     
     return () => {
@@ -40,7 +42,7 @@ const Layout = ({ children }: LayoutProps) => {
   
   return (
     <SidebarProvider defaultOpen={!isMobile}>
-      <div className="flex h-screen w-full overflow-hidden" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
+      <div className="flex h-screen w-full overflow-hidden flex-col md:flex-row" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
         {/* Mobile sidebar toggle button - only visible on mobile */}
         {isMobile && (
           <div className="fixed top-4 left-4 z-[7500]">
@@ -64,9 +66,9 @@ const Layout = ({ children }: LayoutProps) => {
         <Sidebar />
 
         {/* Main content with proper margin to prevent overlap */}
-        <SidebarInset className="flex-1 bg-gray-50 h-screen w-full overflow-hidden ml-0 md:ml-52" 
-                     style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
-          <ScrollArea className="h-full w-full">
+        <SidebarInset className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto" 
+                     style={{ height: 'calc(var(--vh, 1vh) * 100)', minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
+          <div className="h-full w-full">
             <div className="w-full p-3 sm:p-4 md:p-6">
               {/* Application header with logo, name, and mobile-friendly controls */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
@@ -92,7 +94,7 @@ const Layout = ({ children }: LayoutProps) => {
               </div>
               {children}
             </div>
-          </ScrollArea>
+          </div>
         </SidebarInset>
       </div>
     </SidebarProvider>
