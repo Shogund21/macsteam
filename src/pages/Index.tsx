@@ -7,12 +7,14 @@ import EquipmentOverview from "@/components/dashboard/EquipmentOverview";
 import { FilterChangesOverview } from "@/components/dashboard/FilterChangesOverview";
 import { toast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [contentVisible, setContentVisible] = useState(true);
   const [renderAttempt, setRenderAttempt] = useState(0);
+  const isMobile = useIsMobile();
 
   // Force content to render with multiple attempts
   const forceRender = useCallback(() => {
@@ -20,7 +22,7 @@ const Index = () => {
     window.dispatchEvent(new Event('resize'));
     
     // Force all dashboard content to be visible
-    document.querySelectorAll('.dashboard-content, .overflow-container').forEach(el => {
+    document.querySelectorAll('.dashboard-content, .overflow-container, #root > div').forEach(el => {
       if (el instanceof HTMLElement) {
         el.style.display = 'block';
         el.style.visibility = 'visible';
@@ -29,22 +31,22 @@ const Index = () => {
     });
   }, []);
 
-  // Force content visibility and handle errors with multiple attempts
+  // Ensure content is visible on first render and after any errors
   useEffect(() => {
     try {
-      // Set content as visible immediately
+      // Set as immediately visible
       setContentVisible(true);
       forceRender();
       
-      // Schedule multiple re-render attempts
+      // Multiple attempts to ensure content visibility
       const timers = [];
-      for (let i = 1; i <= 5; i++) {
+      for (let i = 1; i <= 10; i++) {
         timers.push(setTimeout(() => {
           setIsLoading(false);
           setContentVisible(true);
           forceRender();
           setRenderAttempt(prev => prev + 1);
-        }, i * 200)); // Try at 200ms, 400ms, 600ms, 800ms, 1000ms
+        }, i * 100)); // More frequent attempts (100ms intervals)
       }
       
       return () => {
@@ -61,22 +63,6 @@ const Index = () => {
       });
     }
   }, [forceRender]);
-
-  // Fix visibility issues if content height is zero (another attempt)
-  useEffect(() => {
-    const checkContentHeight = () => {
-      const dashboardContent = document.querySelector('.dashboard-content');
-      if (dashboardContent && dashboardContent.clientHeight === 0) {
-        console.log('Dashboard content has zero height. Forcing rerender.');
-        forceRender();
-        setRenderAttempt(prev => prev + 1);
-      }
-    };
-    
-    // Check after a delay
-    const timer = setTimeout(checkContentHeight, 500);
-    return () => clearTimeout(timer);
-  }, [forceRender, renderAttempt]);
 
   return (
     <CustomLayout>
@@ -114,17 +100,34 @@ const Index = () => {
               <Stats />
             </div>
             <div className="space-y-4 pb-8">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="md:col-span-2">
-                  <RecentActivities />
-                </div>
-                <div>
-                  <FilterChangesOverview />
-                </div>
-              </div>
-              <div className="grid md:grid-cols-2 gap-6">
-                <EquipmentOverview />
-              </div>
+              {/* Use block display for mobile instead of grid layout */}
+              {isMobile ? (
+                <>
+                  <div className="mb-4">
+                    <RecentActivities />
+                  </div>
+                  <div className="mb-4">
+                    <FilterChangesOverview />
+                  </div>
+                  <div>
+                    <EquipmentOverview />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="md:col-span-2">
+                      <RecentActivities />
+                    </div>
+                    <div>
+                      <FilterChangesOverview />
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <EquipmentOverview />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         )}

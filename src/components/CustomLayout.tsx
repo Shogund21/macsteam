@@ -12,43 +12,42 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [layoutError, setLayoutError] = useState<Error | null>(null);
 
-  // Force content visibility and proper rendering with multiple attempts
+  // Critical rendering fix - always show content
   useEffect(() => {
     try {
-      // Set content as visible immediately
+      // Immediate visibility
       setIsVisible(true);
       
-      // Multiple attempts to ensure content visibility
-      const timers = [];
-      
-      // First attempt immediately
-      const ensureVisibility = () => {
-        // Force visibility on all main containers
-        const containers = document.querySelectorAll('.dashboard-content, .overflow-container, [data-radix-sidebar-inset], [data-radix-sidebar-content]');
-        containers.forEach(container => {
-          if (container instanceof HTMLElement) {
-            container.style.display = 'block';
-            container.style.visibility = 'visible';
-            container.style.opacity = '1';
+      const forceVisibility = () => {
+        // Force all content to be visible
+        document.querySelectorAll('.dashboard-content, .overflow-container, [data-radix-sidebar-inset], [data-radix-sidebar-content], #root > div').forEach(el => {
+          if (el instanceof HTMLElement) {
+            el.style.display = 'block';
+            el.style.visibility = 'visible';
+            el.style.opacity = '1';
+            if (el.classList.contains('dashboard-content')) {
+              el.style.minHeight = '400px';
+            }
           }
         });
         
-        // Force resize to trigger responsive adjustments
+        // Force layout recalculation
         window.dispatchEvent(new Event('resize'));
       };
       
-      // Run visibility fix immediately
-      ensureVisibility();
+      // Run immediately 
+      forceVisibility();
       
-      // And schedule multiple attempts
-      for (let i = 1; i <= 5; i++) {
+      // And multiple times after short delays
+      const timers = [];
+      for (let i = 1; i <= 8; i++) {
         timers.push(setTimeout(() => {
+          forceVisibility();
           setIsVisible(true);
-          ensureVisibility();
-        }, i * 200)); // Attempts at 200ms, 400ms, 600ms, 800ms, 1000ms
+        }, i * 150)); // More frequent attempts with 150ms intervals
       }
       
-      // Clean up timers
+      // Clean up
       return () => {
         timers.forEach(timer => clearTimeout(timer));
       };
@@ -63,7 +62,7 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
     }
   }, []);
 
-  // Show error state if layout fails
+  // Error fallback
   if (layoutError) {
     return (
       <div className="min-h-screen p-4 flex flex-col items-center justify-center">
@@ -80,11 +79,12 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
     );
   }
 
+  // Simple block-based layout that works even if React rendering is struggling
   return (
-    <>
+    <div className="block visible w-full" style={{ display: "block", visibility: "visible" }}>
       <Layout>
         <div 
-          className="overflow-container w-full min-h-[200px] block visible" 
+          className="dashboard-content w-full min-h-[400px] block visible" 
           style={{ 
             display: "block", 
             visibility: "visible",
@@ -99,7 +99,7 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
         </div>
       </Layout>
       <Toaster />
-    </>
+    </div>
   );
 };
 
