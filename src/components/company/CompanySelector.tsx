@@ -50,11 +50,11 @@ export const CompanySelector = () => {
           <SelectValue placeholder="Select company" className="truncate max-w-full" />
         </SelectTrigger>
         <SelectContent 
-          className="bg-white border border-gray-200 shadow-md z-[9999]"
+          className="bg-white border border-gray-200 shadow-md"
           position={isMobile ? "popper" : "item-aligned"}
           sideOffset={isMobile ? 5 : 4}
           align={isMobile ? "center" : "start"}
-          avoidCollisions={true}
+          avoidCollisions={false}
         >
           {companies.map((company) => (
             <SelectItem 

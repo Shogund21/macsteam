@@ -15,6 +15,46 @@
     margin-top: 1rem;
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
   }
+  
+  /* Critical fixes for dropdowns on mobile */
+  @media (max-width: 767px) {
+    [data-radix-popper-content-wrapper] {
+      position: fixed !important;
+      z-index: 9999 !important;
+      width: 80% !important;
+      max-width: 300px !important;
+      transform: none !important;
+    }
+    
+    /* Dropdown positioning */
+    [data-state="open"][data-radix-dropdown-menu-content],
+    [data-state="open"][data-radix-select-content] {
+      position: fixed !important;
+      top: auto !important; 
+      bottom: 20% !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      max-height: 70vh !important;
+      overflow-y: auto !important;
+      background-color: white !important;
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      border-radius: 8px !important;
+      width: 80% !important;
+      max-width: 300px !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+      z-index: 9999 !important;
+    }
+    
+    /* Ensure dropdown visibility */
+    [data-radix-dropdown-menu-content],
+    [data-radix-select-content],
+    [data-state="open"][data-radix-dropdown-menu-content],
+    [data-state="open"][data-radix-select-content] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  }
 }
 
 @layer print {

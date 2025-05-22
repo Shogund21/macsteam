@@ -35,10 +35,10 @@ export function UserDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        align={isMobile ? "center" : "end"} 
-        className="w-[200px] bg-white shadow-md z-[9999]"
-        sideOffset={isMobile ? 5 : 4}
-        avoidCollisions={true}
+        align="end"
+        className="bg-white border border-gray-200 shadow-md"
+        sideOffset={isMobile ? 8 : 4}
+        avoidCollisions={false}
       >
         <DropdownMenuItem className="cursor-pointer" onClick={handleItemClick}>
           <Link to="/settings" className="flex w-full justify-between">

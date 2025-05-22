@@ -34,10 +34,10 @@ export const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) 
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        className="w-[150px] bg-white shadow-md z-[9999]"
-        sideOffset={isMobile ? 5 : 4}
+        className="bg-white shadow-md"
+        sideOffset={isMobile ? 8 : 4}
         align={isMobile ? "center" : "end"}
-        avoidCollisions={true}
+        avoidCollisions={false}
       >
         {statuses.map((statusOption) => (
           <DropdownMenuItem
