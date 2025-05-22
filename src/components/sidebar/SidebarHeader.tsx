@@ -1,10 +1,11 @@
 
-import { Building2 } from "lucide-react";
+import { Building2, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useCompany } from "@/contexts/CompanyContext";
 import { UserDropdown } from "./UserDropdown";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSidebar } from "../ui/sidebar";
 
 interface SidebarHeaderProps {
   isMobile: boolean;
@@ -12,7 +13,7 @@ interface SidebarHeaderProps {
 
 export function SidebarHeader({ isMobile }: SidebarHeaderProps) {
   const { currentCompany } = useCompany();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { toggleSidebar } = useSidebar();
   
   return (
     <div className="flex h-[60px] items-center justify-between border-b px-4">
@@ -24,10 +25,11 @@ export function SidebarHeader({ isMobile }: SidebarHeaderProps) {
         <Button 
           variant="ghost" 
           size="sm" 
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
+          onClick={toggleSidebar}
           className="focus:outline-none"
+          aria-label="Toggle Menu"
         >
-          Menu
+          <Menu className="h-4 w-4" />
         </Button>
       ) : (
         <UserDropdown />

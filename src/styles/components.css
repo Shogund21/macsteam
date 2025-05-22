@@ -60,6 +60,15 @@
     width: 92% !important;
     max-width: 92% !important;
   }
+
+  /* Fix for position of dialog on mobile */
+  [data-radix-popper-content-wrapper] {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    max-width: 95% !important;
+  }
 }
 
 /* Fix for dialog content overflow on mobile */
@@ -78,4 +87,26 @@
 [data-radix-dialog-content],
 [data-radix-alert-dialog-content] {
   z-index: 1000 !important;
+}
+
+/* Fix iOS Safari 100vh issue */
+@supports (-webkit-touch-callout: none) {
+  .h-screen {
+    height: calc(var(--vh, 1vh) * 100);
+  }
+}
+
+/* Fix mobile sheet size */
+[data-radix-sheet-content] {
+  max-width: 100% !important;
+  height: 100% !important;
+}
+
+/* Fix overlapping z-index issues */
+.radix-sheet-overlay {
+  z-index: 1001 !important;
+}
+
+.radix-sheet-content {
+  z-index: 1002 !important;
 }

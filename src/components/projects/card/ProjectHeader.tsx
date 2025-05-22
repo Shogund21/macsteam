@@ -10,6 +10,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
 
@@ -25,14 +26,15 @@ export const ProjectHeader = ({ name, onDelete }: ProjectHeaderProps) => {
     <div className="flex justify-between items-start">
       <h3 className="text-lg font-semibold">{name}</h3>
       <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          className="text-red-500 hover:text-red-600 hover:bg-red-50"
-          onClick={() => setIsAlertOpen(true)}
-        >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        <AlertDialogTrigger asChild>
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="text-red-500 hover:text-red-600 hover:bg-red-50"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        </AlertDialogTrigger>
         <AlertDialogContent className="bg-white max-w-[90vw] sm:max-w-md">
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Project</AlertDialogTitle>

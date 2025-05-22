@@ -9,18 +9,33 @@ export function useIsMobile() {
   )
 
   React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     // Set initial value
     setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
     
-    // Handle resize events
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < MOBILE_BREAKPOINT)
-    }
+    // Handle resize events with debounce for better performance
+    let timeoutId: number | undefined;
     
-    window.addEventListener('resize', handleResize)
+    const handleResize = () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      
+      timeoutId = window.setTimeout(() => {
+        setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
+      }, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
     
     // Clean up
-    return () => window.removeEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
   }, [])
 
   return isMobile
