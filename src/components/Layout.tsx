@@ -26,7 +26,16 @@ const Layout = ({ children }: LayoutProps) => {
 
     setViewportHeight();
     window.addEventListener('resize', setViewportHeight);
-    return () => window.removeEventListener('resize', setViewportHeight);
+    
+    // Force a small delay for layout calculations to complete
+    const timeout = setTimeout(() => {
+      setViewportHeight();
+    }, 100);
+    
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+      clearTimeout(timeout);
+    };
   }, []);
   
   return (
@@ -55,10 +64,10 @@ const Layout = ({ children }: LayoutProps) => {
         <Sidebar />
 
         {/* Main content with proper margin to prevent overlap */}
-        <SidebarInset className="flex-1 bg-gray-50 h-screen overflow-hidden ml-0 md:ml-52" 
+        <SidebarInset className="flex-1 bg-gray-50 h-screen w-full overflow-hidden ml-0 md:ml-52" 
                      style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
-          <ScrollArea className="h-full">
-            <div className="w-full max-w-full p-3 sm:p-4 md:p-6">
+          <ScrollArea className="h-full w-full">
+            <div className="w-full p-3 sm:p-4 md:p-6">
               {/* Application header with logo, name, and mobile-friendly controls */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
                 <div className="flex items-center">

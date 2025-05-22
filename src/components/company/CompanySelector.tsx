@@ -20,38 +20,49 @@ export const CompanySelector = () => {
     return null; // Don't render the selector if there's only one or no company
   }
 
+  const handleValueChange = (value: string) => {
+    const selected = companies.find(c => c.id === value);
+    if (selected) {
+      setCurrentCompany(selected);
+    }
+    if (isMobile) {
+      // Close after selecting on mobile
+      setTimeout(() => setOpen(false), 100);
+    }
+  };
+
+  // Calculate max width based on available space
+  const maxWidth = isMobile ? "150px" : "180px";
+
   return (
-    <div className="flex items-center space-x-2">
-      <Building2 className="h-4 w-4 text-muted-foreground" />
+    <div className="flex items-center">
+      <Building2 className="h-4 w-4 text-muted-foreground mr-2" />
       <Select
         value={currentCompany?.id || ""}
-        onValueChange={(value) => {
-          const selected = companies.find(c => c.id === value);
-          if (selected) {
-            setCurrentCompany(selected);
-          }
-          if (isMobile) {
-            setOpen(false);
-          }
-        }}
+        onValueChange={handleValueChange}
         open={open}
         onOpenChange={setOpen}
       >
-        <SelectTrigger className="w-[180px] h-8">
-          <SelectValue placeholder="Select company" />
+        <SelectTrigger 
+          className={`h-8 bg-white border border-gray-200 rounded-md px-3`}
+          style={{ maxWidth }}
+        >
+          <SelectValue placeholder="Select company" className="truncate max-w-full" />
         </SelectTrigger>
         <SelectContent 
-          className={`select-content ${isMobile ? 'mobile-select-content' : ''}`}
+          className="bg-white border border-gray-200 shadow-md z-[9999]"
           position={isMobile ? "popper" : "item-aligned"}
-          sideOffset={isMobile ? 15 : 4}
+          sideOffset={isMobile ? 5 : 4}
+          align={isMobile ? "center" : "start"}
+          avoidCollisions={true}
         >
           {companies.map((company) => (
             <SelectItem 
               key={company.id} 
               value={company.id}
-              className="select-item"
+              className="cursor-pointer hover:bg-gray-100"
             >
-              {company.name}
+              <span className="truncate block">{company.name}</span>
             </SelectItem>
           ))}
         </SelectContent>

@@ -3,11 +3,11 @@
 .select-content {
   max-height: 300px;
   overflow-y: auto;
-  background-color: white;
+  background-color: white !important;
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  z-index: 1000 !important;
+  z-index: 9000 !important;
 }
 
 .select-item {
@@ -35,6 +35,8 @@
 /* Improved z-index hierarchy for all dropdown components */
 [data-radix-popper-content-wrapper] {
   z-index: 9000 !important; /* Increase z-index to be above all other elements */
+  max-width: 95vw !important; /* Prevent overflow on mobile */
+  background-color: transparent !important;
 }
 
 .radix-select-content {
@@ -48,6 +50,17 @@
 [role="listbox"] {
   background-color: white !important;
   z-index: 9000 !important;
+}
+
+/* Critical fixes for all dropdown menus */
+[data-radix-dropdown-menu-content],
+[data-radix-select-content] {
+  background-color: white !important;
+  z-index: 9999 !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
 }
 
 /* Mobile dialog improvements */
@@ -64,9 +77,9 @@
 
   /* Fix for position of dialog and dropdown content on mobile */
   [data-radix-popper-content-wrapper] {
-    position: fixed !important;
     max-width: 95% !important;
     z-index: 9000 !important;
+    position: fixed !important;
   }
   
   /* Ensure dropdown menus are properly positioned on mobile */
@@ -76,6 +89,14 @@
     background-color: white !important;
     max-height: 80vh !important;
     overflow-y: auto !important;
+  }
+
+  /* Fix dropdown menu visibility on mobile */
+  [data-state="open"][data-radix-dropdown-menu-content],
+  [data-state="open"][data-radix-select-content] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
 }
 
@@ -142,11 +163,14 @@
 
 /* Fix dropdown positioning on mobile */
 @media (max-width: 640px) {
+  /* Fix position for better mobile display */
   [data-radix-popper-content-wrapper] {
-    transform: translate(-50%, 0) !important;
-    left: 50% !important;
     position: fixed !important;
     top: auto !important;
-    bottom: 10% !important;
+    bottom: 20% !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 90% !important;
+    max-width: 90% !important;
   }
 }
