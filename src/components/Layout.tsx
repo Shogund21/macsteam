@@ -1,5 +1,4 @@
-
-import React, { useEffect, useState, useErrorBoundary } from "react";
+import React, { useEffect, useState } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import Sidebar from "@/components/Sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
