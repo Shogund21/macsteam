@@ -1,14 +1,14 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useErrorBoundary } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import Sidebar from "@/components/Sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileHint from "./MobileHint";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CompanySelector } from "./company/CompanySelector";
 import { UserDropdown } from "./sidebar/UserDropdown"; 
+import { toast } from "@/hooks/use-toast";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -16,6 +16,8 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
+  const [isContentVisible, setIsContentVisible] = useState(false);
+  const [layoutError, setLayoutError] = useState<Error | null>(null);
   
   // Fix for mobile Safari: Handle viewport height properly
   useEffect(() => {
@@ -24,25 +26,68 @@ const Layout = ({ children }: LayoutProps) => {
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
 
+    // Set viewport height immediately and on window resize
     setViewportHeight();
     window.addEventListener('resize', setViewportHeight);
     
-    // Force a small delay for layout calculations to complete
-    const timeout = setTimeout(() => {
+    // Force content visibility with multiple safety checks
+    const showContent = () => {
+      setIsContentVisible(true);
       setViewportHeight();
-      // Add an additional delayed check to ensure content rendering
-      setTimeout(() => setViewportHeight(), 300);
-    }, 100);
+    };
+    
+    // Staggered checks with multiple timers to ensure rendering
+    setTimeout(showContent, 100);
+    setTimeout(setViewportHeight, 300);
+    setTimeout(setViewportHeight, 500);
+    
+    // Force a re-render after component mounts to ensure all content is displayed
+    const renderTimer = setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      setViewportHeight();
+    }, 200);
     
     return () => {
       window.removeEventListener('resize', setViewportHeight);
-      clearTimeout(timeout);
+      clearTimeout(renderTimer);
     };
   }, []);
+
+  // Error handling for the layout
+  useEffect(() => {
+    try {
+      // Force re-render to ensure content is visible
+      window.dispatchEvent(new Event('resize'));
+    } catch (err) {
+      console.error("Layout render error:", err);
+      setLayoutError(err instanceof Error ? err : new Error("Unknown layout error"));
+      toast({
+        title: "Display Error",
+        description: "There was a problem loading the page. Please try refreshing.",
+        variant: "destructive"
+      });
+    }
+  }, []);
+
+  // Show fallback UI if layout fails
+  if (layoutError) {
+    return (
+      <div className="min-h-screen p-4 flex flex-col items-center justify-center">
+        <h1 className="text-xl font-bold mb-4">Something went wrong</h1>
+        <p className="mb-4">There was an error loading the application layout.</p>
+        <Button onClick={() => window.location.reload()}>
+          Refresh Page
+        </Button>
+      </div>
+    );
+  }
   
   return (
     <SidebarProvider defaultOpen={!isMobile}>
-      <div className="flex h-screen w-full overflow-hidden flex-col md:flex-row" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
+      <div 
+        className={`flex h-screen w-full overflow-hidden flex-col md:flex-row${isContentVisible ? ' visible' : ' invisible'}`} 
+        style={{ height: 'calc(var(--vh, 1vh) * 100)', minHeight: 'calc(var(--vh, 1vh) * 100)' }}
+      >
         {/* Mobile sidebar toggle button - only visible on mobile */}
         {isMobile && (
           <div className="fixed top-4 left-4 z-[7500]">
@@ -52,6 +97,7 @@ const Layout = ({ children }: LayoutProps) => {
                 size="sm" 
                 className="bg-white/80 backdrop-blur-sm shadow-sm"
                 aria-label="Toggle Menu"
+                onClick={() => setIsContentVisible(true)} // Ensure content is visible after toggle
               >
                 <Menu className="h-4 w-4" />
               </Button>
@@ -66,9 +112,15 @@ const Layout = ({ children }: LayoutProps) => {
         <Sidebar />
 
         {/* Main content with proper margin to prevent overlap */}
-        <SidebarInset className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto" 
-                     style={{ height: 'calc(var(--vh, 1vh) * 100)', minHeight: 'calc(var(--vh, 1vh) * 100)' }}>
-          <div className="h-full w-full">
+        <SidebarInset 
+          className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto display-block" 
+          style={{ 
+            height: 'calc(var(--vh, 1vh) * 100)', 
+            minHeight: 'calc(var(--vh, 1vh) * 100)',
+            visibility: "visible" 
+          }}
+        >
+          <div className="h-full w-full visible">
             <div className="w-full p-3 sm:p-4 md:p-6">
               {/* Application header with logo, name, and mobile-friendly controls */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
@@ -92,7 +144,15 @@ const Layout = ({ children }: LayoutProps) => {
                   </div>
                 )}
               </div>
-              {children}
+              
+              {/* Render children with fallback */}
+              <div className="min-h-[200px] block visible">
+                {children || (
+                  <div className="flex items-center justify-center h-64">
+                    <p>Loading content...</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </SidebarInset>

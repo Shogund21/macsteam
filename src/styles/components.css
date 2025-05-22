@@ -105,12 +105,20 @@
   .dashboard-content {
     min-height: 200px;
     display: block !important;
+    visibility: visible !important;
   }
   
   /* Fix SidebarInset rendering on mobile */
   .sidebar-inset {
     display: block !important;
     min-height: calc(100vh - 60px) !important;
+    visibility: visible !important;
+  }
+
+  /* Force layout visibility */
+  body, #root, .h-screen, [data-radix-sidebar-inset] {
+    display: block !important;
+    visibility: visible !important;
   }
 }
 
@@ -144,9 +152,18 @@
     height: 100% !important;
     min-height: 100% !important;
     overflow: auto !important;
+    display: block !important;
+    visibility: visible !important;
   }
   
   .dashboard-content {
+    display: block !important;
+    visibility: visible !important;
+    min-height: 400px;
+  }
+
+  /* Fix iOS-specific blank page issue */
+  .overflow-container, [data-radix-sidebar-inset] > div {
     display: block !important;
     visibility: visible !important;
   }
@@ -206,6 +223,7 @@
     height: 100% !important;
     min-height: 100% !important;
     overflow: auto !important;
+    display: block !important;
   }
   
   /* Ensure content is visible */
@@ -214,4 +232,30 @@
     min-height: 200px !important;
     visibility: visible !important;
   }
+
+  /* Critical visibility fixes for blank page issues */
+  [data-radix-sidebar-inset], [data-radix-sidebar-inset] > div {
+    display: block !important;
+    visibility: visible !important;
+  }
+}
+
+/* Visibility and layout fixes */
+.dashboard-content,
+.overflow-container,
+[data-radix-sidebar-content],
+[data-radix-sidebar-inset] {
+  display: block !important;
+  visibility: visible !important;
+  min-height: 200px;
+}
+
+/* Ensure main layout components are visible */
+#root > div,
+.h-screen,
+[data-radix-sidebar-root],
+[data-radix-sidebar-content],
+[data-radix-sidebar-inset] {
+  display: block !important;
+  visibility: visible !important;
 }
