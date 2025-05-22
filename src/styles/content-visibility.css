@@ -1,0 +1,14 @@
+
+@layer base {
+  /* Critical fix - force content visibility */
+  .overflow-container,
+  .dashboard-content,
+  [data-radix-sidebar-inset],
+  [data-radix-sidebar-content] {
+    max-width: 100%;
+    overflow-x: hidden;
+    display: block !important;
+    visibility: visible !important;
+    min-height: 200px;
+  }
+}

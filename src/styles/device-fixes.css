@@ -1,0 +1,56 @@
+
+@layer base {
+  /* Critical fixes for mobile rendering */
+  html, body {
+    -webkit-text-size-adjust: 100%;
+    height: 100%;
+    width: 100%;
+    display: block !important;
+    visibility: visible !important;
+    overflow: auto !important;
+  }
+
+  #root {
+    height: 100%;
+    width: 100%;
+    display: block !important;
+    visibility: visible !important;
+    overflow: auto !important;
+  }
+
+  /* For iOS Safari and mobile browsers */
+  @supports (-webkit-touch-callout: none) {
+    html, body {
+      /* Use 100% instead of fixed, overflow auto instead of hidden for iOS */
+      height: 100%;
+      width: 100%;
+      position: relative;
+      overflow: auto;
+      display: block !important;
+      visibility: visible !important;
+    }
+    
+    #root {
+      height: 100%;
+      width: 100%;
+      overflow: auto;
+      display: block !important;
+      visibility: visible !important;
+    }
+  }
+  
+  /* For other browsers - keep previous setup */
+  @supports not (-webkit-touch-callout: none) {
+    html, body {
+      overflow-x: hidden;
+      height: 100%;
+      width: 100%;
+    }
+    
+    #root {
+      height: 100%;
+      width: 100%;
+      overflow-x: hidden;
+    }
+  }
+}
