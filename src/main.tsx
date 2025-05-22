@@ -2,8 +2,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
+// Import styles in the correct order
 import './styles/index.css'
-import './index.css' // Ensure index.css is imported directly
+import './index.css'
 
 // Get root element
 const rootElement = document.getElementById('root');
