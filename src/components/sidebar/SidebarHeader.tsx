@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useCompany } from "@/contexts/CompanyContext";
 import { UserDropdown } from "./UserDropdown";
 import { useSidebar } from "../ui/sidebar";
+import { CompanySelector } from "../company/CompanySelector";
 
 interface SidebarHeaderProps {
   isMobile: boolean;
@@ -31,7 +32,10 @@ export function SidebarHeader({ isMobile }: SidebarHeaderProps) {
           <Menu className="h-4 w-4" />
         </Button>
       ) : (
-        <UserDropdown />
+        <div className="flex items-center gap-2">
+          <CompanySelector />
+          <UserDropdown />
+        </div>
       )}
     </div>
   );

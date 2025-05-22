@@ -32,21 +32,22 @@
   width: 100%;
 }
 
+/* Improved z-index hierarchy for all dropdown components */
 [data-radix-popper-content-wrapper] {
-  z-index: 1000 !important;
+  z-index: 9000 !important; /* Increase z-index to be above all other elements */
 }
 
 .radix-select-content {
   background-color: white !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-  z-index: 1000 !important;
+  z-index: 9000 !important;
 }
 
 /* Force white background and proper z-index for all select dropdowns */
 [role="listbox"] {
   background-color: white !important;
-  z-index: 1000 !important;
+  z-index: 9000 !important;
 }
 
 /* Mobile dialog improvements */
@@ -61,13 +62,20 @@
     max-width: 92% !important;
   }
 
-  /* Fix for position of dialog on mobile */
+  /* Fix for position of dialog and dropdown content on mobile */
   [data-radix-popper-content-wrapper] {
     position: fixed !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
     max-width: 95% !important;
+    z-index: 9000 !important;
+  }
+  
+  /* Ensure dropdown menus are properly positioned on mobile */
+  [data-radix-dropdown-menu-content] {
+    position: fixed !important; 
+    z-index: 9000 !important;
+    background-color: white !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
   }
 }
 
@@ -80,13 +88,13 @@
 /* Ensure all dialog overlays have consistent z-index */
 [data-radix-dialog-overlay],
 [data-radix-alert-dialog-overlay] {
-  z-index: 999 !important;
+  z-index: 8999 !important;
 }
 
 /* Ensure all dialog content has consistent z-index */
 [data-radix-dialog-content],
 [data-radix-alert-dialog-content] {
-  z-index: 1000 !important;
+  z-index: 9000 !important;
 }
 
 /* Fix iOS Safari 100vh issue */
@@ -100,30 +108,45 @@
 [data-radix-sheet-content] {
   max-width: 100% !important;
   height: 100% !important;
-  z-index: 1100 !important;
+  z-index: 8500 !important;
 }
 
 /* Fix overlapping z-index issues */
 [data-radix-sheet-overlay] {
-  z-index: 1001 !important;
+  z-index: 8400 !important;
 }
 
-/* Ensure dropdown menus have proper z-index */
+/* Ensure dropdown menus have proper z-index and appearance */
 [data-radix-dropdown-menu-content] {
-  z-index: 1200 !important;
+  z-index: 9000 !important;
   background-color: white !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+  max-height: 80vh !important;
+  overflow-y: auto !important;
 }
 
 /* Fix mobile navigation issues */
 .mobile-nav-trigger {
-  z-index: 1300 !important;
+  z-index: 7000 !important;
 }
 
-/* Fix sheet component for mobile */
-.radix-sheet-overlay {
-  z-index: 1001 !important;
+/* Force dropdown display on mobile */
+.force-visible-dropdown {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  transform: none !important;
 }
 
-.radix-sheet-content {
-  z-index: 1002 !important;
+/* Fix dropdown positioning on mobile */
+@media (max-width: 640px) {
+  [data-radix-popper-content-wrapper] {
+    transform: translate(-50%, 0) !important;
+    left: 50% !important;
+    position: fixed !important;
+    top: auto !important;
+    bottom: 10% !important;
+  }
 }

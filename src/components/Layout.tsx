@@ -7,6 +7,8 @@ import MobileHint from "./MobileHint";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { CompanySelector } from "./company/CompanySelector";
+import { UserDropdown } from "./sidebar/UserDropdown"; 
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -32,7 +34,7 @@ const Layout = ({ children }: LayoutProps) => {
       <div className="flex h-screen w-full overflow-hidden" style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
         {/* Mobile sidebar toggle button - only visible on mobile */}
         {isMobile && (
-          <div className="fixed top-4 left-4 z-50">
+          <div className="fixed top-4 left-4 z-[7500]">
             <SidebarTrigger asChild>
               <Button 
                 variant="ghost" 
@@ -57,17 +59,27 @@ const Layout = ({ children }: LayoutProps) => {
                      style={{ height: 'calc(var(--vh, 1vh) * 100)' }}>
           <ScrollArea className="h-full">
             <div className="w-full max-w-full p-3 sm:p-4 md:p-6">
-              {/* Application header with logo and name */}
-              <div className="flex items-center mb-6 pb-4 border-b border-gray-200">
-                <img 
-                  src="/lovable-uploads/91b3768c-9bf7-4a1c-b2be-aea61a3ff3be.png" 
-                  alt="AssetGuardian Logo" 
-                  className="h-8 w-8 mr-3" 
-                />
-                <div>
-                  <h1 className="text-xl font-bold text-gray-900">AssetGuardian</h1>
-                  <p className="text-sm text-gray-500">by Shogunai LLC</p>
+              {/* Application header with logo, name, and mobile-friendly controls */}
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
+                <div className="flex items-center">
+                  <img 
+                    src="/lovable-uploads/91b3768c-9bf7-4a1c-b2be-aea61a3ff3be.png" 
+                    alt="AssetGuardian Logo" 
+                    className="h-8 w-8 mr-3" 
+                  />
+                  <div>
+                    <h1 className="text-xl font-bold text-gray-900">AssetGuardian</h1>
+                    <p className="text-sm text-gray-500">by Shogunai LLC</p>
+                  </div>
                 </div>
+                
+                {/* Add company selector and user dropdown in header for mobile */}
+                {isMobile && (
+                  <div className="flex items-center space-x-2">
+                    <CompanySelector />
+                    <UserDropdown />
+                  </div>
+                )}
               </div>
               {children}
             </div>

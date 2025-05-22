@@ -1,4 +1,6 @@
+
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +14,7 @@ interface StatusDropdownProps {
 }
 
 export const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) => {
+  const isMobile = useIsMobile();
   const statuses = ["Operational", "Under Maintenance", "Offline", "Critical"];
 
   return (
@@ -22,8 +25,9 @@ export const StatusDropdown = ({ status, onStatusChange }: StatusDropdownProps) 
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        className="w-[150px] bg-white z-50"
-        align="end"
+        className="w-[150px] bg-white"
+        sideOffset={isMobile ? 15 : 4}
+        align={isMobile ? "center" : "end"}
       >
         {statuses.map((statusOption) => (
           <DropdownMenuItem
