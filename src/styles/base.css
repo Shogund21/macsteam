@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -66,19 +65,22 @@
     --ring: 212.7 26.8% 83.9%;
   }
 
-  /* Updated mobile viewport fixes */
-  html {
+  /* Critical fixes for mobile rendering */
+  html, body {
     -webkit-text-size-adjust: 100%;
     height: 100%;
     width: 100%;
+    display: block !important;
+    visibility: visible !important;
+    overflow: auto !important;
   }
 
-  body {
-    -webkit-overflow-scrolling: touch;
+  #root {
     height: 100%;
     width: 100%;
-    position: relative;
-    overflow: auto;
+    display: block !important;
+    visibility: visible !important;
+    overflow: auto !important;
   }
 
   /* For iOS Safari and mobile browsers */
@@ -89,14 +91,16 @@
       width: 100%;
       position: relative;
       overflow: auto;
+      display: block !important;
+      visibility: visible !important;
     }
     
     #root {
       height: 100%;
       width: 100%;
       overflow: auto;
-      display: flex;
-      flex-direction: column;
+      display: block !important;
+      visibility: visible !important;
     }
   }
   
@@ -115,10 +119,16 @@
     }
   }
 
-  /* Prevent content from causing horizontal overflow */
-  .overflow-container {
+  /* Critical fix - force content visibility */
+  .overflow-container,
+  .dashboard-content,
+  [data-radix-sidebar-inset],
+  [data-radix-sidebar-content] {
     max-width: 100%;
     overflow-x: hidden;
+    display: block !important;
+    visibility: visible !important;
+    min-height: 200px;
   }
   
   /* Fix for dialog positioning on mobile */

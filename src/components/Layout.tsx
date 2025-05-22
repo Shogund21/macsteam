@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import Sidebar from "@/components/Sidebar";
@@ -15,7 +16,7 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
-  const [isContentVisible, setIsContentVisible] = useState(false);
+  const [isContentVisible, setIsContentVisible] = useState(true); // Start with visible content
   const [layoutError, setLayoutError] = useState<Error | null>(null);
   
   // Fix for mobile Safari: Handle viewport height properly
@@ -29,26 +30,20 @@ const Layout = ({ children }: LayoutProps) => {
     setViewportHeight();
     window.addEventListener('resize', setViewportHeight);
     
-    // Force content visibility with multiple safety checks
-    const showContent = () => {
-      setIsContentVisible(true);
-      setViewportHeight();
-    };
+    // Force content visibility
+    setIsContentVisible(true);
     
-    // Staggered checks with multiple timers to ensure rendering
-    setTimeout(showContent, 100);
+    // Force multiple re-renders to ensure display
+    setTimeout(setViewportHeight, 100);
     setTimeout(setViewportHeight, 300);
     setTimeout(setViewportHeight, 500);
-    
-    // Force a re-render after component mounts to ensure all content is displayed
-    const renderTimer = setTimeout(() => {
+    setTimeout(() => {
+      setIsContentVisible(true);
       window.dispatchEvent(new Event('resize'));
-      setViewportHeight();
-    }, 200);
+    }, 800);
     
     return () => {
       window.removeEventListener('resize', setViewportHeight);
-      clearTimeout(renderTimer);
     };
   }, []);
 
@@ -84,7 +79,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <SidebarProvider defaultOpen={!isMobile}>
       <div 
-        className={`flex h-screen w-full overflow-hidden flex-col md:flex-row${isContentVisible ? ' visible' : ' invisible'}`} 
+        className="flex h-screen w-full overflow-hidden flex-col md:flex-row visible" 
         style={{ height: 'calc(var(--vh, 1vh) * 100)', minHeight: 'calc(var(--vh, 1vh) * 100)' }}
       >
         {/* Mobile sidebar toggle button - only visible on mobile */}
@@ -96,7 +91,6 @@ const Layout = ({ children }: LayoutProps) => {
                 size="sm" 
                 className="bg-white/80 backdrop-blur-sm shadow-sm"
                 aria-label="Toggle Menu"
-                onClick={() => setIsContentVisible(true)} // Ensure content is visible after toggle
               >
                 <Menu className="h-4 w-4" />
               </Button>
@@ -112,15 +106,16 @@ const Layout = ({ children }: LayoutProps) => {
 
         {/* Main content with proper margin to prevent overlap */}
         <SidebarInset 
-          className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto display-block" 
+          className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto display-block visible" 
           style={{ 
             height: 'calc(var(--vh, 1vh) * 100)', 
             minHeight: 'calc(var(--vh, 1vh) * 100)',
-            visibility: "visible" 
+            visibility: "visible",
+            display: "block"
           }}
         >
-          <div className="h-full w-full visible">
-            <div className="w-full p-3 sm:p-4 md:p-6">
+          <div className="h-full w-full visible" style={{ display: "block" }}>
+            <div className="w-full p-3 sm:p-4 md:p-6 visible">
               {/* Application header with logo, name, and mobile-friendly controls */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
                 <div className="flex items-center">
@@ -145,10 +140,10 @@ const Layout = ({ children }: LayoutProps) => {
               </div>
               
               {/* Render children with fallback */}
-              <div className="min-h-[200px] block visible">
+              <div className="min-h-[200px] block visible" style={{ display: "block", visibility: "visible" }}>
                 {children || (
                   <div className="flex items-center justify-center h-64">
-                    <p>Loading content...</p>
+                    <p className="text-gray-500">Loading content...</p>
                   </div>
                 )}
               </div>

@@ -4,12 +4,37 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
+    <!-- Enhanced viewport settings for better mobile rendering -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no" />
     <meta name="theme-color" content="#1EAEDB" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="format-detection" content="telephone=no" />
     <title>AssetGuardian</title>
+    <style>
+      /* Critical CSS to ensure content visibility */
+      html, body, #root {
+        height: 100% !important;
+        width: 100% !important;
+        margin: 0;
+        padding: 0;
+        display: block !important;
+        visibility: visible !important;
+      }
+      
+      /* Fix for blank page issue */
+      .invisible {
+        visibility: visible !important;
+      }
+      
+      /* Force content visibility */
+      [data-radix-sidebar-inset], 
+      .dashboard-content,
+      .overflow-container {
+        display: block !important;
+        visibility: visible !important;
+      }
+    </style>
   </head>
   <body>
     <div id="root"></div>

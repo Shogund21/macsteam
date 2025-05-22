@@ -4,60 +4,82 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
+import { useState, useEffect } from "react";
 
 const Stats = () => {
-  // Fetch equipment data
-  const { data: equipmentData, isLoading: equipmentLoading } = useQuery({
+  const [hasError, setHasError] = useState(false);
+
+  // Fetch equipment data with error handling
+  const { data: equipmentData, isLoading: equipmentLoading, error: equipmentError } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('equipment')
-        .select('*');
-      
-      if (error) {
-        console.error('Error fetching equipment:', error);
-        throw error;
+      try {
+        const { data, error } = await supabase
+          .from('equipment')
+          .select('*');
+        
+        if (error) {
+          console.error('Error fetching equipment:', error);
+          throw error;
+        }
+        return data || [];
+      } catch (err) {
+        console.error("Equipment query error:", err);
+        setHasError(true);
+        return [];
       }
-      return data;
     },
   });
 
-  // Fetch projects data
-  const { data: projectsData, isLoading: projectsLoading } = useQuery({
+  // Fetch projects data with error handling
+  const { data: projectsData, isLoading: projectsLoading, error: projectsError } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*');
-      
-      if (error) {
-        console.error('Error fetching projects:', error);
-        throw error;
+      try {
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*');
+        
+        if (error) {
+          console.error('Error fetching projects:', error);
+          throw error;
+        }
+        return data || [];
+      } catch (err) {
+        console.error("Projects query error:", err);
+        setHasError(true);
+        return [];
       }
-      return data;
     },
   });
 
-  // Fetch maintenance checks data for pending tasks
-  const { data: maintenanceData, isLoading: maintenanceLoading } = useQuery({
+  // Fetch maintenance checks data for pending tasks with error handling
+  const { data: maintenanceData, isLoading: maintenanceLoading, error: maintenanceError } = useQuery({
     queryKey: ['maintenance_checks'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('hvac_maintenance_checks')
-        .select('*');
-      
-      if (error) {
-        console.error('Error fetching maintenance checks:', error);
-        throw error;
+      try {
+        const { data, error } = await supabase
+          .from('hvac_maintenance_checks')
+          .select('*');
+        
+        if (error) {
+          console.error('Error fetching maintenance checks:', error);
+          throw error;
+        }
+        return data || [];
+      } catch (err) {
+        console.error("Maintenance checks query error:", err);
+        setHasError(true);
+        return [];
       }
-      return data;
     },
   });
 
   // Calculate active projects (those with status 'in_progress' or 'ongoing')
   const activeProjectsCount = projectsData?.filter(project => 
-    project.status.toLowerCase() === 'in progress' || 
-    project.status.toLowerCase() === 'ongoing'
+    project.status?.toLowerCase() === 'in progress' || 
+    project.status?.toLowerCase() === 'ongoing'
   ).length || 0;
 
   // Calculate pending tasks (maintenance checks with status 'pending')
@@ -65,26 +87,44 @@ const Stats = () => {
     check.status === 'pending'
   ).length || 0;
 
-  // Fetch technicians data
-  const { data: techniciansData, isLoading: techniciansLoading } = useQuery({
+  // Fetch technicians data with error handling
+  const { data: techniciansData, isLoading: techniciansLoading, error: techniciansError } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('technicians')
-        .select('*');
-      
-      if (error) {
-        console.error('Error fetching technicians:', error);
-        throw error;
+      try {
+        const { data, error } = await supabase
+          .from('technicians')
+          .select('*');
+        
+        if (error) {
+          console.error('Error fetching technicians:', error);
+          throw error;
+        }
+        return data || [];
+      } catch (err) {
+        console.error("Technicians query error:", err);
+        setHasError(true);
+        return [];
       }
-      return data;
     },
   });
+
+  // Show any errors
+  useEffect(() => {
+    if (equipmentError || projectsError || maintenanceError || techniciansError) {
+      setHasError(true);
+      toast({
+        title: "Data Loading Error",
+        description: "Some dashboard data failed to load. The display may be incomplete.",
+        variant: "destructive"
+      });
+    }
+  }, [equipmentError, projectsError, maintenanceError, techniciansError]);
 
   const stats = [
     {
       name: "Total Equipment",
-      value: equipmentLoading ? "..." : equipmentData?.length.toString() || "0",
+      value: equipmentLoading ? "..." : (equipmentData?.length || 0).toString(),
       icon: Wrench,
       change: "+4.75%",
       changeType: "positive",
@@ -116,7 +156,7 @@ const Stats = () => {
       name: "Available Technicians",
       value: techniciansLoading 
         ? "..." 
-        : techniciansData?.filter(tech => tech.isAvailable).length.toString() || "0",
+        : (techniciansData?.filter(tech => tech.isAvailable).length || 0).toString(),
       icon: AlertCircle,
       change: "-1.5%",
       changeType: "positive",
