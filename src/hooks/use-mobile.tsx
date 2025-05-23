@@ -26,7 +26,7 @@ export function useIsMobile() {
       navigator.maxTouchPoints > 0 || 
       (navigator as any).msMaxTouchPoints > 0;
     
-    // Combine all checks - if ANY is true, treat as mobile
+    // Prioritize viewport width for consistent behavior
     return isMobileViewport || (isMobileUserAgent && hasTouchCapability);
   }, []);
   
@@ -36,41 +36,33 @@ export function useIsMobile() {
     // Set initial value - check right away
     setIsMobile(checkIfMobile());
     
-    // Better resize handling with throttling
+    // Handle both resize and orientation changes with debouncing
     let timeoutId: number | undefined;
-    let lastCheck = Date.now();
     
-    const handleResize = () => {
-      // Throttle checks to max once per 100ms
-      const now = Date.now();
-      if (now - lastCheck < 100) {
-        if (timeoutId) window.clearTimeout(timeoutId);
-        timeoutId = window.setTimeout(() => {
-          setIsMobile(checkIfMobile());
-          lastCheck = Date.now();
-        }, 100);
-        return;
-      }
+    const handleViewportChange = () => {
+      if (timeoutId) window.clearTimeout(timeoutId);
       
-      setIsMobile(checkIfMobile());
-      lastCheck = now;
+      timeoutId = window.setTimeout(() => {
+        setIsMobile(checkIfMobile());
+      }, 100);
     };
     
-    window.addEventListener('resize', handleResize, { passive: true });
-    window.addEventListener('orientationchange', handleResize, { passive: true });
+    window.addEventListener('resize', handleViewportChange, { passive: true });
+    window.addEventListener('orientationchange', handleViewportChange, { passive: true });
     
-    // Recheck after a short delay to catch any post-render issues
-    setTimeout(() => {
+    // Force recheck after a short delay to account for any layout shifts
+    const recheckTimeout = setTimeout(() => {
       setIsMobile(checkIfMobile());
     }, 200);
     
     // Clean up
     return () => {
-      window.removeEventListener('resize', handleResize);
-      window.removeEventListener('orientationchange', handleResize);
+      window.removeEventListener('resize', handleViewportChange);
+      window.removeEventListener('orientationchange', handleViewportChange);
       if (timeoutId) {
         window.clearTimeout(timeoutId);
       }
+      clearTimeout(recheckTimeout);
     };
   }, [checkIfMobile]);
 

@@ -25,7 +25,6 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     if (!isMobile) {
       setOpen(true); // Always show sidebar on desktop
     }
-    // Don't automatically close on mobile to avoid conditional rendering issues
   }, [isMobile, setOpen]);
 
   // Don't attempt to render before mounting to avoid hydration mismatch
@@ -44,41 +43,43 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     return (
       <aside
         className={cn(
-          "fixed left-0 top-0 z-40 h-screen w-48 border-r border-gray-200 bg-white transition-all",
+          "fixed left-0 top-0 z-30 h-screen w-48 border-r border-gray-200 bg-white transition-all",
           !isOpen ? "-translate-x-full" : "translate-x-0",
           className
         )}
+        data-sidebar="sidebar"
+        data-state={isOpen ? "open" : "closed"}
         {...props}
       >
         <SidebarHeader isMobile={isMobile} />
         <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
+        {children}
       </aside>
     );
   }
   
-  // For mobile: enhanced sheet component for slide-out effect with improved touch handling
+  // For mobile: use Sheet component with improved touch handling
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetOverlay className="z-40" />
       <SheetContent 
         side="left" 
-        className="p-0 w-80 max-w-[85%] overflow-y-auto h-full z-50 bg-white border-r touch-manipulation"
-        onInteractOutside={(e) => {
-          // Prevent closing when clicking the trigger button
-          if (e.target && (e.target as HTMLElement).closest('[data-sidebar="trigger"]')) {
-            e.preventDefault();
-            e.stopPropagation();
-          }
-        }}
+        className="p-0 w-[280px] max-w-[85%] z-50 bg-white border-r mobile-sidebar-content"
+        data-sidebar="sidebar"
+        data-mobile="true"
+        onPointerDown={(e) => e.stopPropagation()} // Prevent event bubbling
         style={{
-          touchAction: "pan-y", // Enable vertical scrolling
-          WebkitOverflowScrolling: "touch", // Smooth scrolling on iOS
-          paddingBottom: "env(safe-area-inset-bottom)" // iOS safe area
+          touchAction: "pan-y",
+          WebkitOverflowScrolling: "touch",
+          paddingBottom: "env(safe-area-inset-bottom)"
         }}
       >
-        <SidebarHeader isMobile={isMobile} />
-        <div className="space-y-4 py-4 overflow-y-auto">
-          <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
+        <div className="flex h-full w-full flex-col">
+          <SidebarHeader isMobile={isMobile} />
+          <div className="space-y-4 py-4 overflow-y-auto flex-1">
+            <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
+            {children}
+          </div>
         </div>
       </SheetContent>
     </Sheet>

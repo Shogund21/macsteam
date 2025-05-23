@@ -5,18 +5,26 @@ import { useEffect } from "react";
 export const useViewportHeight = () => {
   useEffect(() => {
     const setViewportHeight = () => {
+      // This sets a CSS variable that can be used instead of vh units
+      // which don't work well on mobile browsers due to address bar
       const vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty('--vh', `${vh}px`);
     };
 
-    // Set viewport height immediately and on window resize
+    // Set viewport height immediately
     setViewportHeight();
-    window.addEventListener('resize', setViewportHeight);
-    window.addEventListener('orientationchange', setViewportHeight);
+    
+    // Set up event listeners for orientation and resize
+    window.addEventListener('resize', setViewportHeight, { passive: true });
+    window.addEventListener('orientationchange', setViewportHeight, { passive: true });
+    
+    // Force a recheck after a short delay to catch any post-render adjustments
+    const recheckTimeout = setTimeout(setViewportHeight, 200);
     
     return () => {
       window.removeEventListener('resize', setViewportHeight);
       window.removeEventListener('orientationchange', setViewportHeight);
+      clearTimeout(recheckTimeout);
     };
   }, []);
 };

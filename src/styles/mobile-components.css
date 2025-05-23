@@ -8,15 +8,16 @@
     height: 100dvh !important;
     width: 80% !important;
     max-width: 300px !important;
-    overflow-y: auto !important;
-    background-color: white !important;
     z-index: 50 !important;
+    background-color: white !important;
+    overflow-y: auto !important;
   }
   
   .mobile-sidebar-content {
     height: 100% !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
   }
 
   /* Dialog fixes for mobile */
@@ -34,16 +35,7 @@
     position: fixed !important;
     inset: 0 !important;
     background-color: rgba(0, 0, 0, 0.5) !important;
-    z-index: 999 !important;
-  }
-
-  /* Enhanced mobile sheet content */
-  [data-state=open][data-radix-sheet-content] {
-    z-index: 50 !important;
-    overflow-y: auto !important;
-    height: 100dvh !important;
-    width: 85% !important;
-    max-width: 300px !important;
+    z-index: 40 !important;
   }
 
   /* Better handle sidebar trigger */
@@ -52,5 +44,14 @@
     position: fixed !important;
     top: 1rem !important;
     left: 1rem !important;
+  }
+  
+  /* Set proper z-index hierarchy for sheet components */
+  [data-state=open][data-radix-sheet-content] {
+    z-index: 50 !important;
+  }
+  
+  [data-radix-sheet-overlay] {
+    z-index: 40 !important;
   }
 }

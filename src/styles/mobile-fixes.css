@@ -16,6 +16,16 @@
     box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
   }
   
+  /* Use CSS custom properties for reliable mobile height */
+  :root {
+    --vh: 1vh;
+  }
+  
+  .h-screen-safe {
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+  }
+
   /* Critical fixes for dropdowns on mobile */
   @media (max-width: 767px) {
     /* Force higher z-index and proper positioning for dropdown wrappers */

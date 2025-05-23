@@ -20,32 +20,29 @@
     touch-action: manipulation;
   }
 
-  /* Fix for mobile sidebar overlay and content */
+  /* Z-index fixes for overlay and sidebar */
+  [data-state=open][data-radix-sheet-overlay] {
+    z-index: 40 !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+  }
+
+  /* Sheet content improvements */
+  [data-state=open][data-radix-sheet-content] {
+    z-index: 50 !important;
+    touch-action: pan-y !important;
+    -webkit-overflow-scrolling: touch !important;
+    height: 100dvh !important;
+  }
+
+  /* Fix for mobile sidebar usage */
   [data-state=open][data-mobile=true] {
     width: 85% !important;
     max-width: 300px !important;
     z-index: 50 !important;
     overflow-y: auto !important;
     height: 100dvh !important;
-  }
-
-  /* Z-index fixes for overlay and sidebar */
-  [data-radix-sheet-overlay] {
-    z-index: 40 !important; /* Backdrop overlay z-index */
-  }
-
-  /* Sheet content improvements */
-  [data-radix-sheet-content] {
-    touch-action: pan-y !important;
-    -webkit-overflow-scrolling: touch !important; 
-  }
-
-  /* Fix for sidebar overlay in Sheet component */
-  [data-state=open][data-radix-sheet-overlay] {
-    z-index: 45 !important;
-    position: fixed !important;
-    inset: 0 !important;
-    background-color: rgba(0, 0, 0, 0.5) !important;
   }
 
   /* Improved tap targets for mobile */

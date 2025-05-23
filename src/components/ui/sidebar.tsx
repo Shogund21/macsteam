@@ -254,6 +254,20 @@ const SidebarTrigger = React.forwardRef<
 >(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar();
 
+  const handleInteraction = (event: React.MouseEvent | React.TouchEvent) => {
+    // Prevent default behavior
+    event.preventDefault();
+    event.stopPropagation();
+    
+    // Toggle the sidebar
+    toggleSidebar();
+    
+    // Call the original onClick if provided
+    if (onClick && event.type === 'click') {
+      onClick(event as React.MouseEvent);
+    }
+  };
+
   return (
     <Button
       ref={ref}
@@ -261,27 +275,28 @@ const SidebarTrigger = React.forwardRef<
       variant="ghost"
       size="icon"
       className={cn("h-9 w-9 touch-manipulation", className)}
-      onClick={(event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        toggleSidebar();
-        onClick?.(event);
-      }}
-      onTouchStart={(event) => {
-        // Prevent default only for touch events to improve mobile behavior
-        event.stopPropagation();
+      onClick={handleInteraction}
+      onTouchEnd={handleInteraction}
+      onPointerDown={(e) => {
+        // Prevent any pointer events from being captured by other elements
+        e.stopPropagation();
       }}
       style={{
         touchAction: "manipulation",
         WebkitTapHighlightColor: "transparent",
         minHeight: "40px",
-        minWidth: "40px"
+        minWidth: "40px",
+        zIndex: 100
       }}
       aria-label="Toggle Sidebar"
       {...props}
-    ><PanelLeft className="h-5 w-5" /><span className="sr-only">Toggle Sidebar</span></Button>
-  )
-})
+    >
+      <PanelLeft className="h-5 w-5" />
+      <span className="sr-only">Toggle Sidebar</span>
+    </Button>
+  );
+});
+
 SidebarTrigger.displayName = "SidebarTrigger"
 
 const SidebarRail = React.forwardRef<

@@ -17,16 +17,10 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
     <div className="block h-screen w-full overflow-hidden">
       {/* Mobile sidebar trigger with enhanced z-index and tap area */}
       <div className="fixed top-4 left-4 z-[100]" data-sidebar-trigger-wrapper>
-        <SidebarTrigger>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="bg-white/80 backdrop-blur-sm shadow-sm h-12 w-12 touch-manipulation"
-            aria-label="Toggle Menu"
-          >
-            <Menu className="h-5 w-5" />
-          </Button>
-        </SidebarTrigger>
+        <SidebarTrigger 
+          className="bg-white/80 backdrop-blur-sm shadow-sm h-12 w-12 touch-manipulation"
+          aria-label="Toggle Menu"
+        />
       </div>
       
       {/* Mobile helper hint for first-time users */}
