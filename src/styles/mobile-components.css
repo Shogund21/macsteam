@@ -54,4 +54,50 @@
   [data-radix-sheet-overlay] {
     z-index: 40 !important;
   }
+
+  /* Mobile dropdown menu styles */
+  .mobile-dropdown-overlay {
+    position: fixed !important;
+    inset: 0 !important;
+    background-color: rgba(0, 0, 0, 0.3) !important;
+    z-index: 40 !important;
+    animation: fade-in 0.2s ease-out !important;
+  }
+  
+  .mobile-dropdown-menu {
+    position: absolute !important;
+    top: 100% !important;
+    right: 0 !important;
+    width: 200px !important;
+    max-height: 80vh !important;
+    background-color: white !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    z-index: 9999 !important;
+    animation: scale-in 0.2s ease-out !important;
+    transform-origin: top right !important;
+    overflow-y: auto !important;
+  }
+  
+  /* Improve touch targets */
+  .touch-target {
+    min-height: 44px !important; /* Apple's recommended minimum size */
+    min-width: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }

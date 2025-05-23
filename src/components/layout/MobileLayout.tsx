@@ -7,6 +7,7 @@ import { CompanySelector } from "@/components/company/CompanySelector";
 import { UserDropdown } from "@/components/sidebar/UserDropdown";
 import MobileHint from "@/components/MobileHint";
 import Sidebar from "@/components/Sidebar";
+import { MobileDropdownMenu } from "@/components/navigation/MobileDropdownMenu";
 
 interface MobileLayoutProps {
   children: React.ReactNode;
@@ -21,6 +22,11 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
           className="bg-white/80 backdrop-blur-sm shadow-sm h-12 w-12 touch-manipulation"
           aria-label="Toggle Menu"
         />
+      </div>
+      
+      {/* Mobile dropdown menu positioned at the top right */}
+      <div className="fixed top-4 right-4 z-[100]">
+        <MobileDropdownMenu />
       </div>
       
       {/* Mobile helper hint for first-time users */}
@@ -49,8 +55,8 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
               </div>
             </div>
             
-            {/* Company selector and user dropdown */}
-            <div className="flex items-center space-x-2">
+            {/* Company selector only shown in desktop view */}
+            <div className="hidden sm:flex items-center space-x-2">
               <CompanySelector />
               <UserDropdown />
             </div>
