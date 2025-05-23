@@ -15,13 +15,13 @@ interface MobileLayoutProps {
 export const MobileLayout = ({ children }: MobileLayoutProps) => {
   return (
     <div className="block h-screen w-full overflow-hidden">
-      {/* Mobile sidebar toggle button with increased z-index and tap area */}
-      <div className="fixed top-4 left-4 z-[100]">
+      {/* Mobile sidebar trigger with enhanced z-index and tap area */}
+      <div className="fixed top-4 left-4 z-[100]" data-sidebar-trigger-wrapper>
         <SidebarTrigger>
           <Button 
             variant="ghost" 
             size="sm" 
-            className="bg-white/80 backdrop-blur-sm shadow-sm h-10 w-10 touch-manipulation"
+            className="bg-white/80 backdrop-blur-sm shadow-sm h-12 w-12 touch-manipulation"
             aria-label="Toggle Menu"
           >
             <Menu className="h-5 w-5" />
@@ -32,10 +32,10 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
       {/* Mobile helper hint for first-time users */}
       <MobileHint />
       
-      {/* Sidebar with fixed width */}
+      {/* Sidebar with proper mobile integration */}
       <Sidebar />
 
-      {/* Main content area with sufficient padding to prevent content overlap */}
+      {/* Main content area with scrolling enabled */}
       <div 
         className="bg-gray-50 min-h-screen w-full overflow-y-auto"
         data-testid="mobile-content"

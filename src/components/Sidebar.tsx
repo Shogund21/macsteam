@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetOverlay } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { SidebarHeader } from "./sidebar/SidebarHeader";
 import { SidebarNav } from "./sidebar/SidebarNav";
@@ -56,25 +56,28 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     );
   }
   
-  // For mobile: use sheet component for slide-out effect with improved touch handling
+  // For mobile: enhanced sheet component for slide-out effect with improved touch handling
   return (
     <Sheet open={isOpen} onOpenChange={setOpen}>
+      <SheetOverlay className="z-40" />
       <SheetContent 
         side="left" 
-        className="p-0 w-60 max-w-[80%] overflow-y-auto h-full"
+        className="p-0 w-80 max-w-[85%] overflow-y-auto h-full z-50 bg-white border-r touch-manipulation"
         onInteractOutside={(e) => {
-          // Only prevent default for certain events
+          // Prevent closing when clicking the trigger button
           if (e.target && (e.target as HTMLElement).closest('[data-sidebar="trigger"]')) {
             e.preventDefault();
+            e.stopPropagation();
           }
         }}
         style={{
-          touchAction: "pan-y",
-          WebkitOverflowScrolling: "touch"
+          touchAction: "pan-y", // Enable vertical scrolling
+          WebkitOverflowScrolling: "touch", // Smooth scrolling on iOS
+          paddingBottom: "env(safe-area-inset-bottom)" // iOS safe area
         }}
       >
         <SidebarHeader isMobile={isMobile} />
-        <div className="space-y-4 py-4">
+        <div className="space-y-4 py-4 overflow-y-auto">
           <SidebarNav closeMenuOnMobile={closeMenuOnMobile} />
         </div>
       </SheetContent>

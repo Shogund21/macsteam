@@ -7,7 +7,7 @@
     left: 0 !important;
     height: 100dvh !important;
     width: 80% !important;
-    max-width: 260px !important;
+    max-width: 300px !important;
     overflow-y: auto !important;
     background-color: white !important;
     z-index: 50 !important;
@@ -35,5 +35,22 @@
     inset: 0 !important;
     background-color: rgba(0, 0, 0, 0.5) !important;
     z-index: 999 !important;
+  }
+
+  /* Enhanced mobile sheet content */
+  [data-state=open][data-radix-sheet-content] {
+    z-index: 50 !important;
+    overflow-y: auto !important;
+    height: 100dvh !important;
+    width: 85% !important;
+    max-width: 300px !important;
+  }
+
+  /* Better handle sidebar trigger */
+  [data-sidebar-trigger-wrapper] {
+    z-index: 100 !important;
+    position: fixed !important;
+    top: 1rem !important;
+    left: 1rem !important;
   }
 }

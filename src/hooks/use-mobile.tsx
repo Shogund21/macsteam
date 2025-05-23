@@ -8,6 +8,9 @@ export function useIsMobile() {
   const [isMobile, setIsMobile] = useState<boolean>(true);
   
   const checkIfMobile = useCallback(() => {
+    // Only run in browser environment
+    if (typeof window === 'undefined') return true;
+    
     // Check multiple conditions to better detect mobile devices
     const viewportWidth = window.innerWidth;
     const userAgent = window.navigator.userAgent.toLowerCase();
@@ -18,8 +21,13 @@ export function useIsMobile() {
     // Width based detection (primary)
     const isMobileViewport = viewportWidth < MOBILE_BREAKPOINT;
     
+    // Touch capability check
+    const hasTouchCapability = 'ontouchstart' in window || 
+      navigator.maxTouchPoints > 0 || 
+      (navigator as any).msMaxTouchPoints > 0;
+    
     // Combine all checks - if ANY is true, treat as mobile
-    return isMobileViewport || isMobileUserAgent;
+    return isMobileViewport || (isMobileUserAgent && hasTouchCapability);
   }, []);
   
   useEffect(() => {
@@ -48,8 +56,8 @@ export function useIsMobile() {
       lastCheck = now;
     };
     
-    window.addEventListener('resize', handleResize);
-    window.addEventListener('orientationchange', handleResize);
+    window.addEventListener('resize', handleResize, { passive: true });
+    window.addEventListener('orientationchange', handleResize, { passive: true });
     
     // Recheck after a short delay to catch any post-render issues
     setTimeout(() => {

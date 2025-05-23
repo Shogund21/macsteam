@@ -267,10 +267,17 @@ const SidebarTrigger = React.forwardRef<
         toggleSidebar();
         onClick?.(event);
       }}
+      onTouchStart={(event) => {
+        // Prevent default only for touch events to improve mobile behavior
+        event.stopPropagation();
+      }}
       style={{
         touchAction: "manipulation",
-        WebkitTapHighlightColor: "transparent"
+        WebkitTapHighlightColor: "transparent",
+        minHeight: "40px",
+        minWidth: "40px"
       }}
+      aria-label="Toggle Sidebar"
       {...props}
     ><PanelLeft className="h-5 w-5" /><span className="sr-only">Toggle Sidebar</span></Button>
   )

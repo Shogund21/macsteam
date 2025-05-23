@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { MobileLayout } from "@/components/layout/MobileLayout";
@@ -15,6 +15,17 @@ const Layout = ({ children }: LayoutProps) => {
   
   // Apply viewport height adjustment
   useViewportHeight();
+  
+  // Force reflow on device type change to avoid layout issues
+  useEffect(() => {
+    // Small timeout to ensure DOM is ready
+    const timeout = setTimeout(() => {
+      // Force a reflow by accessing offsetHeight
+      document.body.offsetHeight;
+    }, 50);
+    
+    return () => clearTimeout(timeout);
+  }, [isMobile]);
   
   // Use different layout approach for mobile vs desktop
   return (
