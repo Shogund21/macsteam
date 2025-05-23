@@ -15,7 +15,7 @@ export const DesktopLayout = ({ children }: DesktopLayoutProps) => {
 
       {/* Main content with proper margin to prevent overlap */}
       <SidebarInset 
-        className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto" 
+        className="flex-1 bg-gray-50 min-h-screen w-full overflow-y-auto pl-48" 
         data-testid="sidebar-inset"
       >
         <div className="w-full p-3 sm:p-4 md:p-6">

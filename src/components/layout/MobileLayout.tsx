@@ -14,7 +14,7 @@ interface MobileLayoutProps {
 
 export const MobileLayout = ({ children }: MobileLayoutProps) => {
   return (
-    <div className="block h-screen w-full overflow-auto">
+    <div className="block h-screen w-full overflow-hidden">
       {/* Mobile sidebar toggle button with increased z-index and tap area */}
       <div className="fixed top-4 left-4 z-[100]">
         <SidebarTrigger>
@@ -35,12 +35,12 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
       {/* Sidebar with fixed width */}
       <Sidebar />
 
-      {/* Main content area with increased left padding to account for sidebar */}
+      {/* Main content area with sufficient padding to prevent content overlap */}
       <div 
         className="bg-gray-50 min-h-screen w-full overflow-y-auto"
         data-testid="mobile-content"
       >
-        <div className="h-full w-full p-3 sm:p-4 md:pl-52" style={{paddingTop: "1rem"}}>
+        <div className="h-full w-full pt-16 px-3 sm:px-4">
           {/* Application header with logo and controls */}
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <div className="flex items-center">

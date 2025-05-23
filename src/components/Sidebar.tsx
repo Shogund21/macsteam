@@ -39,13 +39,13 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     }
   };
 
-  // For desktop: standard sidebar in page layout with reduced width
+  // For desktop: standard sidebar in page layout with fixed width and position
   if (!isMobile) {
     return (
       <aside
         className={cn(
-          "fixed left-0 top-0 z-40 h-screen w-48 border-r border-gray-200 bg-white transition-all md:translate-x-0",
-          !isOpen ? "-translate-x-full" : "",
+          "fixed left-0 top-0 z-40 h-screen w-48 border-r border-gray-200 bg-white transition-all",
+          !isOpen ? "-translate-x-full" : "translate-x-0",
           className
         )}
         {...props}
@@ -61,7 +61,7 @@ export default function Sidebar({ children, className, ...props }: SidebarProps)
     <Sheet open={isOpen} onOpenChange={setOpen}>
       <SheetContent 
         side="left" 
-        className="p-0 w-60 max-w-[80%] overflow-y-auto"
+        className="p-0 w-60 max-w-[80%] overflow-y-auto h-full"
         onInteractOutside={(e) => {
           // Only prevent default for certain events
           if (e.target && (e.target as HTMLElement).closest('[data-sidebar="trigger"]')) {
