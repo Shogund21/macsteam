@@ -35,12 +35,12 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
       {/* Sidebar with fixed width */}
       <Sidebar />
 
-      {/* Main content area */}
+      {/* Main content area with increased left padding to account for sidebar */}
       <div 
         className="bg-gray-50 min-h-screen w-full overflow-y-auto"
         data-testid="mobile-content"
       >
-        <div className="h-full w-full p-3 sm:p-4" style={{paddingTop: "1rem"}}>
+        <div className="h-full w-full p-3 sm:p-4 md:pl-52" style={{paddingTop: "1rem"}}>
           {/* Application header with logo and controls */}
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <div className="flex items-center">
@@ -74,4 +74,4 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
       </div>
     </div>
   );
-};
+}
