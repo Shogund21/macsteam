@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
@@ -254,7 +255,7 @@ const SidebarTrigger = React.forwardRef<
 >(({ className, onClick, ...props }, ref) => {
   const { toggleSidebar } = useSidebar();
 
-  const handleInteraction = (event: React.MouseEvent | React.TouchEvent) => {
+  const handleInteraction = (event: React.MouseEvent<HTMLButtonElement, MouseEvent> | React.TouchEvent<HTMLButtonElement>) => {
     // Prevent default behavior
     event.preventDefault();
     event.stopPropagation();
@@ -264,7 +265,7 @@ const SidebarTrigger = React.forwardRef<
     
     // Call the original onClick if provided
     if (onClick && event.type === 'click') {
-      onClick(event as React.MouseEvent);
+      onClick(event as React.MouseEvent<HTMLButtonElement, MouseEvent>);
     }
   };
 
