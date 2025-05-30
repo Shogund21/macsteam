@@ -1,3 +1,4 @@
+
 @layer components {
   /* Mobile sidebar styles */
   .mobile-sidebar {
@@ -70,58 +71,77 @@
     transform-origin: top center !important;
   }
   
-  /* CRITICAL: Global Radix UI viewport-aware constraints */
-  [data-radix-select-content] {
-    /* Use Radix's custom properties for viewport-aware width */
-    width: min(var(--radix-select-trigger-width, 240px), calc(100vw - 32px)) !important;
+  /* ENHANCED: More aggressive Radix UI fixes with higher specificity */
+  [data-radix-select-content],
+  [data-radix-dropdown-menu-content] {
+    /* Force positioning within viewport bounds */
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    width: calc(100vw - 32px) !important;
     max-width: calc(100vw - 32px) !important;
-    /* Use available height with scrolling fallback */
-    max-height: min(var(--radix-select-content-available-height, 400px), 50vh) !important;
+    min-width: auto !important;
+    
+    /* Height constraints with scrolling */
+    max-height: 50vh !important;
     overflow-y: auto !important;
-    /* Ensure proper background and borders */
+    
+    /* Ensure proper background and styling */
     background-color: white !important;
     border: 1px solid rgba(0, 0, 0, 0.1) !important;
     border-radius: 8px !important;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
     z-index: 9999 !important;
+    
+    /* Override any transform that might cause overflow */
+    transform: none !important;
   }
 
-  [data-radix-dropdown-menu-content] {
-    /* Same viewport-aware constraints for dropdown menus */
-    width: min(var(--radix-dropdown-menu-trigger-width, 240px), calc(100vw - 32px)) !important;
+  /* Target Radix popper content wrapper specifically */
+  [data-radix-popper-content-wrapper] {
+    position: fixed !important;
+    left: 16px !important;
+    right: 16px !important;
+    width: calc(100vw - 32px) !important;
     max-width: calc(100vw - 32px) !important;
-    max-height: min(var(--radix-dropdown-menu-content-available-height, 400px), 50vh) !important;
-    overflow-y: auto !important;
-    background-color: white !important;
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
-    border-radius: 8px !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
-    z-index: 9999 !important;
+    transform: none !important;
   }
 
   /* Ensure Radix viewport components respect the constraints */
-  [data-radix-select-viewport] {
+  [data-radix-select-viewport],
+  [data-radix-dropdown-menu-viewport] {
     max-height: inherit !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
+    width: 100% !important;
   }
 
-  /* Mobile-specific responsive adjustments */
+  /* More specific mobile constraints */
   @media (max-width: 640px) {
+    /* Override any positioning that causes overflow */
     [data-radix-select-content],
     [data-radix-dropdown-menu-content] {
-      /* More aggressive constraints on very small screens */
-      width: min(var(--radix-select-trigger-width, 200px), calc(100vw - 24px)) !important;
+      /* Force full width with margins */
+      left: 12px !important;
+      right: 12px !important;
+      width: calc(100vw - 24px) !important;
       max-width: calc(100vw - 24px) !important;
+      min-width: auto !important;
+      
+      /* Height constraints */
       max-height: 60vh !important;
-      /* Ensure minimum padding from edges */
-      margin: 12px !important;
+      
+      /* Reset any transforms */
+      transform: translateX(0) translateY(0) !important;
     }
     
-    /* Force dropdown content to respect container bounds */
+    /* Ensure the popper wrapper doesn't cause overflow */
     [data-radix-popper-content-wrapper] {
+      left: 12px !important;
+      right: 12px !important;
+      width: calc(100vw - 24px) !important;
       max-width: calc(100vw - 24px) !important;
-      max-height: 60vh !important;
+      transform: none !important;
     }
   }
   
@@ -129,7 +149,21 @@
   @media (min-width: 641px) {
     [data-radix-select-content],
     [data-radix-dropdown-menu-content] {
+      /* Reset to normal positioning on desktop */
+      position: relative !important;
+      left: auto !important;
+      right: auto !important;
+      width: auto !important;
+      max-width: none !important;
       max-height: 400px !important;
+    }
+    
+    [data-radix-popper-content-wrapper] {
+      position: relative !important;
+      left: auto !important;
+      right: auto !important;
+      width: auto !important;
+      max-width: none !important;
     }
   }
   
