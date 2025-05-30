@@ -8,7 +8,6 @@ import { useSidebar } from "@/components/ui/sidebar";
 
 export function MobileDropdownMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({ right: 'auto' as string | number, left: 'auto' as string | number });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const { toggleSidebar } = useSidebar();
@@ -21,46 +20,6 @@ export function MobileDropdownMenu() {
     { title: "Analytics", icon: BarChart4, path: "/analytics" },
     { title: "Settings", icon: Settings, path: "/settings" }
   ];
-
-  // Calculate optimal menu position based on button location and viewport
-  const calculateMenuPosition = () => {
-    if (!buttonRef.current) return;
-
-    const buttonRect = buttonRef.current.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-    const menuWidth = 200; // Reduced from 224px (w-56) to 200px for mobile
-    
-    // Check if there's enough space on the right
-    const spaceOnRight = viewportWidth - buttonRect.right;
-    
-    if (spaceOnRight >= menuWidth) {
-      // Enough space on the right, align to the right edge of button
-      setMenuPosition({ right: 0, left: 'auto' });
-    } else {
-      // Not enough space on the right, position from the left edge
-      const leftPosition = Math.max(8, buttonRect.left - menuWidth + buttonRect.width);
-      setMenuPosition({ 
-        right: 'auto', 
-        left: Math.min(leftPosition, viewportWidth - menuWidth - 8)
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      calculateMenuPosition();
-      
-      // Recalculate on window resize or orientation change
-      const handleResize = () => calculateMenuPosition();
-      window.addEventListener('resize', handleResize);
-      window.addEventListener('orientationchange', handleResize);
-      
-      return () => {
-        window.removeEventListener('resize', handleResize);
-        window.removeEventListener('orientationchange', handleResize);
-      };
-    }
-  }, [isOpen]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -75,6 +34,21 @@ export function MobileDropdownMenu() {
     toggleSidebar();
     setIsOpen(false);
   };
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node) &&
+          buttonRef.current && !buttonRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isOpen]);
 
   return (
     <div className="relative">
@@ -101,17 +75,19 @@ export function MobileDropdownMenu() {
           <div
             ref={menuRef}
             id="mobile-dropdown-menu"
-            className="fixed top-16 w-50 max-w-[200px] rounded-lg bg-white shadow-lg border border-gray-100 z-[9999] animate-scale-in overflow-y-auto max-h-[70vh]"
-            style={{
-              transformOrigin: 'top right',
-              right: menuPosition.right !== 'auto' ? `${menuPosition.right}px` : undefined,
-              left: menuPosition.left !== 'auto' ? `${menuPosition.left}px` : undefined,
-            }}
+            className={cn(
+              "absolute top-full right-0 mt-2",
+              "w-56 sm:w-48 md:w-56", // Responsive width
+              "max-h-[70vh] overflow-y-auto", // Max height with scroll
+              "rounded-lg bg-white shadow-lg border border-gray-100",
+              "z-[9999] animate-scale-in"
+            )}
+            style={{ transformOrigin: 'top right' }}
           >
-            <div className="p-2 flex flex-col gap-1">
+            <div className="p-2 flex flex-col gap-1 max-h-full overflow-y-auto">
               <Button
                 variant="ghost"
-                className="flex items-center justify-start px-3 py-2 text-left w-full"
+                className="flex items-center justify-start px-3 py-2 text-left w-full min-h-[40px]"
                 onClick={handleSidebarToggle}
               >
                 <span className="text-sm">Full Navigation</span>
@@ -124,7 +100,7 @@ export function MobileDropdownMenu() {
                   key={item.title} 
                   to={item.path}
                   className={cn(
-                    "flex items-center gap-2 px-3 py-2 text-sm rounded-md w-full",
+                    "flex items-center gap-2 px-3 py-2 text-sm rounded-md w-full min-h-[40px]",
                     "hover:bg-gray-100 active:bg-gray-200 transition-colors"
                   )}
                   onClick={handleItemClick}

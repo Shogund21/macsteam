@@ -55,7 +55,7 @@
     z-index: 40 !important;
   }
 
-  /* Mobile dropdown menu styles - updated for better positioning */
+  /* Mobile dropdown menu styles - improved with responsive sizing */
   .mobile-dropdown-overlay {
     position: fixed !important;
     inset: 0 !important;
@@ -64,20 +64,59 @@
     animation: fade-in 0.2s ease-out !important;
   }
   
-  .mobile-dropdown-menu {
-    position: fixed !important;
-    top: 4rem !important;
-    width: 200px !important;
-    max-width: calc(100vw - 2rem) !important;
-    max-height: 70vh !important;
-    background-color: white !important;
-    border-radius: 8px !important;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
-    border: 1px solid rgba(0, 0, 0, 0.1) !important;
-    z-index: 9999 !important;
-    animation: scale-in 0.2s ease-out !important;
-    transform-origin: top right !important;
-    overflow-y: auto !important;
+  /* Responsive dropdown containers */
+  .dropdown-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  /* Mobile-specific dropdown styling */
+  @media (max-width: 640px) {
+    .mobile-dropdown-menu {
+      position: absolute !important;
+      top: 100% !important;
+      right: 0 !important;
+      width: 90vw !important;
+      max-width: 280px !important;
+      max-height: 60vh !important;
+      background-color: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+      border: 1px solid rgba(0, 0, 0, 0.1) !important;
+      z-index: 9999 !important;
+      animation: scale-in 0.2s ease-out !important;
+      transform-origin: top right !important;
+      overflow-y: auto !important;
+    }
+    
+    /* Force dropdown content to respect container bounds */
+    [data-radix-popper-content-wrapper] {
+      max-width: 90vw !important;
+      max-height: 60vh !important;
+    }
+    
+    /* Responsive dropdown content */
+    [data-radix-dropdown-menu-content],
+    [data-radix-select-content] {
+      width: 90vw !important;
+      max-width: 300px !important;
+      max-height: 50vh !important;
+      overflow-y: auto !important;
+    }
+  }
+  
+  /* Desktop dropdown styling */
+  @media (min-width: 641px) {
+    .mobile-dropdown-menu {
+      width: 240px !important;
+      max-height: 70vh !important;
+    }
+    
+    [data-radix-dropdown-menu-content],
+    [data-radix-select-content] {
+      max-height: 400px !important;
+      overflow-y: auto !important;
+    }
   }
   
   /* Ensure proper text sizing and spacing for mobile */
@@ -101,9 +140,24 @@
     -webkit-tap-highlight-color: transparent !important;
   }
   
-  /* Width utilities for mobile menu */
-  .w-50 {
-    width: 200px;
+  /* Dropdown scroll improvements */
+  .dropdown-scroll {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: thin !important;
+  }
+  
+  .dropdown-scroll::-webkit-scrollbar {
+    width: 4px !important;
+  }
+  
+  .dropdown-scroll::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+  
+  .dropdown-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 2px !important;
   }
 }
 

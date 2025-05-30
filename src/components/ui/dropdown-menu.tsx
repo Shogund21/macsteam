@@ -69,7 +69,10 @@ const DropdownMenuContent = React.forwardRef<
         align={isMobile ? "center" : "end"}
         className={cn(
           "z-[50] min-w-[8rem] overflow-hidden rounded-md border bg-white p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-          isMobile && "fixed w-[80%] max-w-[300px] top-[auto] bottom-[20%] left-[50%] transform translate-x-[-50%] max-h-[70vh] overflow-y-auto",
+          // Mobile specific styling with responsive width and max-height
+          isMobile && "w-[90vw] max-w-[300px] max-h-[60vh] overflow-y-auto",
+          // Desktop styling  
+          !isMobile && "max-h-96 overflow-y-auto",
           className
         )}
         style={{ 
@@ -78,8 +81,8 @@ const DropdownMenuContent = React.forwardRef<
           borderColor: "rgba(0,0,0,0.1)",
           borderWidth: "1px",
         }}
-        avoidCollisions={!isMobile}
-        collisionPadding={isMobile ? 0 : 8}
+        avoidCollisions={true}
+        collisionPadding={isMobile ? 16 : 8}
         {...props}
       />
     </DropdownMenuPrimitive.Portal>
