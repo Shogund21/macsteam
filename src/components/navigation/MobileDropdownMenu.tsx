@@ -8,7 +8,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 
 export function MobileDropdownMenu() {
   const [isOpen, setIsOpen] = useState(false);
-  const [menuPosition, setMenuPosition] = useState({ right: 0, left: 'auto' });
+  const [menuPosition, setMenuPosition] = useState({ right: 'auto' as string | number, left: 'auto' as string | number });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const { toggleSidebar } = useSidebar();
@@ -104,8 +104,8 @@ export function MobileDropdownMenu() {
             className="fixed top-16 w-50 max-w-[200px] rounded-lg bg-white shadow-lg border border-gray-100 z-[9999] animate-scale-in overflow-y-auto max-h-[70vh]"
             style={{
               transformOrigin: 'top right',
-              right: menuPosition.right !== 'auto' ? `${menuPosition.right}px` : 'auto',
-              left: menuPosition.left !== 'auto' ? `${menuPosition.left}px` : 'auto',
+              right: menuPosition.right !== 'auto' ? `${menuPosition.right}px` : undefined,
+              left: menuPosition.left !== 'auto' ? `${menuPosition.left}px` : undefined,
             }}
           >
             <div className="p-2 flex flex-col gap-1">
