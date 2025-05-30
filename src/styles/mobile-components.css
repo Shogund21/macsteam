@@ -55,7 +55,7 @@
     z-index: 40 !important;
   }
 
-  /* Mobile dropdown menu styles - improved with responsive sizing */
+  /* Mobile dropdown menu styles - centered positioning */
   .mobile-dropdown-overlay {
     position: fixed !important;
     inset: 0 !important;
@@ -64,18 +64,18 @@
     animation: fade-in 0.2s ease-out !important;
   }
   
-  /* Responsive dropdown containers */
-  .dropdown-container {
-    position: relative;
-    width: 100%;
+  /* Centered dropdown positioning utilities */
+  .dropdown-centered {
+    position: fixed !important;
+    z-index: 9999 !important;
+    transform-origin: top center !important;
   }
   
-  /* Mobile-specific dropdown styling */
+  /* Mobile-specific dropdown styling with viewport awareness */
   @media (max-width: 640px) {
     .mobile-dropdown-menu {
-      position: absolute !important;
-      top: 100% !important;
-      right: 0 !important;
+      position: fixed !important;
+      z-index: 9999 !important;
       width: 90vw !important;
       max-width: 280px !important;
       max-height: 60vh !important;
@@ -83,10 +83,10 @@
       border-radius: 8px !important;
       box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
       border: 1px solid rgba(0, 0, 0, 0.1) !important;
-      z-index: 9999 !important;
       animation: scale-in 0.2s ease-out !important;
-      transform-origin: top right !important;
+      transform-origin: top center !important;
       overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
     }
     
     /* Force dropdown content to respect container bounds */
@@ -95,13 +95,16 @@
       max-height: 60vh !important;
     }
     
-    /* Responsive dropdown content */
+    /* Responsive dropdown content with proper centering */
     [data-radix-dropdown-menu-content],
     [data-radix-select-content] {
+      position: fixed !important;
       width: 90vw !important;
       max-width: 300px !important;
       max-height: 50vh !important;
       overflow-y: auto !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
     }
   }
   
@@ -158,6 +161,19 @@
   .dropdown-scroll::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.2) !important;
     border-radius: 2px !important;
+  }
+
+  /* Viewport-aware positioning utilities */
+  .viewport-centered {
+    position: fixed !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    max-width: 90vw !important;
+  }
+  
+  .viewport-constrained {
+    max-width: calc(100vw - 32px) !important; /* 16px margin on each side */
+    max-height: calc(100vh - 32px) !important;
   }
 }
 
