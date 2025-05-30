@@ -2,7 +2,7 @@ import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useIsMobile } from "@/hooks/use-mobile"
+import { useMobileDropdownPosition } from "@/hooks/use-mobile-dropdown-position"
 
 const Select = SelectPrimitive.Root
 
@@ -13,21 +13,29 @@ const SelectValue = SelectPrimitive.Value
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-      className
-    )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 opacity-50" />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-))
+>(({ className, children, ...props }, ref) => {
+  const { triggerRef, isMobile } = useMobileDropdownPosition();
+  
+  return (
+    <SelectPrimitive.Trigger
+      ref={(node) => {
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+        if (node) triggerRef.current = node;
+      }}
+      className={cn(
+        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+        className
+      )}
+      {...props}
+    >
+      {children}
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown className="h-4 w-4 opacity-50" />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+  )
+})
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 const SelectScrollUpButton = React.forwardRef<
@@ -69,7 +77,7 @@ const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
 >(({ className, children, position = "popper", ...props }, ref) => {
-  const isMobile = useIsMobile();
+  const { position: mobilePosition, isMobile } = useMobileDropdownPosition();
   
   return (
     <SelectPrimitive.Portal>
@@ -77,8 +85,6 @@ const SelectContent = React.forwardRef<
         ref={ref}
         className={cn(
           "relative z-[9999] min-w-[8rem] overflow-hidden rounded-md border bg-white text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-          // Force mobile constraints through Tailwind classes as backup
-          isMobile && "!left-4 !right-4 !w-auto !max-w-none",
           className
         )}
         position={position}
@@ -86,13 +92,20 @@ const SelectContent = React.forwardRef<
           backgroundColor: "white",
           borderColor: "rgba(0,0,0,0.1)",
           borderWidth: "1px",
-          zIndex: 9999 
+          zIndex: 9999,
+          ...(isMobile && mobilePosition ? {
+            position: 'fixed',
+            left: `${mobilePosition.left}px`,
+            right: `${mobilePosition.right}px`,
+            width: `${mobilePosition.width}px`,
+            maxWidth: `${mobilePosition.width}px`,
+            minWidth: 'auto'
+          } : {})
         }}
-        // Force mobile positioning
-        avoidCollisions={isMobile}
-        collisionPadding={isMobile ? 16 : 8}
         side={isMobile ? "bottom" : undefined}
         align={isMobile ? "start" : undefined}
+        avoidCollisions={!isMobile}
+        collisionPadding={isMobile ? 0 : 8}
         {...props}
       >
         <SelectScrollUpButton />

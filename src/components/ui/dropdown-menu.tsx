@@ -3,11 +3,29 @@ import * as DropdownMenuPrimitive from "@radix-ui/react-dropdown-menu"
 import { Check, ChevronRight, Circle } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { useIsMobile } from "@/hooks/use-mobile" 
+import { useMobileDropdownPosition } from "@/hooks/use-mobile-dropdown-position"
 
 const DropdownMenu = DropdownMenuPrimitive.Root
 
-const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger
+const DropdownMenuTrigger = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger>
+>(({ children, ...props }, ref) => {
+  const { triggerRef, isMobile } = useMobileDropdownPosition();
+  
+  return (
+    <DropdownMenuPrimitive.Trigger
+      ref={(node) => {
+        if (typeof ref === 'function') ref(node);
+        else if (ref) ref.current = node;
+        if (node) triggerRef.current = node;
+      }}
+      {...props}
+    >
+      {children}
+    </DropdownMenuPrimitive.Trigger>
+  )
+})
 
 const DropdownMenuGroup = DropdownMenuPrimitive.Group
 
@@ -59,7 +77,7 @@ const DropdownMenuContent = React.forwardRef<
   React.ElementRef<typeof DropdownMenuPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Content>
 >(({ className, sideOffset = 4, ...props }, ref) => {
-  const isMobile = useIsMobile();
+  const { position: mobilePosition, isMobile } = useMobileDropdownPosition();
   
   return (
     <DropdownMenuPrimitive.Portal>
@@ -79,6 +97,14 @@ const DropdownMenuContent = React.forwardRef<
           backgroundColor: "white",
           borderColor: "rgba(0,0,0,0.1)",
           borderWidth: "1px",
+          ...(isMobile && mobilePosition ? {
+            position: 'fixed',
+            left: `${mobilePosition.left}px`,
+            right: `${mobilePosition.right}px`,
+            width: `${mobilePosition.width}px`,
+            maxWidth: `${mobilePosition.width}px`,
+            minWidth: 'auto'
+          } : {})
         }}
         avoidCollisions={isMobile}
         collisionPadding={isMobile ? 16 : 8}
