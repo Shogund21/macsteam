@@ -79,29 +79,53 @@ const SelectContent = React.forwardRef<
 >(({ className, children, position = "popper", ...props }, ref) => {
   const { position: mobilePosition, isMobile } = useMobileDropdownPosition();
   
+  const contentRef = React.useRef<HTMLDivElement>(null);
+  
+  React.useEffect(() => {
+    if (isMobile && contentRef.current && mobilePosition) {
+      const element = contentRef.current;
+      // Apply styles directly to the element and its wrapper
+      const applyStyles = () => {
+        if (element) {
+          element.style.setProperty('position', 'fixed', 'important');
+          element.style.setProperty('left', `${mobilePosition.left}px`, 'important');
+          element.style.setProperty('right', `${mobilePosition.right}px`, 'important');
+          element.style.setProperty('width', `${mobilePosition.width}px`, 'important');
+          element.style.setProperty('max-width', `${mobilePosition.width}px`, 'important');
+          element.style.setProperty('min-width', 'auto', 'important');
+          element.style.setProperty('transform', 'none', 'important');
+          
+          // Also try to find and style the wrapper
+          const wrapper = element.closest('[data-radix-popper-content-wrapper]') as HTMLElement;
+          if (wrapper) {
+            wrapper.style.setProperty('position', 'fixed', 'important');
+            wrapper.style.setProperty('left', `${mobilePosition.left}px`, 'important');
+            wrapper.style.setProperty('right', `${mobilePosition.right}px`, 'important');
+            wrapper.style.setProperty('width', `${mobilePosition.width}px`, 'important');
+            wrapper.style.setProperty('transform', 'none', 'important');
+          }
+        }
+      };
+      
+      applyStyles();
+      // Re-apply after a short delay to override any async positioning
+      setTimeout(applyStyles, 100);
+    }
+  }, [isMobile, mobilePosition]);
+  
   return (
     <SelectPrimitive.Portal>
       <SelectPrimitive.Content
-        ref={ref}
+        ref={(node) => {
+          if (typeof ref === 'function') ref(node);
+          else if (ref) ref.current = node;
+          if (node) contentRef.current = node;
+        }}
         className={cn(
           "relative z-[9999] min-w-[8rem] overflow-hidden rounded-md border bg-white text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           className
         )}
-        position={position}
-        style={{ 
-          backgroundColor: "white",
-          borderColor: "rgba(0,0,0,0.1)",
-          borderWidth: "1px",
-          zIndex: 9999,
-          ...(isMobile && mobilePosition ? {
-            position: 'fixed',
-            left: `${mobilePosition.left}px`,
-            right: `${mobilePosition.right}px`,
-            width: `${mobilePosition.width}px`,
-            maxWidth: `${mobilePosition.width}px`,
-            minWidth: 'auto'
-          } : {})
-        }}
+        position={isMobile ? "fixed" : position}
         side={isMobile ? "bottom" : undefined}
         align={isMobile ? "start" : undefined}
         avoidCollisions={!isMobile}
