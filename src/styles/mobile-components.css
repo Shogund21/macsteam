@@ -55,7 +55,7 @@
     z-index: 40 !important;
   }
 
-  /* Mobile dropdown menu styles */
+  /* Mobile dropdown menu styles - updated for better positioning */
   .mobile-dropdown-overlay {
     position: fixed !important;
     inset: 0 !important;
@@ -65,11 +65,11 @@
   }
   
   .mobile-dropdown-menu {
-    position: absolute !important;
-    top: 100% !important;
-    right: 0 !important;
+    position: fixed !important;
+    top: 4rem !important;
     width: 200px !important;
-    max-height: 80vh !important;
+    max-width: calc(100vw - 2rem) !important;
+    max-height: 70vh !important;
     background-color: white !important;
     border-radius: 8px !important;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
@@ -78,6 +78,16 @@
     animation: scale-in 0.2s ease-out !important;
     transform-origin: top right !important;
     overflow-y: auto !important;
+  }
+  
+  /* Ensure proper text sizing and spacing for mobile */
+  .mobile-dropdown-menu .flex.items-center {
+    min-height: 40px !important;
+  }
+  
+  .mobile-dropdown-menu span {
+    font-size: 0.875rem !important;
+    line-height: 1.25rem !important;
   }
   
   /* Improve touch targets */
@@ -89,6 +99,11 @@
     justify-content: center !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: transparent !important;
+  }
+  
+  /* Width utilities for mobile menu */
+  .w-50 {
+    width: 200px;
   }
 }
 
