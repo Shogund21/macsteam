@@ -1,4 +1,5 @@
 
+
 @layer components {
   /* Mobile sidebar styles */
   .mobile-sidebar {
@@ -71,65 +72,67 @@
     transform-origin: top center !important;
   }
   
-  /* Mobile-specific dropdown styling with viewport awareness */
+  /* CRITICAL: Global Radix UI viewport-aware constraints */
+  [data-radix-select-content] {
+    /* Use Radix's custom properties for viewport-aware width */
+    width: min(var(--radix-select-trigger-width, 240px), calc(100vw - 32px)) !important;
+    max-width: calc(100vw - 32px) !important;
+    /* Use available height with scrolling fallback */
+    max-height: min(var(--radix-select-content-available-height, 400px), 50vh) !important;
+    overflow-y: auto !important;
+    /* Ensure proper background and borders */
+    background-color: white !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+    z-index: 9999 !important;
+  }
+
+  [data-radix-dropdown-menu-content] {
+    /* Same viewport-aware constraints for dropdown menus */
+    width: min(var(--radix-dropdown-menu-trigger-width, 240px), calc(100vw - 32px)) !important;
+    max-width: calc(100vw - 32px) !important;
+    max-height: min(var(--radix-dropdown-menu-content-available-height, 400px), 50vh) !important;
+    overflow-y: auto !important;
+    background-color: white !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+    z-index: 9999 !important;
+  }
+
+  /* Ensure Radix viewport components respect the constraints */
+  [data-radix-select-viewport] {
+    max-height: inherit !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  /* Mobile-specific responsive adjustments */
   @media (max-width: 640px) {
-    .mobile-dropdown-menu {
-      position: fixed !important;
-      z-index: 9999 !important;
-      width: 90vw !important;
-      max-width: 280px !important;
+    [data-radix-select-content],
+    [data-radix-dropdown-menu-content] {
+      /* More aggressive constraints on very small screens */
+      width: min(var(--radix-select-trigger-width, 200px), calc(100vw - 24px)) !important;
+      max-width: calc(100vw - 24px) !important;
       max-height: 60vh !important;
-      background-color: white !important;
-      border-radius: 8px !important;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
-      border: 1px solid rgba(0, 0, 0, 0.1) !important;
-      animation: scale-in 0.2s ease-out !important;
-      transform-origin: top center !important;
-      overflow-y: auto !important;
-      -webkit-overflow-scrolling: touch !important;
+      /* Ensure minimum padding from edges */
+      margin: 12px !important;
     }
     
     /* Force dropdown content to respect container bounds */
     [data-radix-popper-content-wrapper] {
-      max-width: 90vw !important;
+      max-width: calc(100vw - 24px) !important;
       max-height: 60vh !important;
-    }
-    
-    /* Responsive dropdown content with proper centering */
-    [data-radix-dropdown-menu-content],
-    [data-radix-select-content] {
-      position: fixed !important;
-      width: 90vw !important;
-      max-width: 300px !important;
-      max-height: 50vh !important;
-      overflow-y: auto !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
     }
   }
   
   /* Desktop dropdown styling */
   @media (min-width: 641px) {
-    .mobile-dropdown-menu {
-      width: 240px !important;
-      max-height: 70vh !important;
-    }
-    
-    [data-radix-dropdown-menu-content],
-    [data-radix-select-content] {
+    [data-radix-select-content],
+    [data-radix-dropdown-menu-content] {
       max-height: 400px !important;
-      overflow-y: auto !important;
     }
-  }
-  
-  /* Ensure proper text sizing and spacing for mobile */
-  .mobile-dropdown-menu .flex.items-center {
-    min-height: 40px !important;
-  }
-  
-  .mobile-dropdown-menu span {
-    font-size: 0.875rem !important;
-    line-height: 1.25rem !important;
   }
   
   /* Improve touch targets */
