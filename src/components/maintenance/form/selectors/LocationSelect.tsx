@@ -20,7 +20,8 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
   // Log current selection for debugging
   useEffect(() => {
     console.log('LocationSelect: Current location_id value:', selectedLocationId);
-  }, [selectedLocationId]);
+    console.log('LocationSelect: Is mobile:', isMobile);
+  }, [selectedLocationId, isMobile]);
 
   const { data: locations = [], isLoading } = useQuery({
     queryKey: ['locations'],
@@ -49,6 +50,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
 
   const handleLocationChange = (value: string) => {
     console.log('LocationSelect: Changing location_id to:', value);
+    console.log('LocationSelect: Mobile dropdown triggered');
     
     try {
       // Set the location_id in the form with proper options to ensure it's tracked
@@ -76,6 +78,10 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
     }
   };
 
+  const handleOpenChange = (open: boolean) => {
+    console.log('LocationSelect: Dropdown open state changed:', open, 'isMobile:', isMobile);
+  };
+
   return (
     <FormField
       control={form.control}
@@ -85,6 +91,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
           <FormLabel className="text-base font-semibold text-gray-700">Location</FormLabel>
           <Select
             onValueChange={handleLocationChange}
+            onOpenChange={handleOpenChange}
             value={field.value || ""}
             defaultValue={field.value || ""}
           >
@@ -93,6 +100,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                 className={`w-full bg-white border border-gray-200 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                   isMobile ? 'min-h-[52px] text-base px-4' : 'h-12'
                 }`}
+                onClick={() => console.log('LocationSelect: Trigger clicked, isMobile:', isMobile)}
               >
                 <SelectValue 
                   placeholder={isLoading ? "Loading locations..." : "Select location"} 
@@ -101,11 +109,12 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className="z-[9999] bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto"
-              position={isMobile ? "popper" : "popper"}
-              side={isMobile ? "bottom" : "bottom"}
-              align={isMobile ? "start" : "start"}
+              className="z-[10000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto"
+              position="popper"
+              side="bottom"
+              align="start"
               sideOffset={isMobile ? 8 : 4}
+              onOpenAutoFocus={() => console.log('LocationSelect: Content opened')}
             >
               {isLoading ? (
                 <SelectItem 
@@ -121,6 +130,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                     key={loc.id} 
                     value={loc.id}
                     className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+                    onClick={() => console.log('LocationSelect: Item clicked:', loc.name)}
                   >
                     <div className="flex flex-col">
                       <span className="font-medium text-gray-900">{loc.name}</span>
