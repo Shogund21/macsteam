@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 
-const MOBILE_BREAKPOINT = 768 // Reduced to standard mobile breakpoint
+const MOBILE_BREAKPOINT = 640 // Mobile breakpoint as specified in requirements
 
 export function useIsMobile() {
   // Default to false to prevent unnecessary mobile exclusions
@@ -11,9 +11,9 @@ export function useIsMobile() {
     // Only run in browser environment
     if (typeof window === 'undefined') return false;
     
-    // Simplified mobile detection - just use viewport width
+    // Use viewport width for mobile detection
     const viewportWidth = window.innerWidth;
-    const isMobileViewport = viewportWidth < MOBILE_BREAKPOINT;
+    const isMobileViewport = viewportWidth <= MOBILE_BREAKPOINT;
     
     // Debug logging with more context
     console.log('📱 Mobile Detection DEBUG:', {
