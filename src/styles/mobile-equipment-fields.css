@@ -1,6 +1,6 @@
 
 @layer components {
-  /* Mobile equipment fields styling - Enhanced for all equipment types */
+  /* Mobile equipment fields styling - Enhanced with debugging and visibility fixes */
   @media (max-width: 768px) {
     .mobile-equipment-fields {
       padding: 1rem !important;
@@ -10,10 +10,16 @@
       background-color: white !important;
       border-radius: 8px !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      position: relative !important;
+      z-index: 1 !important;
+      min-height: 100px !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
 
-    /* All equipment field containers */
+    /* All equipment field containers - Enhanced visibility */
     .mobile-ahu-fields,
+    .mobile-chiller-fields,
     .mobile-cooling-tower-fields,
     .mobile-elevator-fields,
     .mobile-restroom-fields,
@@ -21,19 +27,22 @@
       width: 100% !important;
       padding: 1rem !important;
       background-color: white !important;
+      border: 1px solid #e5e7eb !important;
       border-radius: 8px !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
       margin-bottom: 1rem !important;
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
       position: relative !important;
-      z-index: 1 !important;
+      z-index: 10 !important;
       min-height: 200px !important;
+      overflow: visible !important;
     }
 
-    /* Ensure all child elements are properly spaced */
+    /* Ensure all child elements are properly spaced and visible */
     .mobile-ahu-fields > *,
+    .mobile-chiller-fields > *,
     .mobile-cooling-tower-fields > *,
     .mobile-elevator-fields > *,
     .mobile-restroom-fields > *,
@@ -41,10 +50,13 @@
       margin-bottom: 1rem !important;
       display: block !important;
       width: 100% !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
 
-    /* Equipment section headers */
+    /* Equipment section headers - Enhanced visibility */
     .mobile-ahu-fields h2,
+    .mobile-chiller-fields h2,
     .mobile-cooling-tower-fields h2,
     .mobile-elevator-fields h2,
     .mobile-restroom-fields h2,
@@ -54,10 +66,15 @@
       color: #1f2937 !important;
       display: block !important;
       font-weight: 600 !important;
+      background-color: #f9fafb !important;
+      padding: 0.5rem !important;
+      border-radius: 4px !important;
+      border-left: 4px solid #3b82f6 !important;
     }
 
-    /* Mobile grid layouts - force single column */
+    /* Mobile grid layouts - force single column with enhanced spacing */
     .mobile-ahu-fields .grid,
+    .mobile-chiller-fields .grid,
     .mobile-cooling-tower-fields .grid,
     .mobile-elevator-fields .grid,
     .mobile-restroom-fields .grid,
@@ -66,19 +83,24 @@
       flex-direction: column !important;
       gap: 1rem !important;
       grid-template-columns: none !important;
+      width: 100% !important;
     }
 
-    /* Space-y utilities override */
+    /* Space-y utilities override with enhanced visibility */
     .mobile-ahu-fields .space-y-6 > *,
+    .mobile-chiller-fields .space-y-6 > *,
     .mobile-cooling-tower-fields .space-y-6 > *,
     .mobile-elevator-fields .space-y-6 > *,
     .mobile-restroom-fields .space-y-6 > *,
     .mobile-general-fields .space-y-6 > * {
       margin-bottom: 1.5rem !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
 
-    /* Form sections within equipment fields */
+    /* Form sections within equipment fields - Enhanced for mobile */
     .mobile-ahu-fields [class*="FormSection"],
+    .mobile-chiller-fields [class*="FormSection"],
     .mobile-cooling-tower-fields [class*="FormSection"],
     .mobile-elevator-fields [class*="FormSection"],
     .mobile-restroom-fields [class*="FormSection"],
@@ -87,12 +109,17 @@
       padding: 1rem !important;
       border-radius: 6px !important;
       margin-bottom: 1rem !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
     }
 
-    /* Form inputs and selects */
+    /* Form inputs and selects - Mobile optimized */
     .mobile-ahu-fields input,
     .mobile-ahu-fields select,
     .mobile-ahu-fields textarea,
+    .mobile-chiller-fields input,
+    .mobile-chiller-fields select,
+    .mobile-chiller-fields textarea,
     .mobile-cooling-tower-fields input,
     .mobile-cooling-tower-fields select,
     .mobile-cooling-tower-fields textarea,
@@ -109,10 +136,14 @@
       font-size: 16px !important;
       padding: 0.75rem !important;
       width: 100% !important;
+      border: 1px solid #d1d5db !important;
+      border-radius: 6px !important;
+      background-color: white !important;
     }
 
-    /* Labels */
+    /* Labels - Enhanced mobile typography */
     .mobile-ahu-fields label,
+    .mobile-chiller-fields label,
     .mobile-cooling-tower-fields label,
     .mobile-elevator-fields label,
     .mobile-restroom-fields label,
@@ -121,6 +152,29 @@
       font-weight: 500 !important;
       margin-bottom: 0.5rem !important;
       display: block !important;
+      color: #374151 !important;
+    }
+
+    /* Form items - Enhanced spacing and layout */
+    .mobile-ahu-fields [data-orientation="vertical"],
+    .mobile-chiller-fields [data-orientation="vertical"],
+    .mobile-cooling-tower-fields [data-orientation="vertical"],
+    .mobile-elevator-fields [data-orientation="vertical"],
+    .mobile-restroom-fields [data-orientation="vertical"],
+    .mobile-general-fields [data-orientation="vertical"] {
+      space-y: 1rem !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Fix for any hidden elements */
+    .mobile-ahu-fields *,
+    .mobile-chiller-fields *,
+    .mobile-cooling-tower-fields *,
+    .mobile-elevator-fields *,
+    .mobile-restroom-fields *,
+    .mobile-general-fields * {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
     }
   }
 }

@@ -19,64 +19,88 @@ interface EquipmentFieldsProps {
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   const isMobile = useIsMobile();
   
-  console.log('EquipmentFields: 🔧 RENDERING with type:', equipmentType, 'isMobile:', isMobile);
+  console.log('EquipmentFields: 🔧 MOBILE RENDERING DEBUG:', {
+    equipmentType, 
+    isMobile,
+    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
+    timestamp: new Date().toISOString()
+  });
+  
+  // Mobile debugging component wrapper
+  const MobileDebugWrapper = ({ children, type }: { children: React.ReactNode, type: string }) => (
+    <div className={isMobile ? `mobile-${type}-fields space-y-4` : 'space-y-6'}>
+      {isMobile && (
+        <div style={{ 
+          backgroundColor: '#f3e5f5', 
+          padding: '6px 12px', 
+          borderRadius: '4px',
+          fontSize: '11px',
+          color: '#7b1fa2',
+          marginBottom: '8px'
+        }}>
+          📱 Rendering {type} maintenance fields
+        </div>
+      )}
+      {children}
+    </div>
+  );
   
   // Render appropriate fields based on equipment type
   if (equipmentType === 'ahu') {
-    console.log('EquipmentFields: ✅ RENDERING AHU FIELDS');
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING AHU FIELDS');
     return (
-      <div className={isMobile ? 'mobile-ahu-fields space-y-4' : 'space-y-6'}>
+      <MobileDebugWrapper type="ahu">
         <AHUMaintenanceFields form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
   if (equipmentType === 'chiller') {
-    console.log('EquipmentFields: ✅ RENDERING CHILLER FIELDS (General)');
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING CHILLER FIELDS');
     return (
-      <div className={isMobile ? 'mobile-general-fields space-y-4' : 'space-y-6'}>
+      <MobileDebugWrapper type="chiller">
         <MaintenanceReadings form={form} />
         <MaintenanceStatus form={form} />
         <MaintenanceObservations form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
   if (equipmentType === 'cooling_tower') {
-    console.log('EquipmentFields: ✅ RENDERING COOLING TOWER FIELDS');
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING COOLING TOWER FIELDS');
     return (
-      <div className={isMobile ? 'mobile-cooling-tower-fields space-y-4' : 'space-y-6'}>
+      <MobileDebugWrapper type="cooling-tower">
         <CoolingTowerFields form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
   if (equipmentType === 'elevator') {
-    console.log('EquipmentFields: ✅ RENDERING ELEVATOR FIELDS');
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING ELEVATOR FIELDS');
     return (
-      <div className={isMobile ? 'mobile-elevator-fields space-y-4' : 'space-y-6'}>
+      <MobileDebugWrapper type="elevator">
         <ElevatorMaintenanceFields form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
   if (equipmentType === 'restroom') {
-    console.log('EquipmentFields: ✅ RENDERING RESTROOM FIELDS');
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING RESTROOM FIELDS');
     return (
-      <div className={isMobile ? 'mobile-restroom-fields space-y-4' : 'space-y-6'}>
+      <MobileDebugWrapper type="restroom">
         <RestroomMaintenanceFields form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
   // Default or general equipment
-  console.log('EquipmentFields: ℹ️ RENDERING DEFAULT/GENERAL FIELDS');
+  console.log('EquipmentFields: ℹ️ MOBILE - RENDERING DEFAULT/GENERAL FIELDS');
   return (
-    <div className={isMobile ? 'mobile-general-fields space-y-4' : 'space-y-6'}>
+    <MobileDebugWrapper type="general">
       <MaintenanceReadings form={form} />
       <MaintenanceStatus form={form} />
       <MaintenanceObservations form={form} />
-    </div>
+    </MobileDebugWrapper>
   );
 };
 
