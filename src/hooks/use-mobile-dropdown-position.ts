@@ -1,16 +1,38 @@
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useIsMobile } from './use-mobile';
+
+interface MobilePosition {
+  left: number;
+  right: number;
+  width: number;
+}
 
 export function useMobileDropdownPosition() {
   const isMobile = useIsMobile();
   const triggerRef = useRef<HTMLElement>(null);
+  const [position, setPosition] = useState<MobilePosition | null>(null);
 
   useEffect(() => {
-    if (!isMobile) return;
+    if (!isMobile) {
+      setPosition(null);
+      return;
+    }
+
+    const calculatePosition = () => {
+      const availableWidth = window.innerWidth - 24; // 12px margin on each side
+      const newPosition = {
+        left: 12,
+        right: 12,
+        width: availableWidth
+      };
+      setPosition(newPosition);
+    };
+
+    // Calculate position immediately
+    calculatePosition();
 
     // Simple approach: just ensure dropdowns are properly constrained via CSS
-    // The heavy lifting is now done by the CSS with !important declarations
     const ensureDropdownConstraints = () => {
       const selectors = [
         '[data-radix-select-content]',
@@ -22,7 +44,6 @@ export function useMobileDropdownPosition() {
         elements.forEach((element: Element) => {
           const htmlElement = element as HTMLElement;
           if (htmlElement && htmlElement.style) {
-            // Only add the mobile-constrained class, let CSS handle the rest
             htmlElement.classList.add('mobile-dropdown-constrained');
           }
         });
@@ -41,10 +62,15 @@ export function useMobileDropdownPosition() {
     // Also run once on mount
     ensureDropdownConstraints();
 
+    // Recalculate position on window resize
+    const handleResize = () => calculatePosition();
+    window.addEventListener('resize', handleResize);
+
     return () => {
       observer.disconnect();
+      window.removeEventListener('resize', handleResize);
     };
   }, [isMobile]);
 
-  return { triggerRef, isMobile };
+  return { triggerRef, isMobile, position };
 }
