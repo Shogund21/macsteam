@@ -38,27 +38,31 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
   ];
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold">Cooling Tower Inspection</h2>
+    <div className="space-y-6 w-full">
+      <h2 className="text-xl font-semibold mb-4">Cooling Tower Inspection</h2>
       
-      <div className={isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
+      <div className={isMobile ? "space-y-4 w-full" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
         {fields.map((field) => (
           <FormField
             key={field.name}
             control={form.control}
             name={field.name}
             render={({ field: formField }) => (
-              <FormItem>
-                <FormLabel>{field.label}</FormLabel>
+              <FormItem className="w-full">
+                <FormLabel className="text-sm font-medium text-gray-700">{field.label}</FormLabel>
                 <Select onValueChange={formField.onChange} defaultValue={formField.value}>
                   <FormControl>
-                    <SelectTrigger className="bg-white">
+                    <SelectTrigger className={`bg-white border border-gray-300 ${isMobile ? 'min-h-[52px] text-base' : ''}`}>
                       <SelectValue placeholder={`Select ${field.label}`} />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent 
+                    className="bg-white border border-gray-200 shadow-lg z-[200]"
+                    position="popper"
+                    sideOffset={4}
+                  >
                     {statusOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
+                      <SelectItem key={option.value} value={option.value} className="cursor-pointer hover:bg-gray-50">
                         {option.label}
                       </SelectItem>
                     ))}

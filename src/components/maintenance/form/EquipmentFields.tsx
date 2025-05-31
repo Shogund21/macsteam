@@ -16,14 +16,20 @@ interface EquipmentFieldsProps {
 }
 
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
+  console.log('EquipmentFields rendering for type:', equipmentType);
+
   // Render appropriate fields based on equipment type
   if (equipmentType === 'ahu') {
-    return <AHUMaintenanceFields form={form} />;
+    return (
+      <div className="w-full space-y-6">
+        <AHUMaintenanceFields form={form} />
+      </div>
+    );
   }
   
   if (equipmentType === 'chiller') {
     return (
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <MaintenanceReadings form={form} />
         <MaintenanceStatus form={form} />
         <MaintenanceObservations form={form} />
@@ -32,20 +38,32 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   }
   
   if (equipmentType === 'cooling_tower') {
-    return <CoolingTowerFields form={form} />;
+    return (
+      <div className="w-full space-y-6">
+        <CoolingTowerFields form={form} />
+      </div>
+    );
   }
   
   if (equipmentType === 'elevator') {
-    return <ElevatorMaintenanceFields form={form} />;
+    return (
+      <div className="w-full space-y-6">
+        <ElevatorMaintenanceFields form={form} />
+      </div>
+    );
   }
   
   if (equipmentType === 'restroom') {
-    return <RestroomMaintenanceFields form={form} />;
+    return (
+      <div className="w-full space-y-6">
+        <RestroomMaintenanceFields form={form} />
+      </div>
+    );
   }
   
   // Default or general equipment
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-6">
       <MaintenanceReadings form={form} />
       <MaintenanceStatus form={form} />
       <MaintenanceObservations form={form} />

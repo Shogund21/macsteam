@@ -8,8 +8,14 @@ const EquipmentTypeFields = () => {
   
   const equipmentId = form.watch('equipment_id');
 
+  console.log('EquipmentTypeFields render:', { equipmentId, equipmentType, isMobile });
+
   if (!equipmentId) {
-    return null;
+    return (
+      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800">
+        Please select equipment to display the maintenance checklist.
+      </div>
+    );
   }
 
   if (!equipmentType) {
@@ -21,7 +27,10 @@ const EquipmentTypeFields = () => {
   }
   
   return (
-    <div className="w-full">
+    <div className="w-full space-y-4">
+      <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
+        Equipment Type: <strong>{equipmentType}</strong> | Device: <strong>{isMobile ? 'Mobile' : 'Desktop'}</strong>
+      </div>
       <EquipmentFields form={form} equipmentType={equipmentType} />
     </div>
   );
