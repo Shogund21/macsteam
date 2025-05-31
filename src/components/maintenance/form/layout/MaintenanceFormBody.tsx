@@ -7,12 +7,12 @@ import DocumentManager from '../../documents/DocumentManager';
 import EquipmentTypeFields from './EquipmentTypeFields';
 
 const MaintenanceFormBody = () => {
-  const { form, equipment, technicians, selectedEquipment } = useMaintenanceFormContext();
+  const { form, equipment, technicians, selectedEquipment, isMobile } = useMaintenanceFormContext();
   
   const equipmentId = form.watch('equipment_id');
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4" data-component="maintenance-form-body">
       <FormSection title="Basic Information">
         <MaintenanceBasicInfo 
           form={form} 
@@ -23,7 +23,9 @@ const MaintenanceFormBody = () => {
       
       {equipmentId && (
         <FormSection title="Equipment Details">
-          <EquipmentTypeFields />
+          <div className="w-full" data-component="equipment-details-wrapper">
+            <EquipmentTypeFields />
+          </div>
         </FormSection>
       )}
 

@@ -12,7 +12,7 @@ const EquipmentTypeFields = () => {
 
   if (!equipmentId) {
     return (
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800">
+      <div className="w-full p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800">
         Please select equipment to display the maintenance checklist.
       </div>
     );
@@ -20,18 +20,25 @@ const EquipmentTypeFields = () => {
 
   if (!equipmentType) {
     return (
-      <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
+      <div className="w-full p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
         Equipment type not detected. Please try selecting the equipment again.
       </div>
     );
   }
   
   return (
-    <div className="w-full space-y-4">
-      <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
+    <div 
+      className="w-full space-y-4" 
+      data-component="equipment-type-fields"
+      data-equipment-type={equipmentType}
+      data-device={isMobile ? 'mobile' : 'desktop'}
+    >
+      <div className="w-full p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
         Equipment Type: <strong>{equipmentType}</strong> | Device: <strong>{isMobile ? 'Mobile' : 'Desktop'}</strong>
       </div>
-      <EquipmentFields form={form} equipmentType={equipmentType} />
+      <div className="w-full" data-component="equipment-fields-container">
+        <EquipmentFields form={form} equipmentType={equipmentType} />
+      </div>
     </div>
   );
 };

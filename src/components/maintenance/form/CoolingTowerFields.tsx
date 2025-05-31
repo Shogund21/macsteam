@@ -38,10 +38,14 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
   ];
 
   return (
-    <div className="space-y-6 w-full">
+    <div 
+      className="w-full space-y-6" 
+      data-component="cooling-tower-fields"
+      data-device={isMobile ? 'mobile' : 'desktop'}
+    >
       <h2 className="text-xl font-semibold mb-4">Cooling Tower Inspection</h2>
       
-      <div className={isMobile ? "space-y-4 w-full" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
+      <div className={`w-full ${isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}`}>
         {fields.map((field) => (
           <FormField
             key={field.name}
@@ -49,10 +53,16 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
             name={field.name}
             render={({ field: formField }) => (
               <FormItem className="w-full">
-                <FormLabel className="text-sm font-medium text-gray-700">{field.label}</FormLabel>
+                <FormLabel className="block text-sm font-medium text-gray-700 mb-2">
+                  {field.label}
+                </FormLabel>
                 <Select onValueChange={formField.onChange} defaultValue={formField.value}>
                   <FormControl>
-                    <SelectTrigger className={`bg-white border border-gray-300 ${isMobile ? 'min-h-[52px] text-base' : ''}`}>
+                    <SelectTrigger 
+                      className={`w-full bg-white border border-gray-300 ${
+                        isMobile ? 'min-h-[52px] text-base' : 'min-h-[40px]'
+                      }`}
+                    >
                       <SelectValue placeholder={`Select ${field.label}`} />
                     </SelectTrigger>
                   </FormControl>
@@ -62,7 +72,11 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
                     sideOffset={4}
                   >
                     {statusOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value} className="cursor-pointer hover:bg-gray-50">
+                      <SelectItem 
+                        key={option.value} 
+                        value={option.value} 
+                        className="cursor-pointer hover:bg-gray-50"
+                      >
                         {option.label}
                       </SelectItem>
                     ))}
