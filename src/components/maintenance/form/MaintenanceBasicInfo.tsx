@@ -45,10 +45,21 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
   }, [form]);
 
   return (
-    <div className="space-y-6">
-      <LocationSelect form={form} />
-      <EquipmentSelect form={form} locationId={locationId || ''} />
-      <TechnicianSelect form={form} technicians={technicians} />
+    <div 
+      className={`${isMobile ? 'space-y-4' : 'space-y-6'} w-full`}
+      data-component="maintenance-basic-info"
+    >
+      <div className="w-full" data-field="location">
+        <LocationSelect form={form} />
+      </div>
+      
+      <div className="w-full" data-field="equipment">
+        <EquipmentSelect form={form} locationId={locationId || ''} />
+      </div>
+      
+      <div className="w-full" data-field="technician">
+        <TechnicianSelect form={form} technicians={technicians} />
+      </div>
     </div>
   );
 };

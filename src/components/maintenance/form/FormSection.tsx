@@ -24,7 +24,7 @@ const FormSection = ({ children, title, noPadding }: FormSectionProps) => {
       data-component="form-section"
     >
       {title && (
-        <h3 className={`${isMobile ? 'text-lg mb-3' : 'text-xl mb-4'} font-semibold`}>
+        <h3 className={`${isMobile ? 'text-lg mb-3' : 'text-xl mb-4'} font-semibold text-gray-800`}>
           {title}
         </h3>
       )}
