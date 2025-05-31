@@ -5,6 +5,7 @@ import LocationSelect from "./selectors/LocationSelect";
 import EquipmentSelect from "./selectors/EquipmentSelect";
 import TechnicianSelect from "./selectors/TechnicianSelect";
 import { useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MaintenanceBasicInfoProps {
   form: UseFormReturn<any>;
@@ -13,6 +14,8 @@ interface MaintenanceBasicInfoProps {
 }
 
 const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasicInfoProps) => {
+  const isMobile = useIsMobile();
+  
   // Add logging to track location and equipment changes
   const locationId = form.watch('location_id');
   const equipmentId = form.watch('equipment_id');
@@ -20,6 +23,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
   console.log('MaintenanceBasicInfo render:', { 
     locationId, 
     equipmentId,
+    isMobile,
     values: form.getValues() 
   });
 
@@ -54,14 +58,20 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
   }, [form]);
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 ${isMobile ? 'mobile-form-grid' : ''}`}>
       {/* Make sure we pass the form to the LocationSelect component */}
-      <LocationSelect form={form} />
+      <div className={isMobile ? 'mobile-form-field' : ''}>
+        <LocationSelect form={form} />
+      </div>
       
       {/* Only pass the locationId to EquipmentSelect if it exists */}
-      <EquipmentSelect form={form} locationId={locationId || ''} />
+      <div className={isMobile ? 'mobile-form-field' : ''}>
+        <EquipmentSelect form={form} locationId={locationId || ''} />
+      </div>
       
-      <TechnicianSelect form={form} technicians={technicians} />
+      <div className={isMobile ? 'mobile-form-field' : ''}>
+        <TechnicianSelect form={form} technicians={technicians} />
+      </div>
     </div>
   );
 };

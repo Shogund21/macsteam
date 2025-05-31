@@ -12,13 +12,18 @@ const FormSection = ({ children, title, noPadding }: FormSectionProps) => {
   const isMobile = useIsMobile();
   
   return (
-    <div className={`bg-gray-50 ${noPadding ? 'p-0' : isMobile ? 'p-4' : 'p-6'} rounded-lg border border-gray-100 shadow-sm`}>
+    <div className={`
+      ${isMobile ? 'mobile-form-section' : 'bg-gray-50 p-6 rounded-lg border border-gray-100 shadow-sm'}
+      ${noPadding && !isMobile ? 'p-0' : ''}
+    `}>
       {title && (
-        <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold mb-4`}>
+        <h3 className={`${isMobile ? 'text-lg mb-3' : 'text-xl mb-4'} font-semibold`}>
           {title}
         </h3>
       )}
-      {children}
+      <div className={isMobile ? 'space-y-4' : ''}>
+        {children}
+      </div>
     </div>
   );
 };

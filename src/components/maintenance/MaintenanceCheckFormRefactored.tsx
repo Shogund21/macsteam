@@ -27,6 +27,7 @@ const MaintenanceCheckForm = ({
   setIsSubmitting: externalSetIsSubmitting
 }: MaintenanceCheckFormProps) => {
   const [internalIsSubmitting, setInternalIsSubmitting] = useState(false);
+  const [formMounted, setFormMounted] = useState(false);
   const isSubmitting = externalIsSubmitting !== undefined ? externalIsSubmitting : internalIsSubmitting;
   const setIsSubmitting = externalSetIsSubmitting || setInternalIsSubmitting;
   
@@ -35,6 +36,17 @@ const MaintenanceCheckForm = ({
   const validateForm = useFormValidation();
   const isMobile = useIsMobile();
 
+  // Track form mounting for mobile
+  useEffect(() => {
+    console.log('MaintenanceCheckForm mounting, isMobile:', isMobile);
+    setFormMounted(true);
+    
+    return () => {
+      console.log('MaintenanceCheckForm unmounting');
+      setFormMounted(false);
+    };
+  }, [isMobile]);
+
   // Track form value changes for debugging
   const locationId = form.watch('location_id');
   const equipmentId = form.watch('equipment_id');
@@ -42,9 +54,11 @@ const MaintenanceCheckForm = ({
   useEffect(() => {
     console.log('Form values changed:', { 
       locationId, 
-      equipmentId 
+      equipmentId,
+      isMobile,
+      formMounted
     });
-  }, [locationId, equipmentId]);
+  }, [locationId, equipmentId, isMobile, formMounted]);
 
   // Log initialData to help with debugging
   useEffect(() => {
@@ -54,7 +68,7 @@ const MaintenanceCheckForm = ({
   }, [initialData]);
 
   // Fetch equipment data
-  const { data: equipment = [], isLoading: isLoadingEquipment } = useQuery({
+  const { data: equipment = [], isLoading: isLoadingEquipment, error: equipmentError } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
       console.log('Starting equipment fetch...');
@@ -68,13 +82,13 @@ const MaintenanceCheckForm = ({
         throw error;
       }
       
-      console.log('Equipment fetched:', data);
+      console.log('Equipment fetched:', data?.length, 'items');
       return data || [];
     },
   });
 
   // Fetch technicians data
-  const { data: technicians = [], isLoading: isLoadingTechnicians } = useQuery({
+  const { data: technicians = [], isLoading: isLoadingTechnicians, error: techniciansError } = useQuery({
     queryKey: ['technicians'],
     queryFn: async () => {
       console.log('Starting technicians fetch...');
@@ -89,6 +103,7 @@ const MaintenanceCheckForm = ({
         throw error;
       }
       
+      console.log('Technicians fetched:', data?.length, 'items');
       return data || [];
     },
   });
@@ -148,8 +163,40 @@ const MaintenanceCheckForm = ({
     form.handleSubmit(onSubmitForm)();
   };
 
+  // Show loading state with mobile-friendly styling
   if (isLoadingEquipment || isLoadingTechnicians) {
-    return <div className="p-4 text-center">Loading...</div>;
+    return (
+      <div className={`${isMobile ? 'mobile-loading-state' : 'p-4 text-center'}`}>
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
+          <span>Loading form data...</span>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state if data loading failed
+  if (equipmentError || techniciansError) {
+    return (
+      <div className={`${isMobile ? 'mobile-error-state' : 'p-4 text-center text-red-600'}`}>
+        <p>Error loading form data. Please try again.</p>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  // Don't render until mounted on mobile to prevent layout issues
+  if (isMobile && !formMounted) {
+    return (
+      <div className="mobile-loading-state">
+        <span>Initializing form...</span>
+      </div>
+    );
   }
 
   return (
@@ -164,23 +211,29 @@ const MaintenanceCheckForm = ({
       equipmentType={equipmentType}
       isMobile={isMobile}
     >
-      <Form {...form}>
-        <form 
-          onSubmit={form.handleSubmit(onSubmitForm)} 
-          className={`space-y-6 ${isMobile ? 'mobile-form-container' : ''}`}
-        >
-          <div className="grid gap-6">
-            <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
-            <MaintenanceFormBody />
-            <FormActions 
-              onCancel={onComplete}
-              isEditing={!!initialData}
-              isSubmitting={isSubmitting}
-              onSubmit={manualSubmit}
-            />
-          </div>
-        </form>
-      </Form>
+      <div className={`${isMobile ? 'mobile-viewport-container' : ''}`}>
+        <Form {...form}>
+          <form 
+            onSubmit={form.handleSubmit(onSubmitForm)} 
+            className={`space-y-6 ${isMobile ? 'mobile-form-container' : ''}`}
+          >
+            <div className={`grid gap-6 ${isMobile ? 'mobile-form-grid' : ''}`}>
+              <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
+              <MaintenanceFormBody />
+              
+              {/* Mobile sticky actions, desktop inline actions */}
+              <div className={isMobile ? 'mobile-form-actions' : ''}>
+                <FormActions 
+                  onCancel={onComplete}
+                  isEditing={!!initialData}
+                  isSubmitting={isSubmitting}
+                  onSubmit={manualSubmit}
+                />
+              </div>
+            </div>
+          </form>
+        </Form>
+      </div>
     </MaintenanceFormProvider>
   );
 };

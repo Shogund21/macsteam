@@ -1,4 +1,6 @@
 
+@import './mobile-form-fixes.css';
+
 @layer base {
   /* Fix for long forms on mobile */
   .mobile-form-container {

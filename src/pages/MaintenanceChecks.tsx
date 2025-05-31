@@ -9,6 +9,7 @@ import { ArrowLeft, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import FormSection from "@/components/maintenance/form/FormSection";
+import "@/styles/mobile-form-fixes.css";
 
 const MaintenanceChecks = () => {
   const [showForm, setShowForm] = useState(false);
@@ -18,16 +19,38 @@ const MaintenanceChecks = () => {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    console.log('MaintenanceChecks mounted, isMobile:', isMobile);
+  }, [isMobile]);
 
   const handleTabChange = (value: string) => {
+    console.log('Tab changing to:', value, 'isMobile:', isMobile);
     setActiveTab(value);
     if (value !== "form") {
       setShowForm(false);
     }
   };
 
-  if (!mounted) return null;
+  const handleShowForm = () => {
+    console.log('Showing form, isMobile:', isMobile);
+    setShowForm(true);
+    setActiveTab("form");
+  };
+
+  const handleHideForm = () => {
+    console.log('Hiding form, isMobile:', isMobile);
+    setShowForm(false);
+    setActiveTab("history");
+  };
+
+  if (!mounted) {
+    return (
+      <Layout>
+        <div className={`${isMobile ? 'mobile-loading-state' : 'p-4 text-center'}`}>
+          <span>Loading...</span>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -44,20 +67,17 @@ const MaintenanceChecks = () => {
           
           {showForm && isMobile ? (
             <Button 
-              onClick={() => setShowForm(false)}
+              onClick={handleHideForm}
               variant="outline"
-              className="w-full md:w-auto flex items-center justify-center"
+              className="w-full md:w-auto flex items-center justify-center mobile-form-button"
               size={isMobile ? "default" : "lg"}
             >
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to List
             </Button>
           ) : (
             <Button 
-              onClick={() => {
-                setShowForm(true);
-                setActiveTab("form");
-              }}
-              className={`${isMobile ? 'w-full py-2 text-sm' : ''} bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow transition-all duration-200`}
+              onClick={handleShowForm}
+              className={`${isMobile ? 'w-full py-2 text-sm mobile-form-button' : ''} bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow transition-all duration-200`}
               size={isMobile ? "default" : "lg"}
             >
               <Plus className={`${isMobile ? 'mr-1 h-4 w-4' : 'mr-2 h-5 w-5'}`} /> New Check
@@ -94,8 +114,8 @@ const MaintenanceChecks = () => {
         )}
 
         {showForm && (
-          <div className="bg-white rounded-lg shadow-sm p-4 animate-fade-in">
-            <MaintenanceCheckForm onComplete={() => setShowForm(false)} />
+          <div className={`${isMobile ? 'mobile-viewport-container' : 'bg-white rounded-lg shadow-sm p-4'} animate-fade-in`}>
+            <MaintenanceCheckForm onComplete={handleHideForm} />
           </div>
         )}
       </div>
