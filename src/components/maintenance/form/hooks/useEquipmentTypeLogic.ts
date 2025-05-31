@@ -1,29 +1,38 @@
 
 import { Equipment } from "@/types/maintenance";
+import { useEffect } from "react";
 
 export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
   const equipmentId = form.watch('equipment_id');
   
-  console.log('useEquipmentTypeLogic: 🔍 MOBILE DEBUG - INPUT ANALYSIS:', {
-    equipmentId,
-    equipmentArrayLength: equipment?.length || 0,
-    equipmentIds: equipment?.map(eq => ({ id: eq.id, name: eq.name })) || [],
-    isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
-    timestamp: new Date().toISOString()
-  });
+  // MOBILE DEBUG: Enhanced input analysis
+  useEffect(() => {
+    console.log('useEquipmentTypeLogic: 🔍 MOBILE DEBUG - State Change Detected:', {
+      equipmentId,
+      equipmentArrayLength: equipment?.length || 0,
+      equipmentIds: equipment?.map(eq => ({ id: eq.id, name: eq.name })) || [],
+      isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
+      timestamp: new Date().toISOString(),
+      formState: form.getValues()
+    });
+  }, [equipmentId, equipment, form]);
 
   const selectedEquipment = equipment?.find(
     (eq) => eq.id === equipmentId
   );
 
   const getEquipmentType = () => {
-    if (!selectedEquipment) {
-      console.log('useEquipmentTypeLogic: ❌ MOBILE - No selected equipment found for ID:', equipmentId);
+    if (!selectedEquipment || !equipmentId || equipmentId === '') {
+      console.log('useEquipmentTypeLogic: ❌ MOBILE - No selected equipment found:', {
+        equipmentId,
+        hasSelectedEquipment: !!selectedEquipment,
+        equipmentIdEmpty: !equipmentId || equipmentId === ''
+      });
       return null;
     }
     
     const name = selectedEquipment.name.toLowerCase();
-    console.log('useEquipmentTypeLogic: 🔍 MOBILE EQUIPMENT DETECTION:', {
+    console.log('useEquipmentTypeLogic: 🔍 MOBILE EQUIPMENT DETECTION - Starting Analysis:', {
       originalName: selectedEquipment.name,
       lowerCaseName: name,
       equipmentId: selectedEquipment.id,
@@ -138,14 +147,20 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
 
   const equipmentType = getEquipmentType();
   
-  console.log('useEquipmentTypeLogic: 🎯 MOBILE FINAL RESULT:', {
-    selectedEquipmentId: selectedEquipment?.id,
-    selectedEquipmentName: selectedEquipment?.name,
-    detectedEquipmentType: equipmentType,
-    isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
-    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
-    timestamp: new Date().toISOString()
-  });
+  // MOBILE ENHANCEMENT: Additional logging for final results
+  useEffect(() => {
+    if (selectedEquipment && equipmentType) {
+      console.log('useEquipmentTypeLogic: 🎯 MOBILE FINAL RESULT - Equipment Type Determined:', {
+        selectedEquipmentId: selectedEquipment?.id,
+        selectedEquipmentName: selectedEquipment?.name,
+        detectedEquipmentType: equipmentType,
+        isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
+        windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
+        shouldTriggerChecklist: !!equipmentType,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }, [selectedEquipment, equipmentType]);
 
   return {
     selectedEquipment,

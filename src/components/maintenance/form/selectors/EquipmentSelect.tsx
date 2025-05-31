@@ -23,24 +23,29 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   
   // Debug logs
   useEffect(() => {
-    console.log('EquipmentSelect: 📍 Location and equipment debug:', {
+    console.log('EquipmentSelect: 📍 MOBILE DEBUG - Location and equipment state:', {
       locationId,
       selectedEquipmentId,
       equipmentCount: equipment?.length || 0,
-      isMobile: isMobile
+      isMobile: isMobile,
+      formValues: form.getValues()
     });
-  }, [locationId, selectedEquipmentId, equipment, isMobile]);
+  }, [locationId, selectedEquipmentId, equipment, isMobile, form]);
 
   const handleEquipmentChange = (value: string) => {
-    console.log('EquipmentSelect: 🔄 Equipment selection changed to:', value);
-    console.log('EquipmentSelect: 📱 Mobile debug - isMobile:', isMobile);
+    console.log('EquipmentSelect: 🔄 MOBILE - Equipment selection started:', {
+      selectedValue: value,
+      isMobile,
+      currentFormState: form.getValues(),
+      timestamp: new Date().toISOString()
+    });
     
     try {
       // Get the selected equipment details
       const selectedEquipment = equipment.find(eq => eq.id === value) as Equipment | undefined;
       
       if (selectedEquipment) {
-        console.log('EquipmentSelect: ✅ Equipment selected:', {
+        console.log('EquipmentSelect: ✅ MOBILE - Equipment found and selecting:', {
           id: selectedEquipment.id,
           name: selectedEquipment.name,
           databaseLocation: selectedEquipment.location,
@@ -49,26 +54,42 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         });
       }
       
-      // Set equipment ID in form
+      // CRITICAL: Set equipment ID in form with all validation options
       form.setValue('equipment_id', value, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true
       });
       
-      // Mobile-specific verification
+      // MOBILE FIX: Force form re-render by triggering watch
+      form.trigger('equipment_id');
+      
+      // MOBILE DEBUG: Immediate verification
+      console.log('EquipmentSelect: 📱 MOBILE - Immediate post-change state:', {
+        equipmentId: form.getValues('equipment_id'),
+        locationId: form.getValues('location_id'),
+        isDirty: form.formState.isDirty,
+        isMobile: isMobile
+      });
+      
+      // MOBILE FIX: Delayed verification to ensure state propagation
       setTimeout(() => {
-        const formValues = form.getValues();
-        console.log('EquipmentSelect: 📱 Mobile verification after equipment change:', {
-          equipmentId: formValues.equipment_id,
-          locationId: formValues.location_id,
-          allFormValues: formValues,
-          isMobile: isMobile
+        const postChangeValues = form.getValues();
+        console.log('EquipmentSelect: 📱 MOBILE - Delayed verification (should trigger checklist):', {
+          equipmentId: postChangeValues.equipment_id,
+          locationId: postChangeValues.location_id,
+          allFormValues: postChangeValues,
+          shouldShowChecklist: !!postChangeValues.equipment_id,
+          isMobile: isMobile,
+          equipmentSelected: !!value && value !== ''
         });
-      }, 100);
+        
+        // Force a form state update to ensure context picks up changes
+        form.trigger();
+      }, 150);
       
     } catch (error) {
-      console.error('EquipmentSelect: ❌ Error in handleEquipmentChange:', error);
+      console.error('EquipmentSelect: ❌ MOBILE - Error in handleEquipmentChange:', error);
       toast({
         title: "Error selecting equipment",
         description: error instanceof Error ? error.message : "An unknown error occurred",

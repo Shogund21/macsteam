@@ -16,19 +16,26 @@ const FormSection = ({ children, title, noPadding }: FormSectionProps) => {
       className={`
         w-full 
         ${isMobile 
-          ? 'mb-4 p-4 rounded-lg bg-white shadow-sm' 
+          ? 'mb-4 p-4 rounded-lg bg-white shadow-sm border border-gray-100' 
           : 'bg-gray-50 p-6 rounded-lg border border-gray-100 shadow-sm'
         }
         ${noPadding && !isMobile ? 'p-0' : ''}
       `}
       data-component="form-section"
+      data-mobile={isMobile}
+      style={{
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1,
+        minHeight: isMobile ? '50px' : 'auto'
+      }}
     >
       {title && (
         <h3 className={`${isMobile ? 'text-lg mb-3' : 'text-xl mb-4'} font-semibold text-gray-800`}>
           {title}
         </h3>
       )}
-      <div className="w-full">
+      <div className="w-full" style={{ display: 'block', visibility: 'visible' }}>
         {children}
       </div>
     </div>
