@@ -114,7 +114,6 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               side="bottom"
               align="start"
               sideOffset={isMobile ? 8 : 4}
-              onOpenAutoFocus={() => console.log('LocationSelect: Content opened')}
             >
               {isLoading ? (
                 <SelectItem 
