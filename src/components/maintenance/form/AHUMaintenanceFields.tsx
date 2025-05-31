@@ -15,10 +15,12 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
   const { isMobile } = useMaintenanceFormContext();
   
   return (
-    <div className="w-full space-y-6">
-      <h2 className="text-xl font-semibold mb-4">AHU Daily Preventative Maintenance</h2>
+    <div className="w-full space-y-6" data-component="ahu-maintenance-fields">
+      <h2 className={`font-semibold mb-4 ${isMobile ? 'text-lg' : 'text-xl'}`}>
+        AHU Daily Preventative Maintenance
+      </h2>
       
-      <div className={isMobile ? "space-y-6 w-full" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
+      <div className="w-full space-y-6">
         <div className="w-full space-y-6">
           <AHUFilterAndBelt form={form} />
           <AHUFanAndDampers form={form} />

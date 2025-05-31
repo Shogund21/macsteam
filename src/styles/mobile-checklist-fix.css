@@ -6,7 +6,8 @@
     [data-component="maintenance-checklist"],
     [data-component="equipment-type-fields"],
     [data-component="cooling-tower-fields"],
-    [data-component="equipment-fields-container"] {
+    [data-component="equipment-fields-container"],
+    [data-component="ahu-maintenance-fields"] {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
@@ -32,7 +33,10 @@
     .mobile-form-field,
     [data-component="cooling-tower-fields"] .w-full input,
     [data-component="cooling-tower-fields"] .w-full select,
-    [data-component="cooling-tower-fields"] [role="combobox"] {
+    [data-component="cooling-tower-fields"] [role="combobox"],
+    [data-component="ahu-maintenance-fields"] .w-full input,
+    [data-component="ahu-maintenance-fields"] .w-full select,
+    [data-component="ahu-maintenance-fields"] [role="combobox"] {
       width: 100% !important;
       min-height: 52px !important;
       font-size: 16px !important;
@@ -46,7 +50,8 @@
 
     /* Force grid layouts to single column on mobile */
     [data-component="cooling-tower-fields"] .grid,
-    [data-component="equipment-type-fields"] .grid {
+    [data-component="equipment-type-fields"] .grid,
+    [data-component="ahu-maintenance-fields"] .grid {
       display: flex !important;
       flex-direction: column !important;
       gap: 1rem !important;
@@ -62,19 +67,44 @@
 
     /* Ensure proper spacing between form items */
     [data-component="cooling-tower-fields"] .space-y-4 > *,
-    [data-component="equipment-type-fields"] .space-y-4 > * {
+    [data-component="equipment-type-fields"] .space-y-4 > *,
+    [data-component="ahu-maintenance-fields"] .space-y-4 > *,
+    [data-component="ahu-maintenance-fields"] .space-y-6 > * {
       margin-bottom: 1rem !important;
       width: 100% !important;
+    }
+
+    /* Fix switch components on mobile */
+    [data-component="ahu-maintenance-fields"] [role="switch"] {
+      transform: scale(1.25) !important;
+    }
+
+    /* Ensure proper select dropdown visibility */
+    [data-radix-select-content] {
+      z-index: 1000 !important;
+      background-color: white !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
     }
   }
 
   /* Touch-friendly interactions */
   @media (max-width: 1200px) and (pointer: coarse) {
     [data-component="cooling-tower-fields"] button,
-    [data-component="cooling-tower-fields"] [role="combobox"] {
-      min-height: 48px !important;
+    [data-component="cooling-tower-fields"] [role="combobox"],
+    [data-component="ahu-maintenance-fields"] button,
+    [data-component="ahu-maintenance-fields"] [role="combobox"] {
+      min-height: 52px !important;
       touch-action: manipulation !important;
       -webkit-tap-highlight-color: transparent !important;
+    }
+
+    /* Ensure form labels are readable */
+    [data-component="ahu-maintenance-fields"] label {
+      font-size: 16px !important;
+      font-weight: 500 !important;
+      margin-bottom: 8px !important;
+      display: block !important;
     }
   }
 }
