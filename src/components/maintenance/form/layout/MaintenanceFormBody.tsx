@@ -46,8 +46,8 @@ const MaintenanceFormBody = () => {
               <div 
                 className="mb-4 p-2 bg-blue-100 border border-blue-300 rounded text-sm"
                 style={{ 
-                  display: 'block !important',
-                  visibility: 'visible !important',
+                  display: 'block',
+                  visibility: 'visible',
                   zIndex: 9999
                 }}
               >

@@ -18,9 +18,9 @@ const EquipmentTypeFields = () => {
       className="w-full" 
       data-component="equipment-type-fields"
       style={{ 
-        display: 'block !important',
-        visibility: 'visible !important',
-        opacity: '1 !important',
+        display: 'block',
+        visibility: 'visible',
+        opacity: '1',
         width: '100%',
         minHeight: isMobile ? '300px' : 'auto',
         backgroundColor: isMobile ? '#fef3c7' : 'transparent',
@@ -35,8 +35,8 @@ const EquipmentTypeFields = () => {
         <div 
           className="mb-3 p-2 bg-yellow-200 border border-yellow-400 rounded text-xs font-bold"
           style={{ 
-            display: 'block !important',
-            visibility: 'visible !important'
+            display: 'block',
+            visibility: 'visible'
           }}
         >
           📋 CHECKLIST CONTAINER - Type: {equipmentType || 'Unknown'}
