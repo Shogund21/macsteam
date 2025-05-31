@@ -9,7 +9,6 @@ import { ArrowLeft, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import FormSection from "@/components/maintenance/form/FormSection";
-import "@/styles/mobile-form-fixes.css";
 
 const MaintenanceChecks = () => {
   const [showForm, setShowForm] = useState(false);
@@ -45,7 +44,7 @@ const MaintenanceChecks = () => {
   if (!mounted) {
     return (
       <Layout>
-        <div className={`${isMobile ? 'mobile-loading-state' : 'p-4 text-center'}`}>
+        <div className={`${isMobile ? 'flex items-center justify-center min-h-[200px]' : 'p-4 text-center'}`}>
           <span>Loading...</span>
         </div>
       </Layout>
@@ -69,7 +68,7 @@ const MaintenanceChecks = () => {
             <Button 
               onClick={handleHideForm}
               variant="outline"
-              className="w-full md:w-auto flex items-center justify-center mobile-form-button"
+              className={`w-full md:w-auto flex items-center justify-center ${isMobile ? 'min-h-[48px] text-base' : ''}`}
               size={isMobile ? "default" : "lg"}
             >
               <ArrowLeft className="mr-2 h-4 w-4" /> Back to List
@@ -77,7 +76,7 @@ const MaintenanceChecks = () => {
           ) : (
             <Button 
               onClick={handleShowForm}
-              className={`${isMobile ? 'w-full py-2 text-sm mobile-form-button' : ''} bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow transition-all duration-200`}
+              className={`${isMobile ? 'w-full py-2 text-sm min-h-[48px]' : ''} bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow transition-all duration-200`}
               size={isMobile ? "default" : "lg"}
             >
               <Plus className={`${isMobile ? 'mr-1 h-4 w-4' : 'mr-2 h-5 w-5'}`} /> New Check
@@ -114,7 +113,7 @@ const MaintenanceChecks = () => {
         )}
 
         {showForm && (
-          <div className={`${isMobile ? 'mobile-viewport-container' : 'bg-white rounded-lg shadow-sm p-4'} animate-fade-in`}>
+          <div className={`${isMobile ? 'w-full' : 'bg-white rounded-lg shadow-sm p-4'} animate-fade-in`}>
             <MaintenanceCheckForm onComplete={handleHideForm} />
           </div>
         )}

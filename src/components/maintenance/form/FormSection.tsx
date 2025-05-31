@@ -13,7 +13,7 @@ const FormSection = ({ children, title, noPadding }: FormSectionProps) => {
   
   return (
     <div className={`
-      ${isMobile ? 'mobile-form-section' : 'bg-gray-50 p-6 rounded-lg border border-gray-100 shadow-sm'}
+      ${isMobile ? 'mb-6 p-4 rounded-lg bg-white shadow-sm' : 'bg-gray-50 p-6 rounded-lg border border-gray-100 shadow-sm'}
       ${noPadding && !isMobile ? 'p-0' : ''}
     `}>
       {title && (
