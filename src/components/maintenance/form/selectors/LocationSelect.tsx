@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface LocationSelectProps {
   form: UseFormReturn<any>;
@@ -14,6 +15,7 @@ interface LocationSelectProps {
 const LocationSelect = ({ form }: LocationSelectProps) => {
   const selectedLocationId = form.watch('location_id');
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Log current selection for debugging
   useEffect(() => {
@@ -49,21 +51,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
     console.log('LocationSelect: Changing location_id to:', value);
     
     try {
-      // CRITICAL FIX: Verify the location ID is valid before setting it
-      const selectedLocation = locations.find(loc => loc.id === value);
-      
-      if (!selectedLocation) {
-        console.warn('Selected location ID not found in available locations:', value);
-        toast({
-          title: "Warning",
-          description: "The selected location may not be valid",
-          variant: "destructive",
-        });
-      } else {
-        console.log('Valid location selected:', selectedLocation.name, 'with ID:', selectedLocation.id);
-      }
-      
-      // CRITICAL FIX: Set the location_id in the form with proper options to ensure it's tracked
+      // Set the location_id in the form with proper options to ensure it's tracked
       form.setValue('location_id', value, { 
         shouldDirty: true, 
         shouldTouch: true,
@@ -71,19 +59,13 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       });
       
       // Clear equipment selection when location changes
-      // This prevents location/equipment mismatch
       form.setValue('equipment_id', '', { 
         shouldDirty: true, 
         shouldTouch: true 
       });
       
-      // Log the form state after making changes
-      setTimeout(() => {
-        console.log('LocationSelect: Form state after change (delayed):', {
-          location_id: form.getValues('location_id'),
-          equipment_id: form.getValues('equipment_id')
-        });
-      }, 100);
+      // Force form to trigger watchers
+      form.trigger(['location_id', 'equipment_id']);
     } catch (error) {
       console.error('Error in handleLocationChange:', error);
       toast({
@@ -108,7 +90,9 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
           >
             <FormControl>
               <SelectTrigger 
-                className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className={`w-full bg-white border border-gray-200 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                  isMobile ? 'min-h-[52px] text-base px-4' : 'h-12'
+                }`}
               >
                 <SelectValue 
                   placeholder={isLoading ? "Loading locations..." : "Select location"} 
@@ -117,7 +101,11 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+              className="z-[9999] bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto"
+              position={isMobile ? "popper" : "popper"}
+              side={isMobile ? "bottom" : "bottom"}
+              align={isMobile ? "start" : "start"}
+              sideOffset={isMobile ? 8 : 4}
             >
               {isLoading ? (
                 <SelectItem 
