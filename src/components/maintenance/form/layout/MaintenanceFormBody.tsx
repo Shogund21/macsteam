@@ -12,8 +12,8 @@ const MaintenanceFormBody = () => {
   console.log('MaintenanceFormBody rendering, isMobile:', isMobile);
 
   return (
-    <div className={`space-y-6 ${isMobile ? 'mobile-form-grid' : ''}`}>
-      <FormSection title={isMobile ? "Basic Information" : undefined}>
+    <div className="space-y-6">
+      <FormSection title="Basic Information">
         <MaintenanceBasicInfo 
           form={form} 
           equipment={equipment} 
@@ -21,11 +21,11 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
-      <FormSection title={isMobile ? "Equipment Details" : undefined}>
+      <FormSection title="Equipment Details">
         <EquipmentTypeFields />
       </FormSection>
 
-      <FormSection title={isMobile ? "Documents" : undefined}>
+      <FormSection title="Documents">
         <DocumentManager equipmentId={form.watch('equipment_id')} />
       </FormSection>
     </div>

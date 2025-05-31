@@ -1,8 +1,8 @@
+
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useMobileDropdownPosition } from "@/hooks/use-mobile-dropdown-position"
 
 const Select = SelectPrimitive.Root
 
@@ -13,29 +13,21 @@ const SelectValue = SelectPrimitive.Value
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => {
-  const { triggerRef, isMobile } = useMobileDropdownPosition();
-  
-  return (
-    <SelectPrimitive.Trigger
-      ref={(node) => {
-        if (typeof ref === 'function') ref(node);
-        else if (ref) ref.current = node;
-        if (node) triggerRef.current = node;
-      }}
-      className={cn(
-        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-        className
-      )}
-      {...props}
-    >
-      {children}
-      <SelectPrimitive.Icon asChild>
-        <ChevronDown className="h-4 w-4 opacity-50" />
-      </SelectPrimitive.Icon>
-    </SelectPrimitive.Trigger>
-  )
-})
+>(({ className, children, ...props }, ref) => (
+  <SelectPrimitive.Trigger
+    ref={ref}
+    className={cn(
+      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+      className
+    )}
+    {...props}
+  >
+    {children}
+    <SelectPrimitive.Icon asChild>
+      <ChevronDown className="h-4 w-4 opacity-50" />
+    </SelectPrimitive.Icon>
+  </SelectPrimitive.Trigger>
+))
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 const SelectScrollUpButton = React.forwardRef<
@@ -76,77 +68,33 @@ SelectScrollDownButton.displayName =
 const SelectContent = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Content>
->(({ className, children, position = "popper", ...props }, ref) => {
-  const { position: mobilePosition, isMobile } = useMobileDropdownPosition();
-  
-  const contentRef = React.useRef<HTMLDivElement>(null);
-  
-  React.useEffect(() => {
-    if (isMobile && contentRef.current && mobilePosition) {
-      const element = contentRef.current;
-      // Apply styles directly to the element and its wrapper
-      const applyStyles = () => {
-        if (element) {
-          element.style.setProperty('position', 'fixed', 'important');
-          element.style.setProperty('left', `${mobilePosition.left}px`, 'important');
-          element.style.setProperty('right', `${mobilePosition.right}px`, 'important');
-          element.style.setProperty('width', `${mobilePosition.width}px`, 'important');
-          element.style.setProperty('max-width', `${mobilePosition.width}px`, 'important');
-          element.style.setProperty('min-width', 'auto', 'important');
-          element.style.setProperty('transform', 'none', 'important');
-          
-          // Also try to find and style the wrapper
-          const wrapper = element.closest('[data-radix-popper-content-wrapper]') as HTMLElement;
-          if (wrapper) {
-            wrapper.style.setProperty('position', 'fixed', 'important');
-            wrapper.style.setProperty('left', `${mobilePosition.left}px`, 'important');
-            wrapper.style.setProperty('right', `${mobilePosition.right}px`, 'important');
-            wrapper.style.setProperty('width', `${mobilePosition.width}px`, 'important');
-            wrapper.style.setProperty('transform', 'none', 'important');
-          }
-        }
-      };
-      
-      applyStyles();
-      // Re-apply after a short delay to override any async positioning
-      setTimeout(applyStyles, 100);
-    }
-  }, [isMobile, mobilePosition]);
-  
-  return (
-    <SelectPrimitive.Portal>
-      <SelectPrimitive.Content
-        ref={(node) => {
-          if (typeof ref === 'function') ref(node);
-          else if (ref) ref.current = node;
-          if (node) contentRef.current = node;
-        }}
+>(({ className, children, position = "popper", ...props }, ref) => (
+  <SelectPrimitive.Portal>
+    <SelectPrimitive.Content
+      ref={ref}
+      className={cn(
+        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+        position === "popper" &&
+          "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
+        className
+      )}
+      position={position}
+      {...props}
+    >
+      <SelectScrollUpButton />
+      <SelectPrimitive.Viewport
         className={cn(
-          "relative z-[9999] min-w-[8rem] overflow-hidden rounded-md border bg-white text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
-          className
+          "p-1",
+          position === "popper" &&
+            "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
         )}
-        position={position}
-        side={isMobile ? "bottom" : undefined}
-        align={isMobile ? "start" : undefined}
-        avoidCollisions={!isMobile}
-        collisionPadding={isMobile ? 0 : 8}
-        {...props}
       >
-        <SelectScrollUpButton />
-        <SelectPrimitive.Viewport
-          className={cn(
-            "p-1 max-h-full overflow-y-auto",
-            position === "popper" &&
-              "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
-          )}
-        >
-          {children}
-        </SelectPrimitive.Viewport>
-        <SelectScrollDownButton />
-      </SelectPrimitive.Content>
-    </SelectPrimitive.Portal>
-  );
-})
+        {children}
+      </SelectPrimitive.Viewport>
+      <SelectScrollDownButton />
+    </SelectPrimitive.Content>
+  </SelectPrimitive.Portal>
+))
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
 const SelectLabel = React.forwardRef<

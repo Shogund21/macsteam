@@ -27,7 +27,6 @@ const MaintenanceCheckForm = ({
   setIsSubmitting: externalSetIsSubmitting
 }: MaintenanceCheckFormProps) => {
   const [internalIsSubmitting, setInternalIsSubmitting] = useState(false);
-  const [formMounted, setFormMounted] = useState(false);
   const isSubmitting = externalIsSubmitting !== undefined ? externalIsSubmitting : internalIsSubmitting;
   const setIsSubmitting = externalSetIsSubmitting || setInternalIsSubmitting;
   
@@ -35,37 +34,6 @@ const MaintenanceCheckForm = ({
   const handleSubmit = useMaintenanceFormSubmit(onComplete, initialData);
   const validateForm = useFormValidation();
   const isMobile = useIsMobile();
-
-  // Track form mounting for mobile
-  useEffect(() => {
-    console.log('MaintenanceCheckForm mounting, isMobile:', isMobile);
-    setFormMounted(true);
-    
-    return () => {
-      console.log('MaintenanceCheckForm unmounting');
-      setFormMounted(false);
-    };
-  }, [isMobile]);
-
-  // Track form value changes for debugging
-  const locationId = form.watch('location_id');
-  const equipmentId = form.watch('equipment_id');
-
-  useEffect(() => {
-    console.log('Form values changed:', { 
-      locationId, 
-      equipmentId,
-      isMobile,
-      formMounted
-    });
-  }, [locationId, equipmentId, isMobile, formMounted]);
-
-  // Log initialData to help with debugging
-  useEffect(() => {
-    if (initialData) {
-      console.log('MaintenanceCheckForm initialData:', initialData);
-    }
-  }, [initialData]);
 
   // Fetch equipment data
   const { data: equipment = [], isLoading: isLoadingEquipment, error: equipmentError } = useQuery({
@@ -127,26 +95,18 @@ const MaintenanceCheckForm = ({
 
   const onSubmitForm = async (values: any) => {
     console.log('Form submission initiated with values:', values);
-    console.log('Is update mode:', !!initialData);
     
     if (isSubmitting) {
       console.log('Preventing double submission');
       return;
     }
     
-    // Validate form before submission
     if (!validateForm(values)) {
       return;
     }
     
     setIsSubmitting(true);
     try {
-      // Log values before submission to verify location_id is present
-      console.log('Form values before submission:', {
-        ...values,
-        location_id_present: !!values.location_id
-      });
-      
       await handleSubmit(values);
     } catch (error) {
       console.error('Error in form submission:', error);
@@ -156,18 +116,16 @@ const MaintenanceCheckForm = ({
     }
   };
 
-  // Manual form submission handler for the button click
   const manualSubmit = () => {
     console.log('Manual submit triggered');
-    console.log('Current form values:', form.getValues());
     form.handleSubmit(onSubmitForm)();
   };
 
-  // Show loading state with mobile-friendly styling
+  // Show loading state
   if (isLoadingEquipment || isLoadingTechnicians) {
     return (
-      <div className={`${isMobile ? 'mobile-loading-state' : 'p-4 text-center'}`}>
-        <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-[200px]">
+        <div className="flex items-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mr-3"></div>
           <span>Loading form data...</span>
         </div>
@@ -178,7 +136,7 @@ const MaintenanceCheckForm = ({
   // Show error state if data loading failed
   if (equipmentError || techniciansError) {
     return (
-      <div className={`${isMobile ? 'mobile-error-state' : 'p-4 text-center text-red-600'}`}>
+      <div className="p-4 text-center text-red-600">
         <p>Error loading form data. Please try again.</p>
         <button 
           onClick={() => window.location.reload()} 
@@ -186,15 +144,6 @@ const MaintenanceCheckForm = ({
         >
           Retry
         </button>
-      </div>
-    );
-  }
-
-  // Don't render until mounted on mobile to prevent layout issues
-  if (isMobile && !formMounted) {
-    return (
-      <div className="mobile-loading-state">
-        <span>Initializing form...</span>
       </div>
     );
   }
@@ -211,29 +160,22 @@ const MaintenanceCheckForm = ({
       equipmentType={equipmentType}
       isMobile={isMobile}
     >
-      <div className={`${isMobile ? 'mobile-viewport-container' : ''}`}>
-        <Form {...form}>
-          <form 
-            onSubmit={form.handleSubmit(onSubmitForm)} 
-            className={`space-y-6 ${isMobile ? 'mobile-form-container' : ''}`}
-          >
-            <div className={`grid gap-6 ${isMobile ? 'mobile-form-grid' : ''}`}>
-              <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
-              <MaintenanceFormBody />
-              
-              {/* Mobile sticky actions, desktop inline actions */}
-              <div className={isMobile ? 'mobile-form-actions' : ''}>
-                <FormActions 
-                  onCancel={onComplete}
-                  isEditing={!!initialData}
-                  isSubmitting={isSubmitting}
-                  onSubmit={manualSubmit}
-                />
-              </div>
-            </div>
-          </form>
-        </Form>
-      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6">
+          <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
+          <MaintenanceFormBody />
+          
+          {/* Form actions */}
+          <div className={isMobile ? 'sticky bottom-0 bg-white p-4 border-t shadow-lg' : ''}>
+            <FormActions 
+              onCancel={onComplete}
+              isEditing={!!initialData}
+              isSubmitting={isSubmitting}
+              onSubmit={manualSubmit}
+            />
+          </div>
+        </form>
+      </Form>
     </MaintenanceFormProvider>
   );
 };
