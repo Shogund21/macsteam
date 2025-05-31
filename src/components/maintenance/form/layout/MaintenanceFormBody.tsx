@@ -11,6 +11,13 @@ const MaintenanceFormBody = () => {
   
   const equipmentId = form.watch('equipment_id');
 
+  console.log('MaintenanceFormBody render:', { 
+    equipmentId, 
+    selectedEquipment: selectedEquipment?.name,
+    isMobile,
+    shouldShowChecklist: !!equipmentId
+  });
+
   return (
     <div className="w-full space-y-4" data-component="maintenance-form-body">
       <FormSection title="Basic Information">
@@ -21,10 +28,32 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
-      {/* Always render equipment fields when equipment is selected - no mobile exclusion */}
+      {/* Equipment checklist section with enhanced mobile debugging */}
       {equipmentId && (
         <FormSection title="Equipment Maintenance Checklist">
-          <div className="w-full" data-component="equipment-details-wrapper">
+          <div 
+            className="w-full" 
+            data-component="equipment-details-wrapper"
+            style={{
+              backgroundColor: isMobile ? '#f0f9ff' : 'transparent',
+              border: isMobile ? '2px solid #3b82f6' : 'none',
+              padding: isMobile ? '16px' : '0',
+              borderRadius: isMobile ? '8px' : '0',
+              minHeight: isMobile ? '200px' : 'auto'
+            }}
+          >
+            {isMobile && (
+              <div 
+                className="mb-4 p-2 bg-blue-100 border border-blue-300 rounded text-sm"
+                style={{ 
+                  display: 'block !important',
+                  visibility: 'visible !important',
+                  zIndex: 9999
+                }}
+              >
+                🔧 DEBUG: Equipment Selected - {selectedEquipment?.name || equipmentId}
+              </div>
+            )}
             <EquipmentTypeFields />
           </div>
         </FormSection>

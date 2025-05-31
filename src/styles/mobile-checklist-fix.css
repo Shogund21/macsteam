@@ -1,6 +1,8 @@
 
+@import './mobile-maintenance-checklist.css';
+
 @layer components {
-  /* Mobile Equipment Checklist Fixes - Enhanced */
+  /* Mobile Equipment Checklist Fixes - Enhanced with Debug Support */
   @media (max-width: 1200px) {
     /* Force visibility and proper layout for maintenance checklists */
     [data-component="maintenance-checklist"],
@@ -23,6 +25,11 @@
       position: relative !important;
       z-index: 1 !important;
       min-height: auto !important;
+      background-color: white !important;
+      padding: 1rem !important;
+      margin-bottom: 1rem !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
 
     /* Ensure form containers stretch full width on mobile */
@@ -36,6 +43,7 @@
       margin-right: 0 !important;
       display: block !important;
       visibility: visible !important;
+      padding: 0.75rem !important;
     }
 
     /* Fix mobile form fields - Enhanced selectors */
@@ -58,6 +66,7 @@
       background-color: white !important;
       display: flex !important;
       align-items: center !important;
+      margin-bottom: 0.5rem !important;
     }
 
     /* Force grid layouts to single column on mobile */
@@ -113,6 +122,13 @@
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
+    }
+
+    /* Debug highlight for equipment checklist sections */
+    [data-component="form-section"]:has([data-component="equipment-details-wrapper"]) {
+      background-color: #f0f9ff !important;
+      border: 2px solid #3b82f6 !important;
+      padding: 1.5rem !important;
     }
   }
 

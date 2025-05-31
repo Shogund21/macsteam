@@ -13,20 +13,35 @@ const EquipmentTypeFields = () => {
     equipmentId: form.watch('equipment_id')
   });
 
-  // Always render equipment fields regardless of mobile status
-  // The component will handle mobile-specific styling internally
   return (
     <div 
       className="w-full" 
       data-component="equipment-type-fields"
       style={{ 
-        display: 'block',
-        visibility: 'visible',
-        opacity: 1,
+        display: 'block !important',
+        visibility: 'visible !important',
+        opacity: '1 !important',
         width: '100%',
-        minHeight: 'auto'
+        minHeight: isMobile ? '300px' : 'auto',
+        backgroundColor: isMobile ? '#fef3c7' : 'transparent',
+        border: isMobile ? '2px dashed #f59e0b' : 'none',
+        padding: isMobile ? '12px' : '0',
+        borderRadius: isMobile ? '6px' : '0',
+        position: 'relative',
+        zIndex: isMobile ? '100' : '1'
       }}
     >
+      {isMobile && (
+        <div 
+          className="mb-3 p-2 bg-yellow-200 border border-yellow-400 rounded text-xs font-bold"
+          style={{ 
+            display: 'block !important',
+            visibility: 'visible !important'
+          }}
+        >
+          📋 CHECKLIST CONTAINER - Type: {equipmentType || 'Unknown'}
+        </div>
+      )}
       <EquipmentFields 
         form={form} 
         equipmentType={equipmentType}
