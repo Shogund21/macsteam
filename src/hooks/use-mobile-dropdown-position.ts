@@ -35,6 +35,12 @@ export function useMobileDropdownPosition() {
     
     // Also force update any existing dropdown content
     const forceDropdownPosition = () => {
+      // Calculate available width here too for this function's scope
+      const viewportWidth = window.innerWidth;
+      const leftMargin = 16;
+      const rightMargin = 16;
+      const availableWidth = viewportWidth - leftMargin - rightMargin;
+      
       setTimeout(() => {
         // Target all possible Radix dropdown selectors
         const selectors = [
