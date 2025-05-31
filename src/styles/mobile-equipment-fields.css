@@ -1,14 +1,18 @@
 
 @layer components {
-  /* Mobile equipment fields styling - Enhanced for visibility */
+  /* Mobile equipment fields styling - Enhanced for all equipment types */
   @media (max-width: 768px) {
     .mobile-equipment-fields {
-      padding: 0.5rem !important;
+      padding: 1rem !important;
       margin: 0 !important;
       width: 100% !important;
       display: block !important;
+      background-color: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
     }
 
+    /* All equipment field containers */
     .mobile-ahu-fields,
     .mobile-cooling-tower-fields,
     .mobile-elevator-fields,
@@ -25,9 +29,10 @@
       opacity: 1 !important;
       position: relative !important;
       z-index: 1 !important;
+      min-height: 200px !important;
     }
 
-    /* Ensure equipment fields are visible and properly spaced */
+    /* Ensure all child elements are properly spaced */
     .mobile-ahu-fields > *,
     .mobile-cooling-tower-fields > *,
     .mobile-elevator-fields > *,
@@ -38,34 +43,84 @@
       width: 100% !important;
     }
 
-    /* Force visibility for equipment-specific components */
-    .mobile-ahu-fields,
-    .mobile-cooling-tower-fields,
-    .mobile-elevator-fields,
-    .mobile-restroom-fields {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      min-height: 200px !important;
-    }
-
-    /* Mobile AHU specific styling */
-    .mobile-ahu-fields h2 {
+    /* Equipment section headers */
+    .mobile-ahu-fields h2,
+    .mobile-cooling-tower-fields h2,
+    .mobile-elevator-fields h2,
+    .mobile-restroom-fields h2,
+    .mobile-general-fields h2 {
       font-size: 1.25rem !important;
       margin-bottom: 1rem !important;
       color: #1f2937 !important;
       display: block !important;
+      font-weight: 600 !important;
     }
 
-    /* Ensure form elements are properly sized on mobile */
-    .mobile-ahu-fields .grid {
+    /* Mobile grid layouts - force single column */
+    .mobile-ahu-fields .grid,
+    .mobile-cooling-tower-fields .grid,
+    .mobile-elevator-fields .grid,
+    .mobile-restroom-fields .grid,
+    .mobile-general-fields .grid {
       display: flex !important;
       flex-direction: column !important;
       gap: 1rem !important;
+      grid-template-columns: none !important;
     }
 
-    .mobile-ahu-fields .space-y-6 > * {
+    /* Space-y utilities override */
+    .mobile-ahu-fields .space-y-6 > *,
+    .mobile-cooling-tower-fields .space-y-6 > *,
+    .mobile-elevator-fields .space-y-6 > *,
+    .mobile-restroom-fields .space-y-6 > *,
+    .mobile-general-fields .space-y-6 > * {
       margin-bottom: 1.5rem !important;
+    }
+
+    /* Form sections within equipment fields */
+    .mobile-ahu-fields [class*="FormSection"],
+    .mobile-cooling-tower-fields [class*="FormSection"],
+    .mobile-elevator-fields [class*="FormSection"],
+    .mobile-restroom-fields [class*="FormSection"],
+    .mobile-general-fields [class*="FormSection"] {
+      background-color: #f9fafb !important;
+      padding: 1rem !important;
+      border-radius: 6px !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Form inputs and selects */
+    .mobile-ahu-fields input,
+    .mobile-ahu-fields select,
+    .mobile-ahu-fields textarea,
+    .mobile-cooling-tower-fields input,
+    .mobile-cooling-tower-fields select,
+    .mobile-cooling-tower-fields textarea,
+    .mobile-elevator-fields input,
+    .mobile-elevator-fields select,
+    .mobile-elevator-fields textarea,
+    .mobile-restroom-fields input,
+    .mobile-restroom-fields select,
+    .mobile-restroom-fields textarea,
+    .mobile-general-fields input,
+    .mobile-general-fields select,
+    .mobile-general-fields textarea {
+      min-height: 48px !important;
+      font-size: 16px !important;
+      padding: 0.75rem !important;
+      width: 100% !important;
+    }
+
+    /* Labels */
+    .mobile-ahu-fields label,
+    .mobile-cooling-tower-fields label,
+    .mobile-elevator-fields label,
+    .mobile-restroom-fields label,
+    .mobile-general-fields label {
+      font-size: 0.875rem !important;
+      font-weight: 500 !important;
+      margin-bottom: 0.5rem !important;
+      display: block !important;
     }
   }
 }

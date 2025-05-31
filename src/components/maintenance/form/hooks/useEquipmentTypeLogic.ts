@@ -27,52 +27,66 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
       equipmentId: selectedEquipment.id
     });
     
-    // Enhanced AHU detection with more variations and better logging
+    // Enhanced detection patterns
     const ahuPatterns = [
-      name.includes('ahu'),
-      name.includes('air handler'),
-      name.includes('air handling'),
-      name.includes('air-handler'),
-      name.includes('airhandler'),
-      /ahu[\s-]?\d+/.test(name),
-      /air[\s-]?handler[\s-]?\d+/.test(name),
-      /ahu[\s-]?\w+/.test(name) // Match "AHU 5", "AHU-A", etc.
+      'ahu',
+      'air handler',
+      'air handling',
+      'air-handler',
+      'airhandler'
     ];
     
-    console.log('useEquipmentTypeLogic: 🔍 AHU PATTERN TESTS:', {
-      name,
-      patterns: {
-        includesAhu: name.includes('ahu'),
-        includesAirHandler: name.includes('air handler'),
-        includesAirHandling: name.includes('air handling'),
-        includesAirHandlerHyphen: name.includes('air-handler'),
-        includesAirhandler: name.includes('airhandler'),
-        ahuWithNumber: /ahu[\s-]?\d+/.test(name),
-        airHandlerWithNumber: /air[\s-]?handler[\s-]?\d+/.test(name),
-        ahuWithAny: /ahu[\s-]?\w+/.test(name)
-      },
-      anyMatch: ahuPatterns.some(pattern => pattern)
-    });
+    const chillerPatterns = [
+      'chiller',
+      'ch-',
+      'ch ',
+      'cooling unit'
+    ];
     
-    if (ahuPatterns.some(pattern => pattern)) {
+    const coolingTowerPatterns = [
+      'cooling tower',
+      'cooling-tower',
+      'coolingtower',
+      'ct-',
+      'ct '
+    ];
+    
+    const elevatorPatterns = [
+      'elevator',
+      'lift',
+      'elev'
+    ];
+    
+    const restroomPatterns = [
+      'restroom',
+      'bathroom',
+      'washroom',
+      'toilet'
+    ];
+    
+    // Check each equipment type
+    if (ahuPatterns.some(pattern => name.includes(pattern)) || /ahu[\s-]?\w*/.test(name)) {
       console.log('useEquipmentTypeLogic: ✅ DETECTED AHU EQUIPMENT:', selectedEquipment.name);
       return 'ahu';
     }
     
-    if (name.includes('chiller')) {
-      console.log('useEquipmentTypeLogic: ✅ Detected chiller equipment');
+    if (chillerPatterns.some(pattern => name.includes(pattern))) {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED CHILLER EQUIPMENT:', selectedEquipment.name);
       return 'chiller';
     }
-    if (name.includes('cooling tower') || name.includes('cooling-tower')) {
-      console.log('useEquipmentTypeLogic: ✅ Detected cooling tower equipment');
+    
+    if (coolingTowerPatterns.some(pattern => name.includes(pattern))) {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED COOLING TOWER EQUIPMENT:', selectedEquipment.name);
       return 'cooling_tower';
     }
-    if (name.includes('elevator')) {
-      console.log('useEquipmentTypeLogic: ✅ Detected elevator equipment');
+    
+    if (elevatorPatterns.some(pattern => name.includes(pattern))) {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED ELEVATOR EQUIPMENT:', selectedEquipment.name);
       return 'elevator';
     }
-    if (name.includes('restroom')) {
-      console.log('useEquipmentTypeLogic: ✅ Detected restroom equipment');
+    
+    if (restroomPatterns.some(pattern => name.includes(pattern))) {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED RESTROOM EQUIPMENT:', selectedEquipment.name);
       return 'restroom';
     }
     
@@ -86,7 +100,6 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     selectedEquipmentId: selectedEquipment?.id,
     selectedEquipmentName: selectedEquipment?.name,
     detectedEquipmentType: equipmentType,
-    isAhu: equipmentType === 'ahu',
     timestamp: new Date().toISOString()
   });
 
