@@ -1,0 +1,42 @@
+
+@layer components {
+  /* Mobile equipment fields styling */
+  @media (max-width: 768px) {
+    .mobile-equipment-fields {
+      padding: 0.5rem !important;
+      margin: 0 !important;
+    }
+
+    .mobile-ahu-fields,
+    .mobile-cooling-tower-fields,
+    .mobile-elevator-fields,
+    .mobile-restroom-fields,
+    .mobile-general-fields {
+      width: 100% !important;
+      padding: 1rem !important;
+      background-color: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Ensure equipment fields are visible and properly spaced */
+    .mobile-ahu-fields > *,
+    .mobile-cooling-tower-fields > *,
+    .mobile-elevator-fields > *,
+    .mobile-restroom-fields > *,
+    .mobile-general-fields > * {
+      margin-bottom: 1rem !important;
+    }
+
+    /* Force visibility for equipment-specific components */
+    .mobile-ahu-fields,
+    .mobile-cooling-tower-fields,
+    .mobile-elevator-fields,
+    .mobile-restroom-fields {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  }
+}

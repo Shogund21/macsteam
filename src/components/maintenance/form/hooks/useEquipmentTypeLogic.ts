@@ -8,44 +8,53 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
 
   const getEquipmentType = () => {
     if (!selectedEquipment) {
-      console.log('No selected equipment found');
+      console.log('useEquipmentTypeLogic: No selected equipment found');
       return null;
     }
     
     const name = selectedEquipment.name.toLowerCase();
-    console.log('Detecting equipment type for:', name);
+    console.log('useEquipmentTypeLogic: Detecting equipment type for:', name);
+    console.log('useEquipmentTypeLogic: Equipment object:', selectedEquipment);
     
-    if (name.includes('ahu') || name.includes('air handler') || name.includes('air handling')) {
-      console.log('Detected AHU equipment');
+    // Enhanced AHU detection with more variations
+    if (name.includes('ahu') || 
+        name.includes('air handler') || 
+        name.includes('air handling') ||
+        name.includes('air-handler') ||
+        name.includes('airhandler') ||
+        /ahu[\s-]?\d+/.test(name) ||
+        /air[\s-]?handler[\s-]?\d+/.test(name)) {
+      console.log('useEquipmentTypeLogic: ✅ Detected AHU equipment');
       return 'ahu';
     }
     if (name.includes('chiller')) {
-      console.log('Detected chiller equipment');
+      console.log('useEquipmentTypeLogic: ✅ Detected chiller equipment');
       return 'chiller';
     }
-    if (name.includes('cooling tower')) {
-      console.log('Detected cooling tower equipment');
+    if (name.includes('cooling tower') || name.includes('cooling-tower')) {
+      console.log('useEquipmentTypeLogic: ✅ Detected cooling tower equipment');
       return 'cooling_tower';
     }
     if (name.includes('elevator')) {
-      console.log('Detected elevator equipment');
+      console.log('useEquipmentTypeLogic: ✅ Detected elevator equipment');
       return 'elevator';
     }
     if (name.includes('restroom')) {
-      console.log('Detected restroom equipment');
+      console.log('useEquipmentTypeLogic: ✅ Detected restroom equipment');
       return 'restroom';
     }
     
-    console.log('Using general equipment type for:', name);
+    console.log('useEquipmentTypeLogic: ℹ️ Using general equipment type for:', name);
     return 'general';
   };
 
   const equipmentType = getEquipmentType();
   
-  console.log('useEquipmentTypeLogic result:', {
+  console.log('useEquipmentTypeLogic: 🎯 FINAL RESULT:', {
     selectedEquipmentId: selectedEquipment?.id,
     selectedEquipmentName: selectedEquipment?.name,
-    equipmentType
+    equipmentType,
+    timestamp: new Date().toISOString()
   });
 
   return {

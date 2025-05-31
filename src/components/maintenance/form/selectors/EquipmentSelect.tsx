@@ -1,4 +1,3 @@
-
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
@@ -21,29 +20,30 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
   
   // Debug logs
   useEffect(() => {
-    console.log('EquipmentSelect: locationId =', locationId);
-    console.log('EquipmentSelect: selectedEquipmentId =', selectedEquipmentId);
-    console.log('EquipmentSelect: equipment count =', equipment?.length || 0);
+    console.log('EquipmentSelect: 📍 Location and equipment debug:', {
+      locationId,
+      selectedEquipmentId,
+      equipmentCount: equipment?.length || 0,
+      isMobile: window.innerWidth <= 768
+    });
   }, [locationId, selectedEquipmentId, equipment]);
 
-  // REMOVED: Code that clears equipment selection when location changes
-
   const handleEquipmentChange = (value: string) => {
-    console.log('EquipmentSelect: Equipment selection changed to:', value);
+    console.log('EquipmentSelect: 🔄 Equipment selection changed to:', value);
+    console.log('EquipmentSelect: 📱 Mobile debug - window width:', window.innerWidth);
     
     try {
       // Get the selected equipment details
       const selectedEquipment = equipment.find(eq => eq.id === value) as Equipment | undefined;
       
       if (selectedEquipment) {
-        console.log('EquipmentSelect: Equipment database location:', selectedEquipment.location);
-        console.log('EquipmentSelect: Current selected locationId:', locationId);
-        
-        // Log, but don't warn about location mismatches
-        if (selectedEquipment.location !== locationId) {
-          console.log('EquipmentSelect: Equipment has database location', 
-            selectedEquipment.location, 'but will use user-selected location', locationId);
-        }
+        console.log('EquipmentSelect: ✅ Equipment selected:', {
+          id: selectedEquipment.id,
+          name: selectedEquipment.name,
+          databaseLocation: selectedEquipment.location,
+          userSelectedLocation: locationId,
+          isMobile: window.innerWidth <= 768
+        });
       }
       
       // Set equipment ID in form
@@ -53,14 +53,19 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         shouldValidate: true
       });
       
-      // Verify location_id is still intact after selecting equipment
+      // Mobile-specific verification
       setTimeout(() => {
-        console.log('EquipmentSelect: Verification - equipment_id after change:', form.getValues('equipment_id'));
-        console.log('EquipmentSelect: Verification - location_id is still:', form.getValues('location_id'));
+        const formValues = form.getValues();
+        console.log('EquipmentSelect: 📱 Mobile verification after equipment change:', {
+          equipmentId: formValues.equipment_id,
+          locationId: formValues.location_id,
+          allFormValues: formValues,
+          windowWidth: window.innerWidth
+        });
       }, 100);
       
     } catch (error) {
-      console.error('Error in handleEquipmentChange:', error);
+      console.error('EquipmentSelect: ❌ Error in handleEquipmentChange:', error);
       toast({
         title: "Error selecting equipment",
         description: error instanceof Error ? error.message : "An unknown error occurred",
