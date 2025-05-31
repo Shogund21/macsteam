@@ -44,7 +44,19 @@ const EquipmentTypeFields = () => {
       isMobile,
       windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown'
     });
-    return null;
+    return (
+      <div style={{ 
+        backgroundColor: '#ffebee', 
+        padding: '12px', 
+        margin: '8px 0', 
+        borderRadius: '6px',
+        fontSize: '14px',
+        color: '#c62828',
+        border: '1px solid #ef5350'
+      }}>
+        ❌ No equipment selected. Please select equipment to see maintenance fields.
+      </div>
+    );
   }
 
   if (!equipmentType) {
@@ -55,7 +67,19 @@ const EquipmentTypeFields = () => {
       isMobile,
       windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown'
     });
-    return null;
+    return (
+      <div style={{ 
+        backgroundColor: '#fff3e0', 
+        padding: '12px', 
+        margin: '8px 0', 
+        borderRadius: '6px',
+        fontSize: '14px',
+        color: '#ef6c00',
+        border: '1px solid #ffb74d'
+      }}>
+        ⚠️ Equipment type not detected. Equipment ID: {equipmentId}, Selected: {selectedEquipment?.name || 'Unknown'}
+      </div>
+    );
   }
 
   console.log('EquipmentTypeFields: ✅ MOBILE - RENDERING EQUIPMENT FIELDS:', {
@@ -67,21 +91,27 @@ const EquipmentTypeFields = () => {
   });
   
   return (
-    <div className={isMobile ? 'mobile-equipment-fields' : ''}>
+    <div className={isMobile ? 'mobile-equipment-fields' : ''} style={{ width: '100%', minHeight: '200px' }}>
       {/* Mobile debugging indicator */}
       {isMobile && (
         <div style={{ 
-          backgroundColor: '#e3f2fd', 
-          padding: '8px', 
+          backgroundColor: '#e8f5e8', 
+          padding: '12px', 
           margin: '8px 0', 
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#1565c0'
+          borderRadius: '6px',
+          fontSize: '13px',
+          color: '#2e7d32',
+          border: '2px solid #4caf50',
+          fontWeight: 'bold'
         }}>
-          📱 Mobile Debug: Rendering {equipmentType} fields for {selectedEquipment?.name}
+          ✅ Mobile Debug: Rendering {equipmentType} fields for {selectedEquipment?.name}
         </div>
       )}
-      <EquipmentFields form={form} equipmentType={equipmentType} />
+      
+      {/* Force render equipment fields */}
+      <div style={{ width: '100%', display: 'block', visibility: 'visible', opacity: 1 }}>
+        <EquipmentFields form={form} equipmentType={equipmentType} />
+      </div>
     </div>
   );
 };
