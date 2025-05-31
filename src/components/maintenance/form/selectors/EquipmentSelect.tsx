@@ -70,11 +70,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent 
-                className="z-[9999] bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto"
-                position={isMobile ? "popper" : "popper"}
-                side={isMobile ? "bottom" : "bottom"}
-                align={isMobile ? "start" : "start"}
-                sideOffset={isMobile ? 8 : 4}
+                className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto"
               >
                 {isLoading ? (
                   <SelectItem value="loading-placeholder" disabled className="text-gray-500">

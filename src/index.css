@@ -4,7 +4,6 @@
 @tailwind utilities;
 
 @import './styles/mobile-checklist-fix.css';
-@import './styles/mobile-dropdown-fixes.css';
  
 @layer base {
   :root {
@@ -113,15 +112,15 @@
   }
 }
 
-/* Enhanced dropdown styles with higher z-index */
+/* Custom styles for dropdowns */
 .select-content {
   max-height: 300px;
   overflow-y: auto;
-  background-color: white !important;
+  background-color: white;
   border: 1px solid #e2e8f0;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  z-index: 10000 !important;
+  z-index: 1000 !important;
 }
 
 .select-item {
@@ -146,42 +145,19 @@
   width: 100%;
 }
 
-/* Force maximum z-index for all Radix components */
 [data-radix-popper-content-wrapper] {
-  z-index: 10000 !important;
+  z-index: 1000 !important;
 }
 
-[data-radix-select-content] {
-  z-index: 10000 !important;
+.radix-select-content {
   background-color: white !important;
   border: 1px solid #e2e8f0 !important;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
-}
-
-[data-radix-dropdown-menu-content] {
-  z-index: 10000 !important;
-  background-color: white !important;
+  z-index: 1000 !important;
 }
 
 /* Force white background and proper z-index for all select dropdowns */
 [role="listbox"] {
   background-color: white !important;
-  z-index: 10000 !important;
-}
-
-/* Additional mobile-specific overrides */
-@media (max-width: 768px) {
-  [data-radix-select-content] {
-    position: fixed !important;
-    z-index: 10000 !important;
-    width: calc(100vw - 32px) !important;
-    left: 16px !important;
-    right: 16px !important;
-    max-width: none !important;
-  }
-  
-  [data-radix-popper-content-wrapper] {
-    position: fixed !important;
-    z-index: 10000 !important;
-  }
+  z-index: 1000 !important;
 }

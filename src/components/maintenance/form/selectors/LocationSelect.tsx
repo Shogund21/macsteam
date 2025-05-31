@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 interface LocationSelectProps {
   form: UseFormReturn<any>;
@@ -15,13 +14,11 @@ interface LocationSelectProps {
 const LocationSelect = ({ form }: LocationSelectProps) => {
   const selectedLocationId = form.watch('location_id');
   const { toast } = useToast();
-  const isMobile = useIsMobile();
 
   // Log current selection for debugging
   useEffect(() => {
     console.log('LocationSelect: Current location_id value:', selectedLocationId);
-    console.log('LocationSelect: Is mobile:', isMobile);
-  }, [selectedLocationId, isMobile]);
+  }, [selectedLocationId]);
 
   const { data: locations = [], isLoading } = useQuery({
     queryKey: ['locations'],
@@ -50,10 +47,23 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
 
   const handleLocationChange = (value: string) => {
     console.log('LocationSelect: Changing location_id to:', value);
-    console.log('LocationSelect: Mobile dropdown triggered');
     
     try {
-      // Set the location_id in the form with proper options to ensure it's tracked
+      // CRITICAL FIX: Verify the location ID is valid before setting it
+      const selectedLocation = locations.find(loc => loc.id === value);
+      
+      if (!selectedLocation) {
+        console.warn('Selected location ID not found in available locations:', value);
+        toast({
+          title: "Warning",
+          description: "The selected location may not be valid",
+          variant: "destructive",
+        });
+      } else {
+        console.log('Valid location selected:', selectedLocation.name, 'with ID:', selectedLocation.id);
+      }
+      
+      // CRITICAL FIX: Set the location_id in the form with proper options to ensure it's tracked
       form.setValue('location_id', value, { 
         shouldDirty: true, 
         shouldTouch: true,
@@ -61,13 +71,19 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       });
       
       // Clear equipment selection when location changes
+      // This prevents location/equipment mismatch
       form.setValue('equipment_id', '', { 
         shouldDirty: true, 
         shouldTouch: true 
       });
       
-      // Force form to trigger watchers
-      form.trigger(['location_id', 'equipment_id']);
+      // Log the form state after making changes
+      setTimeout(() => {
+        console.log('LocationSelect: Form state after change (delayed):', {
+          location_id: form.getValues('location_id'),
+          equipment_id: form.getValues('equipment_id')
+        });
+      }, 100);
     } catch (error) {
       console.error('Error in handleLocationChange:', error);
       toast({
@@ -76,10 +92,6 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
         variant: "destructive",
       });
     }
-  };
-
-  const handleOpenChange = (open: boolean) => {
-    console.log('LocationSelect: Dropdown open state changed:', open, 'isMobile:', isMobile);
   };
 
   return (
@@ -91,16 +103,12 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
           <FormLabel className="text-base font-semibold text-gray-700">Location</FormLabel>
           <Select
             onValueChange={handleLocationChange}
-            onOpenChange={handleOpenChange}
             value={field.value || ""}
             defaultValue={field.value || ""}
           >
             <FormControl>
               <SelectTrigger 
-                className={`w-full bg-white border border-gray-200 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-                  isMobile ? 'min-h-[52px] text-base px-4' : 'h-12'
-                }`}
-                onClick={() => console.log('LocationSelect: Trigger clicked, isMobile:', isMobile)}
+                className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               >
                 <SelectValue 
                   placeholder={isLoading ? "Loading locations..." : "Select location"} 
@@ -109,11 +117,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className="z-[10000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto"
-              position="popper"
-              side="bottom"
-              align="start"
-              sideOffset={isMobile ? 8 : 4}
+              className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
             >
               {isLoading ? (
                 <SelectItem 
@@ -129,7 +133,6 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                     key={loc.id} 
                     value={loc.id}
                     className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
-                    onClick={() => console.log('LocationSelect: Item clicked:', loc.name)}
                   >
                     <div className="flex flex-col">
                       <span className="font-medium text-gray-900">{loc.name}</span>
