@@ -11,8 +11,6 @@ interface CoolingTowerFieldsProps {
 const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
   const { isMobile } = useMaintenanceFormContext();
   
-  console.log('CoolingTowerFields: 📱 RENDERING - isMobile:', isMobile);
-  
   const statusOptions = [
     { value: "good", label: "Good" },
     { value: "fair", label: "Fair" },
@@ -40,21 +38,7 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
   ];
 
   return (
-    <div className="cooling-tower-container space-y-6">
-      {isMobile && (
-        <div className="mobile-debug-indicator" style={{
-          backgroundColor: '#e1f5fe',
-          padding: '8px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#0277bd',
-          marginBottom: '12px',
-          fontWeight: 'bold'
-        }}>
-          📱 Mobile: Cooling Tower Fields
-        </div>
-      )}
-      
+    <div className="space-y-6">
       <h2 className="text-xl font-semibold">Cooling Tower Inspection</h2>
       
       <div className={isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
@@ -64,11 +48,11 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
             control={form.control}
             name={field.name}
             render={({ field: formField }) => (
-              <FormItem className={isMobile ? 'mobile-form-item' : ''}>
+              <FormItem>
                 <FormLabel>{field.label}</FormLabel>
                 <Select onValueChange={formField.onChange} defaultValue={formField.value}>
                   <FormControl>
-                    <SelectTrigger className={`bg-white ${isMobile ? 'mobile-select-trigger' : ''}`}>
+                    <SelectTrigger className="bg-white">
                       <SelectValue placeholder={`Select ${field.label}`} />
                     </SelectTrigger>
                   </FormControl>

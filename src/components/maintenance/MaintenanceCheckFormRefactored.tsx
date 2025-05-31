@@ -12,7 +12,6 @@ import { useMaintenanceData } from "./form/hooks/useMaintenanceData";
 import MaintenanceFormLoader from "./form/layout/MaintenanceFormLoader";
 import MaintenanceFormSubmissionHandler from "./form/layout/MaintenanceFormSubmissionHandler";
 import { useEquipmentTypeLogic } from "./form/hooks/useEquipmentTypeLogic";
-import MobileEquipmentDebugger from "./form/debug/MobileEquipmentDebugger";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -71,9 +70,6 @@ const MaintenanceCheckForm = ({
                     onSubmit={manualSubmit}
                   />
                 </div>
-                
-                {/* Mobile debugging component */}
-                <MobileEquipmentDebugger />
               </form>
             </Form>
           </MaintenanceFormProvider>

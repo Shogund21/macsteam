@@ -11,33 +11,17 @@ interface MaintenanceStatusProps {
 const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
   const { isMobile } = useMaintenanceFormContext();
   
-  console.log('MaintenanceStatus: 📱 MOBILE RENDER:', { isMobile, width: typeof window !== 'undefined' ? window.innerWidth : 'unknown' });
-  
   return (
-    <div className={`maintenance-status-container ${isMobile ? 'mobile-status-layout space-y-4' : 'grid grid-cols-1 md:grid-cols-2 gap-6'}`}>
-      {isMobile && (
-        <div className="mobile-debug-indicator" style={{
-          backgroundColor: '#fff3e0',
-          padding: '8px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#ef6c00',
-          marginBottom: '12px',
-          fontWeight: 'bold'
-        }}>
-          📱 Mobile: Maintenance Status Section
-        </div>
-      )}
-      
+    <div className={isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
       <FormField
         control={form.control}
         name="refrigerant_level"
         render={({ field }) => (
-          <FormItem className={isMobile ? 'mobile-form-item' : ''}>
+          <FormItem>
             <FormLabel>Refrigerant Level</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className={`bg-white border border-gray-200 ${isMobile ? 'mobile-select-trigger' : ''}`}>
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Select level" />
                 </SelectTrigger>
               </FormControl>
@@ -59,11 +43,11 @@ const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
         control={form.control}
         name="oil_level_status"
         render={({ field }) => (
-          <FormItem className={isMobile ? 'mobile-form-item' : ''}>
+          <FormItem>
             <FormLabel>Oil Level Status</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className={`bg-white border border-gray-200 ${isMobile ? 'mobile-select-trigger' : ''}`}>
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
               </FormControl>
@@ -85,11 +69,11 @@ const MaintenanceStatus = ({ form }: MaintenanceStatusProps) => {
         control={form.control}
         name="condenser_condition"
         render={({ field }) => (
-          <FormItem className={isMobile ? 'mobile-form-item' : ''}>
+          <FormItem>
             <FormLabel>Condenser Condition</FormLabel>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
               <FormControl>
-                <SelectTrigger className={`bg-white border border-gray-200 ${isMobile ? 'mobile-select-trigger' : ''}`}>
+                <SelectTrigger className="bg-white border border-gray-200">
                   <SelectValue placeholder="Select condition" />
                 </SelectTrigger>
               </FormControl>
