@@ -7,9 +7,16 @@ import DocumentManager from '../../documents/DocumentManager';
 import EquipmentTypeFields from './EquipmentTypeFields';
 
 const MaintenanceFormBody = () => {
-  const { form, equipment, technicians, isMobile } = useMaintenanceFormContext();
+  const { form, equipment, technicians, isMobile, selectedEquipment, equipmentType } = useMaintenanceFormContext();
+  
+  const equipmentId = form.watch('equipment_id');
 
-  console.log('MaintenanceFormBody rendering, isMobile:', isMobile);
+  console.log('MaintenanceFormBody rendering:', { 
+    isMobile, 
+    equipmentId, 
+    equipmentType,
+    selectedEquipment: selectedEquipment?.name 
+  });
 
   return (
     <div className="space-y-6">
@@ -21,12 +28,14 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
-      <FormSection title="Equipment Details">
-        <EquipmentTypeFields />
-      </FormSection>
+      {equipmentId && (
+        <FormSection title="Equipment Details">
+          <EquipmentTypeFields />
+        </FormSection>
+      )}
 
       <FormSection title="Documents">
-        <DocumentManager equipmentId={form.watch('equipment_id')} />
+        <DocumentManager equipmentId={equipmentId} />
       </FormSection>
     </div>
   );

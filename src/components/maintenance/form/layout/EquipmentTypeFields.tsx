@@ -10,27 +10,35 @@ import RestroomMaintenanceFields from '../RestroomMaintenanceFields';
 import CoolingTowerFields from '../CoolingTowerFields';
 
 const EquipmentTypeFields = () => {
-  const { form, equipmentType } = useMaintenanceFormContext();
+  const { form, equipmentType, selectedEquipment } = useMaintenanceFormContext();
   
-  console.log('Rendering EquipmentTypeFields with type:', equipmentType);
+  console.log('EquipmentTypeFields rendering:', { 
+    equipmentType, 
+    selectedEquipmentName: selectedEquipment?.name 
+  });
   
   // Render appropriate fields based on equipment type
   switch (equipmentType) {
     case 'ahu':
+      console.log('Rendering AHU fields');
       return <AHUMaintenanceFields form={form} />;
     case 'cooling_tower':
+      console.log('Rendering cooling tower fields');
       return <CoolingTowerFields form={form} />;
     case 'elevator':
+      console.log('Rendering elevator fields');
       return <ElevatorMaintenanceFields form={form} />;
     case 'restroom':
+      console.log('Rendering restroom fields');
       return <RestroomMaintenanceFields form={form} />;
     default:
+      console.log('Rendering default/general fields');
       return (
-        <>
+        <div className="space-y-6">
           <MaintenanceReadings form={form} />
           <MaintenanceStatus form={form} />
           <MaintenanceObservations form={form} />
-        </>
+        </div>
       );
   }
 };
