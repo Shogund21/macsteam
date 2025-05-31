@@ -11,9 +11,10 @@
 @import './components.css';
 @import './ui-fixes.css';
 @import './mobile-fixes.css';
-@import './mobile-components.css';
+@import './mobile-sidebar.css';
+@import './mobile-dialogs.css';
+@import './mobile-touch.css';
+@import './mobile-animations.css';
 @import './utilities.css';
 @import './print.css';
 @import './chart.css';
-
-/* Remove duplicate import of visibility-fix.css since we're consolidating visibility fixes */

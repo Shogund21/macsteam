@@ -1,0 +1,33 @@
+
+@layer components {
+  /* Improve touch targets */
+  .touch-target {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+  
+  /* Dropdown scroll improvements */
+  .dropdown-scroll {
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: thin !important;
+  }
+  
+  .dropdown-scroll::-webkit-scrollbar {
+    width: 4px !important;
+  }
+  
+  .dropdown-scroll::-webkit-scrollbar-track {
+    background: transparent !important;
+  }
+  
+  .dropdown-scroll::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 2px !important;
+  }
+}

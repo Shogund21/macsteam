@@ -1,0 +1,39 @@
+
+@layer components {
+  /* Mobile sidebar styles */
+  .mobile-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100dvh !important;
+    width: 80% !important;
+    max-width: 300px !important;
+    z-index: 50 !important;
+    background-color: white !important;
+    overflow-y: auto !important;
+  }
+  
+  .mobile-sidebar-content {
+    height: 100% !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+
+  /* Better handle sidebar trigger */
+  [data-sidebar-trigger-wrapper] {
+    z-index: 100 !important;
+    position: fixed !important;
+    top: 1rem !important;
+    left: 1rem !important;
+  }
+  
+  /* Set proper z-index hierarchy for sheet components */
+  [data-state=open][data-radix-sheet-content] {
+    z-index: 50 !important;
+  }
+  
+  [data-radix-sheet-overlay] {
+    z-index: 40 !important;
+  }
+}
