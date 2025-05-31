@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 
-const MOBILE_BREAKPOINT = 768
+const MOBILE_BREAKPOINT = 1200 // Increased from 768px to capture larger mobile devices and tablets
 
 export function useIsMobile() {
   // Default to true for mobile-first approach to avoid blank screens on phones
@@ -13,12 +13,13 @@ export function useIsMobile() {
     
     // Check multiple conditions to better detect mobile devices
     const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
     const userAgent = window.navigator.userAgent.toLowerCase();
     
-    // UserAgent based detection as fallback
-    const isMobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(userAgent);
+    // UserAgent based detection - enhanced patterns
+    const isMobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet|kindle|silk|playbook|bb10|windows phone|tizen|bada|meego|palm|symbian|series60|nokia|samsung|lg|htc|motorola|sony|asus|acer|lenovo|huawei|xiaomi|oppo|vivo|oneplus/i.test(userAgent);
     
-    // Width based detection (primary)
+    // Width based detection (increased breakpoint)
     const isMobileViewport = viewportWidth < MOBILE_BREAKPOINT;
     
     // Touch capability check
@@ -26,8 +27,51 @@ export function useIsMobile() {
       navigator.maxTouchPoints > 0 || 
       (navigator as any).msMaxTouchPoints > 0;
     
-    // Prioritize viewport width for consistent behavior
-    return isMobileViewport || (isMobileUserAgent && hasTouchCapability);
+    // Orientation detection (mobile devices typically support orientation changes)
+    const hasOrientationCapability = 'orientation' in window || 'onorientationchange' in window;
+    
+    // Aspect ratio check (mobile devices typically have portrait or narrow landscape ratios)
+    const aspectRatio = viewportWidth / viewportHeight;
+    const isMobileAspectRatio = aspectRatio < 1.5; // Portrait or narrow landscape
+    
+    // Device pixel ratio check (many mobile devices have high DPI)
+    const hasHighDPI = window.devicePixelRatio > 1;
+    
+    // Multiple detection methods with scoring
+    let mobileScore = 0;
+    
+    if (isMobileViewport) mobileScore += 3; // High weight for viewport
+    if (isMobileUserAgent) mobileScore += 2; // Medium weight for user agent
+    if (hasTouchCapability) mobileScore += 2; // Medium weight for touch
+    if (hasOrientationCapability) mobileScore += 1; // Low weight for orientation
+    if (isMobileAspectRatio && hasTouchCapability) mobileScore += 1; // Bonus for mobile aspect + touch
+    if (hasHighDPI && hasTouchCapability) mobileScore += 1; // Bonus for high DPI + touch
+    
+    // Check for manual override in localStorage
+    const manualOverride = localStorage.getItem('force-mobile-mode');
+    if (manualOverride === 'true') return true;
+    if (manualOverride === 'false') return false;
+    
+    // Debug logging
+    console.log('📱 Mobile Detection Debug:', {
+      viewportWidth,
+      viewportHeight,
+      userAgent: userAgent.substring(0, 100),
+      isMobileUserAgent,
+      isMobileViewport,
+      hasTouchCapability,
+      hasOrientationCapability,
+      aspectRatio,
+      isMobileAspectRatio,
+      hasHighDPI,
+      mobileScore,
+      devicePixelRatio: window.devicePixelRatio,
+      maxTouchPoints: navigator.maxTouchPoints,
+      finalDecision: mobileScore >= 3
+    });
+    
+    // Return true if mobile score is 3 or higher
+    return mobileScore >= 3;
   }, []);
   
   useEffect(() => {
