@@ -5,40 +5,32 @@ import EquipmentFields from '../EquipmentFields';
 
 const EquipmentTypeFields = () => {
   const { form, equipmentType, selectedEquipment, isMobile } = useMaintenanceFormContext();
-  
-  const equipmentId = form.watch('equipment_id');
 
-  console.log('EquipmentTypeFields render:', { equipmentId, equipmentType, isMobile });
+  console.log('EquipmentTypeFields rendering:', { 
+    equipmentType, 
+    selectedEquipment: selectedEquipment?.name,
+    isMobile,
+    equipmentId: form.watch('equipment_id')
+  });
 
-  if (!equipmentId) {
-    return (
-      <div className="w-full p-4 bg-blue-50 border border-blue-200 rounded-lg text-blue-800">
-        Please select equipment to display the maintenance checklist.
-      </div>
-    );
-  }
-
-  if (!equipmentType) {
-    return (
-      <div className="w-full p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
-        Equipment type not detected. Please try selecting the equipment again.
-      </div>
-    );
-  }
-  
+  // Always render equipment fields regardless of mobile status
+  // The component will handle mobile-specific styling internally
   return (
     <div 
-      className="w-full space-y-4" 
+      className="w-full" 
       data-component="equipment-type-fields"
-      data-equipment-type={equipmentType}
-      data-device={isMobile ? 'mobile' : 'desktop'}
+      style={{ 
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1,
+        width: '100%',
+        minHeight: 'auto'
+      }}
     >
-      <div className="w-full p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
-        Equipment Type: <strong>{equipmentType}</strong> | Device: <strong>{isMobile ? 'Mobile' : 'Desktop'}</strong>
-      </div>
-      <div className="w-full" data-component="equipment-fields-container">
-        <EquipmentFields form={form} equipmentType={equipmentType} />
-      </div>
+      <EquipmentFields 
+        form={form} 
+        equipmentType={equipmentType}
+      />
     </div>
   );
 };

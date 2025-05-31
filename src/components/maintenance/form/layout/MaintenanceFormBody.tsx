@@ -21,8 +21,9 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
+      {/* Always render equipment fields when equipment is selected - no mobile exclusion */}
       {equipmentId && (
-        <FormSection title="Equipment Details">
+        <FormSection title="Equipment Maintenance Checklist">
           <div className="w-full" data-component="equipment-details-wrapper">
             <EquipmentTypeFields />
           </div>
