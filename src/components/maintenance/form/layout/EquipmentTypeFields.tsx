@@ -12,21 +12,60 @@ import CoolingTowerFields from '../CoolingTowerFields';
 const EquipmentTypeFields = () => {
   const { form, equipmentType, selectedEquipment, isMobile } = useMaintenanceFormContext();
   
-  console.log('EquipmentTypeFields: 🔧 RENDERING COMPONENT:', { 
+  const equipmentId = form.watch('equipment_id');
+  
+  console.log('EquipmentTypeFields: 🔧 COMPREHENSIVE DEBUG:', { 
     equipmentType, 
     selectedEquipmentName: selectedEquipment?.name,
+    selectedEquipmentId: selectedEquipment?.id,
+    formEquipmentId: equipmentId,
     isMobile,
+    hasEquipmentId: !!equipmentId,
+    equipmentTypeIsAhu: equipmentType === 'ahu',
     timestamp: new Date().toISOString()
   });
 
+  // Mobile-specific debugging
+  if (isMobile) {
+    console.log('EquipmentTypeFields: 📱 MOBILE SPECIFIC DEBUG:', {
+      screenWidth: window.innerWidth,
+      equipmentType,
+      selectedEquipment: selectedEquipment ? {
+        id: selectedEquipment.id,
+        name: selectedEquipment.name
+      } : null,
+      formState: {
+        equipment_id: form.getValues('equipment_id'),
+        location_id: form.getValues('location_id')
+      }
+    });
+  }
+
   // Add effect to monitor equipment type changes
   useEffect(() => {
-    console.log('EquipmentTypeFields: 🔄 EQUIPMENT TYPE CHANGED:', {
+    console.log('EquipmentTypeFields: 🔄 EQUIPMENT TYPE EFFECT TRIGGERED:', {
       newEquipmentType: equipmentType,
       selectedEquipment: selectedEquipment?.name,
-      isMobile
+      isMobile,
+      shouldRenderAHU: equipmentType === 'ahu'
     });
+    
+    // Force a small delay to ensure mobile rendering
+    if (isMobile && equipmentType) {
+      setTimeout(() => {
+        console.log('EquipmentTypeFields: 📱 MOBILE DELAYED CHECK:', {
+          equipmentType,
+          stillSelected: selectedEquipment?.name
+        });
+      }, 100);
+    }
   }, [equipmentType, selectedEquipment, isMobile]);
+
+  // Early return if no equipment selected
+  if (!equipmentId) {
+    console.log('EquipmentTypeFields: ❌ NO EQUIPMENT ID - NOT RENDERING');
+    return null;
+  }
 
   // Render debugging info in development
   if (process.env.NODE_ENV === 'development') {
@@ -40,50 +79,52 @@ const EquipmentTypeFields = () => {
     });
   }
   
-  // Render appropriate fields based on equipment type
-  switch (equipmentType) {
-    case 'ahu':
-      console.log('EquipmentTypeFields: ✅ Rendering AHU fields for mobile:', isMobile);
-      return (
-        <div className={isMobile ? 'mobile-ahu-fields space-y-4' : ''}>
-          <AHUMaintenanceFields form={form} />
-        </div>
-      );
-      
-    case 'cooling_tower':
-      console.log('EquipmentTypeFields: ✅ Rendering cooling tower fields for mobile:', isMobile);
-      return (
-        <div className={isMobile ? 'mobile-cooling-tower-fields space-y-4' : ''}>
-          <CoolingTowerFields form={form} />
-        </div>
-      );
-      
-    case 'elevator':
-      console.log('EquipmentTypeFields: ✅ Rendering elevator fields for mobile:', isMobile);
-      return (
-        <div className={isMobile ? 'mobile-elevator-fields space-y-4' : ''}>
-          <ElevatorMaintenanceFields form={form} />
-        </div>
-      );
-      
-    case 'restroom':
-      console.log('EquipmentTypeFields: ✅ Rendering restroom fields for mobile:', isMobile);
-      return (
-        <div className={isMobile ? 'mobile-restroom-fields space-y-4' : ''}>
-          <RestroomMaintenanceFields form={form} />
-        </div>
-      );
-      
-    default:
-      console.log('EquipmentTypeFields: ℹ️ Rendering default/general fields for mobile:', isMobile, 'equipmentType:', equipmentType);
-      return (
-        <div className={isMobile ? 'mobile-general-fields space-y-4' : 'space-y-6'}>
-          <MaintenanceReadings form={form} />
-          <MaintenanceStatus form={form} />
-          <MaintenanceObservations form={form} />
-        </div>
-      );
+  // Render appropriate fields based on equipment type with explicit checks
+  if (equipmentType === 'ahu') {
+    console.log('EquipmentTypeFields: ✅ RENDERING AHU FIELDS - Mobile:', isMobile);
+    return (
+      <div className={isMobile ? 'mobile-ahu-fields space-y-4' : 'space-y-6'}>
+        <AHUMaintenanceFields form={form} />
+      </div>
+    );
   }
+      
+  if (equipmentType === 'cooling_tower') {
+    console.log('EquipmentTypeFields: ✅ RENDERING COOLING TOWER FIELDS - Mobile:', isMobile);
+    return (
+      <div className={isMobile ? 'mobile-cooling-tower-fields space-y-4' : 'space-y-6'}>
+        <CoolingTowerFields form={form} />
+      </div>
+    );
+  }
+      
+  if (equipmentType === 'elevator') {
+    console.log('EquipmentTypeFields: ✅ RENDERING ELEVATOR FIELDS - Mobile:', isMobile);
+    return (
+      <div className={isMobile ? 'mobile-elevator-fields space-y-4' : 'space-y-6'}>
+        <ElevatorMaintenanceFields form={form} />
+      </div>
+    );
+  }
+      
+  if (equipmentType === 'restroom') {
+    console.log('EquipmentTypeFields: ✅ RENDERING RESTROOM FIELDS - Mobile:', isMobile);
+    return (
+      <div className={isMobile ? 'mobile-restroom-fields space-y-4' : 'space-y-6'}>
+        <RestroomMaintenanceFields form={form} />
+      </div>
+    );
+  }
+      
+  // Default case - general equipment
+  console.log('EquipmentTypeFields: ℹ️ RENDERING DEFAULT/GENERAL FIELDS - Mobile:', isMobile, 'equipmentType:', equipmentType);
+  return (
+    <div className={isMobile ? 'mobile-general-fields space-y-4' : 'space-y-6'}>
+      <MaintenanceReadings form={form} />
+      <MaintenanceStatus form={form} />
+      <MaintenanceObservations form={form} />
+    </div>
+  );
 };
 
 export default EquipmentTypeFields;

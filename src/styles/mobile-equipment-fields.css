@@ -1,10 +1,12 @@
 
 @layer components {
-  /* Mobile equipment fields styling */
+  /* Mobile equipment fields styling - Enhanced for visibility */
   @media (max-width: 768px) {
     .mobile-equipment-fields {
       padding: 0.5rem !important;
       margin: 0 !important;
+      width: 100% !important;
+      display: block !important;
     }
 
     .mobile-ahu-fields,
@@ -18,6 +20,11 @@
       border-radius: 8px !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
       margin-bottom: 1rem !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      position: relative !important;
+      z-index: 1 !important;
     }
 
     /* Ensure equipment fields are visible and properly spaced */
@@ -27,6 +34,8 @@
     .mobile-restroom-fields > *,
     .mobile-general-fields > * {
       margin-bottom: 1rem !important;
+      display: block !important;
+      width: 100% !important;
     }
 
     /* Force visibility for equipment-specific components */
@@ -37,6 +46,26 @@
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
+      min-height: 200px !important;
+    }
+
+    /* Mobile AHU specific styling */
+    .mobile-ahu-fields h2 {
+      font-size: 1.25rem !important;
+      margin-bottom: 1rem !important;
+      color: #1f2937 !important;
+      display: block !important;
+    }
+
+    /* Ensure form elements are properly sized on mobile */
+    .mobile-ahu-fields .grid {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+    }
+
+    .mobile-ahu-fields .space-y-6 > * {
+      margin-bottom: 1.5rem !important;
     }
   }
 }

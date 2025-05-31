@@ -11,13 +11,14 @@ const MaintenanceFormBody = () => {
   
   const equipmentId = form.watch('equipment_id');
 
-  console.log('MaintenanceFormBody: 📱 MOBILE RENDERING DEBUG:', { 
+  console.log('MaintenanceFormBody: 📱 COMPREHENSIVE MOBILE DEBUG:', { 
     isMobile, 
     equipmentId, 
     equipmentType,
     selectedEquipmentName: selectedEquipment?.name,
     hasEquipmentId: !!equipmentId,
     shouldShowFields: !!equipmentId,
+    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
     timestamp: new Date().toISOString()
   });
 
@@ -27,9 +28,21 @@ const MaintenanceFormBody = () => {
       equipmentAvailable: equipment?.length || 0,
       techniciansAvailable: technicians?.length || 0,
       formValues: form.getValues(),
-      watchedEquipmentId: form.watch('equipment_id')
+      watchedEquipmentId: form.watch('equipment_id'),
+      selectedEquipmentDetails: selectedEquipment ? {
+        id: selectedEquipment.id,
+        name: selectedEquipment.name
+      } : null
     });
   }
+
+  // Force re-render debug
+  console.log('MaintenanceFormBody: 🔄 RENDER TRIGGER:', {
+    equipmentId,
+    equipmentType,
+    willShowEquipmentSection: !!equipmentId,
+    isMobile
+  });
 
   return (
     <div className="space-y-6">
