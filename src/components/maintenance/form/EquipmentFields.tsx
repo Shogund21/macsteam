@@ -9,7 +9,7 @@ import AHUMaintenanceFields from "./AHUMaintenanceFields";
 import ElevatorMaintenanceFields from "./ElevatorMaintenanceFields";
 import RestroomMaintenanceFields from "./RestroomMaintenanceFields";
 import CoolingTowerFields from "./CoolingTowerFields";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMaintenanceFormContext } from "../context/MaintenanceFormContext";
 
 interface EquipmentFieldsProps {
   form: UseFormReturn<MaintenanceFormValues>;
@@ -17,31 +17,37 @@ interface EquipmentFieldsProps {
 }
 
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
-  const isMobile = useIsMobile();
+  // Use context-provided isMobile for consistency
+  const { isMobile } = useMaintenanceFormContext();
   
   console.log('EquipmentFields: 🔧 MOBILE RENDERING DEBUG:', {
     equipmentType, 
     isMobile,
+    contextProvidedMobile: isMobile,
     windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
     timestamp: new Date().toISOString()
   });
   
-  // Mobile debugging component wrapper
+  // Mobile debugging component wrapper with enhanced visibility
   const MobileDebugWrapper = ({ children, type }: { children: React.ReactNode, type: string }) => (
-    <div className={isMobile ? `mobile-${type}-fields space-y-4` : 'space-y-6'}>
+    <div className={`equipment-fields-container ${isMobile ? `mobile-${type}-fields` : ''} space-y-4`}>
       {isMobile && (
         <div style={{ 
           backgroundColor: '#f3e5f5', 
-          padding: '6px 12px', 
+          padding: '8px 12px', 
           borderRadius: '4px',
-          fontSize: '11px',
+          fontSize: '12px',
           color: '#7b1fa2',
-          marginBottom: '8px'
+          marginBottom: '12px',
+          border: '2px solid #9c27b0',
+          fontWeight: 'bold'
         }}>
-          📱 Rendering {type} maintenance fields
+          📱 Mobile: Rendering {type} maintenance fields (Width: {typeof window !== 'undefined' ? window.innerWidth : 'unknown'}px)
         </div>
       )}
-      {children}
+      <div className={isMobile ? 'mobile-equipment-content' : ''}>
+        {children}
+      </div>
     </div>
   );
   

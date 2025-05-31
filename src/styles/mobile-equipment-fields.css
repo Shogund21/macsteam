@@ -2,17 +2,25 @@
 @layer components {
   /* Mobile equipment fields styling - Enhanced with debugging and visibility fixes */
   @media (max-width: 768px) {
-    .mobile-equipment-fields {
-      padding: 1rem !important;
-      margin: 0 !important;
+    /* Equipment container styling */
+    .equipment-fields-container {
       width: 100% !important;
       display: block !important;
-      background-color: white !important;
-      border-radius: 8px !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      visibility: visible !important;
+      opacity: 1 !important;
       position: relative !important;
       z-index: 1 !important;
-      min-height: 100px !important;
+      background-color: white !important;
+      padding: 1rem !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Mobile equipment content wrapper */
+    .mobile-equipment-content {
+      width: 100% !important;
+      display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
     }
@@ -27,9 +35,9 @@
       width: 100% !important;
       padding: 1rem !important;
       background-color: white !important;
-      border: 1px solid #e5e7eb !important;
+      border: 2px solid #e5e7eb !important;
       border-radius: 8px !important;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
       margin-bottom: 1rem !important;
       display: block !important;
       visibility: visible !important;
@@ -38,6 +46,85 @@
       z-index: 10 !important;
       min-height: 200px !important;
       overflow: visible !important;
+    }
+
+    /* Container wrappers for maintenance components */
+    .maintenance-readings-container,
+    .maintenance-status-container,
+    .maintenance-observations-container,
+    .ahu-maintenance-container,
+    .cooling-tower-container {
+      width: 100% !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      background-color: white !important;
+      padding: 1rem !important;
+      border-radius: 6px !important;
+      margin-bottom: 1rem !important;
+      border: 1px solid #e5e7eb !important;
+    }
+
+    /* Mobile layout classes */
+    .mobile-readings-layout,
+    .mobile-status-layout,
+    .mobile-observations-layout {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+      width: 100% !important;
+    }
+
+    /* Mobile form items */
+    .mobile-form-item {
+      width: 100% !important;
+      margin-bottom: 1rem !important;
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    /* Mobile select triggers */
+    .mobile-select-trigger {
+      min-height: 48px !important;
+      font-size: 16px !important;
+      width: 100% !important;
+      background-color: white !important;
+      border: 2px solid #d1d5db !important;
+      border-radius: 6px !important;
+      padding: 0.75rem !important;
+    }
+
+    /* Mobile textarea styling */
+    .mobile-textarea {
+      min-height: 80px !important;
+      font-size: 16px !important;
+      width: 100% !important;
+      padding: 0.75rem !important;
+      border: 2px solid #d1d5db !important;
+      border-radius: 6px !important;
+    }
+
+    /* Mobile switch items */
+    .mobile-switch-item {
+      padding: 1rem !important;
+      border: 2px solid #e5e7eb !important;
+      background-color: white !important;
+      border-radius: 8px !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Debug indicators */
+    .mobile-debug-indicator {
+      display: block !important;
+      width: 100% !important;
+      text-align: center !important;
+      border: 2px solid !important;
+      border-radius: 6px !important;
+      padding: 8px 12px !important;
+      margin-bottom: 12px !important;
+      font-weight: bold !important;
+      font-size: 12px !important;
     }
 
     /* Ensure all child elements are properly spaced and visible */
@@ -67,8 +154,8 @@
       display: block !important;
       font-weight: 600 !important;
       background-color: #f9fafb !important;
-      padding: 0.5rem !important;
-      border-radius: 4px !important;
+      padding: 0.75rem !important;
+      border-radius: 6px !important;
       border-left: 4px solid #3b82f6 !important;
     }
 
@@ -136,7 +223,7 @@
       font-size: 16px !important;
       padding: 0.75rem !important;
       width: 100% !important;
-      border: 1px solid #d1d5db !important;
+      border: 2px solid #d1d5db !important;
       border-radius: 6px !important;
       background-color: white !important;
     }
@@ -149,7 +236,7 @@
     .mobile-restroom-fields label,
     .mobile-general-fields label {
       font-size: 0.875rem !important;
-      font-weight: 500 !important;
+      font-weight: 600 !important;
       margin-bottom: 0.5rem !important;
       display: block !important;
       color: #374151 !important;
@@ -175,6 +262,18 @@
     .mobile-general-fields * {
       max-width: 100% !important;
       box-sizing: border-box !important;
+    }
+
+    /* Force visibility for all form elements */
+    .mobile-ahu-fields [role="combobox"],
+    .mobile-chiller-fields [role="combobox"],
+    .mobile-cooling-tower-fields [role="combobox"],
+    .mobile-elevator-fields [role="combobox"],
+    .mobile-restroom-fields [role="combobox"],
+    .mobile-general-fields [role="combobox"] {
+      visibility: visible !important;
+      opacity: 1 !important;
+      display: flex !important;
     }
   }
 }

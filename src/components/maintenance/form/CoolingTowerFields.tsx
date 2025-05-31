@@ -2,14 +2,14 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMaintenanceFormContext } from "../context/MaintenanceFormContext";
 
 interface CoolingTowerFieldsProps {
   form: UseFormReturn<any>;
 }
 
 const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
-  const isMobile = useIsMobile();
+  const { isMobile } = useMaintenanceFormContext();
   
   console.log('CoolingTowerFields: 📱 RENDERING - isMobile:', isMobile);
   
@@ -40,7 +40,21 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="cooling-tower-container space-y-6">
+      {isMobile && (
+        <div className="mobile-debug-indicator" style={{
+          backgroundColor: '#e1f5fe',
+          padding: '8px',
+          borderRadius: '4px',
+          fontSize: '12px',
+          color: '#0277bd',
+          marginBottom: '12px',
+          fontWeight: 'bold'
+        }}>
+          📱 Mobile: Cooling Tower Fields
+        </div>
+      )}
+      
       <h2 className="text-xl font-semibold">Cooling Tower Inspection</h2>
       
       <div className={isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
@@ -50,11 +64,11 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
             control={form.control}
             name={field.name}
             render={({ field: formField }) => (
-              <FormItem>
+              <FormItem className={isMobile ? 'mobile-form-item' : ''}>
                 <FormLabel>{field.label}</FormLabel>
                 <Select onValueChange={formField.onChange} defaultValue={formField.value}>
                   <FormControl>
-                    <SelectTrigger className="bg-white">
+                    <SelectTrigger className={`bg-white ${isMobile ? 'mobile-select-trigger' : ''}`}>
                       <SelectValue placeholder={`Select ${field.label}`} />
                     </SelectTrigger>
                   </FormControl>
