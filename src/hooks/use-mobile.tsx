@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 
-const MOBILE_BREAKPOINT = 1024 // Reduced from 1200px to be less aggressive
+const MOBILE_BREAKPOINT = 768 // Reduced to standard mobile breakpoint
 
 export function useIsMobile() {
   // Default to false to prevent unnecessary mobile exclusions
@@ -11,42 +11,29 @@ export function useIsMobile() {
     // Only run in browser environment
     if (typeof window === 'undefined') return false;
     
-    // Check multiple conditions to better detect mobile devices
+    // Simplified mobile detection - just use viewport width
     const viewportWidth = window.innerWidth;
-    const userAgent = window.navigator.userAgent.toLowerCase();
-    
-    // UserAgent based detection - be more specific
-    const isMobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent);
-    
-    // Width based detection (reduced breakpoint)
     const isMobileViewport = viewportWidth < MOBILE_BREAKPOINT;
     
-    // Touch capability check
-    const hasTouchCapability = 'ontouchstart' in window || 
-      navigator.maxTouchPoints > 0 || 
-      (navigator as any).msMaxTouchPoints > 0;
-    
-    // Only consider it mobile if it's a small viewport AND has touch OR is clearly a mobile user agent
-    const isMobileDevice = (isMobileViewport && hasTouchCapability) || 
-                          (isMobileUserAgent && viewportWidth < 1200);
-    
-    // Debug logging
-    console.log('📱 Mobile Detection:', {
+    // Debug logging with more context
+    console.log('📱 Mobile Detection DEBUG:', {
       viewportWidth,
-      isMobileUserAgent,
+      breakpoint: MOBILE_BREAKPOINT,
       isMobileViewport,
-      hasTouchCapability,
-      finalDecision: isMobileDevice
+      userAgent: window.navigator.userAgent.substring(0, 50) + '...',
+      timestamp: new Date().toISOString()
     });
     
-    return isMobileDevice;
+    return isMobileViewport;
   }, []);
   
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
     // Set initial value
-    setIsMobile(checkIfMobile());
+    const initialMobileState = checkIfMobile();
+    setIsMobile(initialMobileState);
+    console.log('📱 Initial mobile state set to:', initialMobileState);
     
     // Handle resize with debouncing
     let timeoutId: number | undefined;
@@ -55,7 +42,9 @@ export function useIsMobile() {
       if (timeoutId) window.clearTimeout(timeoutId);
       
       timeoutId = window.setTimeout(() => {
-        setIsMobile(checkIfMobile());
+        const newMobileState = checkIfMobile();
+        console.log('📱 Mobile state changing from', isMobile, 'to', newMobileState);
+        setIsMobile(newMobileState);
       }, 150);
     };
     

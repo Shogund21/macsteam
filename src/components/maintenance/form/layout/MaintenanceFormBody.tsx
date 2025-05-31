@@ -11,11 +11,12 @@ const MaintenanceFormBody = () => {
   
   const equipmentId = form.watch('equipment_id');
 
-  console.log('MaintenanceFormBody render:', { 
+  console.log('🔧 MaintenanceFormBody render:', { 
     equipmentId, 
     selectedEquipment: selectedEquipment?.name,
     isMobile,
-    shouldShowChecklist: !!equipmentId
+    shouldShowChecklist: !!equipmentId,
+    formValues: form.getValues()
   });
 
   return (
@@ -28,13 +29,16 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
-      {/* Equipment checklist section with enhanced mobile debugging */}
+      {/* Equipment checklist section - ALWAYS render when equipment is selected */}
       {equipmentId && (
         <FormSection title="Equipment Maintenance Checklist">
           <div 
             className="w-full" 
             data-component="equipment-details-wrapper"
             style={{
+              display: 'block',
+              visibility: 'visible',
+              opacity: 1,
               backgroundColor: isMobile ? '#f0f9ff' : 'transparent',
               border: isMobile ? '2px solid #3b82f6' : 'none',
               padding: isMobile ? '16px' : '0',

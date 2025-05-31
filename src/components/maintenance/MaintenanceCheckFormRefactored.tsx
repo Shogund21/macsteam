@@ -35,6 +35,18 @@ const MaintenanceCheckForm = ({
   const { equipment, technicians, isLoading, error } = useMaintenanceData();
   const { selectedEquipment, equipmentType } = useEquipmentTypeLogic(equipment, form);
 
+  // Debug form mounting and rendering
+  console.log('🚀 MaintenanceCheckForm render:', {
+    isMobile,
+    hasEquipment: equipment?.length > 0,
+    hasTechnicians: technicians?.length > 0,
+    isLoading,
+    error: error?.message,
+    selectedEquipment: selectedEquipment?.name,
+    equipmentType,
+    formValues: form.getValues()
+  });
+
   return (
     <MaintenanceFormLoader isLoading={isLoading} error={error}>
       <MaintenanceFormSubmissionHandler
@@ -59,6 +71,11 @@ const MaintenanceCheckForm = ({
             <div 
               className={`w-full ${isMobile ? 'px-4' : 'max-w-4xl mx-auto px-6'}`}
               data-component="maintenance-form-container"
+              style={{
+                display: 'block',
+                visibility: 'visible',
+                opacity: 1
+              }}
             >
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full space-y-6">

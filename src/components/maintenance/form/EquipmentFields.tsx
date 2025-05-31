@@ -16,12 +16,16 @@ interface EquipmentFieldsProps {
 }
 
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
-  console.log('EquipmentFields rendering for type:', equipmentType);
+  console.log('🔧 EquipmentFields rendering for type:', equipmentType);
 
-  // Always render appropriate fields - no mobile exclusion
+  // Always render appropriate fields - NO mobile exclusion
   if (equipmentType === 'ahu') {
     return (
-      <div className="w-full space-y-6" data-component="ahu-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="ahu-fields-container"
+        style={{ display: 'block', visibility: 'visible', opacity: 1 }}
+      >
         <AHUMaintenanceFields form={form} />
       </div>
     );
@@ -29,7 +33,11 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   if (equipmentType === 'chiller') {
     return (
-      <div className="w-full space-y-6" data-component="chiller-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="chiller-fields-container"
+        style={{ display: 'block', visibility: 'visible', opacity: 1 }}
+      >
         <MaintenanceReadings form={form} />
         <MaintenanceStatus form={form} />
         <MaintenanceObservations form={form} />
@@ -39,7 +47,11 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   if (equipmentType === 'cooling_tower') {
     return (
-      <div className="w-full space-y-6" data-component="cooling-tower-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="cooling-tower-fields-container"
+        style={{ display: 'block', visibility: 'visible', opacity: 1 }}
+      >
         <CoolingTowerFields form={form} />
       </div>
     );
@@ -47,7 +59,11 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   if (equipmentType === 'elevator') {
     return (
-      <div className="w-full space-y-6" data-component="elevator-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="elevator-fields-container"
+        style={{ display: 'block', visibility: 'visible', opacity: 1 }}
+      >
         <ElevatorMaintenanceFields form={form} />
       </div>
     );
@@ -55,7 +71,11 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   if (equipmentType === 'restroom') {
     return (
-      <div className="w-full space-y-6" data-component="restroom-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="restroom-fields-container"
+        style={{ display: 'block', visibility: 'visible', opacity: 1 }}
+      >
         <RestroomMaintenanceFields form={form} />
       </div>
     );
@@ -63,7 +83,11 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   // Default or general equipment
   return (
-    <div className="w-full space-y-6" data-component="general-fields-container">
+    <div 
+      className="w-full space-y-6" 
+      data-component="general-fields-container"
+      style={{ display: 'block', visibility: 'visible', opacity: 1 }}
+    >
       <MaintenanceReadings form={form} />
       <MaintenanceStatus form={form} />
       <MaintenanceObservations form={form} />
