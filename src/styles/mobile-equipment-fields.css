@@ -1,8 +1,8 @@
 
 @layer components {
-  /* Mobile equipment fields styling - Enhanced with new breakpoints and better mobile detection */
-  @media (max-width: 1200px) {
-    /* Equipment container styling - Enhanced for larger mobile devices */
+  /* Mobile equipment fields styling - Enhanced with debugging and visibility fixes */
+  @media (max-width: 768px) {
+    /* Equipment container styling */
     .equipment-fields-container {
       width: 100% !important;
       display: block !important;
@@ -15,7 +15,6 @@
       border-radius: 8px !important;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
       margin-bottom: 1rem !important;
-      min-height: 100px !important;
     }
 
     /* Mobile equipment content wrapper */
@@ -24,10 +23,9 @@
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
-      min-height: 50px !important;
     }
 
-    /* All equipment field containers - Enhanced visibility and mobile-first approach */
+    /* All equipment field containers - Enhanced visibility */
     .mobile-ahu-fields,
     .mobile-chiller-fields,
     .mobile-cooling-tower-fields,
@@ -48,11 +46,9 @@
       z-index: 10 !important;
       min-height: 200px !important;
       overflow: visible !important;
-      transform: none !important;
-      contain: none !important;
     }
 
-    /* Container wrappers for maintenance components - Mobile-first responsive design */
+    /* Container wrappers for maintenance components */
     .maintenance-readings-container,
     .maintenance-status-container,
     .maintenance-observations-container,
@@ -67,11 +63,9 @@
       border-radius: 6px !important;
       margin-bottom: 1rem !important;
       border: 1px solid #e5e7eb !important;
-      min-height: 50px !important;
-      contain: none !important;
     }
 
-    /* Mobile layout classes - Force single column */
+    /* Mobile layout classes */
     .mobile-readings-layout,
     .mobile-status-layout,
     .mobile-observations-layout {
@@ -79,54 +73,48 @@
       flex-direction: column !important;
       gap: 1rem !important;
       width: 100% !important;
-      grid-template-columns: none !important;
     }
 
-    /* Mobile form items - Enhanced touch targets */
+    /* Mobile form items */
     .mobile-form-item {
       width: 100% !important;
       margin-bottom: 1rem !important;
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
-      min-height: 60px !important;
     }
 
-    /* Mobile select triggers - Larger touch targets */
+    /* Mobile select triggers */
     .mobile-select-trigger {
-      min-height: 52px !important;
+      min-height: 48px !important;
       font-size: 16px !important;
       width: 100% !important;
       background-color: white !important;
       border: 2px solid #d1d5db !important;
       border-radius: 6px !important;
       padding: 0.75rem !important;
-      touch-action: manipulation !important;
     }
 
-    /* Mobile textarea styling - Better for touch */
+    /* Mobile textarea styling */
     .mobile-textarea {
-      min-height: 100px !important;
+      min-height: 80px !important;
       font-size: 16px !important;
       width: 100% !important;
       padding: 0.75rem !important;
       border: 2px solid #d1d5db !important;
       border-radius: 6px !important;
-      touch-action: manipulation !important;
     }
 
-    /* Mobile switch items - Enhanced touch areas */
+    /* Mobile switch items */
     .mobile-switch-item {
-      padding: 1.25rem !important;
+      padding: 1rem !important;
       border: 2px solid #e5e7eb !important;
       background-color: white !important;
       border-radius: 8px !important;
       margin-bottom: 1rem !important;
-      min-height: 60px !important;
-      touch-action: manipulation !important;
     }
 
-    /* Debug indicators - Enhanced visibility */
+    /* Debug indicators */
     .mobile-debug-indicator {
       display: block !important;
       width: 100% !important;
@@ -137,27 +125,23 @@
       margin-bottom: 12px !important;
       font-weight: bold !important;
       font-size: 12px !important;
-      z-index: 100 !important;
-      position: relative !important;
     }
 
-    /* Force all grids to single column on mobile */
-    .mobile-ahu-fields .grid,
-    .mobile-chiller-fields .grid,
-    .mobile-cooling-tower-fields .grid,
-    .mobile-elevator-fields .grid,
-    .mobile-restroom-fields .grid,
-    .mobile-general-fields .grid,
-    .maintenance-readings-container.mobile-readings-layout,
-    .maintenance-status-container.mobile-status-layout {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 1rem !important;
-      grid-template-columns: none !important;
+    /* Ensure all child elements are properly spaced and visible */
+    .mobile-ahu-fields > *,
+    .mobile-chiller-fields > *,
+    .mobile-cooling-tower-fields > *,
+    .mobile-elevator-fields > *,
+    .mobile-restroom-fields > *,
+    .mobile-general-fields > * {
+      margin-bottom: 1rem !important;
+      display: block !important;
       width: 100% !important;
+      visibility: visible !important;
+      opacity: 1 !important;
     }
 
-    /* Equipment section headers - Mobile optimized */
+    /* Equipment section headers - Enhanced visibility */
     .mobile-ahu-fields h2,
     .mobile-chiller-fields h2,
     .mobile-cooling-tower-fields h2,
@@ -173,10 +157,50 @@
       padding: 0.75rem !important;
       border-radius: 6px !important;
       border-left: 4px solid #3b82f6 !important;
+    }
+
+    /* Mobile grid layouts - force single column with enhanced spacing */
+    .mobile-ahu-fields .grid,
+    .mobile-chiller-fields .grid,
+    .mobile-cooling-tower-fields .grid,
+    .mobile-elevator-fields .grid,
+    .mobile-restroom-fields .grid,
+    .mobile-general-fields .grid {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+      grid-template-columns: none !important;
       width: 100% !important;
     }
 
-    /* Form inputs and selects - Mobile optimized with enhanced touch targets */
+    /* Space-y utilities override with enhanced visibility */
+    .mobile-ahu-fields .space-y-6 > *,
+    .mobile-chiller-fields .space-y-6 > *,
+    .mobile-cooling-tower-fields .space-y-6 > *,
+    .mobile-elevator-fields .space-y-6 > *,
+    .mobile-restroom-fields .space-y-6 > *,
+    .mobile-general-fields .space-y-6 > * {
+      margin-bottom: 1.5rem !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    /* Form sections within equipment fields - Enhanced for mobile */
+    .mobile-ahu-fields [class*="FormSection"],
+    .mobile-chiller-fields [class*="FormSection"],
+    .mobile-cooling-tower-fields [class*="FormSection"],
+    .mobile-elevator-fields [class*="FormSection"],
+    .mobile-restroom-fields [class*="FormSection"],
+    .mobile-general-fields [class*="FormSection"] {
+      background-color: #f9fafb !important;
+      padding: 1rem !important;
+      border-radius: 6px !important;
+      margin-bottom: 1rem !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
+    }
+
+    /* Form inputs and selects - Mobile optimized */
     .mobile-ahu-fields input,
     .mobile-ahu-fields select,
     .mobile-ahu-fields textarea,
@@ -195,18 +219,16 @@
     .mobile-general-fields input,
     .mobile-general-fields select,
     .mobile-general-fields textarea {
-      min-height: 52px !important;
+      min-height: 48px !important;
       font-size: 16px !important;
       padding: 0.75rem !important;
       width: 100% !important;
       border: 2px solid #d1d5db !important;
       border-radius: 6px !important;
       background-color: white !important;
-      touch-action: manipulation !important;
-      -webkit-appearance: none !important;
     }
 
-    /* Labels - Mobile typography */
+    /* Labels - Enhanced mobile typography */
     .mobile-ahu-fields label,
     .mobile-chiller-fields label,
     .mobile-cooling-tower-fields label,
@@ -218,10 +240,31 @@
       margin-bottom: 0.5rem !important;
       display: block !important;
       color: #374151 !important;
-      width: 100% !important;
     }
 
-    /* Force visibility for all form elements and dropdowns */
+    /* Form items - Enhanced spacing and layout */
+    .mobile-ahu-fields [data-orientation="vertical"],
+    .mobile-chiller-fields [data-orientation="vertical"],
+    .mobile-cooling-tower-fields [data-orientation="vertical"],
+    .mobile-elevator-fields [data-orientation="vertical"],
+    .mobile-restroom-fields [data-orientation="vertical"],
+    .mobile-general-fields [data-orientation="vertical"] {
+      space-y: 1rem !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Fix for any hidden elements */
+    .mobile-ahu-fields *,
+    .mobile-chiller-fields *,
+    .mobile-cooling-tower-fields *,
+    .mobile-elevator-fields *,
+    .mobile-restroom-fields *,
+    .mobile-general-fields * {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    /* Force visibility for all form elements */
     .mobile-ahu-fields [role="combobox"],
     .mobile-chiller-fields [role="combobox"],
     .mobile-cooling-tower-fields [role="combobox"],
@@ -231,91 +274,6 @@
       visibility: visible !important;
       opacity: 1 !important;
       display: flex !important;
-      min-height: 52px !important;
-      touch-action: manipulation !important;
-    }
-
-    /* Ensure all child elements are properly spaced and visible */
-    .mobile-ahu-fields > *,
-    .mobile-chiller-fields > *,
-    .mobile-cooling-tower-fields > *,
-    .mobile-elevator-fields > *,
-    .mobile-restroom-fields > *,
-    .mobile-general-fields > * {
-      margin-bottom: 1rem !important;
-      display: block !important;
-      width: 100% !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      position: relative !important;
-      z-index: 1 !important;
-    }
-
-    /* Space-y utilities override with enhanced visibility */
-    .mobile-ahu-fields .space-y-6 > *,
-    .mobile-chiller-fields .space-y-6 > *,
-    .mobile-cooling-tower-fields .space-y-6 > *,
-    .mobile-elevator-fields .space-y-6 > *,
-    .mobile-restroom-fields .space-y-6 > *,
-    .mobile-general-fields .space-y-6 > * {
-      margin-bottom: 1.5rem !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      display: block !important;
-      width: 100% !important;
-    }
-
-    /* Fix for any hidden elements - Force visibility */
-    .mobile-ahu-fields *,
-    .mobile-chiller-fields *,
-    .mobile-cooling-tower-fields *,
-    .mobile-elevator-fields *,
-    .mobile-restroom-fields *,
-    .mobile-general-fields * {
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-      contain: none !important;
-    }
-
-    /* Additional fallback for mobile equipment fields visibility */
-    .mobile-equipment-fields {
-      width: 100% !important;
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      min-height: 200px !important;
-      background-color: white !important;
-      padding: 1rem !important;
-      border-radius: 8px !important;
-      border: 1px solid #e5e7eb !important;
-    }
-
-    /* Ensure maintenance form components are visible on mobile */
-    .maintenance-readings-container.mobile-readings-layout > *,
-    .maintenance-status-container.mobile-status-layout > *,
-    .maintenance-observations-container.mobile-observations-layout > * {
-      width: 100% !important;
-      margin-bottom: 1rem !important;
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-  }
-
-  /* Fallback styles for when JavaScript mobile detection might fail */
-  @media (max-width: 1200px) and (pointer: coarse) {
-    .equipment-fields-container,
-    .mobile-equipment-content,
-    .mobile-ahu-fields,
-    .mobile-chiller-fields,
-    .mobile-cooling-tower-fields,
-    .mobile-elevator-fields,
-    .mobile-restroom-fields,
-    .mobile-general-fields {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      width: 100% !important;
     }
   }
 }

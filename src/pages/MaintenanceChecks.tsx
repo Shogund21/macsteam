@@ -18,11 +18,11 @@ const MaintenanceChecks = () => {
 
   useEffect(() => {
     setMounted(true);
-    console.log('🔧 MaintenanceChecks mounted:', { isMobile, showForm, activeTab });
-  }, [isMobile, showForm, activeTab]);
+    console.log('MaintenanceChecks mounted, isMobile:', isMobile);
+  }, [isMobile]);
 
   const handleTabChange = (value: string) => {
-    console.log('🔧 Tab changing:', { from: activeTab, to: value, isMobile, showForm });
+    console.log('Tab changing to:', value, 'isMobile:', isMobile);
     setActiveTab(value);
     if (value !== "form") {
       setShowForm(false);
@@ -30,29 +30,16 @@ const MaintenanceChecks = () => {
   };
 
   const handleShowForm = () => {
-    console.log('🔧 SHOW FORM clicked:', { 
-      currentState: { showForm, activeTab, isMobile },
-      viewport: { width: window.innerWidth, height: window.innerHeight }
-    });
+    console.log('Showing form, isMobile:', isMobile);
     setShowForm(true);
     setActiveTab("form");
   };
 
   const handleHideForm = () => {
-    console.log('🔧 HIDE FORM clicked:', { isMobile, showForm });
+    console.log('Hiding form, isMobile:', isMobile);
     setShowForm(false);
     setActiveTab("history");
   };
-
-  // Debug the rendering decision
-  console.log('🔧 MaintenanceChecks render decision:', {
-    mounted,
-    isMobile,
-    showForm,
-    activeTab,
-    shouldShowForm: showForm,
-    shouldShowTabs: !showForm
-  });
 
   if (!mounted) {
     return (
@@ -97,8 +84,7 @@ const MaintenanceChecks = () => {
           )}
         </div>
 
-        {/* Always render both sections with conditional display instead of conditional mounting */}
-        <div style={{ display: showForm ? 'none' : 'block' }}>
+        {!showForm && (
           <Tabs 
             defaultValue="history" 
             value={activeTab}
@@ -124,19 +110,13 @@ const MaintenanceChecks = () => {
               </div>
             </TabsContent>
           </Tabs>
-        </div>
+        )}
 
-        <div 
-          style={{ display: showForm ? 'block' : 'none' }}
-          className={`w-full animate-fade-in`}
-          data-testid="maintenance-form-container"
-        >
-          {showForm && (
-            <div className={`${isMobile ? 'w-full' : 'bg-white rounded-lg shadow-sm p-4'}`}>
-              <MaintenanceCheckForm onComplete={handleHideForm} />
-            </div>
-          )}
-        </div>
+        {showForm && (
+          <div className={`${isMobile ? 'w-full' : 'bg-white rounded-lg shadow-sm p-4'} animate-fade-in`}>
+            <MaintenanceCheckForm onComplete={handleHideForm} />
+          </div>
+        )}
       </div>
     </Layout>
   );

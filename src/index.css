@@ -2,8 +2,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import './styles/mobile-checklist-fix.css';
  
 @layer base {
   :root {

@@ -1,8 +1,12 @@
 
 import React from "react";
+import { Button } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Menu } from "lucide-react";
 import { CompanySelector } from "@/components/company/CompanySelector";
 import { UserDropdown } from "@/components/sidebar/UserDropdown";
 import MobileHint from "@/components/MobileHint";
+import Sidebar from "@/components/Sidebar";
 import { MobileDropdownMenu } from "@/components/navigation/MobileDropdownMenu";
 
 interface MobileLayoutProps {
@@ -12,6 +16,14 @@ interface MobileLayoutProps {
 export const MobileLayout = ({ children }: MobileLayoutProps) => {
   return (
     <div className="block h-screen w-full overflow-hidden">
+      {/* Mobile sidebar trigger with enhanced z-index and tap area */}
+      <div className="fixed top-4 left-4 z-[100]" data-sidebar-trigger-wrapper>
+        <SidebarTrigger 
+          className="bg-white/80 backdrop-blur-sm shadow-sm h-12 w-12 touch-manipulation"
+          aria-label="Toggle Menu"
+        />
+      </div>
+      
       {/* Mobile dropdown menu positioned at the top right */}
       <div className="fixed top-4 right-4 z-[100]">
         <MobileDropdownMenu />
@@ -19,6 +31,9 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
       
       {/* Mobile helper hint for first-time users */}
       <MobileHint />
+      
+      {/* Sidebar with proper mobile integration */}
+      <Sidebar />
 
       {/* Main content area with scrolling enabled */}
       <div 
