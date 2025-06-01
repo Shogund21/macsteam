@@ -6,17 +6,32 @@ import EquipmentFields from '../EquipmentFields';
 const EquipmentTypeFields = () => {
   const { form, equipmentType, selectedEquipment, equipment, isMobile } = useMaintenanceFormContext();
 
-  // Get equipment from form if context doesn't have it yet
+  // CRITICAL: Enhanced equipment and type detection with multiple fallbacks
   const formEquipmentId = form.watch('equipment_id');
-  const currentEquipment = selectedEquipment || equipment.find(eq => eq.id === formEquipmentId);
+  const fallbackEquipment = formEquipmentId ? equipment.find(eq => eq.id === formEquipmentId) : null;
+  const currentEquipment = selectedEquipment || fallbackEquipment;
   
-  // Get equipment type from context or detect it locally
-  const currentEquipmentType = equipmentType || (currentEquipment ? detectEquipmentTypeFromName(currentEquipment.name) : null);
+  // Enhanced equipment type detection with mobile-specific fallback
+  const getCurrentEquipmentType = () => {
+    // First try context equipment type
+    if (equipmentType) return equipmentType;
+    
+    // Then try to detect from current equipment
+    if (currentEquipment) {
+      return detectEquipmentTypeFromName(currentEquipment.name);
+    }
+    
+    return 'general'; // Always fallback to general
+  };
+  
+  const currentEquipmentType = getCurrentEquipmentType();
 
   console.log('🔧 EquipmentTypeFields rendering:', { 
     equipmentType: currentEquipmentType, 
     selectedEquipment: currentEquipment?.name,
     formEquipmentId,
+    contextEquipmentType: equipmentType,
+    fallbackEquipment: fallbackEquipment?.name,
     isMobile
   });
 
@@ -25,21 +40,25 @@ const EquipmentTypeFields = () => {
     if (isMobile) {
       console.log('🔧 MOBILE EQUIPMENT TYPE FIELDS DEBUG:', {
         equipmentType: currentEquipmentType,
-        selectedEquipmentName: currentEquipment?.name,
-        selectedEquipmentId: currentEquipment?.id,
+        contextEquipmentType: equipmentType,
+        selectedEquipmentName: selectedEquipment?.name,
+        selectedEquipmentId: selectedEquipment?.id,
+        fallbackEquipmentName: fallbackEquipment?.name,
+        currentEquipmentName: currentEquipment?.name,
         formEquipmentId,
         isMobile,
         timestamp: new Date().toISOString()
       });
     }
-  }, [currentEquipmentType, currentEquipment, formEquipmentId, isMobile]);
+  }, [currentEquipmentType, equipmentType, selectedEquipment, fallbackEquipment, currentEquipment, formEquipmentId, isMobile]);
 
   return (
     <div 
-      className="w-full" 
+      className="w-full mobile-checklist-visible" 
       data-component="equipment-type-fields"
       data-equipment-type={currentEquipmentType}
       data-mobile-debug={isMobile ? 'true' : 'false'}
+      data-has-equipment={currentEquipment ? 'true' : 'false'}
       style={{
         display: 'block',
         visibility: 'visible',
@@ -52,7 +71,9 @@ const EquipmentTypeFields = () => {
         <div className="mb-4 p-2 bg-blue-50 border border-blue-200 rounded text-xs">
           <strong>Equipment Type Debug:</strong> {currentEquipmentType || 'Not detected'}<br />
           <strong>Equipment:</strong> {currentEquipment?.name || 'None selected'}<br />
-          <strong>Form Equipment ID:</strong> {formEquipmentId || 'None'}
+          <strong>Form Equipment ID:</strong> {formEquipmentId || 'None'}<br />
+          <strong>Context Type:</strong> {equipmentType || 'None'}<br />
+          <strong>Fallback Equipment:</strong> {fallbackEquipment?.name || 'None'}
         </div>
       )}
       

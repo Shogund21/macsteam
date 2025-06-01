@@ -1,7 +1,11 @@
 
 import { Equipment } from "@/types/maintenance";
+import { useState, useEffect } from "react";
 
 export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
+  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | undefined>(undefined);
+  const [equipmentType, setEquipmentType] = useState<string | null>(null);
+  
   const equipmentId = form.watch('equipment_id');
   
   console.log('useEquipmentTypeLogic: 🔍 EQUIPMENT ANALYSIS:', {
@@ -12,21 +16,42 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     timestamp: new Date().toISOString()
   });
 
-  const selectedEquipment = equipment?.find(
-    (eq) => eq.id === equipmentId
-  );
-
-  const getEquipmentType = () => {
-    if (!selectedEquipment) {
-      console.log('useEquipmentTypeLogic: ❌ No selected equipment found for ID:', equipmentId);
-      return null;
-    }
+  // CRITICAL: Use useEffect to ensure proper re-renders when equipment changes
+  useEffect(() => {
+    const currentEquipment = equipment?.find(eq => eq.id === equipmentId);
     
-    const name = selectedEquipment.name.toLowerCase();
+    console.log('useEquipmentTypeLogic: 🔄 EQUIPMENT UPDATE EFFECT:', {
+      equipmentId,
+      foundEquipment: currentEquipment?.name,
+      equipmentArrayLength: equipment?.length,
+      isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+    });
+    
+    setSelectedEquipment(currentEquipment);
+    
+    if (currentEquipment) {
+      const detectedType = getEquipmentType(currentEquipment);
+      setEquipmentType(detectedType);
+      
+      console.log('useEquipmentTypeLogic: ✅ EQUIPMENT TYPE DETECTED:', {
+        equipmentName: currentEquipment.name,
+        detectedType,
+        isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+      });
+    } else {
+      setEquipmentType(null);
+      console.log('useEquipmentTypeLogic: ❌ No equipment found for ID:', equipmentId);
+    }
+  }, [equipmentId, equipment]);
+
+  const getEquipmentType = (equipment: Equipment): string => {
+    if (!equipment) return 'general';
+    
+    const name = equipment.name.toLowerCase();
     console.log('useEquipmentTypeLogic: 🔍 EQUIPMENT DETECTION:', {
-      originalName: selectedEquipment.name,
+      originalName: equipment.name,
       lowerCaseName: name,
-      equipmentId: selectedEquipment.id,
+      equipmentId: equipment.id,
       isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
     });
     
@@ -91,7 +116,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     // Check each equipment type with detailed logging
     if (ahuPatterns.some(pattern => name.includes(pattern)) || /ahu[\s-]?\w*/.test(name) || /rtu[\s-]?\w*/.test(name)) {
       console.log('useEquipmentTypeLogic: ✅ DETECTED AHU/RTU EQUIPMENT:', {
-        equipmentName: selectedEquipment.name,
+        equipmentName: equipment.name,
         detectedType: 'ahu',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
       });
@@ -100,7 +125,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     
     if (chillerPatterns.some(pattern => name.includes(pattern))) {
       console.log('useEquipmentTypeLogic: ✅ DETECTED CHILLER EQUIPMENT:', {
-        equipmentName: selectedEquipment.name,
+        equipmentName: equipment.name,
         detectedType: 'chiller',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
       });
@@ -109,7 +134,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     
     if (coolingTowerPatterns.some(pattern => name.includes(pattern))) {
       console.log('useEquipmentTypeLogic: ✅ DETECTED COOLING TOWER EQUIPMENT:', {
-        equipmentName: selectedEquipment.name,
+        equipmentName: equipment.name,
         detectedType: 'cooling_tower',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
       });
@@ -118,7 +143,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     
     if (elevatorPatterns.some(pattern => name.includes(pattern))) {
       console.log('useEquipmentTypeLogic: ✅ DETECTED ELEVATOR EQUIPMENT:', {
-        equipmentName: selectedEquipment.name,
+        equipmentName: equipment.name,
         detectedType: 'elevator',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
       });
@@ -127,7 +152,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     
     if (restroomPatterns.some(pattern => name.includes(pattern))) {
       console.log('useEquipmentTypeLogic: ✅ DETECTED RESTROOM EQUIPMENT:', {
-        equipmentName: selectedEquipment.name,
+        equipmentName: equipment.name,
         detectedType: 'restroom',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
       });
@@ -142,8 +167,6 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     return 'general';
   };
 
-  const equipmentType = getEquipmentType();
-  
   console.log('useEquipmentTypeLogic: 🎯 FINAL RESULT:', {
     selectedEquipmentId: selectedEquipment?.id,
     selectedEquipmentName: selectedEquipment?.name,

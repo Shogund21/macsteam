@@ -16,7 +16,8 @@
     [data-component="restroom-fields-container"],
     [data-component="general-fields-container"],
     [data-component="cooling-tower-fields"],
-    [data-component="maintenance-checklist"] {
+    [data-component="maintenance-checklist"],
+    .mobile-checklist-visible {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
@@ -34,6 +35,18 @@
       border-radius: 8px !important;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
       margin-bottom: 1rem !important;
+    }
+
+    /* CRITICAL: Force equipment checklist wrapper to always be visible */
+    [data-component="equipment-details-wrapper"][data-has-equipment="true"],
+    [data-component="equipment-type-fields"][data-has-equipment="true"] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      background-color: #f8fafc !important;
+      border: 2px solid #3b82f6 !important;
+      border-radius: 8px !important;
+      padding: 1rem !important;
     }
 
     /* CRITICAL: Force form sections with equipment checklist to always be visible */
@@ -136,6 +149,15 @@
       margin-bottom: 1rem !important;
       padding: 0.5rem 0 !important;
       border-bottom: 1px solid #e5e7eb !important;
+    }
+
+    /* Mobile debug info styling */
+    .mobile-debug-info {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      z-index: 1000 !important;
+      position: relative !important;
     }
 
     /* IMPROVED: Mobile Dropdown positioning and visibility */
