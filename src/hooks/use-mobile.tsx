@@ -6,6 +6,7 @@ const MOBILE_BREAKPOINT = 1024 // Increased to capture tablets like iPad (822px)
 export function useIsMobile() {
   // Default to false to prevent unnecessary mobile exclusions
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
   
   const checkIfMobile = useCallback(() => {
     // Only run in browser environment
@@ -15,27 +16,21 @@ export function useIsMobile() {
     const viewportWidth = window.innerWidth;
     const isMobileViewport = viewportWidth <= MOBILE_BREAKPOINT;
     
-    // Debug logging with more context
-    console.log('📱 Mobile Detection DEBUG (UPDATED):', {
-      viewportWidth,
-      breakpoint: MOBILE_BREAKPOINT,
-      isMobileViewport,
-      userAgent: window.navigator.userAgent.substring(0, 50) + '...',
-      timestamp: new Date().toISOString()
-    });
-    
     return isMobileViewport;
   }, []);
   
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    // Set initial value
-    const initialMobileState = checkIfMobile();
-    setIsMobile(initialMobileState);
-    console.log('📱 Initial mobile state set to:', initialMobileState, 'with breakpoint:', MOBILE_BREAKPOINT);
+    // Set initial value only once
+    if (!isInitialized) {
+      const initialMobileState = checkIfMobile();
+      setIsMobile(initialMobileState);
+      setIsInitialized(true);
+      console.log('📱 Initial mobile state set to:', initialMobileState, 'with breakpoint:', MOBILE_BREAKPOINT);
+    }
     
-    // Handle resize with debouncing
+    // Handle resize with proper debouncing
     let timeoutId: number | undefined;
     
     const handleViewportChange = () => {
@@ -43,9 +38,14 @@ export function useIsMobile() {
       
       timeoutId = window.setTimeout(() => {
         const newMobileState = checkIfMobile();
-        console.log('📱 Mobile state changing from', isMobile, 'to', newMobileState);
-        setIsMobile(newMobileState);
-      }, 150);
+        setIsMobile(prevState => {
+          if (prevState !== newMobileState) {
+            console.log('📱 Mobile state changing from', prevState, 'to', newMobileState);
+            return newMobileState;
+          }
+          return prevState;
+        });
+      }, 250); // Increased debounce time
     };
     
     window.addEventListener('resize', handleViewportChange, { passive: true });
@@ -59,7 +59,7 @@ export function useIsMobile() {
         window.clearTimeout(timeoutId);
       }
     };
-  }, [checkIfMobile]);
+  }, [checkIfMobile, isInitialized]);
 
   return isMobile;
 }
