@@ -10,7 +10,7 @@ const EquipmentTypeFields = () => {
   const formEquipmentId = form.watch('equipment_id');
   const currentEquipment = formEquipmentId ? equipment.find(eq => eq.id === formEquipmentId) : null;
   
-  // CRITICAL: Handle "no equipment selected" state gracefully
+  // CRITICAL: Always render container, show appropriate content inside
   if (!formEquipmentId || !currentEquipment) {
     return (
       <div 
@@ -27,11 +27,12 @@ const EquipmentTypeFields = () => {
             Status: No equipment selected<br />
             Form ID: {formEquipmentId || 'None'}<br />
             Equipment Array: {equipment?.length || 0} items<br />
-            Action: Please select equipment above
+            Action: Please select equipment above<br />
+            Container: ALWAYS RENDERED
           </div>
         )}
         
-        <div className="text-center py-8 text-gray-500">
+        <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
           <p className="text-lg font-medium">Please select equipment above</p>
           <p className="text-sm mt-2">The maintenance checklist will appear here once you choose an equipment item.</p>
         </div>
@@ -80,7 +81,8 @@ const EquipmentTypeFields = () => {
           Equipment: {currentEquipment.name}<br />
           Type: {currentEquipmentType}<br />
           Form ID: {formEquipmentId}<br />
-          Status: RENDERING FIELDS
+          Status: RENDERING FIELDS<br />
+          Container: ALWAYS RENDERED
         </div>
       )}
       

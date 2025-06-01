@@ -35,7 +35,7 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
-      {/* CRITICAL: ALWAYS render this section - no conditional barrier */}
+      {/* CRITICAL: ALWAYS render this section - REMOVED conditional barrier */}
       <FormSection title="Equipment Maintenance Checklist">
         <div 
           className="w-full mobile-checklist-force-visible" 
