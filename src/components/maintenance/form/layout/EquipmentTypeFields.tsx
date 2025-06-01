@@ -1,101 +1,87 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useMaintenanceFormContext } from '../../context/MaintenanceFormContext';
 import EquipmentFields from '../EquipmentFields';
 
 const EquipmentTypeFields = () => {
-  const { form, equipment, isMobile } = useMaintenanceFormContext();
+  const { form, equipmentType, selectedEquipment, isMobile } = useMaintenanceFormContext();
   
-  // Direct form state lookup - simple and immediate
-  const formEquipmentId = form.watch('equipment_id');
-  const currentEquipment = formEquipmentId ? equipment.find(eq => eq.id === formEquipmentId) : null;
+  const equipmentId = form.watch('equipment_id');
   
-  // Show message if no equipment selected
-  if (!formEquipmentId || !currentEquipment) {
-    return (
-      <div 
-        className="w-full" 
-        data-component="equipment-type-fields"
-        data-state="waiting"
-        style={isMobile ? {
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1,
-          overflow: 'visible',
-          minHeight: '100px'
-        } : {}}
-      >
-        {isMobile && (
-          <div className="mb-4 p-3 bg-yellow-100 border-2 border-yellow-500 rounded text-sm">
-            <strong>⏳ MOBILE CHECKLIST WAITING:</strong><br />
-            Status: No equipment selected<br />
-            Form ID: {formEquipmentId || 'None'}<br />
-            Equipment Array: {equipment?.length || 0} items<br />
-            Action: Please select equipment above
-          </div>
-        )}
-        
-        <div className="text-center py-8 text-gray-500 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-          <p className="text-lg font-medium">Please select equipment above</p>
-          <p className="text-sm mt-2">The maintenance checklist will appear here once you choose an equipment item.</p>
-        </div>
-      </div>
-    );
-  }
-  
-  // Simple equipment type detection
-  const detectEquipmentType = (equipmentName: string): string => {
-    if (!equipmentName) return 'general';
-    
-    const name = equipmentName.toLowerCase();
-    
-    if (name.includes('ahu') || name.includes('air handler') || name.includes('rtu') || name.includes('rooftop')) return 'ahu';
-    if (name.includes('chiller')) return 'chiller';
-    if (name.includes('cooling tower') || name.includes('tower')) return 'cooling_tower';
-    if (name.includes('elevator') || name.includes('lift')) return 'elevator';
-    if (name.includes('restroom') || name.includes('bathroom')) return 'restroom';
-    
-    return 'general';
-  };
-  
-  const currentEquipmentType = detectEquipmentType(currentEquipment.name);
-
-  console.log('🔧 EquipmentTypeFields SHOWING CHECKLIST:', { 
-    formEquipmentId,
-    currentEquipmentName: currentEquipment.name,
-    detectedType: currentEquipmentType,
-    isMobile
+  console.log('EquipmentTypeFields: 🔧 MOBILE COMPREHENSIVE DEBUG:', { 
+    equipmentType, 
+    selectedEquipmentName: selectedEquipment?.name,
+    selectedEquipmentId: selectedEquipment?.id,
+    formEquipmentId: equipmentId,
+    isMobile,
+    hasEquipmentId: !!equipmentId,
+    hasEquipmentType: !!equipmentType,
+    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
+    userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'unknown',
+    timestamp: new Date().toISOString()
   });
 
+  // Add effect to monitor equipment type changes with mobile-specific logging
+  useEffect(() => {
+    console.log('EquipmentTypeFields: 🔄 MOBILE EQUIPMENT TYPE EFFECT TRIGGERED:', {
+      newEquipmentType: equipmentType,
+      selectedEquipment: selectedEquipment?.name,
+      isMobile,
+      shouldRender: !!equipmentId && !!equipmentType,
+      renderingConditions: {
+        hasEquipmentId: !!equipmentId,
+        hasEquipmentType: !!equipmentType,
+        bothConditionsMet: !!equipmentId && !!equipmentType
+      }
+    });
+  }, [equipmentType, selectedEquipment, isMobile, equipmentId]);
+
+  // Enhanced early return logging for mobile
+  if (!equipmentId) {
+    console.log('EquipmentTypeFields: ❌ MOBILE - NO EQUIPMENT ID - NOT RENDERING:', {
+      equipmentId,
+      formValues: form.getValues(),
+      isMobile,
+      windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown'
+    });
+    return null;
+  }
+
+  if (!equipmentType) {
+    console.log('EquipmentTypeFields: ❌ MOBILE - NO EQUIPMENT TYPE - NOT RENDERING:', {
+      equipmentType,
+      selectedEquipment: selectedEquipment?.name,
+      equipmentId,
+      isMobile,
+      windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown'
+    });
+    return null;
+  }
+
+  console.log('EquipmentTypeFields: ✅ MOBILE - RENDERING EQUIPMENT FIELDS:', {
+    equipmentType, 
+    selectedEquipmentName: selectedEquipment?.name,
+    isMobile,
+    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
+    cssClass: isMobile ? 'mobile-equipment-fields' : 'desktop-equipment-fields'
+  });
+  
   return (
-    <div 
-      className="w-full" 
-      data-component="equipment-type-fields"
-      data-equipment-type={currentEquipmentType}
-      data-equipment-name={currentEquipment.name}
-      data-state="active"
-      style={isMobile ? {
-        display: 'block',
-        visibility: 'visible',
-        opacity: 1,
-        overflow: 'visible',
-        minHeight: '100px'
-      } : {}}
-    >
+    <div className={isMobile ? 'mobile-equipment-fields' : ''}>
+      {/* Mobile debugging indicator */}
       {isMobile && (
-        <div className="mb-4 p-3 bg-green-100 border-2 border-green-500 rounded text-sm">
-          <strong>✅ MOBILE CHECKLIST ACTIVE:</strong><br />
-          Equipment: {currentEquipment.name}<br />
-          Type: {currentEquipmentType}<br />
-          Form ID: {formEquipmentId}<br />
-          Status: RENDERING FIELDS ✓
+        <div style={{ 
+          backgroundColor: '#e3f2fd', 
+          padding: '8px', 
+          margin: '8px 0', 
+          borderRadius: '4px',
+          fontSize: '12px',
+          color: '#1565c0'
+        }}>
+          📱 Mobile Debug: Rendering {equipmentType} fields for {selectedEquipment?.name}
         </div>
       )}
-      
-      <EquipmentFields 
-        form={form} 
-        equipmentType={currentEquipmentType}
-      />
+      <EquipmentFields form={form} equipmentType={equipmentType} />
     </div>
   );
 };

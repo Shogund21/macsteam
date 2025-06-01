@@ -75,13 +75,6 @@ export const SidebarProvider = React.forwardRef<
         : setOpen((open) => !open)
     }, [isMobile, setOpen, setOpenMobile])
 
-    // Close mobile sidebar by default
-    React.useEffect(() => {
-      if (isMobile) {
-        setOpenMobile(false)
-      }
-    }, [isMobile])
-
     React.useEffect(() => {
       const handleKeyDown = (event: KeyboardEvent) => {
         if (

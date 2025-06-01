@@ -1,55 +1,59 @@
 
 import { useState, useEffect, useCallback } from "react"
 
-const MOBILE_BREAKPOINT = 1024 // Increased to capture tablets like iPad (822px)
+const MOBILE_BREAKPOINT = 768
 
 export function useIsMobile() {
-  // Default to false to prevent unnecessary mobile exclusions
-  const [isMobile, setIsMobile] = useState<boolean>(false);
-  const [isInitialized, setIsInitialized] = useState<boolean>(false);
+  // Default to true for mobile-first approach to avoid blank screens on phones
+  const [isMobile, setIsMobile] = useState<boolean>(true);
   
   const checkIfMobile = useCallback(() => {
     // Only run in browser environment
-    if (typeof window === 'undefined') return false;
+    if (typeof window === 'undefined') return true;
     
-    // Use viewport width for mobile detection
+    // Check multiple conditions to better detect mobile devices
     const viewportWidth = window.innerWidth;
-    const isMobileViewport = viewportWidth <= MOBILE_BREAKPOINT;
+    const userAgent = window.navigator.userAgent.toLowerCase();
     
-    return isMobileViewport;
+    // UserAgent based detection as fallback
+    const isMobileUserAgent = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini|mobile|tablet/i.test(userAgent);
+    
+    // Width based detection (primary)
+    const isMobileViewport = viewportWidth < MOBILE_BREAKPOINT;
+    
+    // Touch capability check
+    const hasTouchCapability = 'ontouchstart' in window || 
+      navigator.maxTouchPoints > 0 || 
+      (navigator as any).msMaxTouchPoints > 0;
+    
+    // Prioritize viewport width for consistent behavior
+    return isMobileViewport || (isMobileUserAgent && hasTouchCapability);
   }, []);
   
   useEffect(() => {
     if (typeof window === 'undefined') return;
     
-    // Set initial value only once
-    if (!isInitialized) {
-      const initialMobileState = checkIfMobile();
-      setIsMobile(initialMobileState);
-      setIsInitialized(true);
-      console.log('📱 Initial mobile state set to:', initialMobileState, 'with breakpoint:', MOBILE_BREAKPOINT);
-    }
+    // Set initial value - check right away
+    setIsMobile(checkIfMobile());
     
-    // Handle resize with proper debouncing
+    // Handle both resize and orientation changes with debouncing
     let timeoutId: number | undefined;
     
     const handleViewportChange = () => {
       if (timeoutId) window.clearTimeout(timeoutId);
       
       timeoutId = window.setTimeout(() => {
-        const newMobileState = checkIfMobile();
-        setIsMobile(prevState => {
-          if (prevState !== newMobileState) {
-            console.log('📱 Mobile state changing from', prevState, 'to', newMobileState);
-            return newMobileState;
-          }
-          return prevState;
-        });
-      }, 250); // Increased debounce time
+        setIsMobile(checkIfMobile());
+      }, 100);
     };
     
     window.addEventListener('resize', handleViewportChange, { passive: true });
     window.addEventListener('orientationchange', handleViewportChange, { passive: true });
+    
+    // Force recheck after a short delay to account for any layout shifts
+    const recheckTimeout = setTimeout(() => {
+      setIsMobile(checkIfMobile());
+    }, 200);
     
     // Clean up
     return () => {
@@ -58,8 +62,9 @@ export function useIsMobile() {
       if (timeoutId) {
         window.clearTimeout(timeoutId);
       }
+      clearTimeout(recheckTimeout);
     };
-  }, [checkIfMobile, isInitialized]);
+  }, [checkIfMobile]);
 
   return isMobile;
 }

@@ -9,7 +9,7 @@ import AHUMaintenanceFields from "./AHUMaintenanceFields";
 import ElevatorMaintenanceFields from "./ElevatorMaintenanceFields";
 import RestroomMaintenanceFields from "./RestroomMaintenanceFields";
 import CoolingTowerFields from "./CoolingTowerFields";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { useMaintenanceFormContext } from "../context/MaintenanceFormContext";
 
 interface EquipmentFieldsProps {
   form: UseFormReturn<MaintenanceFormValues>;
@@ -17,141 +17,96 @@ interface EquipmentFieldsProps {
 }
 
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
-  const isMobile = useIsMobile();
+  // Use context-provided isMobile for consistency
+  const { isMobile } = useMaintenanceFormContext();
   
-  console.log('🔧 EquipmentFields rendering for type:', equipmentType);
-
-  // Enhanced mobile debugging
-  React.useEffect(() => {
-    if (isMobile) {
-      console.log('🔧 MOBILE EQUIPMENT FIELDS RENDER:', {
-        equipmentType,
-        isMobile,
-        timestamp: new Date().toISOString()
-      });
-    }
-  }, [equipmentType, isMobile]);
-
-  // CRITICAL: Always show maintenance fields when equipment is selected
-  // Render appropriate fields for all devices with fallback to general
-  if (equipmentType === 'ahu') {
-    return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="ahu-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ AHU/RTU Maintenance Fields Loaded</div>
-        )}
-        <AHUMaintenanceFields form={form} />
+  console.log('EquipmentFields: 🔧 MOBILE RENDERING DEBUG:', {
+    equipmentType, 
+    isMobile,
+    contextProvidedMobile: isMobile,
+    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
+    timestamp: new Date().toISOString()
+  });
+  
+  // Mobile debugging component wrapper with enhanced visibility
+  const MobileDebugWrapper = ({ children, type }: { children: React.ReactNode, type: string }) => (
+    <div className={`equipment-fields-container ${isMobile ? `mobile-${type}-fields` : ''} space-y-4`}>
+      {isMobile && (
+        <div style={{ 
+          backgroundColor: '#f3e5f5', 
+          padding: '8px 12px', 
+          borderRadius: '4px',
+          fontSize: '12px',
+          color: '#7b1fa2',
+          marginBottom: '12px',
+          border: '2px solid #9c27b0',
+          fontWeight: 'bold'
+        }}>
+          📱 Mobile: Rendering {type} maintenance fields (Width: {typeof window !== 'undefined' ? window.innerWidth : 'unknown'}px)
+        </div>
+      )}
+      <div className={isMobile ? 'mobile-equipment-content' : ''}>
+        {children}
       </div>
+    </div>
+  );
+  
+  // Render appropriate fields based on equipment type
+  if (equipmentType === 'ahu') {
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING AHU FIELDS');
+    return (
+      <MobileDebugWrapper type="ahu">
+        <AHUMaintenanceFields form={form} />
+      </MobileDebugWrapper>
     );
   }
   
   if (equipmentType === 'chiller') {
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING CHILLER FIELDS');
     return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="chiller-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ Chiller Maintenance Fields Loaded</div>
-        )}
+      <MobileDebugWrapper type="chiller">
         <MaintenanceReadings form={form} />
         <MaintenanceStatus form={form} />
         <MaintenanceObservations form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
   if (equipmentType === 'cooling_tower') {
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING COOLING TOWER FIELDS');
     return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="cooling-tower-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ Cooling Tower Fields Loaded</div>
-        )}
+      <MobileDebugWrapper type="cooling-tower">
         <CoolingTowerFields form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
   if (equipmentType === 'elevator') {
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING ELEVATOR FIELDS');
     return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="elevator-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ Elevator Maintenance Fields Loaded</div>
-        )}
+      <MobileDebugWrapper type="elevator">
         <ElevatorMaintenanceFields form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
   if (equipmentType === 'restroom') {
+    console.log('EquipmentFields: ✅ MOBILE - RENDERING RESTROOM FIELDS');
     return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="restroom-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ Restroom Maintenance Fields Loaded</div>
-        )}
+      <MobileDebugWrapper type="restroom">
         <RestroomMaintenanceFields form={form} />
-      </div>
+      </MobileDebugWrapper>
     );
   }
   
-  // CRITICAL: Always show general maintenance fields as fallback
-  // This ensures users always see maintenance fields when equipment is selected
+  // Default or general equipment
+  console.log('EquipmentFields: ℹ️ MOBILE - RENDERING DEFAULT/GENERAL FIELDS');
   return (
-    <div 
-      className="w-full space-y-6" 
-      data-component="general-fields-container"
-      style={{
-        display: 'block',
-        visibility: 'visible',
-        opacity: 1
-      }}
-    >
-      {isMobile && (
-        <div className="text-green-600 font-medium">
-          ✓ General Maintenance Fields Loaded{equipmentType ? ` (Type: ${equipmentType})` : ''}
-        </div>
-      )}
+    <MobileDebugWrapper type="general">
       <MaintenanceReadings form={form} />
       <MaintenanceStatus form={form} />
       <MaintenanceObservations form={form} />
-    </div>
+    </MobileDebugWrapper>
   );
 };
 
