@@ -1,7 +1,7 @@
 
 import { useState, useEffect, useCallback } from "react"
 
-const MOBILE_BREAKPOINT = 640 // Mobile breakpoint as specified in requirements
+const MOBILE_BREAKPOINT = 1024 // Increased to capture tablets like iPad (822px)
 
 export function useIsMobile() {
   // Default to false to prevent unnecessary mobile exclusions
@@ -16,7 +16,7 @@ export function useIsMobile() {
     const isMobileViewport = viewportWidth <= MOBILE_BREAKPOINT;
     
     // Debug logging with more context
-    console.log('📱 Mobile Detection DEBUG:', {
+    console.log('📱 Mobile Detection DEBUG (UPDATED):', {
       viewportWidth,
       breakpoint: MOBILE_BREAKPOINT,
       isMobileViewport,
@@ -33,7 +33,7 @@ export function useIsMobile() {
     // Set initial value
     const initialMobileState = checkIfMobile();
     setIsMobile(initialMobileState);
-    console.log('📱 Initial mobile state set to:', initialMobileState);
+    console.log('📱 Initial mobile state set to:', initialMobileState, 'with breakpoint:', MOBILE_BREAKPOINT);
     
     // Handle resize with debouncing
     let timeoutId: number | undefined;

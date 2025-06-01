@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import './styles/mobile-checklist-fix.css';
+@import './styles/mobile-maintenance-checklist.css';
  
 @layer base {
   :root {
