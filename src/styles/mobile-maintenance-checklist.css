@@ -132,23 +132,27 @@
       border-bottom: 1px solid #e5e7eb !important;
     }
 
-    /* Dropdown content positioning and visibility */
+    /* IMPROVED: Mobile Dropdown positioning and visibility */
     [data-radix-select-content],
     [data-radix-dropdown-menu-content] {
       position: fixed !important;
-      z-index: 1000 !important;
+      z-index: 9999 !important;
       background-color: white !important;
       border: 1px solid #e5e7eb !important;
       border-radius: 6px !important;
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
-      max-height: 300px !important;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+      max-height: 50vh !important;
       overflow-y: auto !important;
-      width: 80% !important;
-      max-width: 300px !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      top: auto !important;
-      bottom: 25% !important;
+      /* Center horizontally with padding */
+      left: 5% !important;
+      right: 5% !important;
+      width: 90% !important;
+      max-width: 400px !important;
+      margin: 0 auto !important;
+      /* Position higher on screen to avoid being cut off */
+      top: 25% !important;
+      bottom: auto !important;
+      transform: none !important;
     }
 
     /* Ensure no parent containers are hiding content */
