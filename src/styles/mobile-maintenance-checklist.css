@@ -1,23 +1,16 @@
 
 @layer components {
-  /* Mobile Maintenance Checklist Debug and Visibility Fixes */
+  /* CRITICAL: Mobile Maintenance Checklist Force Visibility */
   @media (max-width: 1200px) {
     
-    /* CRITICAL: Force visibility for all maintenance checklist components */
+    /* CRITICAL: Force absolute visibility for mobile checklist components */
+    .mobile-checklist-force-visible,
     [data-component="maintenance-form-body"],
     [data-component="equipment-details-wrapper"],
     [data-component="equipment-type-fields"],
     [data-component="equipment-fields-container"],
-    [data-component="ahu-maintenance-fields"],
-    [data-component="ahu-fields-container"],
-    [data-component="chiller-fields-container"],
-    [data-component="cooling-tower-fields-container"],
-    [data-component="elevator-fields-container"],
-    [data-component="restroom-fields-container"],
-    [data-component="general-fields-container"],
-    [data-component="cooling-tower-fields"],
-    [data-component="maintenance-checklist"],
-    .mobile-checklist-visible {
+    [data-component*="fields-container"],
+    [data-force-visible="true"] {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
@@ -29,36 +22,56 @@
       position: relative !important;
       z-index: 10 !important;
       transform: none !important;
-      margin: 0 !important;
-      padding: 0.5rem !important;
+      margin: 0 0 1rem 0 !important;
+      padding: 1rem !important;
       background-color: white !important;
       border-radius: 8px !important;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-      margin-bottom: 1rem !important;
+      content-visibility: visible !important;
     }
 
-    /* CRITICAL: Force equipment checklist wrapper to always be visible when equipment is selected */
-    [data-component="equipment-details-wrapper"][data-should-show-checklist="true"],
-    [data-component="equipment-type-fields"][data-has-equipment="true"] {
+    /* CRITICAL: Force equipment checklist sections to always be visible */
+    [data-component="equipment-details-wrapper"][data-force-visible="true"],
+    [data-component="equipment-type-fields"][data-force-visible="true"] {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
       background-color: #f8fafc !important;
-      border: 2px solid #3b82f6 !important;
+      border: 2px solid #10b981 !important;
       border-radius: 8px !important;
       padding: 1rem !important;
+      content-visibility: visible !important;
     }
 
-    /* CRITICAL: Force form sections with equipment checklist to always be visible */
-    [data-component="form-section"]:has([data-component="equipment-details-wrapper"][data-should-show-checklist="true"]) {
+    /* CRITICAL: Override any inline styles that might hide content */
+    [style*="display: none"] .mobile-checklist-force-visible,
+    [style*="display:none"] .mobile-checklist-force-visible,
+    [style*="visibility: hidden"] .mobile-checklist-force-visible,
+    [style*="visibility:hidden"] .mobile-checklist-force-visible,
+    [style*="opacity: 0"] .mobile-checklist-force-visible,
+    [style*="opacity:0"] .mobile-checklist-force-visible {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
-      background-color: #f8fafc !important;
-      padding: 1.5rem !important;
+    }
+
+    /* Force all equipment field types to be visible */
+    [data-component="ahu-fields-container"],
+    [data-component="chiller-fields-container"], 
+    [data-component="cooling-tower-fields-container"],
+    [data-component="elevator-fields-container"],
+    [data-component="restroom-fields-container"],
+    [data-component="general-fields-container"] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      padding: 1rem !important;
+      background-color: #ffffff !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 6px !important;
       margin-bottom: 1rem !important;
-      border-radius: 8px !important;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+      content-visibility: visible !important;
     }
 
     /* Force form sections to be visible */
@@ -72,27 +85,19 @@
       background-color: white !important;
       border-radius: 8px !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+      content-visibility: visible !important;
     }
 
-    /* Ensure equipment field containers are properly displayed */
-    [data-component*="fields-container"] {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
-      width: 100% !important;
-      padding: 1rem !important;
-      background-color: #ffffff !important;
-      border: 1px solid #e5e7eb !important;
-      border-radius: 6px !important;
-      margin-bottom: 1rem !important;
-    }
-
-    /* Force all form inputs and selects to be visible and properly sized */
-    [data-component*="fields-container"] input,
-    [data-component*="fields-container"] select,
-    [data-component*="fields-container"] [role="combobox"],
-    [data-component*="fields-container"] textarea,
-    [data-component*="fields-container"] [role="switch"] {
+    /* Force all form inputs to be visible and properly sized */
+    .mobile-checklist-force-visible input,
+    .mobile-checklist-force-visible select,
+    .mobile-checklist-force-visible [role="combobox"],
+    .mobile-checklist-force-visible textarea,
+    .mobile-checklist-force-visible [role="switch"],
+    [data-force-visible="true"] input,
+    [data-force-visible="true"] select,
+    [data-force-visible="true"] [role="combobox"],
+    [data-force-visible="true"] textarea {
       display: flex !important;
       visibility: visible !important;
       opacity: 1 !important;
@@ -108,10 +113,9 @@
       margin-bottom: 0.5rem !important;
     }
 
-    /* Grid layout fixes - force single column on mobile */
-    [data-component*="fields-container"] .grid,
-    [data-component="cooling-tower-fields"] .grid,
-    [data-component="ahu-maintenance-fields"] .grid {
+    /* Force grid layouts to single column */
+    .mobile-checklist-force-visible .grid,
+    [data-force-visible="true"] .grid {
       display: flex !important;
       flex-direction: column !important;
       gap: 1rem !important;
@@ -119,36 +123,26 @@
       width: 100% !important;
     }
 
-    /* Space-y class overrides for proper spacing */
-    [data-component*="fields-container"] .space-y-4 > *,
-    [data-component*="fields-container"] .space-y-6 > * {
+    /* Force proper spacing */
+    .mobile-checklist-force-visible .space-y-4 > *,
+    .mobile-checklist-force-visible .space-y-6 > *,
+    [data-force-visible="true"] .space-y-4 > *,
+    [data-force-visible="true"] .space-y-6 > * {
       margin-bottom: 1rem !important;
       width: 100% !important;
       display: block !important;
       visibility: visible !important;
     }
 
-    /* Form labels should be clearly visible */
-    [data-component*="fields-container"] label {
+    /* Force labels to be visible */
+    .mobile-checklist-force-visible label,
+    [data-force-visible="true"] label {
       display: block !important;
       font-size: 16px !important;
       font-weight: 500 !important;
       color: #374151 !important;
       margin-bottom: 8px !important;
       visibility: visible !important;
-    }
-
-    /* Equipment type titles and headers */
-    [data-component*="fields-container"] h2,
-    [data-component*="fields-container"] h3 {
-      display: block !important;
-      visibility: visible !important;
-      font-size: 1.25rem !important;
-      font-weight: 600 !important;
-      color: #1f2937 !important;
-      margin-bottom: 1rem !important;
-      padding: 0.5rem 0 !important;
-      border-bottom: 1px solid #e5e7eb !important;
     }
 
     /* Mobile debug info styling */
@@ -160,7 +154,7 @@
       position: relative !important;
     }
 
-    /* IMPROVED: Mobile Dropdown positioning and visibility */
+    /* CRITICAL: Dropdown positioning fixes */
     [data-radix-select-content],
     [data-radix-dropdown-menu-content] {
       position: fixed !important;
@@ -171,48 +165,38 @@
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
       max-height: 50vh !important;
       overflow-y: auto !important;
-      /* Center horizontally with padding */
       left: 5% !important;
       right: 5% !important;
       width: 90% !important;
       max-width: 400px !important;
       margin: 0 auto !important;
-      /* Position higher on screen to avoid being cut off */
       top: 25% !important;
       bottom: auto !important;
       transform: none !important;
     }
 
-    /* CRITICAL: Ensure no parent containers are hiding content - Override any inline styles */
-    div[style*="display: none"],
-    div[style*="display:none"] {
-      display: block !important;
-    }
-
-    div[style*="visibility: hidden"],
-    div[style*="visibility:hidden"] {
-      visibility: visible !important;
-    }
-
-    div[style*="opacity: 0"],
-    div[style*="opacity:0"] {
-      opacity: 1 !important;
-    }
-
-    /* Force equipment checklist wrapper to be visible */
-    [data-component="equipment-details-wrapper"][style] {
+    /* Force equipment type headers to be visible */
+    .mobile-checklist-force-visible h2,
+    .mobile-checklist-force-visible h3,
+    [data-force-visible="true"] h2,
+    [data-force-visible="true"] h3 {
       display: block !important;
       visibility: visible !important;
-      opacity: 1 !important;
+      font-size: 1.25rem !important;
+      font-weight: 600 !important;
+      color: #1f2937 !important;
+      margin-bottom: 1rem !important;
+      padding: 0.5rem 0 !important;
+      border-bottom: 1px solid #e5e7eb !important;
     }
   }
 
   /* Touch-friendly interactions */
   @media (max-width: 1200px) and (pointer: coarse) {
-    [data-component*="fields-container"] button,
-    [data-component*="fields-container"] [role="combobox"],
-    [data-component*="fields-container"] input,
-    [data-component*="fields-container"] select {
+    .mobile-checklist-force-visible button,
+    .mobile-checklist-force-visible [role="combobox"],
+    [data-force-visible="true"] button,
+    [data-force-visible="true"] [role="combobox"] {
       min-height: 52px !important;
       min-width: 52px !important;
       touch-action: manipulation !important;

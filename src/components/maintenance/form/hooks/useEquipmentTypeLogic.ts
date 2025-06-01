@@ -8,48 +8,36 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
   
   const equipmentId = form.watch('equipment_id');
   
-  console.log('useEquipmentTypeLogic: 🔍 EQUIPMENT ANALYSIS:', {
+  console.log('useEquipmentTypeLogic: 🔍 DIRECT LOOKUP STRATEGY:', {
     equipmentId,
     equipmentArrayLength: equipment?.length || 0,
-    equipmentIds: equipment?.map(eq => ({ id: eq.id, name: eq.name })) || [],
     isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
     timestamp: new Date().toISOString()
   });
 
-  // CRITICAL: Force immediate equipment update when equipmentId changes
+  // CRITICAL: Immediate and reliable equipment detection
   useEffect(() => {
-    console.log('useEquipmentTypeLogic: 🔄 EQUIPMENT ID CHANGED:', {
-      newEquipmentId: equipmentId,
-      equipmentArrayLength: equipment?.length,
-      isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-    });
-
     if (equipmentId && equipment && equipment.length > 0) {
-      const currentEquipment = equipment.find(eq => eq.id === equipmentId);
+      const foundEquipment = equipment.find(eq => eq.id === equipmentId);
       
-      console.log('useEquipmentTypeLogic: 📋 EQUIPMENT LOOKUP RESULT:', {
-        equipmentId,
-        foundEquipment: currentEquipment?.name,
-        equipmentType: currentEquipment ? getEquipmentType(currentEquipment) : null,
-        isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-      });
-      
-      if (currentEquipment) {
-        setSelectedEquipment(currentEquipment);
-        const detectedType = getEquipmentType(currentEquipment);
+      if (foundEquipment) {
+        setSelectedEquipment(foundEquipment);
+        const detectedType = getEquipmentType(foundEquipment);
         setEquipmentType(detectedType);
         
-        console.log('useEquipmentTypeLogic: ✅ EQUIPMENT CONTEXT UPDATED:', {
-          equipmentName: currentEquipment.name,
-          equipmentId: currentEquipment.id,
+        console.log('useEquipmentTypeLogic: ✅ EQUIPMENT SET:', {
+          equipmentName: foundEquipment.name,
+          equipmentId: foundEquipment.id,
           detectedType,
           isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
         });
       } else {
-        console.log('useEquipmentTypeLogic: ❌ Equipment not found in array');
+        console.log('useEquipmentTypeLogic: ❌ Equipment not found for ID:', equipmentId);
+        setSelectedEquipment(undefined);
+        setEquipmentType('general'); // Always fallback to general
       }
     } else {
-      console.log('useEquipmentTypeLogic: 🔄 Clearing equipment - no ID or empty array');
+      console.log('useEquipmentTypeLogic: 🔄 No equipment ID or empty array');
       setSelectedEquipment(undefined);
       setEquipmentType(null);
     }
@@ -59,52 +47,27 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     if (!equipment) return 'general';
     
     const name = equipment.name.toLowerCase();
-    console.log('useEquipmentTypeLogic: 🔍 EQUIPMENT TYPE DETECTION:', {
-      originalName: equipment.name,
-      lowerCaseName: name,
-      equipmentId: equipment.id,
-      isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-    });
     
-    // Enhanced detection patterns with detailed logging
-    const ahuPatterns = ['ahu', 'air handler', 'air handling', 'air-handler', 'airhandler', 'ahu-', 'ahu ', 'ah-', 'ah ', 'rtu', 'roof top unit', 'rooftop unit', 'roof-top', 'rtu-', 'rtu '];
-    const chillerPatterns = ['chiller', 'ch-', 'ch ', 'cooling unit', 'chiller-', 'chill'];
-    const coolingTowerPatterns = ['cooling tower', 'cooling-tower', 'coolingtower', 'ct-', 'ct ', 'tower'];
-    const elevatorPatterns = ['elevator', 'lift', 'elev', 'ele-', 'elevator-'];
-    const restroomPatterns = ['restroom', 'bathroom', 'washroom', 'toilet', 'rest-', 'rr-'];
-    
-    if (ahuPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED AHU/RTU:', equipment.name);
+    // Enhanced detection with more patterns
+    if (name.includes('ahu') || name.includes('air handler') || name.includes('air-handler') || 
+        name.includes('rtu') || name.includes('rooftop') || name.includes('roof-top')) {
       return 'ahu';
     }
-    if (chillerPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED CHILLER:', equipment.name);
+    if (name.includes('chiller') || name.includes('ch-') || name.includes('cooling unit')) {
       return 'chiller';
     }
-    if (coolingTowerPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED COOLING TOWER:', equipment.name);
+    if (name.includes('cooling tower') || name.includes('tower') || name.includes('ct-')) {
       return 'cooling_tower';
     }
-    if (elevatorPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED ELEVATOR:', equipment.name);
+    if (name.includes('elevator') || name.includes('lift') || name.includes('elev')) {
       return 'elevator';
     }
-    if (restroomPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED RESTROOM:', equipment.name);
+    if (name.includes('restroom') || name.includes('bathroom') || name.includes('washroom')) {
       return 'restroom';
     }
     
-    console.log('useEquipmentTypeLogic: ℹ️ DEFAULTING TO GENERAL:', equipment.name);
     return 'general';
   };
-
-  console.log('useEquipmentTypeLogic: 🎯 HOOK RETURN VALUES:', {
-    selectedEquipmentId: selectedEquipment?.id,
-    selectedEquipmentName: selectedEquipment?.name,
-    detectedEquipmentType: equipmentType,
-    isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
-    timestamp: new Date().toISOString()
-  });
 
   return {
     selectedEquipment,
