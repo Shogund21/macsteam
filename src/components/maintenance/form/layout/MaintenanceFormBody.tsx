@@ -9,15 +9,16 @@ import EquipmentTypeFields from './EquipmentTypeFields';
 const MaintenanceFormBody = () => {
   const { form, equipment, technicians, selectedEquipment, isMobile } = useMaintenanceFormContext();
   
-  // CRITICAL: Use selectedEquipment from context instead of form.watch for immediate UI response
-  const shouldShowChecklist = !!selectedEquipment;
+  // CRITICAL: Use BOTH form watch AND context for maximum reliability
+  const formEquipmentId = form.watch('equipment_id');
+  const shouldShowChecklist = !!(formEquipmentId || selectedEquipment);
 
   console.log('🔧 MaintenanceFormBody render:', { 
     selectedEquipment: selectedEquipment?.name,
     selectedEquipmentId: selectedEquipment?.id,
+    formEquipmentId,
     shouldShowChecklist,
     isMobile,
-    formEquipmentId: form.watch('equipment_id'),
     formValues: form.getValues()
   });
 
@@ -27,13 +28,14 @@ const MaintenanceFormBody = () => {
       console.log('🔧 MOBILE CHECKLIST VISIBILITY DEBUG:', {
         selectedEquipment: selectedEquipment?.name,
         selectedEquipmentId: selectedEquipment?.id,
+        formEquipmentId,
         shouldShowChecklist,
-        formEquipmentId: form.watch('equipment_id'),
         contextHasEquipment: !!selectedEquipment,
+        formHasEquipmentId: !!formEquipmentId,
         timestamp: new Date().toISOString()
       });
     }
-  }, [selectedEquipment, isMobile, form]);
+  }, [selectedEquipment, formEquipmentId, isMobile, form]);
 
   return (
     <div className="w-full space-y-4" data-component="maintenance-form-body">
@@ -45,19 +47,19 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
-      {/* CRITICAL: Use selectedEquipment from context for immediate rendering */}
+      {/* CRITICAL: Show checklist if EITHER form has equipment OR context has equipment */}
       {shouldShowChecklist && (
         <FormSection title="Equipment Maintenance Checklist">
           <div 
             className="w-full" 
             data-component="equipment-details-wrapper"
             data-mobile-visible={isMobile ? 'true' : 'false'}
-            data-equipment-id={selectedEquipment?.id}
+            data-equipment-id={selectedEquipment?.id || formEquipmentId}
             data-equipment-name={selectedEquipment?.name}
             style={{
-              display: 'block',
-              visibility: 'visible',
-              opacity: 1,
+              display: 'block !important',
+              visibility: 'visible !important',
+              opacity: '1 !important',
               minHeight: '100px'
             }}
           >
@@ -75,14 +77,16 @@ const MaintenanceFormBody = () => {
           <strong>Mobile Debug Info:</strong><br />
           Selected Equipment: {selectedEquipment?.name || 'None'}<br />
           Equipment ID: {selectedEquipment?.id || 'None'}<br />
-          Form Equipment ID: {form.watch('equipment_id') || 'None'}<br />
+          Form Equipment ID: {formEquipmentId || 'None'}<br />
           Should Show Checklist: {shouldShowChecklist ? 'Yes' : 'No'}<br />
+          Form Has Equipment: {formEquipmentId ? 'Yes' : 'No'}<br />
+          Context Has Equipment: {selectedEquipment ? 'Yes' : 'No'}<br />
           Is Mobile: {isMobile ? 'Yes' : 'No'}
         </div>
       )}
 
       <FormSection title="Documents">
-        <DocumentManager equipmentId={selectedEquipment?.id} />
+        <DocumentManager equipmentId={selectedEquipment?.id || formEquipmentId} />
       </FormSection>
     </div>
   );
