@@ -41,9 +41,9 @@ const EquipmentTypeFields = () => {
       data-equipment-type={currentEquipmentType}
       data-mobile-debug={isMobile ? 'true' : 'false'}
       style={{
-        display: 'block !important',
-        visibility: 'visible !important',
-        opacity: '1 !important',
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1,
         minHeight: '50px'
       }}
     >

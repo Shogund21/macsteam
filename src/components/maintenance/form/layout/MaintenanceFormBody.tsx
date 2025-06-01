@@ -9,15 +9,15 @@ import EquipmentTypeFields from './EquipmentTypeFields';
 const MaintenanceFormBody = () => {
   const { form, equipment, technicians, selectedEquipment, isMobile } = useMaintenanceFormContext();
   
-  // CRITICAL: Use BOTH form watch AND context for maximum reliability
+  // CRITICAL: Check BOTH form state AND context for equipment selection
   const formEquipmentId = form.watch('equipment_id');
-  const shouldShowChecklist = !!(formEquipmentId || selectedEquipment);
+  const hasEquipment = !!(formEquipmentId || selectedEquipment);
 
   console.log('🔧 MaintenanceFormBody render:', { 
     selectedEquipment: selectedEquipment?.name,
     selectedEquipmentId: selectedEquipment?.id,
     formEquipmentId,
-    shouldShowChecklist,
+    hasEquipment,
     isMobile,
     formValues: form.getValues()
   });
@@ -29,13 +29,13 @@ const MaintenanceFormBody = () => {
         selectedEquipment: selectedEquipment?.name,
         selectedEquipmentId: selectedEquipment?.id,
         formEquipmentId,
-        shouldShowChecklist,
+        hasEquipment,
         contextHasEquipment: !!selectedEquipment,
         formHasEquipmentId: !!formEquipmentId,
         timestamp: new Date().toISOString()
       });
     }
-  }, [selectedEquipment, formEquipmentId, isMobile, form]);
+  }, [selectedEquipment, formEquipmentId, isMobile, form, hasEquipment]);
 
   return (
     <div className="w-full space-y-4" data-component="maintenance-form-body">
@@ -48,7 +48,7 @@ const MaintenanceFormBody = () => {
       </FormSection>
       
       {/* CRITICAL: Show checklist if EITHER form has equipment OR context has equipment */}
-      {shouldShowChecklist && (
+      {hasEquipment && (
         <FormSection title="Equipment Maintenance Checklist">
           <div 
             className="w-full" 
@@ -57,9 +57,9 @@ const MaintenanceFormBody = () => {
             data-equipment-id={selectedEquipment?.id || formEquipmentId}
             data-equipment-name={selectedEquipment?.name}
             style={{
-              display: 'block !important',
-              visibility: 'visible !important',
-              opacity: '1 !important',
+              display: 'block',
+              visibility: 'visible',
+              opacity: 1,
               minHeight: '100px'
             }}
           >
@@ -78,7 +78,7 @@ const MaintenanceFormBody = () => {
           Selected Equipment: {selectedEquipment?.name || 'None'}<br />
           Equipment ID: {selectedEquipment?.id || 'None'}<br />
           Form Equipment ID: {formEquipmentId || 'None'}<br />
-          Should Show Checklist: {shouldShowChecklist ? 'Yes' : 'No'}<br />
+          Has Equipment: {hasEquipment ? 'Yes' : 'No'}<br />
           Form Has Equipment: {formEquipmentId ? 'Yes' : 'No'}<br />
           Context Has Equipment: {selectedEquipment ? 'Yes' : 'No'}<br />
           Is Mobile: {isMobile ? 'Yes' : 'No'}
