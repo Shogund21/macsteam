@@ -9,44 +9,44 @@ import EquipmentTypeFields from './EquipmentTypeFields';
 const MaintenanceFormBody = () => {
   const { form, equipment, technicians, selectedEquipment, isMobile } = useMaintenanceFormContext();
   
-  // CRITICAL: Prioritize form state over context for mobile reliability
+  // CRITICAL: Get form equipment ID directly for reliable detection
   const formEquipmentId = form.watch('equipment_id');
   
-  // Add direct equipment lookup as fallback to context
+  // CRITICAL: Multiple equipment detection strategies for maximum reliability
   const fallbackEquipment = formEquipmentId ? equipment.find(eq => eq.id === formEquipmentId) : null;
   const currentEquipment = selectedEquipment || fallbackEquipment;
   
-  // Show checklist if we have ANY equipment reference
+  // CRITICAL: Show checklist if we have ANY equipment reference - prioritize form state
   const hasEquipment = !!(formEquipmentId || selectedEquipment || fallbackEquipment);
+  const shouldShowChecklist = hasEquipment;
 
-  console.log('🔧 MaintenanceFormBody render:', { 
-    selectedEquipment: selectedEquipment?.name,
-    selectedEquipmentId: selectedEquipment?.id,
+  console.log('🔧 MaintenanceFormBody CRITICAL DEBUG:', { 
     formEquipmentId,
-    fallbackEquipment: fallbackEquipment?.name,
-    currentEquipment: currentEquipment?.name,
+    selectedEquipmentId: selectedEquipment?.id,
+    selectedEquipmentName: selectedEquipment?.name,
+    fallbackEquipmentName: fallbackEquipment?.name,
+    currentEquipmentName: currentEquipment?.name,
     hasEquipment,
+    shouldShowChecklist,
     isMobile,
-    formValues: form.getValues()
+    equipmentArrayLength: equipment.length,
+    timestamp: new Date().toISOString()
   });
 
-  // Enhanced mobile debugging for equipment checklist visibility
+  // Force checklist visibility logging for mobile debugging
   React.useEffect(() => {
     if (isMobile) {
-      console.log('🔧 MOBILE CHECKLIST VISIBILITY DEBUG:', {
-        selectedEquipment: selectedEquipment?.name,
-        selectedEquipmentId: selectedEquipment?.id,
+      console.log('🔧 MOBILE CHECKLIST VISIBILITY DECISION:', {
         formEquipmentId,
-        fallbackEquipment: fallbackEquipment?.name,
-        currentEquipment: currentEquipment?.name,
+        selectedEquipmentName: selectedEquipment?.name,
+        fallbackEquipmentName: fallbackEquipment?.name,
         hasEquipment,
-        contextHasEquipment: !!selectedEquipment,
-        formHasEquipmentId: !!formEquipmentId,
-        fallbackFound: !!fallbackEquipment,
+        shouldShowChecklist,
+        checklistWillRender: shouldShowChecklist,
         timestamp: new Date().toISOString()
       });
     }
-  }, [selectedEquipment, formEquipmentId, fallbackEquipment, currentEquipment, isMobile, form, hasEquipment]);
+  }, [formEquipmentId, selectedEquipment, fallbackEquipment, hasEquipment, shouldShowChecklist, isMobile]);
 
   return (
     <div className="w-full space-y-4" data-component="maintenance-form-body">
@@ -58,8 +58,8 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
-      {/* CRITICAL: Show checklist if ANY equipment is available */}
-      {hasEquipment && (
+      {/* CRITICAL: Show checklist based on shouldShowChecklist flag */}
+      {shouldShowChecklist && (
         <FormSection title="Equipment Maintenance Checklist">
           <div 
             className="w-full mobile-checklist-visible" 
@@ -67,13 +67,8 @@ const MaintenanceFormBody = () => {
             data-mobile-visible={isMobile ? 'true' : 'false'}
             data-equipment-id={currentEquipment?.id || formEquipmentId}
             data-equipment-name={currentEquipment?.name}
-            data-has-equipment={hasEquipment ? 'true' : 'false'}
-            style={{
-              display: 'block',
-              visibility: 'visible',
-              opacity: 1,
-              minHeight: '100px'
-            }}
+            data-has-equipment={shouldShowChecklist ? 'true' : 'false'}
+            data-should-show-checklist={shouldShowChecklist ? 'true' : 'false'}
           >
             <EquipmentTypeFields />
           </div>
@@ -82,20 +77,16 @@ const MaintenanceFormBody = () => {
 
       {/* Enhanced mobile debugging section */}
       {isMobile && (
-        <div 
-          className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg text-sm mobile-debug-info"
-          style={{ display: 'block', visibility: 'visible' }}
-        >
-          <strong>Mobile Debug Info:</strong><br />
-          Selected Equipment: {selectedEquipment?.name || 'None'}<br />
-          Equipment ID: {selectedEquipment?.id || 'None'}<br />
+        <div className="bg-green-50 border border-green-200 p-4 rounded-lg text-sm mobile-debug-info">
+          <strong>🔧 Mobile Equipment Debug:</strong><br />
           Form Equipment ID: {formEquipmentId || 'None'}<br />
+          Selected Equipment: {selectedEquipment?.name || 'None'}<br />
           Fallback Equipment: {fallbackEquipment?.name || 'None'}<br />
           Current Equipment: {currentEquipment?.name || 'None'}<br />
           Has Equipment: {hasEquipment ? 'Yes' : 'No'}<br />
-          Form Has Equipment: {formEquipmentId ? 'Yes' : 'No'}<br />
-          Context Has Equipment: {selectedEquipment ? 'Yes' : 'No'}<br />
-          Fallback Found: {fallbackEquipment ? 'Yes' : 'No'}<br />
+          Should Show Checklist: {shouldShowChecklist ? 'YES' : 'NO'}<br />
+          Checklist Rendered: {shouldShowChecklist ? 'YES - VISIBLE' : 'NO - HIDDEN'}<br />
+          Equipment Array Length: {equipment.length}<br />
           Is Mobile: {isMobile ? 'Yes' : 'No'}
         </div>
       )}

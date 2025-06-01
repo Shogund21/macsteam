@@ -6,12 +6,12 @@ import EquipmentFields from '../EquipmentFields';
 const EquipmentTypeFields = () => {
   const { form, equipmentType, selectedEquipment, equipment, isMobile } = useMaintenanceFormContext();
 
-  // CRITICAL: Enhanced equipment and type detection with multiple fallbacks
+  // CRITICAL: Multiple equipment detection strategies
   const formEquipmentId = form.watch('equipment_id');
   const fallbackEquipment = formEquipmentId ? equipment.find(eq => eq.id === formEquipmentId) : null;
   const currentEquipment = selectedEquipment || fallbackEquipment;
   
-  // Enhanced equipment type detection with mobile-specific fallback
+  // CRITICAL: Enhanced equipment type detection with immediate fallback
   const getCurrentEquipmentType = () => {
     // First try context equipment type
     if (equipmentType) return equipmentType;
@@ -21,32 +21,34 @@ const EquipmentTypeFields = () => {
       return detectEquipmentTypeFromName(currentEquipment.name);
     }
     
-    return 'general'; // Always fallback to general
+    // Always fallback to general to ensure checklist shows
+    return 'general';
   };
   
   const currentEquipmentType = getCurrentEquipmentType();
 
-  console.log('🔧 EquipmentTypeFields rendering:', { 
+  console.log('🔧 EquipmentTypeFields CRITICAL RENDER:', { 
     equipmentType: currentEquipmentType, 
-    selectedEquipment: currentEquipment?.name,
+    selectedEquipmentName: selectedEquipment?.name,
+    fallbackEquipmentName: fallbackEquipment?.name,
+    currentEquipmentName: currentEquipment?.name,
     formEquipmentId,
     contextEquipmentType: equipmentType,
-    fallbackEquipment: fallbackEquipment?.name,
-    isMobile
+    isMobile,
+    timestamp: new Date().toISOString()
   });
 
-  // CRITICAL: Enhanced mobile debugging and force visibility
+  // Mobile-specific equipment type logging
   React.useEffect(() => {
     if (isMobile) {
       console.log('🔧 MOBILE EQUIPMENT TYPE FIELDS DEBUG:', {
         equipmentType: currentEquipmentType,
         contextEquipmentType: equipmentType,
         selectedEquipmentName: selectedEquipment?.name,
-        selectedEquipmentId: selectedEquipment?.id,
         fallbackEquipmentName: fallbackEquipment?.name,
         currentEquipmentName: currentEquipment?.name,
         formEquipmentId,
-        isMobile,
+        willRenderEquipmentFields: true,
         timestamp: new Date().toISOString()
       });
     }
@@ -59,21 +61,18 @@ const EquipmentTypeFields = () => {
       data-equipment-type={currentEquipmentType}
       data-mobile-debug={isMobile ? 'true' : 'false'}
       data-has-equipment={currentEquipment ? 'true' : 'false'}
-      style={{
-        display: 'block',
-        visibility: 'visible',
-        opacity: 1,
-        minHeight: '50px'
-      }}
+      data-equipment-name={currentEquipment?.name || 'None'}
     >
       {/* Mobile debugging info */}
       {isMobile && (
-        <div className="mb-4 p-2 bg-blue-50 border border-blue-200 rounded text-xs">
-          <strong>Equipment Type Debug:</strong> {currentEquipmentType || 'Not detected'}<br />
-          <strong>Equipment:</strong> {currentEquipment?.name || 'None selected'}<br />
-          <strong>Form Equipment ID:</strong> {formEquipmentId || 'None'}<br />
-          <strong>Context Type:</strong> {equipmentType || 'None'}<br />
-          <strong>Fallback Equipment:</strong> {fallbackEquipment?.name || 'None'}
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm">
+          <strong>🔧 Equipment Type Debug:</strong><br />
+          Equipment Type: {currentEquipmentType || 'Not detected'}<br />
+          Equipment: {currentEquipment?.name || 'None selected'}<br />
+          Form Equipment ID: {formEquipmentId || 'None'}<br />
+          Context Type: {equipmentType || 'None'}<br />
+          Fallback Equipment: {fallbackEquipment?.name || 'None'}<br />
+          <strong>Status: RENDERING EQUIPMENT FIELDS</strong>
         </div>
       )}
       
@@ -86,18 +85,12 @@ const EquipmentTypeFields = () => {
 };
 
 // Helper function to detect equipment type from name
-const detectEquipmentTypeFromName = (equipmentName: string): string | null => {
-  if (!equipmentName) return null;
+const detectEquipmentTypeFromName = (equipmentName: string): string => {
+  if (!equipmentName) return 'general';
   
   const name = equipmentName.toLowerCase();
   
-  // Enhanced AHU/RTU detection patterns
-  const ahuPatterns = [
-    'ahu', 'air handler', 'air handling', 'air-handler', 'airhandler',
-    'ahu-', 'ahu ', 'ah-', 'ah ', 'rtu', 'roof top unit', 'rooftop unit',
-    'roof-top', 'rtu-', 'rtu '
-  ];
-  
+  const ahuPatterns = ['ahu', 'air handler', 'air handling', 'air-handler', 'airhandler', 'ahu-', 'ahu ', 'ah-', 'ah ', 'rtu', 'roof top unit', 'rooftop unit', 'roof-top', 'rtu-', 'rtu '];
   const chillerPatterns = ['chiller', 'ch-', 'ch ', 'cooling unit', 'chiller-', 'chill'];
   const coolingTowerPatterns = ['cooling tower', 'cooling-tower', 'coolingtower', 'ct-', 'ct ', 'tower'];
   const elevatorPatterns = ['elevator', 'lift', 'elev', 'ele-', 'elevator-'];

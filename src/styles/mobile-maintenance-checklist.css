@@ -37,8 +37,8 @@
       margin-bottom: 1rem !important;
     }
 
-    /* CRITICAL: Force equipment checklist wrapper to always be visible */
-    [data-component="equipment-details-wrapper"][data-has-equipment="true"],
+    /* CRITICAL: Force equipment checklist wrapper to always be visible when equipment is selected */
+    [data-component="equipment-details-wrapper"][data-should-show-checklist="true"],
     [data-component="equipment-type-fields"][data-has-equipment="true"] {
       display: block !important;
       visibility: visible !important;
@@ -50,7 +50,7 @@
     }
 
     /* CRITICAL: Force form sections with equipment checklist to always be visible */
-    [data-component="form-section"]:has([data-component="equipment-details-wrapper"]) {
+    [data-component="form-section"]:has([data-component="equipment-details-wrapper"][data-should-show-checklist="true"]) {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;

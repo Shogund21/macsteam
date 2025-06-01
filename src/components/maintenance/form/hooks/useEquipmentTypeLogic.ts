@@ -16,31 +16,42 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     timestamp: new Date().toISOString()
   });
 
-  // CRITICAL: Use useEffect to ensure proper re-renders when equipment changes
+  // CRITICAL: Force immediate equipment update when equipmentId changes
   useEffect(() => {
-    const currentEquipment = equipment?.find(eq => eq.id === equipmentId);
-    
-    console.log('useEquipmentTypeLogic: 🔄 EQUIPMENT UPDATE EFFECT:', {
-      equipmentId,
-      foundEquipment: currentEquipment?.name,
+    console.log('useEquipmentTypeLogic: 🔄 EQUIPMENT ID CHANGED:', {
+      newEquipmentId: equipmentId,
       equipmentArrayLength: equipment?.length,
       isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
     });
-    
-    setSelectedEquipment(currentEquipment);
-    
-    if (currentEquipment) {
-      const detectedType = getEquipmentType(currentEquipment);
-      setEquipmentType(detectedType);
+
+    if (equipmentId && equipment && equipment.length > 0) {
+      const currentEquipment = equipment.find(eq => eq.id === equipmentId);
       
-      console.log('useEquipmentTypeLogic: ✅ EQUIPMENT TYPE DETECTED:', {
-        equipmentName: currentEquipment.name,
-        detectedType,
+      console.log('useEquipmentTypeLogic: 📋 EQUIPMENT LOOKUP RESULT:', {
+        equipmentId,
+        foundEquipment: currentEquipment?.name,
+        equipmentType: currentEquipment ? getEquipmentType(currentEquipment) : null,
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
       });
+      
+      if (currentEquipment) {
+        setSelectedEquipment(currentEquipment);
+        const detectedType = getEquipmentType(currentEquipment);
+        setEquipmentType(detectedType);
+        
+        console.log('useEquipmentTypeLogic: ✅ EQUIPMENT CONTEXT UPDATED:', {
+          equipmentName: currentEquipment.name,
+          equipmentId: currentEquipment.id,
+          detectedType,
+          isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+        });
+      } else {
+        console.log('useEquipmentTypeLogic: ❌ Equipment not found in array');
+      }
     } else {
+      console.log('useEquipmentTypeLogic: 🔄 Clearing equipment - no ID or empty array');
+      setSelectedEquipment(undefined);
       setEquipmentType(null);
-      console.log('useEquipmentTypeLogic: ❌ No equipment found for ID:', equipmentId);
     }
   }, [equipmentId, equipment]);
 
@@ -48,131 +59,50 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     if (!equipment) return 'general';
     
     const name = equipment.name.toLowerCase();
-    console.log('useEquipmentTypeLogic: 🔍 EQUIPMENT DETECTION:', {
+    console.log('useEquipmentTypeLogic: 🔍 EQUIPMENT TYPE DETECTION:', {
       originalName: equipment.name,
       lowerCaseName: name,
       equipmentId: equipment.id,
       isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
     });
     
-    // Enhanced AHU detection patterns - INCLUDES RTU
-    const ahuPatterns = [
-      'ahu',
-      'air handler',
-      'air handling',
-      'air-handler',
-      'airhandler',
-      'ahu-',
-      'ahu ',
-      'ah-',
-      'ah ',
-      'rtu',              // Added RTU detection
-      'roof top unit',    // Added roof top unit
-      'rooftop unit',     // Added rooftop unit variant
-      'roof-top',         // Added hyphenated variant
-      'rtu-',             // Added RTU with dash
-      'rtu '              // Added RTU with space
-    ];
+    // Enhanced detection patterns with detailed logging
+    const ahuPatterns = ['ahu', 'air handler', 'air handling', 'air-handler', 'airhandler', 'ahu-', 'ahu ', 'ah-', 'ah ', 'rtu', 'roof top unit', 'rooftop unit', 'roof-top', 'rtu-', 'rtu '];
+    const chillerPatterns = ['chiller', 'ch-', 'ch ', 'cooling unit', 'chiller-', 'chill'];
+    const coolingTowerPatterns = ['cooling tower', 'cooling-tower', 'coolingtower', 'ct-', 'ct ', 'tower'];
+    const elevatorPatterns = ['elevator', 'lift', 'elev', 'ele-', 'elevator-'];
+    const restroomPatterns = ['restroom', 'bathroom', 'washroom', 'toilet', 'rest-', 'rr-'];
     
-    // Enhanced chiller detection patterns  
-    const chillerPatterns = [
-      'chiller',
-      'ch-',
-      'ch ',
-      'cooling unit',
-      'chiller-',
-      'chill'
-    ];
-    
-    // Enhanced cooling tower detection patterns
-    const coolingTowerPatterns = [
-      'cooling tower',
-      'cooling-tower',
-      'coolingtower',
-      'ct-',
-      'ct ',
-      'tower'
-    ];
-    
-    // Enhanced elevator detection patterns
-    const elevatorPatterns = [
-      'elevator',
-      'lift',
-      'elev',
-      'ele-',
-      'elevator-'
-    ];
-    
-    // Enhanced restroom detection patterns
-    const restroomPatterns = [
-      'restroom',
-      'bathroom',
-      'washroom',
-      'toilet',
-      'rest-',
-      'rr-'
-    ];
-    
-    // Check each equipment type with detailed logging
-    if (ahuPatterns.some(pattern => name.includes(pattern)) || /ahu[\s-]?\w*/.test(name) || /rtu[\s-]?\w*/.test(name)) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED AHU/RTU EQUIPMENT:', {
-        equipmentName: equipment.name,
-        detectedType: 'ahu',
-        isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-      });
+    if (ahuPatterns.some(pattern => name.includes(pattern))) {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED AHU/RTU:', equipment.name);
       return 'ahu';
     }
-    
     if (chillerPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED CHILLER EQUIPMENT:', {
-        equipmentName: equipment.name,
-        detectedType: 'chiller',
-        isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-      });
+      console.log('useEquipmentTypeLogic: ✅ DETECTED CHILLER:', equipment.name);
       return 'chiller';
     }
-    
     if (coolingTowerPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED COOLING TOWER EQUIPMENT:', {
-        equipmentName: equipment.name,
-        detectedType: 'cooling_tower',
-        isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-      });
+      console.log('useEquipmentTypeLogic: ✅ DETECTED COOLING TOWER:', equipment.name);
       return 'cooling_tower';
     }
-    
     if (elevatorPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED ELEVATOR EQUIPMENT:', {
-        equipmentName: equipment.name,
-        detectedType: 'elevator',
-        isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-      });
+      console.log('useEquipmentTypeLogic: ✅ DETECTED ELEVATOR:', equipment.name);
       return 'elevator';
     }
-    
     if (restroomPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ DETECTED RESTROOM EQUIPMENT:', {
-        equipmentName: equipment.name,
-        detectedType: 'restroom',
-        isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-      });
+      console.log('useEquipmentTypeLogic: ✅ DETECTED RESTROOM:', equipment.name);
       return 'restroom';
     }
     
-    console.log('useEquipmentTypeLogic: ℹ️ Using general equipment type for:', {
-      equipmentName: name,
-      detectedType: 'general',
-      isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
-    });
+    console.log('useEquipmentTypeLogic: ℹ️ DEFAULTING TO GENERAL:', equipment.name);
     return 'general';
   };
 
-  console.log('useEquipmentTypeLogic: 🎯 FINAL RESULT:', {
+  console.log('useEquipmentTypeLogic: 🎯 HOOK RETURN VALUES:', {
     selectedEquipmentId: selectedEquipment?.id,
     selectedEquipmentName: selectedEquipment?.name,
     detectedEquipmentType: equipmentType,
     isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false,
-    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
     timestamp: new Date().toISOString()
   });
 
