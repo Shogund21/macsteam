@@ -31,7 +31,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     });
   }, [locationId, selectedEquipmentId, equipment, isMobile]);
 
-  // CRITICAL FIX: Enhanced equipment change handler with mobile debugging
+  // CRITICAL: Enhanced equipment change handler with mobile state verification
   const handleEquipmentChange = (value: string) => {
     console.log('🔧 MOBILE EQUIPMENT CHANGE - START:', {
       newValue: value,
@@ -54,22 +54,23 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         });
       }
       
-      // CRITICAL: Force form update with all validation flags
+      // CRITICAL: Multiple form update strategies for mobile reliability
       form.setValue('equipment_id', value, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true
       });
       
-      // CRITICAL: Force form revalidation to trigger React re-renders
+      // Force immediate form validation and re-render
       form.trigger('equipment_id');
+      form.trigger(); // Trigger all fields
       
-      // Mobile-specific verification with longer timeout
+      // Enhanced mobile verification with multiple checks
       setTimeout(() => {
         const formValues = form.getValues();
         const currentEquipmentId = form.watch('equipment_id');
         
-        console.log('🔧 MOBILE EQUIPMENT CHANGE - Verification:', {
+        console.log('🔧 MOBILE EQUIPMENT CHANGE - VERIFICATION:', {
           expectedEquipmentId: value,
           actualEquipmentId: currentEquipmentId,
           formValuesEquipmentId: formValues.equipment_id,
@@ -78,13 +79,23 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
           success: currentEquipmentId === value
         });
         
-        // Additional fallback: if the form value didn't update properly, force it again
+        // Additional fallback: Force update if mismatch detected
         if (currentEquipmentId !== value) {
-          console.warn('🔧 MOBILE EQUIPMENT CHANGE - Form value mismatch, forcing update');
-          form.setValue('equipment_id', value, { shouldValidate: true });
+          console.warn('🔧 MOBILE EQUIPMENT CHANGE - Form value mismatch, forcing multiple updates');
+          form.setValue('equipment_id', value, { shouldValidate: true, shouldDirty: true });
           form.trigger();
+          
+          // Force a second verification
+          setTimeout(() => {
+            const finalCheck = form.watch('equipment_id');
+            console.log('🔧 MOBILE EQUIPMENT CHANGE - FINAL CHECK:', {
+              expectedValue: value,
+              actualValue: finalCheck,
+              success: finalCheck === value
+            });
+          }, 100);
         }
-      }, 200);
+      }, 150);
       
     } catch (error) {
       console.error('🔧 MOBILE EQUIPMENT CHANGE - Error:', error);

@@ -21,7 +21,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   console.log('🔧 EquipmentFields rendering for type:', equipmentType);
 
-  // CRITICAL: Enhanced mobile debugging
+  // Enhanced mobile debugging
   React.useEffect(() => {
     if (isMobile) {
       console.log('🔧 MOBILE EQUIPMENT FIELDS RENDER:', {
@@ -32,7 +32,8 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
     }
   }, [equipmentType, isMobile]);
 
-  // Always render appropriate fields for all devices
+  // CRITICAL: Always show maintenance fields when equipment is selected
+  // Render appropriate fields for all devices with fallback to general
   if (equipmentType === 'ahu') {
     return (
       <div 
@@ -45,7 +46,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
         }}
       >
         {isMobile && (
-          <div className="text-green-600 font-medium">✓ AHU Maintenance Fields Loaded</div>
+          <div className="text-green-600 font-medium">✓ AHU/RTU Maintenance Fields Loaded</div>
         )}
         <AHUMaintenanceFields form={form} />
       </div>
@@ -130,7 +131,8 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
     );
   }
   
-  // Default or general equipment
+  // CRITICAL: Always show general maintenance fields as fallback
+  // This ensures users always see maintenance fields when equipment is selected
   return (
     <div 
       className="w-full space-y-6" 
@@ -142,7 +144,9 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       }}
     >
       {isMobile && (
-        <div className="text-green-600 font-medium">✓ General Maintenance Fields Loaded</div>
+        <div className="text-green-600 font-medium">
+          ✓ General Maintenance Fields Loaded{equipmentType ? ` (Type: ${equipmentType})` : ''}
+        </div>
       )}
       <MaintenanceReadings form={form} />
       <MaintenanceStatus form={form} />

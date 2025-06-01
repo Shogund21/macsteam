@@ -4,7 +4,7 @@ import { Equipment } from "@/types/maintenance";
 export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
   const equipmentId = form.watch('equipment_id');
   
-  console.log('useEquipmentTypeLogic: 🔍 MOBILE DEBUG - INPUT ANALYSIS:', {
+  console.log('useEquipmentTypeLogic: 🔍 EQUIPMENT ANALYSIS:', {
     equipmentId,
     equipmentArrayLength: equipment?.length || 0,
     equipmentIds: equipment?.map(eq => ({ id: eq.id, name: eq.name })) || [],
@@ -18,19 +18,19 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
 
   const getEquipmentType = () => {
     if (!selectedEquipment) {
-      console.log('useEquipmentTypeLogic: ❌ MOBILE - No selected equipment found for ID:', equipmentId);
+      console.log('useEquipmentTypeLogic: ❌ No selected equipment found for ID:', equipmentId);
       return null;
     }
     
     const name = selectedEquipment.name.toLowerCase();
-    console.log('useEquipmentTypeLogic: 🔍 MOBILE EQUIPMENT DETECTION:', {
+    console.log('useEquipmentTypeLogic: 🔍 EQUIPMENT DETECTION:', {
       originalName: selectedEquipment.name,
       lowerCaseName: name,
       equipmentId: selectedEquipment.id,
       isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
     });
     
-    // Enhanced AHU detection patterns
+    // Enhanced AHU detection patterns - INCLUDES RTU
     const ahuPatterns = [
       'ahu',
       'air handler',
@@ -40,7 +40,13 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
       'ahu-',
       'ahu ',
       'ah-',
-      'ah '
+      'ah ',
+      'rtu',              // Added RTU detection
+      'roof top unit',    // Added roof top unit
+      'rooftop unit',     // Added rooftop unit variant
+      'roof-top',         // Added hyphenated variant
+      'rtu-',             // Added RTU with dash
+      'rtu '              // Added RTU with space
     ];
     
     // Enhanced chiller detection patterns  
@@ -83,8 +89,8 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     ];
     
     // Check each equipment type with detailed logging
-    if (ahuPatterns.some(pattern => name.includes(pattern)) || /ahu[\s-]?\w*/.test(name)) {
-      console.log('useEquipmentTypeLogic: ✅ MOBILE - DETECTED AHU EQUIPMENT:', {
+    if (ahuPatterns.some(pattern => name.includes(pattern)) || /ahu[\s-]?\w*/.test(name) || /rtu[\s-]?\w*/.test(name)) {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED AHU/RTU EQUIPMENT:', {
         equipmentName: selectedEquipment.name,
         detectedType: 'ahu',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
@@ -93,7 +99,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     }
     
     if (chillerPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ MOBILE - DETECTED CHILLER EQUIPMENT:', {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED CHILLER EQUIPMENT:', {
         equipmentName: selectedEquipment.name,
         detectedType: 'chiller',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
@@ -102,7 +108,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     }
     
     if (coolingTowerPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ MOBILE - DETECTED COOLING TOWER EQUIPMENT:', {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED COOLING TOWER EQUIPMENT:', {
         equipmentName: selectedEquipment.name,
         detectedType: 'cooling_tower',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
@@ -111,7 +117,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     }
     
     if (elevatorPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ MOBILE - DETECTED ELEVATOR EQUIPMENT:', {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED ELEVATOR EQUIPMENT:', {
         equipmentName: selectedEquipment.name,
         detectedType: 'elevator',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
@@ -120,7 +126,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     }
     
     if (restroomPatterns.some(pattern => name.includes(pattern))) {
-      console.log('useEquipmentTypeLogic: ✅ MOBILE - DETECTED RESTROOM EQUIPMENT:', {
+      console.log('useEquipmentTypeLogic: ✅ DETECTED RESTROOM EQUIPMENT:', {
         equipmentName: selectedEquipment.name,
         detectedType: 'restroom',
         isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
@@ -128,7 +134,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
       return 'restroom';
     }
     
-    console.log('useEquipmentTypeLogic: ℹ️ MOBILE - Using general equipment type for:', {
+    console.log('useEquipmentTypeLogic: ℹ️ Using general equipment type for:', {
       equipmentName: name,
       detectedType: 'general',
       isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
@@ -138,7 +144,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
 
   const equipmentType = getEquipmentType();
   
-  console.log('useEquipmentTypeLogic: 🎯 MOBILE FINAL RESULT:', {
+  console.log('useEquipmentTypeLogic: 🎯 FINAL RESULT:', {
     selectedEquipmentId: selectedEquipment?.id,
     selectedEquipmentName: selectedEquipment?.name,
     detectedEquipmentType: equipmentType,
