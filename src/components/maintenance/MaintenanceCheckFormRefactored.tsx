@@ -12,7 +12,6 @@ import { useMaintenanceData } from "./form/hooks/useMaintenanceData";
 import MaintenanceFormLoader from "./form/layout/MaintenanceFormLoader";
 import MaintenanceFormSubmissionHandler from "./form/layout/MaintenanceFormSubmissionHandler";
 import { useEquipmentTypeLogic } from "./form/hooks/useEquipmentTypeLogic";
-import MobileEquipmentDebugger from "./form/debug/MobileEquipmentDebugger";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -36,6 +35,18 @@ const MaintenanceCheckForm = ({
   const { equipment, technicians, isLoading, error } = useMaintenanceData();
   const { selectedEquipment, equipmentType } = useEquipmentTypeLogic(equipment, form);
 
+  // Debug form mounting and rendering
+  console.log('🚀 MaintenanceCheckForm render:', {
+    isMobile,
+    hasEquipment: equipment?.length > 0,
+    hasTechnicians: technicians?.length > 0,
+    isLoading,
+    error: error?.message,
+    selectedEquipment: selectedEquipment?.name,
+    equipmentType,
+    formValues: form.getValues()
+  });
+
   return (
     <MaintenanceFormLoader isLoading={isLoading} error={error}>
       <MaintenanceFormSubmissionHandler
@@ -57,25 +68,32 @@ const MaintenanceCheckForm = ({
             equipmentType={equipmentType}
             isMobile={isMobile}
           >
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmitForm)} className="space-y-6">
-                <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
-                <MaintenanceFormBody />
-                
-                {/* Form actions */}
-                <div className={isMobile ? 'sticky bottom-0 bg-white p-4 border-t shadow-lg' : ''}>
-                  <FormActions 
-                    onCancel={onComplete}
-                    isEditing={!!initialData}
-                    isSubmitting={isSubmitting}
-                    onSubmit={manualSubmit}
-                  />
-                </div>
-                
-                {/* Mobile debugging component */}
-                <MobileEquipmentDebugger />
-              </form>
-            </Form>
+            <div 
+              className={`w-full ${isMobile ? 'px-4' : 'max-w-4xl mx-auto px-6'}`}
+              data-component="maintenance-form-container"
+              style={{
+                display: 'block',
+                visibility: 'visible',
+                opacity: 1
+              }}
+            >
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full space-y-6">
+                  <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
+                  <MaintenanceFormBody />
+                  
+                  {/* Form actions */}
+                  <div className={isMobile ? 'sticky bottom-0 bg-white p-4 border-t shadow-lg' : ''}>
+                    <FormActions 
+                      onCancel={onComplete}
+                      isEditing={!!initialData}
+                      isSubmitting={isSubmitting}
+                      onSubmit={manualSubmit}
+                    />
+                  </div>
+                </form>
+              </Form>
+            </div>
           </MaintenanceFormProvider>
         )}
       </MaintenanceFormSubmissionHandler>

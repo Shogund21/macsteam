@@ -14,31 +14,21 @@ interface AHUMaintenanceFieldsProps {
 const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
   const { isMobile } = useMaintenanceFormContext();
   
-  console.log('AHUMaintenanceFields: 📱 RENDERING - isMobile:', isMobile);
-  
   return (
-    <div className="ahu-maintenance-container space-y-6">
-      {isMobile && (
-        <div className="mobile-debug-indicator" style={{
-          backgroundColor: '#fce4ec',
-          padding: '8px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#ad1457',
-          marginBottom: '12px',
-          fontWeight: 'bold'
-        }}>
-          📱 Mobile: AHU Maintenance Fields
+    <div className="w-full space-y-6" data-component="ahu-maintenance-fields">
+      <h2 className={`font-semibold mb-4 ${isMobile ? 'text-lg' : 'text-xl'}`}>
+        AHU Daily Preventative Maintenance
+      </h2>
+      
+      <div className="w-full space-y-6">
+        <div className="w-full space-y-6">
+          <AHUFilterAndBelt form={form} />
+          <AHUFanAndDampers form={form} />
         </div>
-      )}
-      
-      <h2 className="text-xl font-semibold">AHU Daily Preventative Maintenance</h2>
-      
-      <div className={isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
-        <AHUFilterAndBelt form={form} />
-        <AHUFanAndDampers form={form} />
-        <AHUConditionChecks form={form} />
-        <AHUAirflowAndDrainage form={form} />
+        <div className="w-full space-y-6">
+          <AHUConditionChecks form={form} />
+          <AHUAirflowAndDrainage form={form} />
+        </div>
       </div>
 
       <AHUNotes form={form} />

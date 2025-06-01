@@ -28,17 +28,20 @@ const Layout = ({ children }: LayoutProps) => {
   }, [isMobile]);
   
   // Use different layout approach for mobile vs desktop
+  // Only wrap desktop layout with SidebarProvider
+  if (isMobile) {
+    return (
+      <MobileLayout>
+        {children}
+      </MobileLayout>
+    );
+  }
+
   return (
-    <SidebarProvider defaultOpen={!isMobile}>
-      {isMobile ? (
-        <MobileLayout>
-          {children}
-        </MobileLayout>
-      ) : (
-        <DesktopLayout>
-          {children}
-        </DesktopLayout>
-      )}
+    <SidebarProvider defaultOpen={true}>
+      <DesktopLayout>
+        {children}
+      </DesktopLayout>
     </SidebarProvider>
   );
 };

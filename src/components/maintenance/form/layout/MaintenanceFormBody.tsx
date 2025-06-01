@@ -7,56 +7,26 @@ import DocumentManager from '../../documents/DocumentManager';
 import EquipmentTypeFields from './EquipmentTypeFields';
 
 const MaintenanceFormBody = () => {
-  const { form, equipment, technicians, isMobile, selectedEquipment, equipmentType } = useMaintenanceFormContext();
+  const { form, equipment, technicians, isMobile } = useMaintenanceFormContext();
   
-  const equipmentId = form.watch('equipment_id');
+  // CRITICAL: Use ONLY form state for rendering decisions - bypass context
+  const formEquipmentId = form.watch('equipment_id');
+  
+  // CRITICAL: Simple direct lookup - no context dependencies
+  const hasEquipmentSelected = !!(formEquipmentId && equipment && equipment.length > 0);
+  const currentEquipment = formEquipmentId ? equipment.find(eq => eq.id === formEquipmentId) : null;
 
-  console.log('MaintenanceFormBody: 📱 MOBILE COMPREHENSIVE DEBUG:', { 
-    isMobile, 
-    equipmentId, 
-    equipmentType,
-    selectedEquipmentName: selectedEquipment?.name,
-    hasEquipmentId: !!equipmentId,
-    shouldShowFields: !!equipmentId,
-    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
-    userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : 'unknown',
+  console.log('🔧 MaintenanceFormBody ALWAYS RENDER CHECKLIST:', { 
+    formEquipmentId,
+    equipmentArrayLength: equipment?.length || 0,
+    hasEquipmentSelected,
+    currentEquipmentName: currentEquipment?.name || 'None',
+    isMobile,
     timestamp: new Date().toISOString()
   });
 
-  // Additional mobile-specific debugging with form state
-  if (isMobile) {
-    console.log('MaintenanceFormBody: 📱 MOBILE FORM STATE DEBUG:', {
-      equipmentAvailable: equipment?.length || 0,
-      techniciansAvailable: technicians?.length || 0,
-      allFormValues: form.getValues(),
-      watchedEquipmentId: form.watch('equipment_id'),
-      watchedLocationId: form.watch('location_id'),
-      selectedEquipmentDetails: selectedEquipment ? {
-        id: selectedEquipment.id,
-        name: selectedEquipment.name
-      } : null,
-      formErrors: form.formState.errors,
-      formIsDirty: form.formState.isDirty,
-      formIsValid: form.formState.isValid
-    });
-  }
-
-  // Enhanced render decision logging
-  console.log('MaintenanceFormBody: 🔄 MOBILE RENDER DECISION:', {
-    equipmentId,
-    equipmentType,
-    willShowEquipmentSection: !!equipmentId,
-    isMobile,
-    renderingConditions: {
-      hasEquipmentId: !!equipmentId,
-      hasEquipmentType: !!equipmentType,
-      hasSelectedEquipment: !!selectedEquipment,
-      allConditionsMet: !!equipmentId && !!equipmentType && !!selectedEquipment
-    }
-  });
-
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-4" data-component="maintenance-form-body">
       <FormSection title="Basic Information">
         <MaintenanceBasicInfo 
           form={form} 
@@ -65,30 +35,35 @@ const MaintenanceFormBody = () => {
         />
       </FormSection>
       
-      {equipmentId && (
-        <FormSection title="Equipment Details">
-          {/* Mobile debugging indicator */}
-          {isMobile && (
-            <div style={{ 
-              backgroundColor: '#fef3c7', 
-              padding: '8px 12px', 
-              borderRadius: '4px',
-              fontSize: '12px',
-              color: '#92400e',
-              marginBottom: '12px',
-              border: '1px solid #fbbf24'
-            }}>
-              📱 Mobile Equipment Section: {selectedEquipment?.name || 'Unknown'} ({equipmentType || 'No type'})
-            </div>
-          )}
-          <div className={isMobile ? 'mobile-equipment-fields' : ''}>
-            <EquipmentTypeFields />
-          </div>
-        </FormSection>
+      {/* CRITICAL: ALWAYS render this section - REMOVED conditional barrier */}
+      <FormSection title="Equipment Maintenance Checklist">
+        <div 
+          className="w-full mobile-checklist-force-visible" 
+          data-component="equipment-details-wrapper"
+          data-mobile-visible="true"
+          data-equipment-id={formEquipmentId || 'none'}
+          data-equipment-name={currentEquipment?.name || 'None Selected'}
+          data-force-visible="true"
+        >
+          <EquipmentTypeFields />
+        </div>
+      </FormSection>
+
+      {/* Mobile debugging - always show */}
+      {isMobile && (
+        <div className="bg-green-100 border-2 border-green-500 p-4 rounded-lg text-sm mobile-debug-info">
+          <strong>✅ MOBILE CHECKLIST STATUS:</strong><br />
+          Equipment Selected: {currentEquipment?.name || 'None'}<br />
+          Form Equipment ID: {formEquipmentId || 'None'}<br />
+          Has Equipment Array: {equipment?.length > 0 ? 'Yes' : 'No'}<br />
+          Checklist Section: ALWAYS RENDERED<br />
+          Content State: {hasEquipmentSelected ? 'SHOWING FIELDS' : 'SHOWING SELECT MESSAGE'}<br />
+          Timestamp: {new Date().toLocaleString()}
+        </div>
       )}
 
       <FormSection title="Documents">
-        <DocumentManager equipmentId={equipmentId} />
+        <DocumentManager equipmentId={formEquipmentId} />
       </FormSection>
     </div>
   );

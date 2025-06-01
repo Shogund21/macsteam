@@ -11,8 +11,6 @@ interface CoolingTowerFieldsProps {
 const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
   const { isMobile } = useMaintenanceFormContext();
   
-  console.log('CoolingTowerFields: 📱 RENDERING - isMobile:', isMobile);
-  
   const statusOptions = [
     { value: "good", label: "Good" },
     { value: "fair", label: "Fair" },
@@ -40,41 +38,45 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
   ];
 
   return (
-    <div className="cooling-tower-container space-y-6">
-      {isMobile && (
-        <div className="mobile-debug-indicator" style={{
-          backgroundColor: '#e1f5fe',
-          padding: '8px',
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#0277bd',
-          marginBottom: '12px',
-          fontWeight: 'bold'
-        }}>
-          📱 Mobile: Cooling Tower Fields
-        </div>
-      )}
+    <div 
+      className="w-full space-y-6" 
+      data-component="cooling-tower-fields"
+      data-device={isMobile ? 'mobile' : 'desktop'}
+    >
+      <h2 className="text-xl font-semibold mb-4">Cooling Tower Inspection</h2>
       
-      <h2 className="text-xl font-semibold">Cooling Tower Inspection</h2>
-      
-      <div className={isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
+      <div className={`w-full ${isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}`}>
         {fields.map((field) => (
           <FormField
             key={field.name}
             control={form.control}
             name={field.name}
             render={({ field: formField }) => (
-              <FormItem className={isMobile ? 'mobile-form-item' : ''}>
-                <FormLabel>{field.label}</FormLabel>
+              <FormItem className="w-full">
+                <FormLabel className="block text-sm font-medium text-gray-700 mb-2">
+                  {field.label}
+                </FormLabel>
                 <Select onValueChange={formField.onChange} defaultValue={formField.value}>
                   <FormControl>
-                    <SelectTrigger className={`bg-white ${isMobile ? 'mobile-select-trigger' : ''}`}>
+                    <SelectTrigger 
+                      className={`w-full bg-white border border-gray-300 ${
+                        isMobile ? 'min-h-[52px] text-base' : 'min-h-[40px]'
+                      }`}
+                    >
                       <SelectValue placeholder={`Select ${field.label}`} />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
+                  <SelectContent 
+                    className="bg-white border border-gray-200 shadow-lg z-[200]"
+                    position="popper"
+                    sideOffset={4}
+                  >
                     {statusOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
+                      <SelectItem 
+                        key={option.value} 
+                        value={option.value} 
+                        className="cursor-pointer hover:bg-gray-50"
+                      >
                         {option.label}
                       </SelectItem>
                     ))}

@@ -4,14 +4,12 @@ import { Link } from "react-router-dom";
 import { Menu, X, LayoutDashboard, Wrench, Building2, ClipboardList, BarChart4, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useSidebar } from "@/components/ui/sidebar";
 
 export function MobileDropdownMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0, right: 'auto' });
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const { toggleSidebar } = useSidebar();
   
   const menuItems = [
     { title: "Dashboard", icon: LayoutDashboard, path: "/" },
@@ -69,12 +67,6 @@ export function MobileDropdownMenu() {
   };
 
   const handleItemClick = () => {
-    setIsOpen(false);
-  };
-  
-  const handleSidebarToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    toggleSidebar();
     setIsOpen(false);
   };
 
@@ -144,16 +136,6 @@ export function MobileDropdownMenu() {
             }}
           >
             <div className="p-2 flex flex-col gap-1">
-              <Button
-                variant="ghost"
-                className="flex items-center justify-start px-3 py-2 text-left w-full min-h-[40px]"
-                onClick={handleSidebarToggle}
-              >
-                <span className="text-sm">Full Navigation</span>
-              </Button>
-              
-              <div className="h-px bg-gray-100 my-1" />
-              
               {menuItems.map((item) => (
                 <Link 
                   key={item.title} 
