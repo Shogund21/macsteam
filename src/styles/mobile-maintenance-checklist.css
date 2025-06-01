@@ -1,0 +1,192 @@
+
+@layer components {
+  /* Mobile Maintenance Checklist Debug and Visibility Fixes */
+  @media (max-width: 1200px) {
+    
+    /* CRITICAL: Force visibility for all maintenance checklist components */
+    [data-component="maintenance-form-body"],
+    [data-component="equipment-details-wrapper"],
+    [data-component="equipment-type-fields"],
+    [data-component="equipment-fields-container"],
+    [data-component="ahu-maintenance-fields"],
+    [data-component="ahu-fields-container"],
+    [data-component="chiller-fields-container"],
+    [data-component="cooling-tower-fields-container"],
+    [data-component="elevator-fields-container"],
+    [data-component="restroom-fields-container"],
+    [data-component="general-fields-container"],
+    [data-component="cooling-tower-fields"],
+    [data-component="maintenance-checklist"] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      min-height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      position: relative !important;
+      z-index: 10 !important;
+      transform: none !important;
+      margin: 0 !important;
+      padding: 0.5rem !important;
+      background-color: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Force form sections to be visible and properly spaced */
+    [data-component="form-section"] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      margin-bottom: 1.5rem !important;
+      padding: 1rem !important;
+      background-color: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Equipment checklist section specific fixes */
+    [data-component="form-section"]:has([data-component="equipment-details-wrapper"]) {
+      background-color: #f8fafc !important;
+      border: 2px solid #e2e8f0 !important;
+      padding: 1.5rem !important;
+    }
+
+    /* Ensure equipment field containers are properly displayed */
+    [data-component*="fields-container"] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      padding: 1rem !important;
+      background-color: #ffffff !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 6px !important;
+      margin-bottom: 1rem !important;
+    }
+
+    /* Force all form inputs and selects to be visible and properly sized */
+    [data-component*="fields-container"] input,
+    [data-component*="fields-container"] select,
+    [data-component*="fields-container"] [role="combobox"],
+    [data-component*="fields-container"] textarea,
+    [data-component*="fields-container"] [role="switch"] {
+      display: flex !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      min-height: 52px !important;
+      padding: 12px 16px !important;
+      font-size: 16px !important;
+      line-height: 1.4 !important;
+      border: 1px solid #d1d5db !important;
+      border-radius: 6px !important;
+      background-color: white !important;
+      color: #1f2937 !important;
+      margin-bottom: 0.5rem !important;
+    }
+
+    /* Grid layout fixes - force single column on mobile */
+    [data-component*="fields-container"] .grid,
+    [data-component="cooling-tower-fields"] .grid,
+    [data-component="ahu-maintenance-fields"] .grid {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+      grid-template-columns: none !important;
+      width: 100% !important;
+    }
+
+    /* Space-y class overrides for proper spacing */
+    [data-component*="fields-container"] .space-y-4 > *,
+    [data-component*="fields-container"] .space-y-6 > * {
+      margin-bottom: 1rem !important;
+      width: 100% !important;
+      display: block !important;
+      visibility: visible !important;
+    }
+
+    /* Form labels should be clearly visible */
+    [data-component*="fields-container"] label {
+      display: block !important;
+      font-size: 16px !important;
+      font-weight: 500 !important;
+      color: #374151 !important;
+      margin-bottom: 8px !important;
+      visibility: visible !important;
+    }
+
+    /* Equipment type titles and headers */
+    [data-component*="fields-container"] h2,
+    [data-component*="fields-container"] h3 {
+      display: block !important;
+      visibility: visible !important;
+      font-size: 1.25rem !important;
+      font-weight: 600 !important;
+      color: #1f2937 !important;
+      margin-bottom: 1rem !important;
+      padding: 0.5rem 0 !important;
+      border-bottom: 1px solid #e5e7eb !important;
+    }
+
+    /* Dropdown content positioning and visibility */
+    [data-radix-select-content],
+    [data-radix-dropdown-menu-content] {
+      position: fixed !important;
+      z-index: 1000 !important;
+      background-color: white !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 6px !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+      max-height: 300px !important;
+      overflow-y: auto !important;
+      width: 80% !important;
+      max-width: 300px !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      top: auto !important;
+      bottom: 25% !important;
+    }
+
+    /* Debug borders for troubleshooting (remove after fixing) */
+    [data-component="equipment-type-fields"] {
+      border: 3px solid #ef4444 !important;
+      background-color: #fef2f2 !important;
+    }
+
+    [data-component="equipment-details-wrapper"] {
+      border: 3px solid #10b981 !important;
+      background-color: #f0fdf4 !important;
+    }
+
+    /* Ensure no parent containers are hiding content */
+    div[style*="display: none"] {
+      display: block !important;
+    }
+
+    div[style*="visibility: hidden"] {
+      visibility: visible !important;
+    }
+
+    div[style*="opacity: 0"] {
+      opacity: 1 !important;
+    }
+  }
+
+  /* Touch-friendly interactions */
+  @media (max-width: 1200px) and (pointer: coarse) {
+    [data-component*="fields-container"] button,
+    [data-component*="fields-container"] [role="combobox"],
+    [data-component*="fields-container"] input,
+    [data-component*="fields-container"] select {
+      min-height: 52px !important;
+      min-width: 52px !important;
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+  }
+}

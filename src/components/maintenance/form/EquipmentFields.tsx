@@ -9,7 +9,6 @@ import AHUMaintenanceFields from "./AHUMaintenanceFields";
 import ElevatorMaintenanceFields from "./ElevatorMaintenanceFields";
 import RestroomMaintenanceFields from "./RestroomMaintenanceFields";
 import CoolingTowerFields from "./CoolingTowerFields";
-import { useMaintenanceFormContext } from "../context/MaintenanceFormContext";
 
 interface EquipmentFieldsProps {
   form: UseFormReturn<MaintenanceFormValues>;
@@ -17,96 +16,58 @@ interface EquipmentFieldsProps {
 }
 
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
-  // Use context-provided isMobile for consistency
-  const { isMobile } = useMaintenanceFormContext();
-  
-  console.log('EquipmentFields: 🔧 MOBILE RENDERING DEBUG:', {
-    equipmentType, 
-    isMobile,
-    contextProvidedMobile: isMobile,
-    windowWidth: typeof window !== 'undefined' ? window.innerWidth : 'unknown',
-    timestamp: new Date().toISOString()
-  });
-  
-  // Mobile debugging component wrapper with enhanced visibility
-  const MobileDebugWrapper = ({ children, type }: { children: React.ReactNode, type: string }) => (
-    <div className={`equipment-fields-container ${isMobile ? `mobile-${type}-fields` : ''} space-y-4`}>
-      {isMobile && (
-        <div style={{ 
-          backgroundColor: '#f3e5f5', 
-          padding: '8px 12px', 
-          borderRadius: '4px',
-          fontSize: '12px',
-          color: '#7b1fa2',
-          marginBottom: '12px',
-          border: '2px solid #9c27b0',
-          fontWeight: 'bold'
-        }}>
-          📱 Mobile: Rendering {type} maintenance fields (Width: {typeof window !== 'undefined' ? window.innerWidth : 'unknown'}px)
-        </div>
-      )}
-      <div className={isMobile ? 'mobile-equipment-content' : ''}>
-        {children}
-      </div>
-    </div>
-  );
-  
-  // Render appropriate fields based on equipment type
+  console.log('🔧 EquipmentFields rendering for type:', equipmentType);
+
+  // Always render appropriate fields for all devices
   if (equipmentType === 'ahu') {
-    console.log('EquipmentFields: ✅ MOBILE - RENDERING AHU FIELDS');
     return (
-      <MobileDebugWrapper type="ahu">
+      <div className="w-full space-y-6" data-component="ahu-fields-container">
         <AHUMaintenanceFields form={form} />
-      </MobileDebugWrapper>
+      </div>
     );
   }
   
   if (equipmentType === 'chiller') {
-    console.log('EquipmentFields: ✅ MOBILE - RENDERING CHILLER FIELDS');
     return (
-      <MobileDebugWrapper type="chiller">
+      <div className="w-full space-y-6" data-component="chiller-fields-container">
         <MaintenanceReadings form={form} />
         <MaintenanceStatus form={form} />
         <MaintenanceObservations form={form} />
-      </MobileDebugWrapper>
+      </div>
     );
   }
   
   if (equipmentType === 'cooling_tower') {
-    console.log('EquipmentFields: ✅ MOBILE - RENDERING COOLING TOWER FIELDS');
     return (
-      <MobileDebugWrapper type="cooling-tower">
+      <div className="w-full space-y-6" data-component="cooling-tower-fields-container">
         <CoolingTowerFields form={form} />
-      </MobileDebugWrapper>
+      </div>
     );
   }
   
   if (equipmentType === 'elevator') {
-    console.log('EquipmentFields: ✅ MOBILE - RENDERING ELEVATOR FIELDS');
     return (
-      <MobileDebugWrapper type="elevator">
+      <div className="w-full space-y-6" data-component="elevator-fields-container">
         <ElevatorMaintenanceFields form={form} />
-      </MobileDebugWrapper>
+      </div>
     );
   }
   
   if (equipmentType === 'restroom') {
-    console.log('EquipmentFields: ✅ MOBILE - RENDERING RESTROOM FIELDS');
     return (
-      <MobileDebugWrapper type="restroom">
+      <div className="w-full space-y-6" data-component="restroom-fields-container">
         <RestroomMaintenanceFields form={form} />
-      </MobileDebugWrapper>
+      </div>
     );
   }
   
   // Default or general equipment
-  console.log('EquipmentFields: ℹ️ MOBILE - RENDERING DEFAULT/GENERAL FIELDS');
   return (
-    <MobileDebugWrapper type="general">
+    <div className="w-full space-y-6" data-component="general-fields-container">
       <MaintenanceReadings form={form} />
       <MaintenanceStatus form={form} />
       <MaintenanceObservations form={form} />
-    </MobileDebugWrapper>
+    </div>
   );
 };
 

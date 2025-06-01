@@ -1,21 +1,19 @@
 
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
-/* Import core CSS files in proper order */
-@import './variables.css';
 @import './base.css';
+@import './variables.css';
+@import './components.css';
+@import './utilities.css';
+@import './mobile-fixes.css';
+@import './mobile-checklist-fix.css';
+@import './mobile-maintenance-checklist.css';
+@import './mobile-form-fixes.css';
+@import './mobile-equipment-fields.css';
+@import './mobile-animations.css';
+@import './mobile-touch.css';
+@import './mobile-dialogs.css';
+@import './mobile-sidebar.css';
+@import './ui-fixes.css';
 @import './device-fixes.css';
 @import './content-visibility.css';
-@import './components.css';
-@import './ui-fixes.css';
-@import './mobile-fixes.css';
-@import './mobile-sidebar.css';
-@import './mobile-dialogs.css';
-@import './mobile-touch.css';
-@import './mobile-animations.css';
-@import './mobile-equipment-fields.css';
-@import './utilities.css';
-@import './print.css';
 @import './chart.css';
+@import './print.css';

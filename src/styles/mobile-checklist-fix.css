@@ -1,0 +1,174 @@
+
+@import './mobile-maintenance-checklist.css';
+
+@layer components {
+  /* Mobile Equipment Checklist Fixes - Enhanced with Debug Support */
+  @media (max-width: 1200px) {
+    /* Force visibility and proper layout for maintenance checklists */
+    [data-component="maintenance-checklist"],
+    [data-component="equipment-type-fields"],
+    [data-component="cooling-tower-fields"],
+    [data-component="equipment-fields-container"],
+    [data-component="ahu-maintenance-fields"],
+    [data-component="ahu-fields-container"],
+    [data-component="chiller-fields-container"],
+    [data-component="cooling-tower-fields-container"],
+    [data-component="elevator-fields-container"],
+    [data-component="restroom-fields-container"],
+    [data-component="general-fields-container"] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      max-height: none !important;
+      overflow: visible !important;
+      position: relative !important;
+      z-index: 1 !important;
+      min-height: auto !important;
+      background-color: white !important;
+      padding: 1rem !important;
+      margin-bottom: 1rem !important;
+      border-radius: 8px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Ensure form containers stretch full width on mobile */
+    [data-component="maintenance-form-container"],
+    [data-component="maintenance-form-body"],
+    [data-component="form-section"],
+    [data-component="equipment-details-wrapper"] {
+      width: 100% !important;
+      max-width: none !important;
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+      display: block !important;
+      visibility: visible !important;
+      padding: 0.75rem !important;
+    }
+
+    /* Fix mobile form fields - Enhanced selectors */
+    .mobile-form-field,
+    [data-component="cooling-tower-fields"] .w-full input,
+    [data-component="cooling-tower-fields"] .w-full select,
+    [data-component="cooling-tower-fields"] [role="combobox"],
+    [data-component="ahu-maintenance-fields"] .w-full input,
+    [data-component="ahu-maintenance-fields"] .w-full select,
+    [data-component="ahu-maintenance-fields"] [role="combobox"],
+    [data-component*="fields-container"] .w-full input,
+    [data-component*="fields-container"] .w-full select,
+    [data-component*="fields-container"] [role="combobox"] {
+      width: 100% !important;
+      min-height: 52px !important;
+      font-size: 16px !important;
+      padding: 12px 16px !important;
+      border: 1px solid #d1d5db !important;
+      border-radius: 6px !important;
+      background-color: white !important;
+      display: flex !important;
+      align-items: center !important;
+      margin-bottom: 0.5rem !important;
+    }
+
+    /* Force grid layouts to single column on mobile */
+    [data-component="cooling-tower-fields"] .grid,
+    [data-component="equipment-type-fields"] .grid,
+    [data-component="ahu-maintenance-fields"] .grid,
+    [data-component*="fields-container"] .grid {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+      grid-template-columns: none !important;
+    }
+
+    /* Remove any overflow constraints that might hide content */
+    .space-y-6,
+    .space-y-4 {
+      overflow: visible !important;
+      max-height: none !important;
+    }
+
+    /* Ensure proper spacing between form items */
+    [data-component="cooling-tower-fields"] .space-y-4 > *,
+    [data-component="equipment-type-fields"] .space-y-4 > *,
+    [data-component="ahu-maintenance-fields"] .space-y-4 > *,
+    [data-component="ahu-maintenance-fields"] .space-y-6 > *,
+    [data-component*="fields-container"] .space-y-4 > *,
+    [data-component*="fields-container"] .space-y-6 > * {
+      margin-bottom: 1rem !important;
+      width: 100% !important;
+      display: block !important;
+      visibility: visible !important;
+    }
+
+    /* Fix switch components on mobile */
+    [data-component="ahu-maintenance-fields"] [role="switch"],
+    [data-component*="fields-container"] [role="switch"] {
+      transform: scale(1.25) !important;
+    }
+
+    /* Ensure proper select dropdown visibility with higher z-index */
+    [data-radix-select-content] {
+      z-index: 1000 !important;
+      background-color: white !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1) !important;
+      max-height: 300px !important;
+      overflow-y: auto !important;
+    }
+
+    /* Force form sections to be visible */
+    .form-section,
+    [data-component="form-section"] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
+    /* Debug highlight for equipment checklist sections */
+    [data-component="form-section"]:has([data-component="equipment-details-wrapper"]) {
+      background-color: #f0f9ff !important;
+      border: 2px solid #3b82f6 !important;
+      padding: 1.5rem !important;
+    }
+  }
+
+  /* Touch-friendly interactions */
+  @media (max-width: 1200px) and (pointer: coarse) {
+    [data-component="cooling-tower-fields"] button,
+    [data-component="cooling-tower-fields"] [role="combobox"],
+    [data-component="ahu-maintenance-fields"] button,
+    [data-component="ahu-maintenance-fields"] [role="combobox"],
+    [data-component*="fields-container"] button,
+    [data-component*="fields-container"] [role="combobox"] {
+      min-height: 52px !important;
+      touch-action: manipulation !important;
+      -webkit-tap-highlight-color: transparent !important;
+    }
+
+    /* Ensure form labels are readable */
+    [data-component="ahu-maintenance-fields"] label,
+    [data-component*="fields-container"] label {
+      font-size: 16px !important;
+      font-weight: 500 !important;
+      margin-bottom: 8px !important;
+      display: block !important;
+    }
+  }
+
+  /* Additional fallback for any hidden containers */
+  @media (max-width: 1200px) {
+    /* Ensure no parent containers are hiding the checklist */
+    div[style*="display: none"],
+    div[style*="visibility: hidden"] {
+      display: block !important;
+      visibility: visible !important;
+    }
+
+    /* Make sure equipment selection triggers are visible */
+    [data-component="equipment-details-wrapper"] > * {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+  }
+}
