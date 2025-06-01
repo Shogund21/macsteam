@@ -45,11 +45,6 @@ const EquipmentTypeFields = () => {
       data-equipment-type={currentEquipmentType}
       data-equipment-name={currentEquipment?.name || 'None'}
       data-force-visible="true"
-      style={{
-        display: 'block !important',
-        visibility: 'visible !important',
-        opacity: '1 !important'
-      }}
     >
       {/* Mobile status indicator - always visible */}
       {isMobile && (

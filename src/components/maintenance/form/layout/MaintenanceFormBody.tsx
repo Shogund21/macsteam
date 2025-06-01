@@ -49,11 +49,6 @@ const MaintenanceFormBody = () => {
             data-equipment-id={formEquipmentId}
             data-equipment-name={currentEquipment?.name || 'Unknown'}
             data-force-visible="true"
-            style={{
-              display: 'block !important',
-              visibility: 'visible !important',
-              opacity: '1 !important'
-            }}
           >
             <EquipmentTypeFields />
           </div>
