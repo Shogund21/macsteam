@@ -9,6 +9,7 @@ import AHUMaintenanceFields from "./AHUMaintenanceFields";
 import ElevatorMaintenanceFields from "./ElevatorMaintenanceFields";
 import RestroomMaintenanceFields from "./RestroomMaintenanceFields";
 import CoolingTowerFields from "./CoolingTowerFields";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface EquipmentFieldsProps {
   form: UseFormReturn<MaintenanceFormValues>;
@@ -16,12 +17,36 @@ interface EquipmentFieldsProps {
 }
 
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
+  const isMobile = useIsMobile();
+  
   console.log('🔧 EquipmentFields rendering for type:', equipmentType);
+
+  // CRITICAL: Enhanced mobile debugging
+  React.useEffect(() => {
+    if (isMobile) {
+      console.log('🔧 MOBILE EQUIPMENT FIELDS RENDER:', {
+        equipmentType,
+        isMobile,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }, [equipmentType, isMobile]);
 
   // Always render appropriate fields for all devices
   if (equipmentType === 'ahu') {
     return (
-      <div className="w-full space-y-6" data-component="ahu-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="ahu-fields-container"
+        style={{
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1
+        }}
+      >
+        {isMobile && (
+          <div className="text-green-600 font-medium">✓ AHU Maintenance Fields Loaded</div>
+        )}
         <AHUMaintenanceFields form={form} />
       </div>
     );
@@ -29,7 +54,18 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   if (equipmentType === 'chiller') {
     return (
-      <div className="w-full space-y-6" data-component="chiller-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="chiller-fields-container"
+        style={{
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1
+        }}
+      >
+        {isMobile && (
+          <div className="text-green-600 font-medium">✓ Chiller Maintenance Fields Loaded</div>
+        )}
         <MaintenanceReadings form={form} />
         <MaintenanceStatus form={form} />
         <MaintenanceObservations form={form} />
@@ -39,7 +75,18 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   if (equipmentType === 'cooling_tower') {
     return (
-      <div className="w-full space-y-6" data-component="cooling-tower-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="cooling-tower-fields-container"
+        style={{
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1
+        }}
+      >
+        {isMobile && (
+          <div className="text-green-600 font-medium">✓ Cooling Tower Fields Loaded</div>
+        )}
         <CoolingTowerFields form={form} />
       </div>
     );
@@ -47,7 +94,18 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   if (equipmentType === 'elevator') {
     return (
-      <div className="w-full space-y-6" data-component="elevator-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="elevator-fields-container"
+        style={{
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1
+        }}
+      >
+        {isMobile && (
+          <div className="text-green-600 font-medium">✓ Elevator Maintenance Fields Loaded</div>
+        )}
         <ElevatorMaintenanceFields form={form} />
       </div>
     );
@@ -55,7 +113,18 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   if (equipmentType === 'restroom') {
     return (
-      <div className="w-full space-y-6" data-component="restroom-fields-container">
+      <div 
+        className="w-full space-y-6" 
+        data-component="restroom-fields-container"
+        style={{
+          display: 'block',
+          visibility: 'visible',
+          opacity: 1
+        }}
+      >
+        {isMobile && (
+          <div className="text-green-600 font-medium">✓ Restroom Maintenance Fields Loaded</div>
+        )}
         <RestroomMaintenanceFields form={form} />
       </div>
     );
@@ -63,7 +132,18 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   
   // Default or general equipment
   return (
-    <div className="w-full space-y-6" data-component="general-fields-container">
+    <div 
+      className="w-full space-y-6" 
+      data-component="general-fields-container"
+      style={{
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1
+      }}
+    >
+      {isMobile && (
+        <div className="text-green-600 font-medium">✓ General Maintenance Fields Loaded</div>
+      )}
       <MaintenanceReadings form={form} />
       <MaintenanceStatus form={form} />
       <MaintenanceObservations form={form} />

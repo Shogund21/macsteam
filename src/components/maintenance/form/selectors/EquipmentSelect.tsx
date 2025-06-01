@@ -31,16 +31,21 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
     });
   }, [locationId, selectedEquipmentId, equipment, isMobile]);
 
+  // CRITICAL FIX: Enhanced equipment change handler with mobile debugging
   const handleEquipmentChange = (value: string) => {
-    console.log('EquipmentSelect: 🔄 Equipment selection changed to:', value);
-    console.log('EquipmentSelect: 📱 Mobile debug - isMobile:', isMobile);
+    console.log('🔧 MOBILE EQUIPMENT CHANGE - START:', {
+      newValue: value,
+      previousValue: selectedEquipmentId,
+      isMobile,
+      timestamp: new Date().toISOString()
+    });
     
     try {
       // Get the selected equipment details
       const selectedEquipment = equipment.find(eq => eq.id === value) as Equipment | undefined;
       
       if (selectedEquipment) {
-        console.log('EquipmentSelect: ✅ Equipment selected:', {
+        console.log('🔧 MOBILE EQUIPMENT CHANGE - Equipment found:', {
           id: selectedEquipment.id,
           name: selectedEquipment.name,
           databaseLocation: selectedEquipment.location,
@@ -49,26 +54,40 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
         });
       }
       
-      // Set equipment ID in form
+      // CRITICAL: Force form update with all validation flags
       form.setValue('equipment_id', value, {
         shouldDirty: true,
         shouldTouch: true,
         shouldValidate: true
       });
       
-      // Mobile-specific verification
+      // CRITICAL: Force form revalidation to trigger React re-renders
+      form.trigger('equipment_id');
+      
+      // Mobile-specific verification with longer timeout
       setTimeout(() => {
         const formValues = form.getValues();
-        console.log('EquipmentSelect: 📱 Mobile verification after equipment change:', {
-          equipmentId: formValues.equipment_id,
-          locationId: formValues.location_id,
+        const currentEquipmentId = form.watch('equipment_id');
+        
+        console.log('🔧 MOBILE EQUIPMENT CHANGE - Verification:', {
+          expectedEquipmentId: value,
+          actualEquipmentId: currentEquipmentId,
+          formValuesEquipmentId: formValues.equipment_id,
           allFormValues: formValues,
-          isMobile: isMobile
+          isMobile: isMobile,
+          success: currentEquipmentId === value
         });
-      }, 100);
+        
+        // Additional fallback: if the form value didn't update properly, force it again
+        if (currentEquipmentId !== value) {
+          console.warn('🔧 MOBILE EQUIPMENT CHANGE - Form value mismatch, forcing update');
+          form.setValue('equipment_id', value, { shouldValidate: true });
+          form.trigger();
+        }
+      }, 200);
       
     } catch (error) {
-      console.error('EquipmentSelect: ❌ Error in handleEquipmentChange:', error);
+      console.error('🔧 MOBILE EQUIPMENT CHANGE - Error:', error);
       toast({
         title: "Error selecting equipment",
         description: error instanceof Error ? error.message : "An unknown error occurred",
@@ -101,6 +120,7 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                   } ${
                     isDisabled ? 'opacity-60 cursor-not-allowed' : 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
                   }`}
+                  data-mobile-debug={isMobile ? 'true' : 'false'}
                 >
                   <SelectValue 
                     placeholder={
@@ -115,8 +135,12 @@ const EquipmentSelect = ({ form, locationId }: EquipmentSelectProps) => {
                 </SelectTrigger>
               </FormControl>
               <SelectContent 
-                className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto"
-                {...(isMobile ? {} : { position: "popper" })}
+                className="z-[9999] bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto"
+                {...(isMobile ? { 
+                  position: "popper",
+                  sideOffset: 5,
+                  alignOffset: 0
+                } : { position: "popper" })}
               >
                 {isLoading ? (
                   <SelectItem value="loading-placeholder" disabled className={`text-gray-500 ${isMobile ? 'py-4 px-4 text-base' : 'py-3 px-4 text-sm'}`}>
