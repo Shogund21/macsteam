@@ -123,13 +123,6 @@
       visibility: visible !important;
       opacity: 1 !important;
     }
-
-    /* Debug highlight for equipment checklist sections */
-    [data-component="form-section"]:has([data-component="equipment-details-wrapper"]) {
-      background-color: #f0f9ff !important;
-      border: 2px solid #3b82f6 !important;
-      padding: 1.5rem !important;
-    }
   }
 
   /* Touch-friendly interactions */
