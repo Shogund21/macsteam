@@ -53,9 +53,12 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
         <LocationSelect form={form} />
       </div>
       
-      <div className="w-full" data-field="equipment">
-        <EquipmentSelect form={form} locationId={locationId || ''} />
-      </div>
+      {/* Only show equipment selector on desktop - mobile handles this separately */}
+      {!isMobile && (
+        <div className="w-full" data-field="equipment">
+          <EquipmentSelect form={form} locationId={locationId || ''} />
+        </div>
+      )}
       
       <div className="w-full" data-field="technician">
         <TechnicianSelect form={form} technicians={technicians} />
