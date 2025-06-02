@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import FormSection from '../FormSection';
 import MaintenanceBasicInfo from '../MaintenanceBasicInfo';
@@ -7,6 +8,8 @@ import EquipmentTypeFields from './EquipmentTypeFields';
 import MobileEquipmentSelector from '../../mobile/MobileEquipmentSelector';
 import MobileMaintenanceChecklist from '../../mobile/MobileMaintenanceChecklist';
 import { Equipment } from '@/types/maintenance';
+import LocationSelect from '../selectors/LocationSelect';
+import TechnicianSelect from '../selectors/TechnicianSelect';
 
 const MaintenanceFormBody = () => {
   const { form, equipment, technicians, isMobile } = useMaintenanceFormContext();
@@ -34,27 +37,24 @@ const MaintenanceFormBody = () => {
     setMobileSelectedEquipment(selectedEquipment);
   };
 
-  return (
-    <div className="w-full space-y-4" data-component="maintenance-form-body">
-      <FormSection title="Basic Information">
-        <div className="space-y-4">
-          {/* Location and Technician Selection - Always use standard components */}
+  // MOBILE VERSION - Completely separate rendering
+  if (isMobile) {
+    return (
+      <div className="w-full space-y-6 pb-20" data-component="mobile-maintenance-form-body">
+        {/* Basic Information Section */}
+        <FormSection title="Basic Information">
           <div className="space-y-4">
+            {/* Location */}
             <div className="w-full">
-              <label className="block text-base font-semibold text-gray-700 mb-2">Location</label>
-              <div className="w-full">
-                {/* Use existing LocationSelect from MaintenanceBasicInfo but extract location logic */}
-                <MaintenanceBasicInfo 
-                  form={form} 
-                  equipment={equipment} 
-                  technicians={technicians} 
-                />
-              </div>
+              <LocationSelect form={form} />
             </div>
-          </div>
-
-          {/* Equipment Selection - Mobile vs Desktop */}
-          {isMobile ? (
+            
+            {/* Technician */}
+            <div className="w-full">
+              <TechnicianSelect form={form} technicians={technicians} />
+            </div>
+            
+            {/* Equipment - Mobile Specific */}
             <div className="w-full">
               <MobileEquipmentSelector
                 form={form}
@@ -62,30 +62,20 @@ const MaintenanceFormBody = () => {
                 onEquipmentSelected={handleMobileEquipmentSelected}
               />
             </div>
-          ) : null}
-        </div>
-      </FormSection>
-      
-      {/* Equipment Maintenance Checklist */}
-      <FormSection title="Equipment Maintenance Checklist">
-        {isMobile ? (
-          // Mobile: Use new mobile checklist system
+          </div>
+        </FormSection>
+        
+        {/* Equipment Maintenance Checklist */}
+        <FormSection title="Equipment Maintenance Checklist">
           <div className="w-full">
             <MobileMaintenanceChecklist
               form={form}
               selectedEquipment={mobileSelectedEquipment}
             />
           </div>
-        ) : (
-          // Desktop: Keep existing system unchanged
-          <div className="w-full">
-            <EquipmentTypeFields />
-          </div>
-        )}
-      </FormSection>
+        </FormSection>
 
-      {/* Mobile debugging info */}
-      {isMobile && (
+        {/* Mobile debugging info */}
         <div className="bg-blue-100 border-2 border-blue-500 p-4 rounded-lg text-sm">
           <strong>📱 MOBILE SYSTEM STATUS:</strong><br />
           Selected Equipment: {mobileSelectedEquipment?.name || 'None'}<br />
@@ -94,7 +84,36 @@ const MaintenanceFormBody = () => {
           Mobile State: {mobileSelectedEquipment ? 'ACTIVE' : 'WAITING FOR SELECTION'}<br />
           Timestamp: {new Date().toLocaleString()}
         </div>
-      )}
+
+        {/* Documents */}
+        <FormSection title="Documents">
+          <DocumentManager equipmentId={formEquipmentId} />
+        </FormSection>
+      </div>
+    );
+  }
+
+  // DESKTOP VERSION - Original rendering
+  return (
+    <div className="w-full space-y-4" data-component="desktop-maintenance-form-body">
+      <FormSection title="Basic Information">
+        <div className="space-y-4">
+          <div className="w-full">
+            <MaintenanceBasicInfo 
+              form={form} 
+              equipment={equipment} 
+              technicians={technicians} 
+            />
+          </div>
+        </div>
+      </FormSection>
+      
+      {/* Equipment Maintenance Checklist */}
+      <FormSection title="Equipment Maintenance Checklist">
+        <div className="w-full">
+          <EquipmentTypeFields />
+        </div>
+      </FormSection>
 
       <FormSection title="Documents">
         <DocumentManager equipmentId={formEquipmentId} />
