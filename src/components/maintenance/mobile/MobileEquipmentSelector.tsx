@@ -42,7 +42,19 @@ const MobileEquipmentSelector = ({
     });
 
     // Find selected equipment and notify parent immediately
-    const selectedEquipment = equipment.find(eq => eq.id === value) || null;
+    // Convert equipment from query to maintenance Equipment type
+    const selectedEquipmentData = equipment.find(eq => eq.id === value);
+    const selectedEquipment = selectedEquipmentData ? {
+      id: selectedEquipmentData.id,
+      name: selectedEquipmentData.name,
+      location: selectedEquipmentData.location,
+      model: selectedEquipmentData.model || '',
+      serialNumber: selectedEquipmentData.serialNumber || '',
+      lastMaintenance: selectedEquipmentData.lastMaintenance || null,
+      nextMaintenance: selectedEquipmentData.nextMaintenance || null,
+      status: selectedEquipmentData.status || ''
+    } as Equipment : null;
+
     onEquipmentSelected(selectedEquipment);
 
     console.log('🔧 MOBILE Equipment Selected:', {
@@ -57,7 +69,17 @@ const MobileEquipmentSelector = ({
     const formEquipmentId = form.getValues('equipment_id');
     if (formEquipmentId && formEquipmentId !== selectedEquipmentId) {
       setSelectedEquipmentId(formEquipmentId);
-      const selectedEquipment = equipment.find(eq => eq.id === formEquipmentId) || null;
+      const selectedEquipmentData = equipment.find(eq => eq.id === formEquipmentId);
+      const selectedEquipment = selectedEquipmentData ? {
+        id: selectedEquipmentData.id,
+        name: selectedEquipmentData.name,
+        location: selectedEquipmentData.location,
+        model: selectedEquipmentData.model || '',
+        serialNumber: selectedEquipmentData.serialNumber || '',
+        lastMaintenance: selectedEquipmentData.lastMaintenance || null,
+        nextMaintenance: selectedEquipmentData.nextMaintenance || null,
+        status: selectedEquipmentData.status || ''
+      } as Equipment : null;
       onEquipmentSelected(selectedEquipment);
     }
   }, [form, equipment, selectedEquipmentId, onEquipmentSelected]);
