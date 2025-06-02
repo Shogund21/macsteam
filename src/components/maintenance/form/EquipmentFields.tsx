@@ -19,138 +19,92 @@ interface EquipmentFieldsProps {
 const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   const isMobile = useIsMobile();
   
-  console.log('🔧 EquipmentFields rendering for type:', equipmentType);
+  console.log('🔧 EquipmentFields rendering for type:', equipmentType, 'Mobile:', isMobile);
 
-  // Enhanced mobile debugging
-  React.useEffect(() => {
-    if (isMobile) {
-      console.log('🔧 MOBILE EQUIPMENT FIELDS RENDER:', {
-        equipmentType,
-        isMobile,
-        timestamp: new Date().toISOString()
-      });
+  // Render equipment-specific fields based on type
+  const renderEquipmentFields = () => {
+    switch (equipmentType) {
+      case 'ahu':
+        return (
+          <div className="w-full space-y-4">
+            {isMobile && (
+              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
+                ✓ AHU/RTU Maintenance Checklist
+              </div>
+            )}
+            <AHUMaintenanceFields form={form} />
+          </div>
+        );
+      
+      case 'chiller':
+        return (
+          <div className="w-full space-y-4">
+            {isMobile && (
+              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
+                ✓ Chiller Maintenance Checklist
+              </div>
+            )}
+            <MaintenanceReadings form={form} />
+            <MaintenanceStatus form={form} />
+            <MaintenanceObservations form={form} />
+          </div>
+        );
+      
+      case 'cooling_tower':
+        return (
+          <div className="w-full space-y-4">
+            {isMobile && (
+              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
+                ✓ Cooling Tower Maintenance Checklist
+              </div>
+            )}
+            <CoolingTowerFields form={form} />
+          </div>
+        );
+      
+      case 'elevator':
+        return (
+          <div className="w-full space-y-4">
+            {isMobile && (
+              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
+                ✓ Elevator Maintenance Checklist
+              </div>
+            )}
+            <ElevatorMaintenanceFields form={form} />
+          </div>
+        );
+      
+      case 'restroom':
+        return (
+          <div className="w-full space-y-4">
+            {isMobile && (
+              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
+                ✓ Restroom Maintenance Checklist
+              </div>
+            )}
+            <RestroomMaintenanceFields form={form} />
+          </div>
+        );
+      
+      default:
+        return (
+          <div className="w-full space-y-4">
+            {isMobile && (
+              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
+                ✓ General Maintenance Checklist
+              </div>
+            )}
+            <MaintenanceReadings form={form} />
+            <MaintenanceStatus form={form} />
+            <MaintenanceObservations form={form} />
+          </div>
+        );
     }
-  }, [equipmentType, isMobile]);
+  };
 
-  // CRITICAL: Always show maintenance fields when equipment is selected
-  // Render appropriate fields for all devices with fallback to general
-  if (equipmentType === 'ahu') {
-    return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="ahu-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ AHU/RTU Maintenance Fields Loaded</div>
-        )}
-        <AHUMaintenanceFields form={form} />
-      </div>
-    );
-  }
-  
-  if (equipmentType === 'chiller') {
-    return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="chiller-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ Chiller Maintenance Fields Loaded</div>
-        )}
-        <MaintenanceReadings form={form} />
-        <MaintenanceStatus form={form} />
-        <MaintenanceObservations form={form} />
-      </div>
-    );
-  }
-  
-  if (equipmentType === 'cooling_tower') {
-    return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="cooling-tower-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ Cooling Tower Fields Loaded</div>
-        )}
-        <CoolingTowerFields form={form} />
-      </div>
-    );
-  }
-  
-  if (equipmentType === 'elevator') {
-    return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="elevator-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ Elevator Maintenance Fields Loaded</div>
-        )}
-        <ElevatorMaintenanceFields form={form} />
-      </div>
-    );
-  }
-  
-  if (equipmentType === 'restroom') {
-    return (
-      <div 
-        className="w-full space-y-6" 
-        data-component="restroom-fields-container"
-        style={{
-          display: 'block',
-          visibility: 'visible',
-          opacity: 1
-        }}
-      >
-        {isMobile && (
-          <div className="text-green-600 font-medium">✓ Restroom Maintenance Fields Loaded</div>
-        )}
-        <RestroomMaintenanceFields form={form} />
-      </div>
-    );
-  }
-  
-  // CRITICAL: Always show general maintenance fields as fallback
-  // This ensures users always see maintenance fields when equipment is selected
   return (
-    <div 
-      className="w-full space-y-6" 
-      data-component="general-fields-container"
-      style={{
-        display: 'block',
-        visibility: 'visible',
-        opacity: 1
-      }}
-    >
-      {isMobile && (
-        <div className="text-green-600 font-medium">
-          ✓ General Maintenance Fields Loaded{equipmentType ? ` (Type: ${equipmentType})` : ''}
-        </div>
-      )}
-      <MaintenanceReadings form={form} />
-      <MaintenanceStatus form={form} />
-      <MaintenanceObservations form={form} />
+    <div className="w-full" data-component="equipment-fields-container">
+      {renderEquipmentFields()}
     </div>
   );
 };
