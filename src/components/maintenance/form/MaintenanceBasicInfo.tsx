@@ -46,22 +46,23 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
 
   return (
     <div 
-      className={`${isMobile ? 'space-y-4' : 'space-y-6'} w-full`}
+      className="w-full"
       data-component="maintenance-basic-info"
     >
-      <div className="w-full" data-field="location">
-        <LocationSelect form={form} />
-      </div>
-      
-      {/* Only show equipment selector on desktop - mobile handles this separately */}
-      {!isMobile && (
+      {/* Responsive layout: stacked on mobile, row on desktop */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
+        <div className="w-full" data-field="location">
+          <LocationSelect form={form} />
+        </div>
+        
+        {/* Equipment selector now shows on all devices */}
         <div className="w-full" data-field="equipment">
           <EquipmentSelect form={form} locationId={locationId || ''} />
         </div>
-      )}
-      
-      <div className="w-full" data-field="technician">
-        <TechnicianSelect form={form} technicians={technicians} />
+        
+        <div className="w-full" data-field="technician">
+          <TechnicianSelect form={form} technicians={technicians} />
+        </div>
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ import MaintenanceBasicInfo from '../MaintenanceBasicInfo';
 import { useMaintenanceFormContext } from '../../context/MaintenanceFormContext';
 import DocumentManager from '../../documents/DocumentManager';
 import EquipmentTypeFields from './EquipmentTypeFields';
-import MobileEquipmentSelector from '../../mobile/MobileEquipmentSelector';
 
 const MaintenanceFormBody = () => {
   const { form, equipment, technicians, isMobile } = useMaintenanceFormContext();
@@ -35,33 +34,14 @@ const MaintenanceFormBody = () => {
       {/* Basic Information Section */}
       <FormSection title="Basic Information">
         <div className="space-y-4">
-          {isMobile ? (
-            // Mobile layout with mobile equipment selector
-            <div className="space-y-4">
-              <MaintenanceBasicInfo 
-                form={form} 
-                equipment={equipment} 
-                technicians={technicians} 
-              />
-              
-              {/* Mobile Equipment Selector */}
-              <div className="w-full">
-                <MobileEquipmentSelector
-                  form={form}
-                  locationId={locationId || ''}
-                />
-              </div>
-            </div>
-          ) : (
-            // Desktop layout
-            <div className="w-full">
-              <MaintenanceBasicInfo 
-                form={form} 
-                equipment={equipment} 
-                technicians={technicians} 
-              />
-            </div>
-          )}
+          {/* Universal basic info component - works on all devices now */}
+          <div className="w-full">
+            <MaintenanceBasicInfo 
+              form={form} 
+              equipment={equipment} 
+              technicians={technicians} 
+            />
+          </div>
         </div>
       </FormSection>
       
