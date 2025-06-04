@@ -1,20 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
 import { UseFormReturn } from 'react-hook-form';
-import { Equipment } from '@/types/maintenance';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useEquipmentQuery } from '@/hooks/useEquipmentQuery';
 
 interface MobileEquipmentSelectorProps {
   form: UseFormReturn<any>;
   locationId: string;
-  onEquipmentSelected: (equipment: Equipment | null) => void;
 }
 
 const MobileEquipmentSelector = ({ 
   form, 
-  locationId, 
-  onEquipmentSelected 
+  locationId
 }: MobileEquipmentSelectorProps) => {
   const [selectedEquipmentId, setSelectedEquipmentId] = useState<string>('');
   const { data: equipment = [], isLoading, isError } = useEquipmentQuery(locationId);
@@ -26,7 +23,7 @@ const MobileEquipmentSelector = ({
   });
 
   const handleEquipmentChange = (value: string) => {
-    console.log('🔧 MOBILE Equipment Selection - Direct Handler:', {
+    console.log('🔧 Mobile Equipment Selection:', {
       newValue: value,
       previousValue: selectedEquipmentId,
       timestamp: new Date().toISOString()
@@ -34,55 +31,23 @@ const MobileEquipmentSelector = ({
 
     setSelectedEquipmentId(value);
     
-    // Update form value
+    // Update form value with proper validation
     form.setValue('equipment_id', value, {
       shouldDirty: true,
       shouldTouch: true,
       shouldValidate: true
     });
 
-    // Find selected equipment and notify parent immediately
-    // Convert equipment from query to maintenance Equipment type
-    const selectedEquipmentData = equipment.find(eq => eq.id === value);
-    const selectedEquipment = selectedEquipmentData ? {
-      id: selectedEquipmentData.id,
-      name: selectedEquipmentData.name,
-      location: selectedEquipmentData.location,
-      model: selectedEquipmentData.model || '',
-      serialNumber: selectedEquipmentData.serialNumber || '',
-      lastMaintenance: selectedEquipmentData.lastMaintenance || null,
-      nextMaintenance: selectedEquipmentData.nextMaintenance || null,
-      status: selectedEquipmentData.status || ''
-    } as Equipment : null;
-
-    onEquipmentSelected(selectedEquipment);
-
-    console.log('🔧 MOBILE Equipment Selected:', {
-      equipmentId: value,
-      equipmentName: selectedEquipment?.name || 'None',
-      notifiedParent: true
-    });
+    console.log('🔧 Equipment form value updated:', value);
   };
 
-  // Sync with form when component mounts
+  // Sync with form when component mounts or form value changes externally
   useEffect(() => {
     const formEquipmentId = form.getValues('equipment_id');
     if (formEquipmentId && formEquipmentId !== selectedEquipmentId) {
       setSelectedEquipmentId(formEquipmentId);
-      const selectedEquipmentData = equipment.find(eq => eq.id === formEquipmentId);
-      const selectedEquipment = selectedEquipmentData ? {
-        id: selectedEquipmentData.id,
-        name: selectedEquipmentData.name,
-        location: selectedEquipmentData.location,
-        model: selectedEquipmentData.model || '',
-        serialNumber: selectedEquipmentData.serialNumber || '',
-        lastMaintenance: selectedEquipmentData.lastMaintenance || null,
-        nextMaintenance: selectedEquipmentData.nextMaintenance || null,
-        status: selectedEquipmentData.status || ''
-      } as Equipment : null;
-      onEquipmentSelected(selectedEquipment);
     }
-  }, [form, equipment, selectedEquipmentId, onEquipmentSelected]);
+  }, [form, selectedEquipmentId]);
 
   const isDisabled = !locationId;
 
