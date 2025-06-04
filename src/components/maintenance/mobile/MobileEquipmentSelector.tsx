@@ -23,7 +23,7 @@ const MobileEquipmentSelector = ({
   });
 
   const handleEquipmentChange = (value: string) => {
-    console.log('🔧 Mobile Equipment Selection:', {
+    console.log('🔧 Mobile Equipment Selection STARTING:', {
       newValue: value,
       previousValue: selectedEquipmentId,
       timestamp: new Date().toISOString()
@@ -31,14 +31,38 @@ const MobileEquipmentSelector = ({
 
     setSelectedEquipmentId(value);
     
-    // Update form value with proper validation
+    // CRITICAL: Multiple form update strategies for mobile reliability
     form.setValue('equipment_id', value, {
       shouldDirty: true,
       shouldTouch: true,
       shouldValidate: true
     });
 
-    console.log('🔧 Equipment form value updated:', value);
+    // Force immediate form validation and re-render
+    form.trigger('equipment_id');
+    
+    console.log('🔧 Mobile Equipment Selection COMPLETED:', {
+      selectedValue: value,
+      formValue: form.getValues('equipment_id'),
+      timestamp: new Date().toISOString()
+    });
+
+    // Delayed verification to ensure state propagation
+    setTimeout(() => {
+      const currentFormValue = form.getValues('equipment_id');
+      console.log('🔧 Mobile Equipment Selection VERIFICATION:', {
+        expectedValue: value,
+        actualFormValue: currentFormValue,
+        success: currentFormValue === value
+      });
+      
+      // Force trigger if values don't match
+      if (currentFormValue !== value) {
+        console.warn('🔧 Mobile Equipment Selection MISMATCH - forcing update');
+        form.setValue('equipment_id', value, { shouldValidate: true });
+        form.trigger();
+      }
+    }, 100);
   };
 
   // Sync with form when component mounts or form value changes externally
