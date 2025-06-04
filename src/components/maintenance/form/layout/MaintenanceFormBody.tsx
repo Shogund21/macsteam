@@ -14,55 +14,69 @@ import TechnicianSelect from '../selectors/TechnicianSelect';
 const MaintenanceFormBody = () => {
   const { form, equipment, technicians, isMobile } = useMaintenanceFormContext();
   
-  // Mobile-specific state for immediate checklist display
+  // AGGRESSIVE mobile state management
   const [mobileSelectedEquipment, setMobileSelectedEquipment] = useState<Equipment | null>(null);
-  const [forceChecklistUpdate, setForceChecklistUpdate] = useState(0);
+  const [aggressiveForceUpdate, setAggressiveForceUpdate] = useState(0);
   
   const formEquipmentId = form.watch('equipment_id');
   const locationId = form.watch('location_id');
 
-  console.log('🔧 MaintenanceFormBody render:', { 
+  console.log('🔧 MaintenanceFormBody AGGRESSIVE DEBUG:', { 
     isMobile,
     formEquipmentId,
     locationId,
     hasMobileSelection: !!mobileSelectedEquipment,
     mobileEquipmentName: mobileSelectedEquipment?.name || 'None',
-    forceChecklistUpdate,
+    aggressiveForceUpdate,
     timestamp: new Date().toISOString()
   });
 
-  // Enhanced equipment selection handler with forced updates
+  // AGGRESSIVE equipment selection handler
   const handleMobileEquipmentSelected = (selectedEquipment: Equipment | null) => {
-    console.log('🔧 Mobile equipment selected in MaintenanceFormBody:', {
+    console.log('🔧 AGGRESSIVE Equipment Selected:', {
       equipmentName: selectedEquipment?.name || 'None',
       equipmentId: selectedEquipment?.id || 'None',
       previousEquipment: mobileSelectedEquipment?.name || 'None'
     });
     
     setMobileSelectedEquipment(selectedEquipment);
+    setAggressiveForceUpdate(prev => prev + 1);
     
-    // Force checklist update by incrementing counter
-    setForceChecklistUpdate(prev => prev + 1);
+    // AGGRESSIVE: Multiple update strategies
+    if (selectedEquipment) {
+      // Force form update with multiple validation triggers
+      form.setValue('equipment_id', selectedEquipment.id, {
+        shouldDirty: true,
+        shouldTouch: true,
+        shouldValidate: true
+      });
+      
+      // Trigger validation again after a short delay
+      setTimeout(() => {
+        form.trigger('equipment_id');
+        console.log('🔧 AGGRESSIVE: Delayed form trigger completed');
+      }, 100);
+    }
     
-    console.log('🔧 MaintenanceFormBody - Equipment selection complete, forcing checklist update:', forceChecklistUpdate + 1);
+    console.log('🔧 AGGRESSIVE: Equipment selection complete, force update:', aggressiveForceUpdate + 1);
   };
 
-  // Watch for form equipment changes and sync with mobile state
+  // AGGRESSIVE form sync
   useEffect(() => {
     if (isMobile && formEquipmentId && equipment) {
       const foundEquipment = equipment.find(eq => eq.id === formEquipmentId);
       if (foundEquipment && foundEquipment.id !== mobileSelectedEquipment?.id) {
-        console.log('🔧 MaintenanceFormBody - Syncing form equipment with mobile state:', foundEquipment.name);
+        console.log('🔧 AGGRESSIVE: Syncing form equipment with mobile state:', foundEquipment.name);
         setMobileSelectedEquipment(foundEquipment);
-        setForceChecklistUpdate(prev => prev + 1);
+        setAggressiveForceUpdate(prev => prev + 1);
       }
     }
   }, [formEquipmentId, equipment, isMobile, mobileSelectedEquipment]);
 
-  // MOBILE VERSION - Completely separate rendering
+  // MOBILE VERSION - AGGRESSIVE rendering
   if (isMobile) {
     return (
-      <div className="w-full space-y-6 pb-20" data-component="mobile-maintenance-form-body">
+      <div className="w-full space-y-6 pb-20" data-component="mobile-maintenance-form-body-aggressive">
         {/* Basic Information Section */}
         <FormSection title="Basic Information">
           <div className="space-y-4">
@@ -76,7 +90,7 @@ const MaintenanceFormBody = () => {
               <TechnicianSelect form={form} technicians={technicians} />
             </div>
             
-            {/* Equipment - Mobile Specific */}
+            {/* Equipment - AGGRESSIVE Mobile Specific */}
             <div className="w-full">
               <MobileEquipmentSelector
                 form={form}
@@ -87,36 +101,36 @@ const MaintenanceFormBody = () => {
           </div>
         </FormSection>
         
-        {/* Equipment Maintenance Checklist with enhanced visibility */}
+        {/* Equipment Maintenance Checklist - AGGRESSIVE visibility */}
         <FormSection title="Equipment Maintenance Checklist">
           <div className="w-full">
-            {/* Add a visual separator and status indicator */}
-            <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
-              <div className="text-sm text-gray-600">
-                <strong>🔧 DYNAMIC CHECKLIST STATUS:</strong><br />
+            {/* AGGRESSIVE visual separator and status indicator */}
+            <div className="mb-4 p-3 bg-yellow-50 rounded-lg border border-yellow-300">
+              <div className="text-sm text-yellow-800 font-medium">
+                🚀 AGGRESSIVE CHECKLIST STATUS:<br />
                 Selected Equipment: {mobileSelectedEquipment?.name || 'None'}<br />
                 Form Equipment ID: {formEquipmentId || 'None'}<br />
-                Update Counter: {forceChecklistUpdate}<br />
-                Status: {mobileSelectedEquipment ? '✅ READY' : '⏳ WAITING FOR EQUIPMENT SELECTION'}
+                Force Update: {aggressiveForceUpdate}<br />
+                Status: {(mobileSelectedEquipment || formEquipmentId) ? '✅ SHOULD BE VISIBLE' : '⏳ WAITING FOR EQUIPMENT'}
               </div>
             </div>
             
             <MobileMaintenanceChecklist
               form={form}
               selectedEquipment={mobileSelectedEquipment}
-              key={`checklist-${forceChecklistUpdate}-${mobileSelectedEquipment?.id || 'none'}`}
+              key={`aggressive-checklist-${aggressiveForceUpdate}-${mobileSelectedEquipment?.id || formEquipmentId || 'none'}`}
             />
           </div>
         </FormSection>
 
-        {/* Mobile debugging info */}
-        <div className="bg-blue-100 border-2 border-blue-500 p-4 rounded-lg text-sm">
-          <strong>📱 MOBILE SYSTEM STATUS:</strong><br />
+        {/* AGGRESSIVE mobile debugging info */}
+        <div className="bg-purple-100 border-2 border-purple-500 p-4 rounded-lg text-sm">
+          <strong>🔥 AGGRESSIVE MOBILE SYSTEM STATUS:</strong><br />
           Selected Equipment: {mobileSelectedEquipment?.name || 'None'}<br />
           Form Equipment ID: {formEquipmentId || 'None'}<br />
           Location ID: {locationId || 'None'}<br />
-          Mobile State: {mobileSelectedEquipment ? 'ACTIVE' : 'WAITING FOR SELECTION'}<br />
-          Force Update Counter: {forceChecklistUpdate}<br />
+          Mobile State: {(mobileSelectedEquipment || formEquipmentId) ? 'ACTIVE' : 'WAITING FOR SELECTION'}<br />
+          Aggressive Force Counter: {aggressiveForceUpdate}<br />
           Timestamp: {new Date().toLocaleString()}
         </div>
 
@@ -143,7 +157,6 @@ const MaintenanceFormBody = () => {
         </div>
       </FormSection>
       
-      {/* Equipment Maintenance Checklist */}
       <FormSection title="Equipment Maintenance Checklist">
         <div className="w-full">
           <EquipmentTypeFields />

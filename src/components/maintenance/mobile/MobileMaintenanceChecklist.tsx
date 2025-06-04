@@ -20,44 +20,40 @@ const MobileMaintenanceChecklist = ({
   selectedEquipment 
 }: MobileMaintenanceChecklistProps) => {
   
-  const [isChecklistVisible, setIsChecklistVisible] = useState(false);
-  const [currentEquipment, setCurrentEquipment] = useState<Equipment | null>(null);
-
-  // Watch for equipment changes and update visibility
-  useEffect(() => {
-    console.log('🔧 MobileMaintenanceChecklist - Equipment change detected:', {
-      hasEquipment: !!selectedEquipment,
-      equipmentName: selectedEquipment?.name || 'None',
-      previousEquipment: currentEquipment?.name || 'None',
-      timestamp: new Date().toISOString()
-    });
-
-    if (selectedEquipment) {
-      setCurrentEquipment(selectedEquipment);
-      setIsChecklistVisible(true);
-      console.log('🔧 MobileMaintenanceChecklist - Checklist made visible for:', selectedEquipment.name);
-    } else {
-      setIsChecklistVisible(false);
-      console.log('🔧 MobileMaintenanceChecklist - Checklist hidden - no equipment selected');
-    }
-  }, [selectedEquipment, currentEquipment]);
-
-  // Also watch form equipment_id to catch any missed updates
+  const [forceVisible, setForceVisible] = useState(false);
+  const [renderKey, setRenderKey] = useState(0);
+  
+  // Get form equipment ID directly
   const formEquipmentId = form.watch('equipment_id');
-  useEffect(() => {
-    if (formEquipmentId && !selectedEquipment) {
-      console.log('🔧 MobileMaintenanceChecklist - Form has equipment but selectedEquipment is null, forcing visibility');
-      setIsChecklistVisible(true);
-    }
-  }, [formEquipmentId, selectedEquipment]);
-
-  console.log('🔧 MobileMaintenanceChecklist render:', {
-    hasEquipment: !!selectedEquipment,
-    equipmentName: selectedEquipment?.name || 'None',
-    isChecklistVisible,
-    formEquipmentId,
+  
+  console.log('🔧 MobileMaintenanceChecklist AGGRESSIVE DEBUG:', {
+    hasSelectedEquipment: !!selectedEquipment,
+    selectedEquipmentName: selectedEquipment?.name || 'None',
+    formEquipmentId: formEquipmentId || 'None',
+    forceVisible,
+    renderKey,
     timestamp: new Date().toISOString()
   });
+
+  // AGGRESSIVE: Show checklist if EITHER selectedEquipment OR formEquipmentId exists
+  useEffect(() => {
+    const shouldShow = !!(selectedEquipment || formEquipmentId);
+    console.log('🔧 AGGRESSIVE VISIBILITY CHECK:', {
+      selectedEquipment: !!selectedEquipment,
+      formEquipmentId: !!formEquipmentId,
+      shouldShow,
+      currentForceVisible: forceVisible
+    });
+    
+    if (shouldShow && !forceVisible) {
+      setForceVisible(true);
+      setRenderKey(prev => prev + 1);
+      console.log('🔧 FORCING CHECKLIST VISIBLE - Equipment detected!');
+    } else if (!shouldShow && forceVisible) {
+      setForceVisible(false);
+      console.log('🔧 HIDING CHECKLIST - No equipment detected');
+    }
+  }, [selectedEquipment, formEquipmentId, forceVisible]);
 
   // Detect equipment type from name
   const detectEquipmentType = (equipmentName: string): string => {
@@ -72,8 +68,28 @@ const MobileMaintenanceChecklist = ({
     return 'general';
   };
 
-  // If no equipment is selected and checklist is not visible, show waiting state
-  if (!selectedEquipment && !isChecklistVisible) {
+  // AGGRESSIVE: Determine equipment to use (priority: selectedEquipment, then try to derive from form)
+  const equipmentToUse = selectedEquipment || (formEquipmentId ? { 
+    id: formEquipmentId, 
+    name: `Equipment ${formEquipmentId.slice(0, 8)}`,
+    location: '',
+    model: '',
+    serialNumber: '',
+    lastMaintenance: null,
+    nextMaintenance: null,
+    status: ''
+  } as Equipment : null);
+
+  // AGGRESSIVE: Always show something if we have any equipment data
+  const shouldShowChecklist = forceVisible || !!equipmentToUse || !!formEquipmentId;
+
+  console.log('🔧 FINAL RENDER DECISION:', {
+    shouldShowChecklist,
+    equipmentToUse: equipmentToUse?.name || 'None',
+    renderKey
+  });
+
+  if (!shouldShowChecklist) {
     return (
       <div className="w-full p-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
         <div className="text-center py-8 text-gray-500">
@@ -89,33 +105,30 @@ const MobileMaintenanceChecklist = ({
     );
   }
 
-  // Use either selectedEquipment or currentEquipment for rendering
-  const equipmentToUse = selectedEquipment || currentEquipment;
-  
   if (!equipmentToUse) {
+    console.log('🔧 EMERGENCY FALLBACK: No equipment but should show checklist');
     return (
-      <div className="w-full p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-        <p className="text-yellow-700 text-center">Loading equipment details...</p>
+      <div className="w-full p-4 bg-red-50 rounded-lg border border-red-200">
+        <p className="text-red-700 text-center font-medium">⚠️ EMERGENCY MODE: Checklist should display but no equipment found</p>
+        <div className="mt-2 text-xs text-red-600">
+          Form Equipment ID: {formEquipmentId || 'None'}<br/>
+          Selected Equipment: {selectedEquipment?.name || 'None'}<br/>
+          Force Visible: {forceVisible ? 'YES' : 'NO'}
+        </div>
       </div>
     );
   }
 
   const equipmentType = detectEquipmentType(equipmentToUse.name);
 
-  console.log('🔧 MobileMaintenanceChecklist showing checklist:', {
-    equipmentName: equipmentToUse.name,
-    detectedType: equipmentType,
-    isVisible: isChecklistVisible
-  });
-
-  // Render equipment-specific checklist with enhanced visibility
+  // Render equipment-specific checklist with AGGRESSIVE visibility
   const renderChecklistFields = () => {
     switch (equipmentType) {
       case 'ahu':
         return (
           <div className="space-y-4">
             <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
-              ✓ AHU/RTU Maintenance Checklist - {equipmentToUse.name}
+              ✅ AHU/RTU Maintenance Checklist - {equipmentToUse.name}
             </div>
             <AHUMaintenanceFields form={form} />
           </div>
@@ -125,7 +138,7 @@ const MobileMaintenanceChecklist = ({
         return (
           <div className="space-y-4">
             <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
-              ✓ Chiller Maintenance Checklist - {equipmentToUse.name}
+              ✅ Chiller Maintenance Checklist - {equipmentToUse.name}
             </div>
             <MaintenanceReadings form={form} />
             <MaintenanceStatus form={form} />
@@ -137,7 +150,7 @@ const MobileMaintenanceChecklist = ({
         return (
           <div className="space-y-4">
             <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
-              ✓ Cooling Tower Maintenance Checklist - {equipmentToUse.name}
+              ✅ Cooling Tower Maintenance Checklist - {equipmentToUse.name}
             </div>
             <CoolingTowerFields form={form} />
           </div>
@@ -147,7 +160,7 @@ const MobileMaintenanceChecklist = ({
         return (
           <div className="space-y-4">
             <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
-              ✓ Elevator Maintenance Checklist - {equipmentToUse.name}
+              ✅ Elevator Maintenance Checklist - {equipmentToUse.name}
             </div>
             <ElevatorMaintenanceFields form={form} />
           </div>
@@ -157,7 +170,7 @@ const MobileMaintenanceChecklist = ({
         return (
           <div className="space-y-4">
             <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
-              ✓ Restroom Maintenance Checklist - {equipmentToUse.name}
+              ✅ Restroom Maintenance Checklist - {equipmentToUse.name}
             </div>
             <RestroomMaintenanceFields form={form} />
           </div>
@@ -167,7 +180,7 @@ const MobileMaintenanceChecklist = ({
         return (
           <div className="space-y-4">
             <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
-              ✓ General Maintenance Checklist - {equipmentToUse.name}
+              ✅ General Maintenance Checklist - {equipmentToUse.name}
             </div>
             <MaintenanceReadings form={form} />
             <MaintenanceStatus form={form} />
@@ -179,18 +192,22 @@ const MobileMaintenanceChecklist = ({
 
   return (
     <div 
+      key={`aggressive-checklist-${renderKey}-${equipmentToUse.id}`}
       className="w-full bg-white p-4 rounded-lg shadow-sm border border-gray-200 animate-in fade-in duration-300"
-      data-component="mobile-maintenance-checklist"
+      data-component="mobile-maintenance-checklist-aggressive"
       data-equipment-type={equipmentType}
       data-equipment-name={equipmentToUse.name}
-      data-checklist-visible={isChecklistVisible}
+      data-force-visible={forceVisible}
+      data-render-key={renderKey}
     >
-      {/* Dynamic status indicator */}
-      <div className="mb-4 p-2 bg-blue-50 rounded-lg border border-blue-200">
-        <div className="text-sm text-blue-700">
-          <strong>📋 Checklist Status:</strong> {isChecklistVisible ? 'ACTIVE' : 'WAITING'} | 
-          Equipment: {equipmentToUse.name} | 
-          Type: {equipmentType.toUpperCase()}
+      {/* AGGRESSIVE status indicator */}
+      <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="text-sm text-blue-700 font-medium">
+          🚀 AGGRESSIVE CHECKLIST MODE: ACTIVE<br />
+          Equipment: {equipmentToUse.name}<br />
+          Type: {equipmentType.toUpperCase()}<br />
+          Render Key: {renderKey}<br />
+          Status: ✅ CHECKLIST FORCED VISIBLE
         </div>
       </div>
       
