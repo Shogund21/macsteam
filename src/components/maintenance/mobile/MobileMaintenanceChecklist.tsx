@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import { Equipment } from '@/types/maintenance';
 import AHUMaintenanceFields from '../form/AHUMaintenanceFields';
@@ -20,9 +20,42 @@ const MobileMaintenanceChecklist = ({
   selectedEquipment 
 }: MobileMaintenanceChecklistProps) => {
   
+  const [isChecklistVisible, setIsChecklistVisible] = useState(false);
+  const [currentEquipment, setCurrentEquipment] = useState<Equipment | null>(null);
+
+  // Watch for equipment changes and update visibility
+  useEffect(() => {
+    console.log('🔧 MobileMaintenanceChecklist - Equipment change detected:', {
+      hasEquipment: !!selectedEquipment,
+      equipmentName: selectedEquipment?.name || 'None',
+      previousEquipment: currentEquipment?.name || 'None',
+      timestamp: new Date().toISOString()
+    });
+
+    if (selectedEquipment) {
+      setCurrentEquipment(selectedEquipment);
+      setIsChecklistVisible(true);
+      console.log('🔧 MobileMaintenanceChecklist - Checklist made visible for:', selectedEquipment.name);
+    } else {
+      setIsChecklistVisible(false);
+      console.log('🔧 MobileMaintenanceChecklist - Checklist hidden - no equipment selected');
+    }
+  }, [selectedEquipment, currentEquipment]);
+
+  // Also watch form equipment_id to catch any missed updates
+  const formEquipmentId = form.watch('equipment_id');
+  useEffect(() => {
+    if (formEquipmentId && !selectedEquipment) {
+      console.log('🔧 MobileMaintenanceChecklist - Form has equipment but selectedEquipment is null, forcing visibility');
+      setIsChecklistVisible(true);
+    }
+  }, [formEquipmentId, selectedEquipment]);
+
   console.log('🔧 MobileMaintenanceChecklist render:', {
     hasEquipment: !!selectedEquipment,
     equipmentName: selectedEquipment?.name || 'None',
+    isChecklistVisible,
+    formEquipmentId,
     timestamp: new Date().toISOString()
   });
 
@@ -39,7 +72,8 @@ const MobileMaintenanceChecklist = ({
     return 'general';
   };
 
-  if (!selectedEquipment) {
+  // If no equipment is selected and checklist is not visible, show waiting state
+  if (!selectedEquipment && !isChecklistVisible) {
     return (
       <div className="w-full p-6 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
         <div className="text-center py-8 text-gray-500">
@@ -55,21 +89,33 @@ const MobileMaintenanceChecklist = ({
     );
   }
 
-  const equipmentType = detectEquipmentType(selectedEquipment.name);
+  // Use either selectedEquipment or currentEquipment for rendering
+  const equipmentToUse = selectedEquipment || currentEquipment;
+  
+  if (!equipmentToUse) {
+    return (
+      <div className="w-full p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+        <p className="text-yellow-700 text-center">Loading equipment details...</p>
+      </div>
+    );
+  }
+
+  const equipmentType = detectEquipmentType(equipmentToUse.name);
 
   console.log('🔧 MobileMaintenanceChecklist showing checklist:', {
-    equipmentName: selectedEquipment.name,
-    detectedType: equipmentType
+    equipmentName: equipmentToUse.name,
+    detectedType: equipmentType,
+    isVisible: isChecklistVisible
   });
 
-  // Render equipment-specific checklist
+  // Render equipment-specific checklist with enhanced visibility
   const renderChecklistFields = () => {
     switch (equipmentType) {
       case 'ahu':
         return (
           <div className="space-y-4">
-            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg">
-              ✓ AHU/RTU Maintenance Checklist - {selectedEquipment.name}
+            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
+              ✓ AHU/RTU Maintenance Checklist - {equipmentToUse.name}
             </div>
             <AHUMaintenanceFields form={form} />
           </div>
@@ -78,8 +124,8 @@ const MobileMaintenanceChecklist = ({
       case 'chiller':
         return (
           <div className="space-y-4">
-            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg">
-              ✓ Chiller Maintenance Checklist - {selectedEquipment.name}
+            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
+              ✓ Chiller Maintenance Checklist - {equipmentToUse.name}
             </div>
             <MaintenanceReadings form={form} />
             <MaintenanceStatus form={form} />
@@ -90,8 +136,8 @@ const MobileMaintenanceChecklist = ({
       case 'cooling_tower':
         return (
           <div className="space-y-4">
-            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg">
-              ✓ Cooling Tower Maintenance Checklist - {selectedEquipment.name}
+            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
+              ✓ Cooling Tower Maintenance Checklist - {equipmentToUse.name}
             </div>
             <CoolingTowerFields form={form} />
           </div>
@@ -100,8 +146,8 @@ const MobileMaintenanceChecklist = ({
       case 'elevator':
         return (
           <div className="space-y-4">
-            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg">
-              ✓ Elevator Maintenance Checklist - {selectedEquipment.name}
+            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
+              ✓ Elevator Maintenance Checklist - {equipmentToUse.name}
             </div>
             <ElevatorMaintenanceFields form={form} />
           </div>
@@ -110,8 +156,8 @@ const MobileMaintenanceChecklist = ({
       case 'restroom':
         return (
           <div className="space-y-4">
-            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg">
-              ✓ Restroom Maintenance Checklist - {selectedEquipment.name}
+            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
+              ✓ Restroom Maintenance Checklist - {equipmentToUse.name}
             </div>
             <RestroomMaintenanceFields form={form} />
           </div>
@@ -120,8 +166,8 @@ const MobileMaintenanceChecklist = ({
       default:
         return (
           <div className="space-y-4">
-            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg">
-              ✓ General Maintenance Checklist - {selectedEquipment.name}
+            <div className="text-green-600 font-medium p-3 bg-green-50 rounded-lg border border-green-200">
+              ✓ General Maintenance Checklist - {equipmentToUse.name}
             </div>
             <MaintenanceReadings form={form} />
             <MaintenanceStatus form={form} />
@@ -133,11 +179,21 @@ const MobileMaintenanceChecklist = ({
 
   return (
     <div 
-      className="w-full bg-white p-4 rounded-lg shadow-sm"
+      className="w-full bg-white p-4 rounded-lg shadow-sm border border-gray-200 animate-in fade-in duration-300"
       data-component="mobile-maintenance-checklist"
       data-equipment-type={equipmentType}
-      data-equipment-name={selectedEquipment.name}
+      data-equipment-name={equipmentToUse.name}
+      data-checklist-visible={isChecklistVisible}
     >
+      {/* Dynamic status indicator */}
+      <div className="mb-4 p-2 bg-blue-50 rounded-lg border border-blue-200">
+        <div className="text-sm text-blue-700">
+          <strong>📋 Checklist Status:</strong> {isChecklistVisible ? 'ACTIVE' : 'WAITING'} | 
+          Equipment: {equipmentToUse.name} | 
+          Type: {equipmentType.toUpperCase()}
+        </div>
+      </div>
+      
       {renderChecklistFields()}
     </div>
   );
