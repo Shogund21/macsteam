@@ -15,6 +15,8 @@ const EquipmentTypeFields = () => {
     currentEquipmentName: currentEquipment?.name || 'None',
     equipmentCount: equipment?.length || 0,
     isMobile,
+    hasEquipment: !!currentEquipment,
+    equipmentList: equipment.map(eq => ({ id: eq.id, name: eq.name })),
     timestamp: new Date().toISOString()
   });
 
@@ -26,12 +28,17 @@ const EquipmentTypeFields = () => {
         name: currentEquipment.name,
         isMobile
       });
+    } else if (formEquipmentId && !currentEquipment) {
+      console.log('🔧 Equipment ID set but equipment not found:', {
+        formEquipmentId,
+        availableEquipment: equipment.map(eq => eq.id)
+      });
     }
-  }, [formEquipmentId, currentEquipment, isMobile]);
+  }, [formEquipmentId, currentEquipment, isMobile, equipment]);
 
   // Return early if no equipment selected
   if (!formEquipmentId || !currentEquipment) {
-    console.log('🔧 No equipment selected, not showing checklist');
+    console.log('🔧 No equipment selected, not showing checklist:', { formEquipmentId, hasCurrentEquipment: !!currentEquipment });
     return null;
   }
   
