@@ -2,7 +2,7 @@
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UseFormReturn } from "react-hook-form";
-import { Thermometer, Gauge2, Filter, Settings } from "lucide-react";
+import { Thermometer, Gauge, Filter, Settings } from "lucide-react";
 import ChecklistSection from "./sections/ChecklistSection";
 import FormFieldGroup from "./sections/FormFieldGroup";
 import { useMaintenanceFormContext } from "../context/MaintenanceFormContext";
@@ -18,7 +18,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
     <div className="w-full space-y-4">
       <ChecklistSection
         title="Equipment Readings & Status"
-        icon={<Gauge2 className="h-5 w-5" />}
+        icon={<Gauge className="h-5 w-5" />}
         colorScheme="blue"
       >
         <FormFieldGroup 
@@ -32,7 +32,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
             render={({ field }) => (
               <FormItem className="w-full">
                 <FormLabel className={`flex items-center gap-2 text-sm font-medium text-gray-700 ${isMobile ? 'text-base' : ''}`}>
-                  <Gauge2 className="h-4 w-4" />
+                  <Gauge className="h-4 w-4" />
                   Chiller Pressure Reading (PSI)
                 </FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
