@@ -72,9 +72,9 @@ const EquipmentTypeFields = () => {
       data-force-visible="true"
       key={`equipment-${formEquipmentId}`} // Force re-render on equipment change
       style={{ 
-        display: 'block !important', 
-        visibility: 'visible !important', 
-        opacity: '1 !important',
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1,
         minHeight: '200px',
         backgroundColor: isMobile ? '#f0f9ff' : 'transparent',
         padding: isMobile ? '1rem' : '0',

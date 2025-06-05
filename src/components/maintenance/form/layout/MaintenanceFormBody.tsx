@@ -79,7 +79,7 @@ const MaintenanceFormBody = () => {
         <div 
           className="mobile-checklist-force-visible bg-green-50 border-2 border-green-500 p-4 rounded-lg"
           data-force-visible="true"
-          style={{ display: 'block !important', visibility: 'visible !important', opacity: '1 !important' }}
+          style={{ display: 'block', visibility: 'visible', opacity: 1 }}
         >
           <h3 className="text-lg font-semibold text-green-800 mb-3">
             🔧 Mobile Maintenance Checklist (Fallback)

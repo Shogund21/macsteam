@@ -24,9 +24,9 @@ const FormSection = ({ children, title, noPadding }: FormSectionProps) => {
       data-component="form-section"
       data-force-visible="true"
       style={isMobile ? { 
-        display: 'block !important', 
-        visibility: 'visible !important', 
-        opacity: '1 !important' 
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1
       } : {}}
     >
       {title && (

@@ -108,9 +108,9 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       data-component="equipment-fields-container"
       data-force-visible="true"
       style={isMobile ? { 
-        display: 'block !important', 
-        visibility: 'visible !important', 
-        opacity: '1 !important',
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1,
         minHeight: '100px'
       } : {}}
     >

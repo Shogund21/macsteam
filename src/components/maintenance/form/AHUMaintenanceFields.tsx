@@ -20,9 +20,9 @@ const AHUMaintenanceFields = ({ form }: AHUMaintenanceFieldsProps) => {
       data-component="ahu-maintenance-fields"
       data-force-visible="true"
       style={isMobile ? { 
-        display: 'block !important', 
-        visibility: 'visible !important', 
-        opacity: '1 !important',
+        display: 'block',
+        visibility: 'visible',
+        opacity: 1,
         backgroundColor: '#ffffff',
         padding: '1rem',
         borderRadius: '8px',
