@@ -22,7 +22,7 @@
       position: relative !important;
       z-index: 10 !important;
       transform: none !important;
-      margin: 0 0 1rem 0 !important;
+      margin: 0 0 1.5rem 0 !important;
       padding: 1rem !important;
       background-color: white !important;
       border-radius: 8px !important;
@@ -74,21 +74,21 @@
       content-visibility: visible !important;
     }
 
-    /* Force form sections to be visible */
+    /* Force form sections to be visible and properly spaced */
     [data-component="form-section"] {
       display: block !important;
       visibility: visible !important;
       opacity: 1 !important;
       width: 100% !important;
-      margin-bottom: 1.5rem !important;
-      padding: 1rem !important;
+      margin-bottom: 2rem !important;
+      padding: 1.25rem !important;
       background-color: white !important;
       border-radius: 8px !important;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
       content-visibility: visible !important;
     }
 
-    /* Force all form inputs to be visible and properly sized */
+    /* Enhanced form field styling for mobile */
     .mobile-checklist-force-visible input,
     .mobile-checklist-force-visible select,
     .mobile-checklist-force-visible [role="combobox"],
@@ -102,47 +102,61 @@
       visibility: visible !important;
       opacity: 1 !important;
       width: 100% !important;
-      min-height: 52px !important;
-      padding: 12px 16px !important;
+      min-height: 56px !important;
+      padding: 14px 16px !important;
       font-size: 16px !important;
-      line-height: 1.4 !important;
-      border: 1px solid #d1d5db !important;
-      border-radius: 6px !important;
+      line-height: 1.5 !important;
+      border: 2px solid #d1d5db !important;
+      border-radius: 8px !important;
       background-color: white !important;
       color: #1f2937 !important;
-      margin-bottom: 0.5rem !important;
+      margin-bottom: 1rem !important;
+      transition: border-color 0.2s ease !important;
     }
 
-    /* Force grid layouts to single column */
+    /* Focus states for better UX */
+    .mobile-checklist-force-visible input:focus,
+    .mobile-checklist-force-visible [role="combobox"]:focus,
+    .mobile-checklist-force-visible textarea:focus,
+    [data-force-visible="true"] input:focus,
+    [data-force-visible="true"] [role="combobox"]:focus,
+    [data-force-visible="true"] textarea:focus {
+      border-color: #3b82f6 !important;
+      ring: 2px solid #93c5fd !important;
+      outline: none !important;
+    }
+
+    /* Force single column layout */
     .mobile-checklist-force-visible .grid,
     [data-force-visible="true"] .grid {
       display: flex !important;
       flex-direction: column !important;
-      gap: 1rem !important;
+      gap: 1.5rem !important;
       grid-template-columns: none !important;
       width: 100% !important;
     }
 
-    /* Force proper spacing */
+    /* Enhanced spacing for mobile */
     .mobile-checklist-force-visible .space-y-4 > *,
     .mobile-checklist-force-visible .space-y-6 > *,
     [data-force-visible="true"] .space-y-4 > *,
     [data-force-visible="true"] .space-y-6 > * {
-      margin-bottom: 1rem !important;
+      margin-bottom: 1.5rem !important;
       width: 100% !important;
       display: block !important;
       visibility: visible !important;
     }
 
-    /* Force labels to be visible */
+    /* Enhanced label styling */
     .mobile-checklist-force-visible label,
     [data-force-visible="true"] label {
       display: block !important;
       font-size: 16px !important;
-      font-weight: 500 !important;
+      font-weight: 600 !important;
       color: #374151 !important;
       margin-bottom: 8px !important;
       visibility: visible !important;
+      line-height: 1.4 !important;
     }
 
     /* Mobile debug info styling */
@@ -154,7 +168,7 @@
       position: relative !important;
     }
 
-    /* CRITICAL: Dropdown positioning fixes */
+    /* CRITICAL: Enhanced dropdown positioning fixes */
     [data-radix-select-content],
     [data-radix-dropdown-menu-content] {
       position: fixed !important;
@@ -175,7 +189,7 @@
       transform: none !important;
     }
 
-    /* Force equipment type headers to be visible */
+    /* Force checklist headers to be prominent */
     .mobile-checklist-force-visible h2,
     .mobile-checklist-force-visible h3,
     [data-force-visible="true"] h2,
@@ -183,11 +197,19 @@
       display: block !important;
       visibility: visible !important;
       font-size: 1.25rem !important;
-      font-weight: 600 !important;
+      font-weight: 700 !important;
       color: #1f2937 !important;
       margin-bottom: 1rem !important;
-      padding: 0.5rem 0 !important;
-      border-bottom: 1px solid #e5e7eb !important;
+      padding: 0.75rem 0 !important;
+      text-align: center !important;
+    }
+
+    /* Section dividers */
+    .mobile-checklist-force-visible > div + div,
+    [data-force-visible="true"] > div + div {
+      border-top: 2px solid #f3f4f6 !important;
+      padding-top: 1.5rem !important;
+      margin-top: 1.5rem !important;
     }
   }
 
@@ -197,8 +219,8 @@
     .mobile-checklist-force-visible [role="combobox"],
     [data-force-visible="true"] button,
     [data-force-visible="true"] [role="combobox"] {
-      min-height: 52px !important;
-      min-width: 52px !important;
+      min-height: 56px !important;
+      min-width: 56px !important;
       touch-action: manipulation !important;
       -webkit-tap-highlight-color: transparent !important;
     }

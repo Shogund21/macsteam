@@ -14,14 +14,24 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
   
   return (
     <div className="w-full space-y-6">
-      <h3 className="text-lg font-semibold">Maintenance Readings</h3>
-      <div className={isMobile ? "space-y-4 w-full" : "grid grid-cols-1 md:grid-cols-2 gap-6"}>
+      <div className={`${isMobile ? 'text-center py-3 px-3 bg-green-50 border border-green-200 rounded-lg' : ''}`}>
+        <h3 className={`font-semibold ${isMobile ? 'text-lg text-green-800' : 'text-lg'}`}>
+          Maintenance Readings
+        </h3>
+        {isMobile && (
+          <p className="text-sm text-green-600 mt-1">Record all applicable readings</p>
+        )}
+      </div>
+      
+      <div className="w-full space-y-4">
         <FormField
           control={form.control}
           name="chiller_pressure_reading"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="text-sm font-medium text-gray-700">Chiller Pressure Reading (PSI)</FormLabel>
+              <FormLabel className={`text-sm font-medium text-gray-700 ${isMobile ? 'text-base' : ''}`}>
+                Chiller Pressure Reading (PSI)
+              </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className={`bg-white border border-gray-300 ${isMobile ? 'min-h-[52px] text-base' : ''}`}>
@@ -51,7 +61,9 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
           name="chiller_temperature_reading"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="text-sm font-medium text-gray-700">Chiller Temperature Reading (°F)</FormLabel>
+              <FormLabel className={`text-sm font-medium text-gray-700 ${isMobile ? 'text-base' : ''}`}>
+                Chiller Temperature Reading (°F)
+              </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className={`bg-white border border-gray-300 ${isMobile ? 'min-h-[52px] text-base' : ''}`}>
@@ -81,7 +93,9 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
           name="air_filter_status"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="text-sm font-medium text-gray-700">Air Filter Status</FormLabel>
+              <FormLabel className={`text-sm font-medium text-gray-700 ${isMobile ? 'text-base' : ''}`}>
+                Air Filter Status
+              </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className={`bg-white border border-gray-300 ${isMobile ? 'min-h-[52px] text-base' : ''}`}>
@@ -109,7 +123,9 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
           name="belt_condition"
           render={({ field }) => (
             <FormItem className="w-full">
-              <FormLabel className="text-sm font-medium text-gray-700">Belt Condition</FormLabel>
+              <FormLabel className={`text-sm font-medium text-gray-700 ${isMobile ? 'text-base' : ''}`}>
+                Belt Condition
+              </FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className={`bg-white border border-gray-300 ${isMobile ? 'min-h-[52px] text-base' : ''}`}>
