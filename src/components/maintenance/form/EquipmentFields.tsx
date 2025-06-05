@@ -26,22 +26,17 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
     switch (equipmentType) {
       case 'ahu':
         return (
-          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
-            {isMobile && (
-              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
-                ✓ AHU/RTU Maintenance Checklist
-              </div>
-            )}
+          <div className={`w-full ${isMobile ? 'mobile-container' : ''}`}>
             <AHUMaintenanceFields form={form} />
           </div>
         );
       
       case 'chiller':
         return (
-          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
+          <div className={`w-full space-y-4 ${isMobile ? 'mobile-container' : ''}`}>
             {isMobile && (
-              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
-                ✓ Chiller Maintenance Checklist
+              <div className="checklist-section-header">
+                ❄️ Chiller Maintenance Checklist
               </div>
             )}
             <MaintenanceReadings form={form} />
@@ -52,10 +47,10 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       case 'cooling_tower':
         return (
-          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
+          <div className={`w-full space-y-4 ${isMobile ? 'mobile-container' : ''}`}>
             {isMobile && (
-              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
-                ✓ Cooling Tower Maintenance Checklist
+              <div className="checklist-section-header">
+                🌊 Cooling Tower Maintenance Checklist
               </div>
             )}
             <CoolingTowerFields form={form} />
@@ -64,10 +59,10 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       case 'elevator':
         return (
-          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
+          <div className={`w-full space-y-4 ${isMobile ? 'mobile-container' : ''}`}>
             {isMobile && (
-              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
-                ✓ Elevator Maintenance Checklist
+              <div className="checklist-section-header">
+                🛗 Elevator Maintenance Checklist
               </div>
             )}
             <ElevatorMaintenanceFields form={form} />
@@ -76,10 +71,10 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       case 'restroom':
         return (
-          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
+          <div className={`w-full space-y-4 ${isMobile ? 'mobile-container' : ''}`}>
             {isMobile && (
-              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
-                ✓ Restroom Maintenance Checklist
+              <div className="checklist-section-header">
+                🚿 Restroom Maintenance Checklist
               </div>
             )}
             <RestroomMaintenanceFields form={form} />
@@ -88,10 +83,10 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       default:
         return (
-          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
+          <div className={`w-full space-y-4 ${isMobile ? 'mobile-container' : ''}`}>
             {isMobile && (
-              <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
-                ✓ General Maintenance Checklist
+              <div className="checklist-section-header">
+                🔧 General Maintenance Checklist
               </div>
             )}
             <MaintenanceReadings form={form} />
@@ -103,17 +98,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   };
 
   return (
-    <div 
-      className="w-full mobile-checklist-force-visible" 
-      data-component="equipment-fields-container"
-      data-force-visible="true"
-      style={isMobile ? { 
-        display: 'block',
-        visibility: 'visible',
-        opacity: 1,
-        minHeight: '100px'
-      } : {}}
-    >
+    <div className={`w-full ${isMobile ? 'mobile-scroll-container' : ''}`}>
       {renderEquipmentFields()}
     </div>
   );
