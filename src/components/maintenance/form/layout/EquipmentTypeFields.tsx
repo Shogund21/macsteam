@@ -28,6 +28,20 @@ const EquipmentTypeFields = () => {
         name: currentEquipment.name,
         isMobile
       });
+      
+      // On mobile, scroll to checklist after a delay to ensure it's rendered
+      if (isMobile) {
+        setTimeout(() => {
+          const checklistElement = document.querySelector('[data-component="equipment-type-fields"]');
+          if (checklistElement) {
+            checklistElement.scrollIntoView({ 
+              behavior: 'smooth', 
+              block: 'start',
+              inline: 'nearest'
+            });
+          }
+        }, 100);
+      }
     } else if (formEquipmentId && !currentEquipment) {
       console.log('🔧 Equipment ID set but equipment not found:', {
         formEquipmentId,
@@ -65,7 +79,7 @@ const EquipmentTypeFields = () => {
 
   return (
     <div 
-      className={`w-full mobile-checklist-force-visible ${isMobile ? 'space-y-4' : 'space-y-6'}`}
+      className={`w-full mobile-checklist-force-visible ${isMobile ? 'space-y-4 mobile-equipment-container' : 'space-y-6'}`}
       data-component="equipment-type-fields"
       data-equipment-type={currentEquipmentType}
       data-equipment-name={currentEquipment.name}
@@ -79,11 +93,15 @@ const EquipmentTypeFields = () => {
         backgroundColor: isMobile ? '#f0f9ff' : 'transparent',
         padding: isMobile ? '1rem' : '0',
         borderRadius: isMobile ? '8px' : '0',
-        border: isMobile ? '2px solid #0ea5e9' : 'none'
+        border: isMobile ? '2px solid #0ea5e9' : 'none',
+        position: 'relative',
+        zIndex: 1,
+        width: '100%',
+        overflow: isMobile ? 'visible' : 'initial'
       }}
     >
       {isMobile && (
-        <div className="p-3 bg-green-100 border border-green-400 rounded text-sm">
+        <div className="p-3 bg-green-100 border border-green-400 rounded text-sm mb-4">
           <strong>✅ Mobile Checklist Active:</strong><br />
           Equipment: {currentEquipment.name}<br />
           Type: {currentEquipmentType}<br />
@@ -91,7 +109,16 @@ const EquipmentTypeFields = () => {
         </div>
       )}
       
-      <div className={`mobile-checklist-force-visible ${isMobile ? 'bg-white p-4 rounded-lg shadow-sm' : ''}`} data-force-visible="true">
+      <div 
+        className={`mobile-checklist-force-visible ${isMobile ? 'bg-white p-4 rounded-lg shadow-sm' : ''}`} 
+        data-force-visible="true"
+        style={isMobile ? {
+          width: '100%',
+          minHeight: '200px',
+          position: 'relative',
+          overflow: 'visible'
+        } : {}}
+      >
         <EquipmentFields 
           form={form} 
           equipmentType={currentEquipmentType}

@@ -29,12 +29,34 @@ const MaintenanceFormBody = () => {
     }
   }, [formEquipmentId, isMobile, form]);
 
+  // Fix mobile scroll issues by ensuring proper viewport
+  useEffect(() => {
+    if (isMobile) {
+      // Ensure mobile viewport is properly set
+      const viewport = document.querySelector('meta[name="viewport"]');
+      if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, user-scalable=yes');
+      }
+      
+      // Enable smooth scrolling on mobile
+      document.documentElement.style.scrollBehavior = 'smooth';
+    }
+  }, [isMobile]);
+
   return (
-    <div className={`w-full space-y-6 ${isMobile ? 'pb-20' : ''}`} data-component="maintenance-form-body">
+    <div 
+      className={`w-full space-y-6 ${isMobile ? 'pb-32 min-h-screen' : 'pb-20'}`} 
+      data-component="maintenance-form-body"
+      style={isMobile ? {
+        overflowY: 'auto',
+        maxHeight: '100vh',
+        WebkitOverflowScrolling: 'touch',
+        position: 'relative'
+      } : {}}
+    >
       {/* Basic Information Section */}
       <FormSection title="Basic Information">
         <div className="space-y-4">
-          {/* Universal basic info component - works on all devices now */}
           <div className="w-full">
             <MaintenanceBasicInfo 
               form={form} 
@@ -55,39 +77,33 @@ const MaintenanceFormBody = () => {
             <div>Equipment Count: {equipment?.length || 0}</div>
             <div>Should Show Checklist: {formEquipmentId ? 'YES' : 'NO'}</div>
             <div>Is Mobile: {isMobile ? 'YES' : 'NO'}</div>
+            <div>Viewport Height: {window.innerHeight}px</div>
+            <div>Scroll Height: {document.documentElement.scrollHeight}px</div>
           </div>
         </div>
       )}
       
-      {/* Equipment Maintenance Checklist - Force render on mobile with enhanced visibility */}
+      {/* Equipment Maintenance Checklist */}
       {formEquipmentId && (
         <div 
-          className={`mobile-checklist-force-visible ${isMobile ? 'mobile-checklist-force-visible' : ''}`}
+          className={`mobile-checklist-container ${isMobile ? 'mobile-checklist-enhanced' : ''}`}
           data-force-visible="true"
           data-component="equipment-details-wrapper"
+          style={isMobile ? {
+            display: 'block',
+            visibility: 'visible',
+            opacity: 1,
+            marginTop: '2rem',
+            marginBottom: '3rem',
+            position: 'relative',
+            zIndex: 1
+          } : {}}
         >
           <FormSection title="Equipment Maintenance Checklist">
             <div className="w-full">
               <EquipmentTypeFields />
             </div>
           </FormSection>
-        </div>
-      )}
-
-      {/* FALLBACK: Always show checklist section on mobile if equipment exists */}
-      {isMobile && formEquipmentId && (
-        <div 
-          className="mobile-checklist-force-visible bg-green-50 border-2 border-green-500 p-4 rounded-lg"
-          data-force-visible="true"
-          style={{ display: 'block', visibility: 'visible', opacity: 1 }}
-        >
-          <h3 className="text-lg font-semibold text-green-800 mb-3">
-            🔧 Mobile Maintenance Checklist (Fallback)
-          </h3>
-          <div className="text-green-700 text-sm mb-4">
-            This section should always be visible when equipment is selected on mobile.
-          </div>
-          <EquipmentTypeFields />
         </div>
       )}
 
