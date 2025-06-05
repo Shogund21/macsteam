@@ -65,11 +65,22 @@ const EquipmentTypeFields = () => {
 
   return (
     <div 
-      className={`w-full ${isMobile ? 'space-y-4' : 'space-y-6'}`}
+      className={`w-full mobile-checklist-force-visible ${isMobile ? 'space-y-4' : 'space-y-6'}`}
       data-component="equipment-type-fields"
       data-equipment-type={currentEquipmentType}
       data-equipment-name={currentEquipment.name}
+      data-force-visible="true"
       key={`equipment-${formEquipmentId}`} // Force re-render on equipment change
+      style={{ 
+        display: 'block !important', 
+        visibility: 'visible !important', 
+        opacity: '1 !important',
+        minHeight: '200px',
+        backgroundColor: isMobile ? '#f0f9ff' : 'transparent',
+        padding: isMobile ? '1rem' : '0',
+        borderRadius: isMobile ? '8px' : '0',
+        border: isMobile ? '2px solid #0ea5e9' : 'none'
+      }}
     >
       {isMobile && (
         <div className="p-3 bg-green-100 border border-green-400 rounded text-sm">
@@ -80,7 +91,7 @@ const EquipmentTypeFields = () => {
         </div>
       )}
       
-      <div className={`${isMobile ? 'bg-white p-4 rounded-lg shadow-sm' : ''}`}>
+      <div className={`mobile-checklist-force-visible ${isMobile ? 'bg-white p-4 rounded-lg shadow-sm' : ''}`} data-force-visible="true">
         <EquipmentFields 
           form={form} 
           equipmentType={currentEquipmentType}

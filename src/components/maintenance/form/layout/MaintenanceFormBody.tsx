@@ -45,13 +45,50 @@ const MaintenanceFormBody = () => {
         </div>
       </FormSection>
       
-      {/* Equipment Maintenance Checklist - Always render when equipment is selected */}
-      {formEquipmentId && (
-        <FormSection title="Equipment Maintenance Checklist">
-          <div className="w-full">
-            <EquipmentTypeFields />
+      {/* Mobile Debug Information */}
+      {isMobile && (
+        <div className="mobile-debug-info p-4 bg-yellow-100 border border-yellow-400 rounded-lg">
+          <h4 className="font-semibold text-yellow-800">Mobile Debug Status:</h4>
+          <div className="text-sm text-yellow-700 mt-2">
+            <div>Selected Equipment ID: {formEquipmentId || 'None'}</div>
+            <div>Location ID: {locationId || 'None'}</div>
+            <div>Equipment Count: {equipment?.length || 0}</div>
+            <div>Should Show Checklist: {formEquipmentId ? 'YES' : 'NO'}</div>
+            <div>Is Mobile: {isMobile ? 'YES' : 'NO'}</div>
           </div>
-        </FormSection>
+        </div>
+      )}
+      
+      {/* Equipment Maintenance Checklist - Force render on mobile with enhanced visibility */}
+      {formEquipmentId && (
+        <div 
+          className={`mobile-checklist-force-visible ${isMobile ? 'mobile-checklist-force-visible' : ''}`}
+          data-force-visible="true"
+          data-component="equipment-details-wrapper"
+        >
+          <FormSection title="Equipment Maintenance Checklist">
+            <div className="w-full">
+              <EquipmentTypeFields />
+            </div>
+          </FormSection>
+        </div>
+      )}
+
+      {/* FALLBACK: Always show checklist section on mobile if equipment exists */}
+      {isMobile && formEquipmentId && (
+        <div 
+          className="mobile-checklist-force-visible bg-green-50 border-2 border-green-500 p-4 rounded-lg"
+          data-force-visible="true"
+          style={{ display: 'block !important', visibility: 'visible !important', opacity: '1 !important' }}
+        >
+          <h3 className="text-lg font-semibold text-green-800 mb-3">
+            🔧 Mobile Maintenance Checklist (Fallback)
+          </h3>
+          <div className="text-green-700 text-sm mb-4">
+            This section should always be visible when equipment is selected on mobile.
+          </div>
+          <EquipmentTypeFields />
+        </div>
       )}
 
       {/* Documents */}

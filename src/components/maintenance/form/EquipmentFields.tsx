@@ -26,7 +26,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
     switch (equipmentType) {
       case 'ahu':
         return (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
             {isMobile && (
               <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
                 ✓ AHU/RTU Maintenance Checklist
@@ -38,7 +38,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       case 'chiller':
         return (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
             {isMobile && (
               <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
                 ✓ Chiller Maintenance Checklist
@@ -52,7 +52,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       case 'cooling_tower':
         return (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
             {isMobile && (
               <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
                 ✓ Cooling Tower Maintenance Checklist
@@ -64,7 +64,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       case 'elevator':
         return (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
             {isMobile && (
               <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
                 ✓ Elevator Maintenance Checklist
@@ -76,7 +76,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       case 'restroom':
         return (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
             {isMobile && (
               <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
                 ✓ Restroom Maintenance Checklist
@@ -88,7 +88,7 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
       
       default:
         return (
-          <div className="w-full space-y-4">
+          <div className="w-full space-y-4 mobile-checklist-force-visible" data-force-visible="true">
             {isMobile && (
               <div className="text-green-600 font-medium p-2 bg-green-50 rounded">
                 ✓ General Maintenance Checklist
@@ -103,7 +103,17 @@ const EquipmentFields = ({ form, equipmentType }: EquipmentFieldsProps) => {
   };
 
   return (
-    <div className="w-full" data-component="equipment-fields-container">
+    <div 
+      className="w-full mobile-checklist-force-visible" 
+      data-component="equipment-fields-container"
+      data-force-visible="true"
+      style={isMobile ? { 
+        display: 'block !important', 
+        visibility: 'visible !important', 
+        opacity: '1 !important',
+        minHeight: '100px'
+      } : {}}
+    >
       {renderEquipmentFields()}
     </div>
   );
