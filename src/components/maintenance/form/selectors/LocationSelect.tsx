@@ -6,6 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useEffect } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface LocationSelectProps {
   form: UseFormReturn<any>;
@@ -14,35 +15,40 @@ interface LocationSelectProps {
 const LocationSelect = ({ form }: LocationSelectProps) => {
   const selectedLocationId = form.watch('location_id');
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Log current selection for debugging
   useEffect(() => {
     console.log('LocationSelect: Current location_id value:', selectedLocationId);
   }, [selectedLocationId]);
 
-  const { data: locations = [], isLoading } = useQuery({
+  const { data: locations = [], isLoading, error } = useQuery({
     queryKey: ['locations'],
     queryFn: async () => {
-      console.log('Starting locations fetch...');
-      const { data, error } = await supabase
-        .from('locations')
-        .select('*')
-        .eq('is_active', true)
-        .order('name');
-      
-      if (error) {
-        console.error('Error fetching locations:', error);
-        toast({
-          title: "Error loading locations",
-          description: error.message,
-          variant: "destructive",
-        });
-        throw error;
+      try {
+        console.log('Starting locations fetch...');
+        const { data, error } = await supabase
+          .from('locations')
+          .select('*')
+          .eq('is_active', true)
+          .order('name');
+        
+        if (error) {
+          console.error('Error fetching locations:', error);
+          // Return empty array instead of throwing to prevent crashes
+          return [];
+        }
+        
+        console.log('Locations fetched:', data?.length || 0, 'locations');
+        return data || [];
+      } catch (error) {
+        console.error('Locations fetch exception:', error);
+        return [];
       }
-      
-      console.log('Locations fetched:', data?.length || 0, 'locations');
-      return data || [];
     },
+    retry: 1,
+    staleTime: 30000,
+    refetchOnWindowFocus: false,
   });
 
   const handleLocationChange = (value: string) => {
@@ -52,14 +58,9 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       // CRITICAL FIX: Verify the location ID is valid before setting it
       const selectedLocation = locations.find(loc => loc.id === value);
       
-      if (!selectedLocation) {
+      if (!selectedLocation && value !== '') {
         console.warn('Selected location ID not found in available locations:', value);
-        toast({
-          title: "Warning",
-          description: "The selected location may not be valid",
-          variant: "destructive",
-        });
-      } else {
+      } else if (selectedLocation) {
         console.log('Valid location selected:', selectedLocation.name, 'with ID:', selectedLocation.id);
       }
       
@@ -86,11 +87,6 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
       }, 100);
     } catch (error) {
       console.error('Error in handleLocationChange:', error);
-      toast({
-        title: "Error selecting location",
-        description: error instanceof Error ? error.message : "An unknown error occurred",
-        variant: "destructive",
-      });
     }
   };
 
@@ -108,7 +104,9 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
           >
             <FormControl>
               <SelectTrigger 
-                className="w-full bg-white border border-gray-200 h-12 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                className={`w-full bg-white border border-gray-200 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                  isMobile ? 'min-h-[52px] text-base px-4' : 'h-12'
+                }`}
               >
                 <SelectValue 
                   placeholder={isLoading ? "Loading locations..." : "Select location"} 
@@ -117,26 +115,40 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className="z-[1000] bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto"
+              className={`bg-white divide-y divide-gray-100 rounded-lg shadow-lg w-[--radix-select-trigger-width] max-h-[300px] overflow-y-auto ${
+                isMobile ? 'z-[9999]' : 'z-[1000]'
+              }`}
+              position="popper"
+              sideOffset={4}
             >
               {isLoading ? (
                 <SelectItem 
                   value="loading-placeholder" 
                   disabled 
-                  className="py-3 px-4 text-sm text-gray-500"
+                  className={`text-gray-500 ${isMobile ? 'py-4 px-4 text-base' : 'py-3 px-4 text-sm'}`}
                 >
                   Loading locations...
+                </SelectItem>
+              ) : error ? (
+                <SelectItem 
+                  value="error-placeholder" 
+                  disabled 
+                  className={`text-red-500 ${isMobile ? 'py-4 px-4 text-base' : 'py-3 px-4 text-sm'}`}
+                >
+                  Error loading locations
                 </SelectItem>
               ) : locations.length > 0 ? (
                 locations.map((loc) => (
                   <SelectItem 
                     key={loc.id} 
                     value={loc.id}
-                    className="py-3 px-4 hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600"
+                    className={`hover:bg-blue-50 cursor-pointer focus:bg-blue-50 focus:text-blue-600 ${
+                      isMobile ? 'py-4 px-4' : 'py-3 px-4'
+                    }`}
                   >
                     <div className="flex flex-col">
-                      <span className="font-medium text-gray-900">{loc.name}</span>
-                      <span className="text-sm text-gray-500">
+                      <span className={`font-medium text-gray-900 ${isMobile ? 'text-base' : ''}`}>{loc.name}</span>
+                      <span className={`text-gray-500 ${isMobile ? 'text-sm mt-1' : 'text-sm'}`}>
                         Store #{loc.store_number}
                       </span>
                     </div>
@@ -146,7 +158,7 @@ const LocationSelect = ({ form }: LocationSelectProps) => {
                 <SelectItem 
                   value="no-locations-placeholder" 
                   disabled 
-                  className="py-3 text-sm text-gray-500"
+                  className={`text-gray-500 ${isMobile ? 'py-4 px-4 text-base' : 'py-3 px-4 text-sm'}`}
                 >
                   No locations available
                 </SelectItem>

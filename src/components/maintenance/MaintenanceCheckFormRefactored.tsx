@@ -11,6 +11,7 @@ import FormActions from "./form/FormActions";
 import { useMaintenanceData } from "./form/hooks/useMaintenanceData";
 import MaintenanceFormLoader from "./form/layout/MaintenanceFormLoader";
 import MaintenanceFormSubmissionHandler from "./form/layout/MaintenanceFormSubmissionHandler";
+import MaintenanceFormErrorBoundary from "./form/layout/MaintenanceFormErrorBoundary";
 import { useEquipmentTypeLogic } from "./form/hooks/useEquipmentTypeLogic";
 
 interface MaintenanceCheckFormProps {
@@ -48,56 +49,58 @@ const MaintenanceCheckForm = ({
   });
 
   return (
-    <MaintenanceFormLoader isLoading={isLoading} error={error}>
-      <MaintenanceFormSubmissionHandler
-        onComplete={onComplete}
-        initialData={initialData}
-        isSubmitting={isSubmitting}
-        setIsSubmitting={setIsSubmitting}
-        form={form}
-      >
-        {(onSubmitForm, manualSubmit) => (
-          <MaintenanceFormProvider
-            form={form}
-            initialData={initialData}
-            isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
-            equipment={equipment}
-            technicians={technicians}
-            selectedEquipment={selectedEquipment}
-            equipmentType={equipmentType}
-            isMobile={isMobile}
-          >
-            <div 
-              className={`w-full ${isMobile ? 'px-4' : 'max-w-4xl mx-auto px-6'}`}
-              data-component="maintenance-form-container"
-              style={{
-                display: 'block',
-                visibility: 'visible',
-                opacity: 1
-              }}
+    <MaintenanceFormErrorBoundary>
+      <MaintenanceFormLoader isLoading={isLoading} error={error}>
+        <MaintenanceFormSubmissionHandler
+          onComplete={onComplete}
+          initialData={initialData}
+          isSubmitting={isSubmitting}
+          setIsSubmitting={setIsSubmitting}
+          form={form}
+        >
+          {(onSubmitForm, manualSubmit) => (
+            <MaintenanceFormProvider
+              form={form}
+              initialData={initialData}
+              isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
+              equipment={equipment}
+              technicians={technicians}
+              selectedEquipment={selectedEquipment}
+              equipmentType={equipmentType}
+              isMobile={isMobile}
             >
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full space-y-6">
-                  <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
-                  <MaintenanceFormBody />
-                  
-                  {/* Form actions */}
-                  <div className={isMobile ? 'sticky bottom-0 bg-white p-4 border-t shadow-lg' : ''}>
-                    <FormActions 
-                      onCancel={onComplete}
-                      isEditing={!!initialData}
-                      isSubmitting={isSubmitting}
-                      onSubmit={manualSubmit}
-                    />
-                  </div>
-                </form>
-              </Form>
-            </div>
-          </MaintenanceFormProvider>
-        )}
-      </MaintenanceFormSubmissionHandler>
-    </MaintenanceFormLoader>
+              <div 
+                className={`w-full ${isMobile ? 'px-4' : 'max-w-4xl mx-auto px-6'}`}
+                data-component="maintenance-form-container"
+                style={{
+                  display: 'block',
+                  visibility: 'visible',
+                  opacity: 1
+                }}
+              >
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full space-y-6">
+                    <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
+                    <MaintenanceFormBody />
+                    
+                    {/* Form actions */}
+                    <div className={isMobile ? 'sticky bottom-0 bg-white p-4 border-t shadow-lg' : ''}>
+                      <FormActions 
+                        onCancel={onComplete}
+                        isEditing={!!initialData}
+                        isSubmitting={isSubmitting}
+                        onSubmit={manualSubmit}
+                      />
+                    </div>
+                  </form>
+                </Form>
+              </div>
+            </MaintenanceFormProvider>
+          )}
+        </MaintenanceFormSubmissionHandler>
+      </MaintenanceFormLoader>
+    </MaintenanceFormErrorBoundary>
   );
 };
 
