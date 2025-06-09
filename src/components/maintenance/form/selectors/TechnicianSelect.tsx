@@ -30,12 +30,6 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
                 className={`w-full bg-white border border-gray-200 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                   isMobile ? 'min-h-[52px] text-base px-4' : 'h-12'
                 }`}
-                style={isMobile ? {
-                  position: 'relative',
-                  zIndex: 10,
-                  display: 'block',
-                  visibility: 'visible'
-                } : {}}
               >
                 <SelectValue 
                   placeholder="Select technician" 
@@ -44,23 +38,19 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className={`bg-white divide-y divide-gray-100 rounded-lg shadow-lg max-h-[300px] overflow-y-auto ${
-                isMobile ? 'z-[9999] w-full' : 'z-[1000]'
+              className={`bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto ${
+                isMobile ? 'w-[calc(100vw-2rem)]' : ''
               }`}
               position="popper"
+              side="bottom"
+              align="start"
               sideOffset={4}
-              style={isMobile ? {
-                position: 'fixed',
-                left: '1rem',
-                right: '1rem',
-                width: 'calc(100vw - 2rem)',
-                maxWidth: 'calc(100vw - 2rem)',
+              avoidCollisions={true}
+              collisionPadding={isMobile ? 16 : 8}
+              style={{
                 zIndex: 9999,
-                backgroundColor: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '0.5rem',
-                boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)'
-              } : {}}
+                position: 'fixed'
+              }}
             >
               <SelectItem 
                 value="no-technician" 
