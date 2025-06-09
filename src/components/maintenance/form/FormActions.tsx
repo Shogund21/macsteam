@@ -39,7 +39,7 @@ const FormActions = ({
       </Button>
       
       <Button 
-        type={onSubmit ? "button" : "submit"}
+        type="submit"
         onClick={onSubmit ? handleSubmit : undefined}
         className={`${isMobile ? 'w-full min-h-[48px]' : ''} bg-[#1EAEDB] hover:bg-[#33C3F0] text-white text-base font-medium`}
         disabled={isSubmitting}
