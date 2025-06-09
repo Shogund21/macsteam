@@ -41,16 +41,6 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
               className={`bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto ${
                 isMobile ? 'w-[calc(100vw-2rem)]' : ''
               }`}
-              position="popper"
-              side="bottom"
-              align="start"
-              sideOffset={4}
-              avoidCollisions={true}
-              collisionPadding={isMobile ? 16 : 8}
-              style={{
-                zIndex: 9999,
-                position: 'fixed'
-              }}
             >
               <SelectItem 
                 value="no-technician" 
