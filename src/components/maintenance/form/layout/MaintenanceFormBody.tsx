@@ -67,22 +67,6 @@ const MaintenanceFormBody = () => {
         </div>
       </FormSection>
       
-      {/* Mobile Debug Information */}
-      {isMobile && (
-        <div className="mobile-debug-info p-4 bg-yellow-100 border border-yellow-400 rounded-lg">
-          <h4 className="font-semibold text-yellow-800">Mobile Debug Status:</h4>
-          <div className="text-sm text-yellow-700 mt-2">
-            <div>Selected Equipment ID: {formEquipmentId || 'None'}</div>
-            <div>Location ID: {locationId || 'None'}</div>
-            <div>Equipment Count: {equipment?.length || 0}</div>
-            <div>Should Show Checklist: {formEquipmentId ? 'YES' : 'NO'}</div>
-            <div>Is Mobile: {isMobile ? 'YES' : 'NO'}</div>
-            <div>Viewport Height: {window.innerHeight}px</div>
-            <div>Scroll Height: {document.documentElement.scrollHeight}px</div>
-          </div>
-        </div>
-      )}
-      
       {/* Equipment Maintenance Checklist */}
       {formEquipmentId && (
         <div 
