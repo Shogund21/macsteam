@@ -11,20 +11,20 @@ export const FormActions = ({ isSubmitting }: FormActionsProps) => {
   const navigate = useNavigate();
   
   return (
-    <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
+    <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 py-4">
       <Button
         type="button"
         variant="outline"
         onClick={() => navigate("/projects")}
         disabled={isSubmitting}
-        className="w-full sm:w-auto"
+        className="w-full sm:w-auto min-h-[48px] text-base"
       >
         Cancel
       </Button>
       <Button 
         type="submit" 
         disabled={isSubmitting}
-        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white w-full sm:w-auto"
+        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white w-full sm:w-auto min-h-[48px] text-base"
       >
         {isSubmitting ? (
           <div className="flex items-center justify-center gap-2">
