@@ -27,7 +27,13 @@ const FormActions = ({
   };
   
   return (
-    <div className={`flex ${isMobile ? 'flex-col gap-3 sticky bottom-0 bg-white p-4 border-t shadow-lg z-50' : 'flex-row justify-end gap-3'} pt-4`}>
+    <div className={`
+      ${isMobile 
+        ? 'bg-white p-4 border-t shadow-lg' 
+        : 'pt-4'
+      } 
+      flex ${isMobile ? 'flex-col gap-3' : 'flex-row justify-end gap-3'}
+    `}>
       <Button
         type="button"
         variant="outline"
@@ -39,8 +45,8 @@ const FormActions = ({
       </Button>
       
       <Button 
-        type="submit"
-        onClick={onSubmit ? handleSubmit : undefined}
+        type="button"
+        onClick={handleSubmit}
         className={`${isMobile ? 'w-full min-h-[48px]' : ''} bg-[#1EAEDB] hover:bg-[#33C3F0] text-white text-base font-medium`}
         disabled={isSubmitting}
       >
