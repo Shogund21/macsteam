@@ -1,3 +1,4 @@
+
 import {
   Select,
   SelectContent,
@@ -22,7 +23,7 @@ const PROJECT_STATUSES = [
 export const StatusSelect = ({ value, onValueChange }: StatusSelectProps) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Select status" />
       </SelectTrigger>
       <SelectContent>

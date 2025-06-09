@@ -65,13 +65,15 @@ export const AddProjectForm = () => {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <ProjectBasicInfo form={form} />
-        <ProjectStatusInfo form={form} />
-        <ProjectDates form={form} />
-        <FormActions isSubmitting={isSubmitting} />
-      </form>
-    </Form>
+    <div className="w-full max-w-2xl mx-auto">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-8">
+          <ProjectBasicInfo form={form} />
+          <ProjectStatusInfo form={form} />
+          <ProjectDates form={form} />
+          <FormActions isSubmitting={isSubmitting} />
+        </form>
+      </Form>
+    </div>
   );
 };

@@ -1,3 +1,4 @@
+
 import {
   Select,
   SelectContent,
@@ -20,7 +21,7 @@ const PROJECT_PRIORITIES = [
 export const PrioritySelect = ({ value, onValueChange }: PrioritySelectProps) => {
   return (
     <Select value={value} onValueChange={onValueChange}>
-      <SelectTrigger className="w-[180px]">
+      <SelectTrigger className="w-full">
         <SelectValue placeholder="Select priority" />
       </SelectTrigger>
       <SelectContent>

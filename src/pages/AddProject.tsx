@@ -1,17 +1,22 @@
+
 import Layout from "@/components/Layout";
 import { AddProjectForm } from "@/components/projects/AddProjectForm";
 
 const AddProject = () => {
   return (
     <Layout>
-      <div className="max-w-2xl mx-auto p-6 space-y-6 animate-fade-in">
-        <div>
-          <h1 className="text-3xl font-bold">Add New Project</h1>
-          <p className="text-muted-foreground mt-2">
-            Enter the details of the new project
-          </p>
+      <div className="min-h-screen bg-gray-50 py-6">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-gray-900">Add New Project</h1>
+            <p className="text-gray-600 mt-2">
+              Enter the details of the new project
+            </p>
+          </div>
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <AddProjectForm />
+          </div>
         </div>
-        <AddProjectForm />
       </div>
     </Layout>
   );
