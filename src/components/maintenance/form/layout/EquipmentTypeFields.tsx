@@ -100,15 +100,6 @@ const EquipmentTypeFields = () => {
         overflow: isMobile ? 'visible' : 'initial'
       }}
     >
-      {isMobile && (
-        <div className="p-3 bg-green-100 border border-green-400 rounded text-sm mb-4">
-          <strong>✅ Mobile Checklist Active:</strong><br />
-          Equipment: {currentEquipment.name}<br />
-          Type: {currentEquipmentType}<br />
-          Status: Displaying maintenance fields
-        </div>
-      )}
-      
       <div 
         className={`mobile-checklist-force-visible ${isMobile ? 'bg-white p-4 rounded-lg shadow-sm' : ''}`} 
         data-force-visible="true"
