@@ -17,14 +17,14 @@ export const FormActions = ({ isSubmitting }: FormActionsProps) => {
         variant="outline"
         onClick={() => navigate("/projects")}
         disabled={isSubmitting}
-        className="w-full sm:w-auto min-h-[48px] text-base"
+        className="w-full sm:w-auto min-h-[48px] text-base bg-blue-800 hover:bg-blue-900 text-white border-blue-800"
       >
         Cancel
       </Button>
       <Button 
         type="submit" 
         disabled={isSubmitting}
-        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white w-full sm:w-auto min-h-[48px] text-base"
+        className="bg-blue-800 hover:bg-blue-900 text-white w-full sm:w-auto min-h-[48px] text-base"
       >
         {isSubmitting ? (
           <div className="flex items-center justify-center gap-2">

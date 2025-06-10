@@ -75,13 +75,14 @@ const EquipmentForm = () => {
             variant="outline"
             onClick={() => navigate("/equipment")}
             disabled={isSubmitting}
+            className="bg-blue-800 hover:bg-blue-900 text-white border-blue-800"
           >
             Cancel
           </Button>
           <Button 
             type="submit"
             disabled={isSubmitting} 
-            className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-white"
+            className="bg-blue-800 hover:bg-blue-900 text-white"
           >
             {isSubmitting ? (
               <>

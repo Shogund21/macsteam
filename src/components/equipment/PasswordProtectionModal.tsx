@@ -54,12 +54,12 @@ const PasswordProtectionModal = ({
             className="w-full"
           />
           <div className="flex justify-end space-x-2">
-            <Button variant="outline" type="button" onClick={onClose}>
+            <Button variant="outline" type="button" onClick={onClose} className="bg-blue-800 hover:bg-blue-900 text-white border-blue-800">
               Cancel
             </Button>
             <Button 
               type="submit"
-              className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
+              className="bg-blue-800 hover:bg-blue-900 text-white"
             >
               Submit
             </Button>

@@ -39,7 +39,7 @@ const FormActions = ({
         variant="outline"
         onClick={onCancel}
         disabled={isSubmitting}
-        className={`${isMobile ? 'w-full min-h-[48px]' : ''} text-base font-medium`}
+        className={`${isMobile ? 'w-full min-h-[48px]' : ''} text-base font-medium bg-blue-800 hover:bg-blue-900 text-white border-blue-800`}
       >
         Cancel
       </Button>
@@ -47,7 +47,7 @@ const FormActions = ({
       <Button 
         type="button"
         onClick={handleSubmit}
-        className={`${isMobile ? 'w-full min-h-[48px]' : ''} bg-[#1EAEDB] hover:bg-[#33C3F0] text-white text-base font-medium`}
+        className={`${isMobile ? 'w-full min-h-[48px]' : ''} bg-blue-800 hover:bg-blue-900 text-white text-base font-medium`}
         disabled={isSubmitting}
       >
         {isSubmitting ? (

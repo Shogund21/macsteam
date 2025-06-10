@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -10,12 +11,13 @@ const FormActions = () => {
         type="button"
         variant="outline"
         onClick={() => navigate("/equipment")}
+        className="bg-blue-800 hover:bg-blue-900 text-white border-blue-800"
       >
         Cancel
       </Button>
       <Button 
         type="submit"
-        className="bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
+        className="bg-blue-800 hover:bg-blue-900 text-white"
       >
         Add Equipment
       </Button>
