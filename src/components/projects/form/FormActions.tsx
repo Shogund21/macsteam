@@ -11,7 +11,7 @@ export const FormActions = ({ isSubmitting }: FormActionsProps) => {
   const navigate = useNavigate();
   
   return (
-    <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4 py-4">
+    <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
       <Button
         type="button"
         variant="outline"
