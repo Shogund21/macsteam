@@ -20,7 +20,7 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
   const isHomePage = location.pathname === '/';
 
   return (
-    <div className="block h-screen w-full overflow-hidden">
+    <div className="block w-full">
       {/* Mobile dropdown menu positioned at the top right */}
       <div className="fixed top-4 right-4 z-[100]">
         <MobileDropdownMenu />
@@ -29,12 +29,13 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
       {/* Mobile helper hint for first-time users */}
       <MobileHint />
 
-      {/* Main content area with scrolling enabled */}
+      {/* Main content area with proper scrolling */}
       <div 
-        className="bg-gray-50 min-h-screen w-full overflow-y-auto"
+        className="bg-gray-50 w-full"
         data-testid="mobile-content"
+        style={{ minHeight: '100vh' }}
       >
-        <div className="h-full w-full pt-16 px-3 sm:px-4">
+        <div className="w-full pt-16 px-3 sm:px-4 pb-8">
           {/* Application header with logo and controls */}
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
             <div className="flex items-center">
@@ -99,8 +100,8 @@ export const MobileLayout = ({ children }: MobileLayoutProps) => {
             </div>
           )}
           
-          {/* Main content with fallback */}
-          <div className="dashboard-content min-h-[200px]">
+          {/* Main content with proper spacing for mobile */}
+          <div className="dashboard-content">
             {children || (
               <div className="flex items-center justify-center h-64">
                 <p className="text-gray-500">Loading content...</p>
