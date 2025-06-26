@@ -83,23 +83,23 @@ const MaintenanceCheckForm = ({
               isMobile={isMobile}
             >
               <div 
-                className={`w-full ${isMobile ? 'min-h-screen' : 'max-w-4xl mx-auto px-6'}`}
+                className={`w-full ${isMobile ? 'flex flex-col min-h-screen' : 'max-w-4xl mx-auto px-6'}`}
                 data-component="maintenance-form-container"
               >
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full">
+                  <form onSubmit={form.handleSubmit(onSubmitForm)} className={`w-full ${isMobile ? 'flex flex-col flex-1' : ''}`}>
                     {/* Header */}
-                    <div className={`${isMobile ? 'px-4 py-4' : ''}`}>
+                    <div className={`${isMobile ? 'flex-shrink-0 px-4 py-4' : ''}`}>
                       <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
                     </div>
                     
-                    {/* Form Body - scrollable on mobile */}
-                    <div className={`${isMobile ? 'px-4 pb-24' : 'pb-8'}`}>
+                    {/* Form Body - scrollable content */}
+                    <div className={`${isMobile ? 'flex-1 px-4 pb-4 overflow-y-auto' : 'pb-8'}`}>
                       <MaintenanceFormBody />
                     </div>
                     
-                    {/* Form Actions - fixed at bottom on mobile */}
-                    <div className={`${isMobile ? 'fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50' : 'mt-6'}`}>
+                    {/* Form Actions - at bottom but not fixed */}
+                    <div className={`${isMobile ? 'flex-shrink-0 px-4 py-4 bg-white border-t border-gray-200' : 'mt-6'}`}>
                       <FormActions 
                         onCancel={onComplete}
                         isEditing={!!initialData}

@@ -73,7 +73,7 @@ const MaintenanceChecks = () => {
 
   return (
     <Layout>
-      <div className="space-y-4 animate-fade-in pb-16">
+      <div className={`space-y-4 animate-fade-in ${isMobile ? 'pb-4' : 'pb-16'}`}>
         <div className={`flex flex-col ${isMobile ? 'gap-3' : 'md:flex-row'} justify-between items-start md:items-center gap-4 bg-gradient-to-r from-blue-50 to-indigo-50 p-4 md:p-6 rounded-lg shadow-sm`}>
           <div>
             <h1 className={`${isMobile ? 'text-xl' : 'text-2xl md:text-3xl'} font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600`}>
@@ -147,11 +147,11 @@ const MaintenanceChecks = () => {
 
         <div 
           style={{ display: showForm ? 'block' : 'none' }}
-          className={`w-full animate-fade-in`}
+          className={`w-full animate-fade-in ${isMobile ? 'h-screen' : ''}`}
           data-testid="maintenance-form-container"
         >
           {showForm && (
-            <div className={`${isMobile ? 'w-full' : 'bg-white rounded-lg shadow-sm p-4'}`}>
+            <div className={`${isMobile ? 'w-full h-full' : 'bg-white rounded-lg shadow-sm p-4'}`}>
               <MaintenanceCheckForm onComplete={handleHideForm} />
             </div>
           )}
