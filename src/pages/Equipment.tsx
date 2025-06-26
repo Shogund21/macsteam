@@ -1,3 +1,4 @@
+
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
@@ -7,12 +8,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { EquipmentList } from "@/components/equipment/EquipmentList";
 import { EquipmentAuth } from "@/components/equipment/EquipmentAuth";
 import { useEquipmentStatus } from "@/hooks/equipment/useEquipmentStatus";
+import { Equipment } from "@/types/equipment";
 
 const Equipment = () => {
   const navigate = useNavigate();
   const { handleStatusChange, handleDelete } = useEquipmentStatus();
 
-  const { data: equipment, isLoading } = useQuery({
+  const { data: equipmentData, isLoading } = useQuery({
     queryKey: ['equipment'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -27,6 +29,18 @@ const Equipment = () => {
       return data;
     },
   });
+
+  // Map database fields to Equipment interface
+  const equipment: Equipment[] = equipmentData?.map(item => ({
+    id: item.id,
+    name: item.name,
+    model: item.model || '',
+    serialNumber: item.serial_number || '', // Map snake_case to camelCase
+    location: item.location,
+    lastMaintenance: item.lastMaintenance,
+    nextMaintenance: item.nextMaintenance,
+    status: item.status || ''
+  })) || [];
 
   return (
     <Layout>
@@ -51,7 +65,7 @@ const Equipment = () => {
             <p className="text-center py-4">Loading equipment...</p>
           ) : (
             <EquipmentList 
-              equipment={equipment || []}
+              equipment={equipment}
               onStatusChange={handleStatusChange}
               onDelete={handleDelete}
             />

@@ -6,6 +6,7 @@ import { EquipmentItem } from "@/components/equipment/EquipmentItem";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Equipment } from "@/types/equipment";
 
 const EquipmentOverview = () => {
   const navigate = useNavigate();
@@ -27,6 +28,18 @@ const EquipmentOverview = () => {
     },
   });
 
+  // Map database fields to Equipment interface
+  const equipment: Equipment[] = equipmentData?.map(item => ({
+    id: item.id,
+    name: item.name,
+    model: item.model || '',
+    serialNumber: item.serial_number || '', // Map snake_case to camelCase
+    location: item.location,
+    lastMaintenance: item.lastMaintenance,
+    nextMaintenance: item.nextMaintenance,
+    status: item.status || ''
+  })) || [];
+
   return (
     <Card className="border-none shadow-lg bg-gradient-to-br from-white to-purple-50 animate-fade-in">
       <CardHeader className="bg-white pb-2">
@@ -38,10 +51,10 @@ const EquipmentOverview = () => {
             <div className="flex justify-center py-8">
               <div className="animate-pulse h-6 w-40 bg-gray-200 rounded"></div>
             </div>
-          ) : equipmentData && equipmentData.length > 0 ? (
+          ) : equipment && equipment.length > 0 ? (
             <>
-              {equipmentData.slice(0, 3).map((equipment) => (
-                <EquipmentItem key={equipment.id} equipment={equipment} />
+              {equipment.slice(0, 3).map((equipmentItem) => (
+                <EquipmentItem key={equipmentItem.id} equipment={equipmentItem} />
               ))}
               <Button 
                 onClick={() => navigate("/equipment")}

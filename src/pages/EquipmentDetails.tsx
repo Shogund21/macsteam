@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -10,13 +11,14 @@ import { QRCodeGenerator } from "@/components/equipment/QRCodeGenerator";
 import { StatusDropdown } from "@/components/equipment/StatusDropdown";
 import { useEquipmentStatus } from "@/hooks/equipment/useEquipmentStatus";
 import EquipmentFilterChanges from "@/components/filter/EquipmentFilterChanges";
+import { Equipment } from "@/types/equipment";
 
 const EquipmentDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { handleStatusChange } = useEquipmentStatus();
 
-  const { data: equipment, isLoading } = useQuery({
+  const { data: equipmentData, isLoading } = useQuery({
     queryKey: ['equipment', id],
     queryFn: async () => {
       if (!id) return null;
@@ -36,6 +38,18 @@ const EquipmentDetails = () => {
     },
     enabled: !!id,
   });
+
+  // Map database fields to Equipment interface
+  const equipment: Equipment | null = equipmentData ? {
+    id: equipmentData.id,
+    name: equipmentData.name,
+    model: equipmentData.model || '',
+    serialNumber: equipmentData.serial_number || '', // Map snake_case to camelCase
+    location: equipmentData.location,
+    lastMaintenance: equipmentData.lastMaintenance,
+    nextMaintenance: equipmentData.nextMaintenance,
+    status: equipmentData.status || ''
+  } : null;
 
   return (
     <Layout>

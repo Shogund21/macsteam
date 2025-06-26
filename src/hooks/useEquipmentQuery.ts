@@ -78,8 +78,15 @@ export const useEquipmentQuery = (locationId: string) => {
           const isElevator = e.name.toLowerCase().includes('elevator');
           
           // Add internal tracking properties but don't display warnings
-          const equipmentWithMeta = {
-            ...e,
+          const equipmentWithMeta: Equipment = {
+            id: e.id,
+            name: e.name,
+            model: e.model || '',
+            serialNumber: e.serial_number || '', // Map snake_case to camelCase
+            location: e.location,
+            lastMaintenance: e.lastMaintenance,
+            nextMaintenance: e.nextMaintenance,
+            status: e.status || '',
             isSpecialLocation: isRestroom || isElevator,
             originalLocationId: e.location,
             displayWarning: false // Never show warnings
@@ -89,7 +96,7 @@ export const useEquipmentQuery = (locationId: string) => {
             console.log(`Special equipment "${e.name}" has database location "${e.location}" but will be available for all locations`);
           }
           
-          return equipmentWithMeta as Equipment;
+          return equipmentWithMeta;
         });
 
         console.log(`Returning all ${processedEquipment.length} equipment items for location ${locationData.name}`);

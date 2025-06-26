@@ -21,12 +21,12 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
       <ChecklistSection
         title="Motor Performance & Current Readings"
         icon={<Zap className="h-5 w-5" />}
-        colorScheme="yellow"
+        colorScheme="orange"
       >
         <FormFieldGroup 
           title="Motor Current Analysis"
           description="Record motor current limits and phase readings"
-          columns={isMobile ? 1 : 3}
+          columns={isMobile ? 1 : 2}
         >
           <FormField
             control={form.control}
@@ -95,7 +95,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         <FormFieldGroup 
           title="3-Phase Motor Current Readings"
           description="Record individual phase current readings (Amps)"
-          columns={isMobile ? 1 : 3}
+          columns={isMobile ? 1 : 2}
         >
           <FormField
             control={form.control}
@@ -168,7 +168,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         <FormFieldGroup 
           title="Evaporator Temperature Readings"
           description="Record chilled water and refrigerant temperatures"
-          columns={isMobile ? 1 : 3}
+          columns={isMobile ? 1 : 2}
         >
           <FormField
             control={form.control}
@@ -234,7 +234,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         <FormFieldGroup 
           title="Evaporator Pressure Readings"
           description="Record refrigerant pressure and approach temperature"
-          columns={isMobile ? 1 : 3}
+          columns={isMobile ? 1 : 2}
         >
           <FormField
             control={form.control}
@@ -307,7 +307,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         <FormFieldGroup 
           title="Condenser Temperature Readings"
           description="Record condenser water temperatures"
-          columns={isMobile ? 1 : 3}
+          columns={isMobile ? 1 : 2}
         >
           <FormField
             control={form.control}
@@ -373,7 +373,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         <FormFieldGroup 
           title="Condenser Pressure & Flow"
           description="Record refrigerant pressure and water flow status"
-          columns={isMobile ? 1 : 3}
+          columns={isMobile ? 1 : 2}
         >
           <FormField
             control={form.control}
@@ -446,7 +446,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         <FormFieldGroup 
           title="Compressor Operational Status"
           description="Record compressor running status and control signals"
-          columns={isMobile ? 1 : 3}
+          columns={isMobile ? 1 : 2}
         >
           <FormField
             control={form.control}
@@ -517,7 +517,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
         <FormFieldGroup 
           title="Oil System Performance"
           description="Record oil pressure, temperature, and pump status"
-          columns={isMobile ? 1 : 3}
+          columns={isMobile ? 1 : 2}
         >
           <FormField
             control={form.control}
@@ -631,7 +631,7 @@ const MaintenanceReadings = ({ form }: MaintenanceReadingsProps) => {
       <ChecklistSection
         title="Additional System Checks"
         icon={<Filter className="h-5 w-5" />}
-        colorScheme="gray"
+        colorScheme="purple"
       >
         <FormFieldGroup 
           title="General System Status"
