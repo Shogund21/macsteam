@@ -30,6 +30,40 @@ export const maintenanceFormSchema = z.object({
   condenser_condition: naString.optional(),
   notes: z.string().optional().nullable(),
   
+  // Motor Performance Fields
+  active_current_limit_setpoint: z.string().optional(),
+  average_motor_current_pla: z.string().optional(),
+  motor_frequency: z.string().optional(),
+  starter_motor_current_l1: z.string().optional(),
+  starter_motor_current_l2: z.string().optional(),
+  starter_motor_current_l3: z.string().optional(),
+  
+  // Evaporator Fields
+  active_chilled_water_setpoint: z.string().optional(),
+  evap_leaving_water_temp: z.string().optional(),
+  evap_entering_water_temp: z.string().optional(),
+  evap_sat_rfgt_temp: z.string().optional(),
+  evap_rfgt_pressure: z.string().optional(),
+  evap_approach_temp: z.string().optional(),
+  
+  // Condenser Fields
+  cond_entering_water_temp: z.string().optional(),
+  cond_leaving_water_temp: z.string().optional(),
+  cond_sat_rfgt_temp: z.string().optional(),
+  cond_rfgt_pressure: z.string().optional(),
+  cond_approach_temp: z.string().optional(),
+  differential_refrigerant_pressure: z.string().optional(),
+  
+  // Compressor Fields
+  compressor_running_status: z.string().optional(),
+  chiller_control_signal: z.string().optional(),
+  compressor_starts_count: z.string().optional(),
+  oil_differential_pressure: z.string().optional(),
+  oil_pump_discharge_pressure: z.string().optional(),
+  oil_tank_pressure: z.string().optional(),
+  compressor_running_time: z.string().optional(),
+  compressor_refrigerant_discharge_temp: z.string().optional(),
+  
   // AHU specific fields
   air_filter_cleaned: z.boolean().optional(),
   fan_belt_condition: naString.optional(),

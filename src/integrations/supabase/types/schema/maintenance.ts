@@ -1,3 +1,4 @@
+
 export interface MaintenanceChecksTable {
   Row: {
     id: string;
@@ -35,6 +36,40 @@ export interface MaintenanceChecksTable {
     corrective_actions: string | null;
     maintenance_recommendations: string | null;
     images: string[] | null;
+    
+    // Motor Performance Fields
+    active_current_limit_setpoint: string | null;
+    average_motor_current_pla: string | null;
+    motor_frequency: string | null;
+    starter_motor_current_l1: string | null;
+    starter_motor_current_l2: string | null;
+    starter_motor_current_l3: string | null;
+    
+    // Evaporator Fields
+    active_chilled_water_setpoint: string | null;
+    evap_leaving_water_temp: string | null;
+    evap_entering_water_temp: string | null;
+    evap_sat_rfgt_temp: string | null;
+    evap_rfgt_pressure: string | null;
+    evap_approach_temp: string | null;
+    
+    // Condenser Fields
+    cond_entering_water_temp: string | null;
+    cond_leaving_water_temp: string | null;
+    cond_sat_rfgt_temp: string | null;
+    cond_rfgt_pressure: string | null;
+    cond_approach_temp: string | null;
+    differential_refrigerant_pressure: string | null;
+    
+    // Compressor Fields
+    compressor_running_status: string | null;
+    chiller_control_signal: string | null;
+    compressor_starts_count: string | null;
+    oil_differential_pressure: string | null;
+    oil_pump_discharge_pressure: string | null;
+    oil_tank_pressure: string | null;
+    compressor_running_time: string | null;
+    compressor_refrigerant_discharge_temp: string | null;
   };
   Insert: {
     id?: string;
@@ -72,6 +107,40 @@ export interface MaintenanceChecksTable {
     corrective_actions?: string | null;
     maintenance_recommendations?: string | null;
     images?: string[] | null;
+    
+    // Motor Performance Fields
+    active_current_limit_setpoint?: string | null;
+    average_motor_current_pla?: string | null;
+    motor_frequency?: string | null;
+    starter_motor_current_l1?: string | null;
+    starter_motor_current_l2?: string | null;
+    starter_motor_current_l3?: string | null;
+    
+    // Evaporator Fields
+    active_chilled_water_setpoint?: string | null;
+    evap_leaving_water_temp?: string | null;
+    evap_entering_water_temp?: string | null;
+    evap_sat_rfgt_temp?: string | null;
+    evap_rfgt_pressure?: string | null;
+    evap_approach_temp?: string | null;
+    
+    // Condenser Fields
+    cond_entering_water_temp?: string | null;
+    cond_leaving_water_temp?: string | null;
+    cond_sat_rfgt_temp?: string | null;
+    cond_rfgt_pressure?: string | null;
+    cond_approach_temp?: string | null;
+    differential_refrigerant_pressure?: string | null;
+    
+    // Compressor Fields
+    compressor_running_status?: string | null;
+    chiller_control_signal?: string | null;
+    compressor_starts_count?: string | null;
+    oil_differential_pressure?: string | null;
+    oil_pump_discharge_pressure?: string | null;
+    oil_tank_pressure?: string | null;
+    compressor_running_time?: string | null;
+    compressor_refrigerant_discharge_temp?: string | null;
   };
   Update: {
     id?: string;
@@ -109,5 +178,39 @@ export interface MaintenanceChecksTable {
     corrective_actions?: string | null;
     maintenance_recommendations?: string | null;
     images?: string[] | null;
+    
+    // Motor Performance Fields
+    active_current_limit_setpoint?: string | null;
+    average_motor_current_pla?: string | null;
+    motor_frequency?: string | null;
+    starter_motor_current_l1?: string | null;
+    starter_motor_current_l2?: string | null;
+    starter_motor_current_l3?: string | null;
+    
+    // Evaporator Fields
+    active_chilled_water_setpoint?: string | null;
+    evap_leaving_water_temp?: string | null;
+    evap_entering_water_temp?: string | null;
+    evap_sat_rfgt_temp?: string | null;
+    evap_rfgt_pressure?: string | null;
+    evap_approach_temp?: string | null;
+    
+    // Condenser Fields
+    cond_entering_water_temp?: string | null;
+    cond_leaving_water_temp?: string | null;
+    cond_sat_rfgt_temp?: string | null;
+    cond_rfgt_pressure?: string | null;
+    cond_approach_temp?: string | null;
+    differential_refrigerant_pressure?: string | null;
+    
+    // Compressor Fields
+    compressor_running_status?: string | null;
+    chiller_control_signal?: string | null;
+    compressor_starts_count?: string | null;
+    oil_differential_pressure?: string | null;
+    oil_pump_discharge_pressure?: string | null;
+    oil_tank_pressure?: string | null;
+    compressor_running_time?: string | null;
+    compressor_refrigerant_discharge_temp?: string | null;
   };
 }
