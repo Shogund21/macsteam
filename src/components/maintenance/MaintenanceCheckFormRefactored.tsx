@@ -42,8 +42,8 @@ const MaintenanceCheckForm = ({
     model: item.model || '',
     serialNumber: item.serial_number || '', // Map snake_case to camelCase
     location: item.location,
-    lastMaintenance: item.lastMaintenance,
-    nextMaintenance: item.nextMaintenance,
+    lastMaintenance: item.lastMaintenance || null,
+    nextMaintenance: item.nextMaintenance || null,
     status: item.status || ''
   })) || [];
 
@@ -83,21 +83,23 @@ const MaintenanceCheckForm = ({
               isMobile={isMobile}
             >
               <div 
-                className={`w-full ${isMobile ? 'px-2 pb-6' : 'max-w-4xl mx-auto px-6'}`}
+                className={`w-full ${isMobile ? 'min-h-screen' : 'max-w-4xl mx-auto px-6'}`}
                 data-component="maintenance-form-container"
-                style={isMobile ? {
-                  minHeight: 'calc(100vh - 200px)',
-                  position: 'relative',
-                  zIndex: 1
-                } : {}}
               >
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full space-y-4">
-                    <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
-                    <MaintenanceFormBody />
+                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full">
+                    {/* Header */}
+                    <div className={`${isMobile ? 'px-4 py-4' : ''}`}>
+                      <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
+                    </div>
                     
-                    {/* Form actions integrated within form on mobile for better UX */}
-                    <div className={`${isMobile ? 'mt-8 mb-4' : 'mt-6'}`}>
+                    {/* Form Body - scrollable on mobile */}
+                    <div className={`${isMobile ? 'px-4 pb-24' : 'pb-8'}`}>
+                      <MaintenanceFormBody />
+                    </div>
+                    
+                    {/* Form Actions - fixed at bottom on mobile */}
+                    <div className={`${isMobile ? 'fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-50' : 'mt-6'}`}>
                       <FormActions 
                         onCancel={onComplete}
                         isEditing={!!initialData}

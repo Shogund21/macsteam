@@ -28,11 +28,8 @@ const FormActions = ({
   
   return (
     <div className={`
-      ${isMobile 
-        ? 'w-full bg-white p-4 rounded-lg border border-gray-200 shadow-sm' 
-        : 'pt-4'
-      } 
       flex ${isMobile ? 'flex-col gap-3' : 'flex-row justify-end gap-3'}
+      w-full
     `}>
       <Button
         type="button"

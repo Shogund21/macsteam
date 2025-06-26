@@ -49,7 +49,7 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
       className="w-full"
       data-component="maintenance-basic-info"
     >
-      {/* Mobile: Stack all fields vertically with proper spacing */}
+      {/* Stack all fields vertically on mobile with proper spacing */}
       <div className={`${isMobile ? 'space-y-6' : 'flex flex-row gap-6'}`}>
         <div className={`${isMobile ? 'w-full' : 'w-full'}`} data-field="location">
           <LocationSelect form={form} />

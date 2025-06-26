@@ -38,7 +38,7 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className={`bg-white border border-gray-300 rounded-lg shadow-lg max-h-[300px] overflow-y-auto ${
+              className={`bg-white border border-gray-300 rounded-lg shadow-lg max-h-[300px] overflow-y-auto z-[9999] ${
                 isMobile ? 'w-full' : ''
               }`}
               position="popper"
