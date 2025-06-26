@@ -49,18 +49,17 @@ const MaintenanceBasicInfo = ({ form, equipment, technicians }: MaintenanceBasic
       className="w-full"
       data-component="maintenance-basic-info"
     >
-      {/* Responsive layout: stacked on mobile, row on desktop */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:gap-6">
-        <div className="w-full" data-field="location">
+      {/* Mobile: Stack all fields vertically with proper spacing */}
+      <div className={`${isMobile ? 'space-y-6' : 'flex flex-row gap-6'}`}>
+        <div className={`${isMobile ? 'w-full' : 'w-full'}`} data-field="location">
           <LocationSelect form={form} />
         </div>
         
-        {/* Equipment selector now shows on all devices */}
-        <div className="w-full" data-field="equipment">
+        <div className={`${isMobile ? 'w-full' : 'w-full'}`} data-field="equipment">
           <EquipmentSelect form={form} locationId={locationId || ''} />
         </div>
         
-        <div className="w-full" data-field="technician">
+        <div className={`${isMobile ? 'w-full' : 'w-full'}`} data-field="technician">
           <TechnicianSelect form={form} technicians={technicians} />
         </div>
       </div>

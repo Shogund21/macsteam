@@ -83,25 +83,30 @@ const MaintenanceCheckForm = ({
               isMobile={isMobile}
             >
               <div 
-                className={`w-full ${isMobile ? 'px-4 pb-32' : 'max-w-4xl mx-auto px-6'}`}
+                className={`w-full ${isMobile ? 'px-2 pb-6' : 'max-w-4xl mx-auto px-6'}`}
                 data-component="maintenance-form-container"
+                style={isMobile ? {
+                  minHeight: 'calc(100vh - 200px)',
+                  position: 'relative',
+                  zIndex: 1
+                } : {}}
               >
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full space-y-6">
+                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full space-y-4">
                     <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
                     <MaintenanceFormBody />
+                    
+                    {/* Form actions integrated within form on mobile for better UX */}
+                    <div className={`${isMobile ? 'mt-8 mb-4' : 'mt-6'}`}>
+                      <FormActions 
+                        onCancel={onComplete}
+                        isEditing={!!initialData}
+                        isSubmitting={isSubmitting}
+                        onSubmit={manualSubmit}
+                      />
+                    </div>
                   </form>
                 </Form>
-                
-                {/* Form actions outside the form but always visible */}
-                <div className={`mt-6 ${isMobile ? 'fixed bottom-0 left-0 right-0 z-50' : 'relative'}`}>
-                  <FormActions 
-                    onCancel={onComplete}
-                    isEditing={!!initialData}
-                    isSubmitting={isSubmitting}
-                    onSubmit={manualSubmit}
-                  />
-                </div>
               </div>
             </MaintenanceFormProvider>
           )}

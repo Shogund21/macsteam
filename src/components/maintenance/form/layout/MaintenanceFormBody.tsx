@@ -24,64 +24,31 @@ const MaintenanceFormBody = () => {
   useEffect(() => {
     if (isMobile && formEquipmentId) {
       console.log('🔧 Mobile equipment changed, forcing update:', formEquipmentId);
-      // Trigger form validation to ensure all components update
       form.trigger();
     }
   }, [formEquipmentId, isMobile, form]);
 
-  // Fix mobile scroll issues by ensuring proper viewport
-  useEffect(() => {
-    if (isMobile) {
-      // Ensure mobile viewport is properly set
-      const viewport = document.querySelector('meta[name="viewport"]');
-      if (viewport) {
-        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, user-scalable=yes');
-      }
-      
-      // Enable smooth scrolling on mobile
-      document.documentElement.style.scrollBehavior = 'smooth';
-    }
-  }, [isMobile]);
-
   return (
     <div 
-      className={`w-full space-y-6 ${isMobile ? 'pb-32 min-h-screen' : 'pb-20'}`} 
+      className={`w-full space-y-6 ${isMobile ? 'pb-4' : 'pb-8'}`} 
       data-component="maintenance-form-body"
-      style={isMobile ? {
-        overflowY: 'auto',
-        maxHeight: '100vh',
-        WebkitOverflowScrolling: 'touch',
-        position: 'relative'
-      } : {}}
     >
       {/* Basic Information Section */}
       <FormSection title="Basic Information">
-        <div className="space-y-4">
-          <div className="w-full">
-            <MaintenanceBasicInfo 
-              form={form} 
-              equipment={equipment} 
-              technicians={technicians} 
-            />
-          </div>
+        <div className="w-full">
+          <MaintenanceBasicInfo 
+            form={form} 
+            equipment={equipment} 
+            technicians={technicians} 
+          />
         </div>
       </FormSection>
       
       {/* Equipment Maintenance Checklist */}
       {formEquipmentId && (
         <div 
-          className={`mobile-checklist-container ${isMobile ? 'mobile-checklist-enhanced' : ''}`}
-          data-force-visible="true"
+          className="w-full"
           data-component="equipment-details-wrapper"
-          style={isMobile ? {
-            display: 'block',
-            visibility: 'visible',
-            opacity: 1,
-            marginTop: '2rem',
-            marginBottom: '3rem',
-            position: 'relative',
-            zIndex: 1
-          } : {}}
         >
           <FormSection title="Equipment Maintenance Checklist">
             <div className="w-full">

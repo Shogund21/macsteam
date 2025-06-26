@@ -29,7 +29,7 @@ const FormActions = ({
   return (
     <div className={`
       ${isMobile 
-        ? 'bg-white p-4 border-t shadow-lg' 
+        ? 'w-full bg-white p-4 rounded-lg border border-gray-200 shadow-sm' 
         : 'pt-4'
       } 
       flex ${isMobile ? 'flex-col gap-3' : 'flex-row justify-end gap-3'}
@@ -39,7 +39,7 @@ const FormActions = ({
         variant="outline"
         onClick={onCancel}
         disabled={isSubmitting}
-        className={`${isMobile ? 'w-full min-h-[48px]' : ''} text-base font-medium bg-blue-800 hover:bg-blue-900 text-white border-blue-800`}
+        className={`${isMobile ? 'w-full min-h-[48px] order-2' : ''} text-base font-medium bg-white hover:bg-gray-50 text-gray-700 border-gray-300`}
       >
         Cancel
       </Button>
@@ -47,7 +47,7 @@ const FormActions = ({
       <Button 
         type="button"
         onClick={handleSubmit}
-        className={`${isMobile ? 'w-full min-h-[48px]' : ''} bg-blue-800 hover:bg-blue-900 text-white text-base font-medium`}
+        className={`${isMobile ? 'w-full min-h-[48px] order-1' : ''} bg-blue-600 hover:bg-blue-700 text-white text-base font-medium`}
         disabled={isSubmitting}
       >
         {isSubmitting ? (

@@ -27,7 +27,7 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
           >
             <FormControl>
               <SelectTrigger 
-                className={`w-full bg-white border border-gray-200 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                className={`w-full bg-white border border-gray-300 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                   isMobile ? 'min-h-[52px] text-base px-4' : 'h-12'
                 }`}
               >
@@ -38,9 +38,11 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className={`bg-white border border-gray-200 rounded-lg shadow-lg max-h-[300px] overflow-y-auto ${
-                isMobile ? 'w-[calc(100vw-2rem)]' : ''
+              className={`bg-white border border-gray-300 rounded-lg shadow-lg max-h-[300px] overflow-y-auto ${
+                isMobile ? 'w-full' : ''
               }`}
+              position="popper"
+              sideOffset={4}
             >
               <SelectItem 
                 value="no-technician" 
