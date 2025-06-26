@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Form } from "@/components/ui/form";
 import { MaintenanceCheck } from "@/types/maintenance";
@@ -13,6 +12,7 @@ import MaintenanceFormLoader from "./form/layout/MaintenanceFormLoader";
 import MaintenanceFormSubmissionHandler from "./form/layout/MaintenanceFormSubmissionHandler";
 import MaintenanceFormErrorBoundary from "./form/layout/MaintenanceFormErrorBoundary";
 import { useEquipmentTypeLogic } from "./form/hooks/useEquipmentTypeLogic";
+import { Equipment } from "@/types/equipment";
 
 interface MaintenanceCheckFormProps {
   onComplete: () => void;
@@ -33,7 +33,20 @@ const MaintenanceCheckForm = ({
   
   const form = useMaintenanceForm(initialData);
   const isMobile = useIsMobile();
-  const { equipment, technicians, isLoading, error } = useMaintenanceData();
+  const { equipment: rawEquipment, technicians, isLoading, error } = useMaintenanceData();
+  
+  // Map database fields to Equipment interface
+  const equipment: Equipment[] = rawEquipment?.map(item => ({
+    id: item.id,
+    name: item.name,
+    model: item.model || '',
+    serialNumber: item.serial_number || '', // Map snake_case to camelCase
+    location: item.location,
+    lastMaintenance: item.lastMaintenance,
+    nextMaintenance: item.nextMaintenance,
+    status: item.status || ''
+  })) || [];
+
   const { selectedEquipment, equipmentType } = useEquipmentTypeLogic(equipment, form);
 
   console.log('🚀 MaintenanceCheckForm render:', {

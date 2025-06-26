@@ -8,7 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { EquipmentList } from "@/components/equipment/EquipmentList";
 import { EquipmentAuth } from "@/components/equipment/EquipmentAuth";
 import { useEquipmentStatus } from "@/hooks/equipment/useEquipmentStatus";
-import { Equipment } from "@/types/equipment";
+import type { Equipment } from "@/types/equipment";
 
 const Equipment = () => {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Equipment = () => {
             </div>
             <Button 
               onClick={() => navigate("/add-equipment")}
-              className="w-full md:w-auto bg-[#1EAEDB] hover:bg-[#33C3F0] text-black"
+              className="w-full md:w-auto bg-blue-800 hover:bg-blue-900 text-white"
             >
               <Plus className="mr-2 h-4 w-4" /> Add Equipment
             </Button>
