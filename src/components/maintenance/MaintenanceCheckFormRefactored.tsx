@@ -83,26 +83,25 @@ const MaintenanceCheckForm = ({
               isMobile={isMobile}
             >
               <div 
-                className={`w-full ${isMobile ? 'h-full' : 'max-w-4xl mx-auto px-6'}`}
+                className={`w-full ${isMobile ? 'h-full flex flex-col' : 'max-w-4xl mx-auto px-6'}`}
                 data-component="maintenance-form-container"
               >
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full h-full">
+                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full h-full flex flex-col">
                     {isMobile ? (
-                      // Mobile layout: simple vertical stack with proper spacing
-                      <div className="h-full flex flex-col">
-                        {/* Header */}
-                        <div className="px-4 py-4 bg-white border-b">
+                      <>
+                        {/* Header - fixed */}
+                        <div className="flex-shrink-0 px-4 py-3 bg-white border-b border-gray-200">
                           <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
                         </div>
                         
                         {/* Form Body - scrollable */}
-                        <div className="flex-1 overflow-y-auto px-4 py-4">
+                        <div className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50">
                           <MaintenanceFormBody />
                         </div>
                         
-                        {/* Form Actions - sticky bottom */}
-                        <div className="px-4 py-4 bg-white border-t">
+                        {/* Form Actions - fixed bottom */}
+                        <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-200">
                           <FormActions 
                             onCancel={onComplete}
                             isEditing={!!initialData}
@@ -110,7 +109,7 @@ const MaintenanceCheckForm = ({
                             onSubmit={manualSubmit}
                           />
                         </div>
-                      </div>
+                      </>
                     ) : (
                       // Desktop layout
                       <>

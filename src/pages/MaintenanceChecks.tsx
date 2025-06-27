@@ -147,13 +147,11 @@ const MaintenanceChecks = () => {
 
         <div 
           style={{ display: showForm ? 'block' : 'none' }}
-          className={`w-full animate-fade-in ${isMobile ? 'fixed inset-0 z-50 bg-white' : ''}`}
+          className={`w-full ${isMobile ? 'fixed inset-0 z-40 bg-white' : 'bg-white rounded-lg shadow-sm p-4'}`}
           data-testid="maintenance-form-container"
         >
           {showForm && (
-            <div className={`${isMobile ? 'w-full h-full' : 'bg-white rounded-lg shadow-sm p-4'}`}>
-              <MaintenanceCheckForm onComplete={handleHideForm} />
-            </div>
+            <MaintenanceCheckForm onComplete={handleHideForm} />
           )}
         </div>
       </div>
