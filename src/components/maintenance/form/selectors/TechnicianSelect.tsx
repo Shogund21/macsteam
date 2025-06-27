@@ -28,7 +28,7 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
             <FormControl>
               <SelectTrigger 
                 className={`w-full bg-white border border-gray-300 hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-                  isMobile ? 'min-h-[48px] text-base px-4' : 'h-12'
+                  isMobile ? 'min-h-[52px] text-base px-4' : 'h-12'
                 }`}
               >
                 <SelectValue 
@@ -38,12 +38,18 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
               </SelectTrigger>
             </FormControl>
             <SelectContent 
-              className="bg-white border border-gray-300 rounded-lg shadow-lg max-h-[300px] overflow-y-auto z-50"
+              className={`bg-white border border-gray-300 rounded-lg shadow-lg max-h-[300px] overflow-y-auto ${
+                isMobile ? 'z-[9999] w-[calc(100vw-2rem)] mx-4' : 'z-50'
+              }`}
+              position="popper"
+              side={isMobile ? "bottom" : "bottom"}
+              align={isMobile ? "start" : "start"}
+              sideOffset={isMobile ? 8 : 4}
             >
               <SelectItem 
                 value="no-technician" 
                 className={`cursor-pointer hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-600 ${
-                  isMobile ? 'py-3 px-4 text-base' : 'py-3 px-4'
+                  isMobile ? 'py-4 px-4 text-base min-h-[48px]' : 'py-3 px-4'
                 }`}
               >
                 No technician selected
@@ -55,7 +61,7 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
                     key={tech.id} 
                     value={tech.id}
                     className={`cursor-pointer hover:bg-blue-50 focus:bg-blue-50 focus:text-blue-600 ${
-                      isMobile ? 'py-3 px-4' : 'py-3 px-4'
+                      isMobile ? 'py-4 px-4 min-h-[48px]' : 'py-3 px-4'
                     }`}
                   >
                     <div className="flex flex-col w-full">
@@ -72,7 +78,7 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
                 <SelectItem 
                   value="no-technicians" 
                   disabled 
-                  className={`text-gray-500 ${isMobile ? 'py-3 text-base' : 'py-3 text-sm'}`}
+                  className={`text-gray-500 ${isMobile ? 'py-4 text-base min-h-[48px]' : 'py-3 text-sm'}`}
                 >
                   No technicians available
                 </SelectItem>

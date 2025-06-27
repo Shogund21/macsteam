@@ -83,25 +83,32 @@ const MaintenanceCheckForm = ({
               isMobile={isMobile}
             >
               <div 
-                className={`w-full ${isMobile ? 'h-full flex flex-col' : 'max-w-4xl mx-auto px-6'}`}
+                className={`w-full ${isMobile ? 'h-screen flex flex-col bg-white' : 'max-w-4xl mx-auto px-6'}`}
                 data-component="maintenance-form-container"
+                style={isMobile ? { touchAction: 'pan-y' } : {}}
               >
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full h-full flex flex-col">
                     {isMobile ? (
                       <>
                         {/* Header - fixed */}
-                        <div className="flex-shrink-0 px-4 py-3 bg-white border-b border-gray-200">
+                        <div className="flex-shrink-0 px-4 py-3 bg-white border-b border-gray-200 relative z-10">
                           <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
                         </div>
                         
                         {/* Form Body - scrollable */}
-                        <div className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50">
+                        <div 
+                          className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50 relative"
+                          style={{ 
+                            WebkitOverflowScrolling: 'touch',
+                            overscrollBehavior: 'contain'
+                          }}
+                        >
                           <MaintenanceFormBody />
                         </div>
                         
                         {/* Form Actions - fixed bottom */}
-                        <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-200">
+                        <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-200 relative z-10">
                           <FormActions 
                             onCancel={onComplete}
                             isEditing={!!initialData}

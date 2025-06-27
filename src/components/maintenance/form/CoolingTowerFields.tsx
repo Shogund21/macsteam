@@ -45,7 +45,7 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
     >
       <h2 className="text-xl font-semibold mb-4">Cooling Tower Inspection</h2>
       
-      <div className={`w-full ${isMobile ? "space-y-4" : "grid grid-cols-1 md:grid-cols-2 gap-6"}`}>
+      <div className={`w-full ${isMobile ? "space-y-6" : "grid grid-cols-1 md:grid-cols-2 gap-6"}`}>
         {fields.map((field) => (
           <FormField
             key={field.name}
@@ -60,22 +60,27 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
                   <FormControl>
                     <SelectTrigger 
                       className={`w-full bg-white border border-gray-300 ${
-                        isMobile ? 'min-h-[52px] text-base' : 'min-h-[40px]'
+                        isMobile ? 'min-h-[52px] text-base px-4' : 'min-h-[40px]'
                       }`}
                     >
                       <SelectValue placeholder={`Select ${field.label}`} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent 
-                    className="bg-white border border-gray-200 shadow-lg z-[200]"
+                    className={`bg-white border border-gray-200 shadow-lg ${
+                      isMobile ? 'z-[9999] w-[calc(100vw-2rem)]' : 'z-[200]'
+                    }`}
                     position="popper"
-                    sideOffset={4}
+                    side={isMobile ? "bottom" : "bottom"}
+                    sideOffset={isMobile ? 8 : 4}
                   >
                     {statusOptions.map((option) => (
                       <SelectItem 
                         key={option.value} 
                         value={option.value} 
-                        className="cursor-pointer hover:bg-gray-50"
+                        className={`cursor-pointer hover:bg-gray-50 ${
+                          isMobile ? 'py-4 px-4 text-base min-h-[48px]' : 'py-2 px-3'
+                        }`}
                       >
                         {option.label}
                       </SelectItem>
