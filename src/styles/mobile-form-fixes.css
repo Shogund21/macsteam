@@ -165,6 +165,39 @@
     body:has([data-state="open"][data-radix-select-content]) {
       overflow: hidden !important;
     }
+
+    /* Prevent freezing and performance issues */
+    .maintenance-form-mobile {
+      contain: layout style paint !important;
+      will-change: transform !important;
+      transform: translateZ(0) !important;
+    }
+
+    /* Optimize select performance */
+    [data-radix-select-content] * {
+      contain: strict !important;
+      will-change: auto !important;
+    }
+
+    /* Ensure proper touch events */
+    .mobile-form-container * {
+      -webkit-touch-callout: none !important;
+      -webkit-user-select: none !important;
+      -khtml-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+      user-select: none !important;
+    }
+
+    /* Allow text selection in form inputs */
+    .mobile-form-container input,
+    .mobile-form-container textarea,
+    .mobile-form-container [contenteditable] {
+      -webkit-user-select: text !important;
+      -moz-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+    }
   }
 
   /* Landscape mobile adjustments */

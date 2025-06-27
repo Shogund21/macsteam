@@ -1,5 +1,5 @@
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import FormSection from '../FormSection';
 import MaintenanceBasicInfo from '../MaintenanceBasicInfo';
 import { useMaintenanceFormContext } from '../../context/MaintenanceFormContext';
@@ -20,13 +20,41 @@ const MaintenanceFormBody = () => {
     timestamp: new Date().toISOString()
   });
 
-  // Force re-render when equipment changes on mobile
-  useEffect(() => {
-    if (isMobile && formEquipmentId) {
-      console.log('🔧 Mobile equipment changed, forcing update:', formEquipmentId);
-      form.trigger();
-    }
-  }, [formEquipmentId, isMobile, form]);
+  // Memoize sections to prevent unnecessary re-renders
+  const basicInfoSection = useMemo(() => (
+    <FormSection title="Basic Information">
+      <div className="w-full">
+        <MaintenanceBasicInfo 
+          form={form} 
+          equipment={equipment} 
+          technicians={technicians} 
+        />
+      </div>
+    </FormSection>
+  ), [form, equipment, technicians]);
+
+  const equipmentSection = useMemo(() => {
+    if (!formEquipmentId) return null;
+    
+    return (
+      <div 
+        className="w-full"
+        data-component="equipment-details-wrapper"
+      >
+        <FormSection title="Equipment Maintenance Checklist">
+          <div className="w-full">
+            <EquipmentTypeFields />
+          </div>
+        </FormSection>
+      </div>
+    );
+  }, [formEquipmentId]);
+
+  const documentsSection = useMemo(() => (
+    <FormSection title="Documents">
+      <DocumentManager equipmentId={formEquipmentId} />
+    </FormSection>
+  ), [formEquipmentId]);
 
   return (
     <div 
@@ -34,34 +62,13 @@ const MaintenanceFormBody = () => {
       data-component="maintenance-form-body"
     >
       {/* Basic Information Section */}
-      <FormSection title="Basic Information">
-        <div className="w-full">
-          <MaintenanceBasicInfo 
-            form={form} 
-            equipment={equipment} 
-            technicians={technicians} 
-          />
-        </div>
-      </FormSection>
+      {basicInfoSection}
       
       {/* Equipment Maintenance Checklist */}
-      {formEquipmentId && (
-        <div 
-          className="w-full"
-          data-component="equipment-details-wrapper"
-        >
-          <FormSection title="Equipment Maintenance Checklist">
-            <div className="w-full">
-              <EquipmentTypeFields />
-            </div>
-          </FormSection>
-        </div>
-      )}
+      {equipmentSection}
 
       {/* Documents */}
-      <FormSection title="Documents">
-        <DocumentManager equipmentId={formEquipmentId} />
-      </FormSection>
+      {documentsSection}
     </div>
   );
 };

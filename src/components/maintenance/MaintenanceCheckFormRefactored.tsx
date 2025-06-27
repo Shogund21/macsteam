@@ -82,7 +82,7 @@ const MaintenanceCheckForm = ({
               equipmentType={equipmentType}
               isMobile={isMobile}
             >
-              <div className={`w-full ${isMobile ? 'h-screen flex flex-col' : 'max-w-4xl mx-auto px-6'}`}>
+              <div className={`w-full ${isMobile ? 'h-screen flex flex-col maintenance-form-mobile' : 'max-w-4xl mx-auto px-6'}`}>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full h-full flex flex-col">
                     {isMobile ? (
@@ -93,12 +93,12 @@ const MaintenanceCheckForm = ({
                         </div>
                         
                         {/* Mobile Form Body - scrollable middle */}
-                        <div className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50">
+                        <div className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50 mobile-form-container">
                           <MaintenanceFormBody />
                         </div>
                         
                         {/* Mobile Form Actions - fixed at bottom */}
-                        <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-200 sticky bottom-0 z-40">
+                        <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-200 sticky bottom-0 z-40 mobile-form-actions">
                           <FormActions 
                             onCancel={onComplete}
                             isEditing={!!initialData}
