@@ -38,11 +38,7 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
   ];
 
   return (
-    <div 
-      className="w-full space-y-6" 
-      data-component="cooling-tower-fields"
-      data-device={isMobile ? 'mobile' : 'desktop'}
-    >
+    <div className="w-full space-y-6">
       <h2 className="text-xl font-semibold mb-4">Cooling Tower Inspection</h2>
       
       <div className={`w-full ${isMobile ? "space-y-6" : "grid grid-cols-1 md:grid-cols-2 gap-6"}`}>
@@ -68,11 +64,10 @@ const CoolingTowerFields = ({ form }: CoolingTowerFieldsProps) => {
                   </FormControl>
                   <SelectContent 
                     className={`bg-white border border-gray-200 shadow-lg ${
-                      isMobile ? 'z-[9999] w-[calc(100vw-2rem)]' : 'z-[200]'
+                      isMobile ? 'z-[9999]' : 'z-[200]'
                     }`}
                     position="popper"
-                    side={isMobile ? "bottom" : "bottom"}
-                    sideOffset={isMobile ? 8 : 4}
+                    sideOffset={4}
                   >
                     {statusOptions.map((option) => (
                       <SelectItem 

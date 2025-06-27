@@ -39,12 +39,10 @@ const TechnicianSelect = ({ form, technicians }: TechnicianSelectProps) => {
             </FormControl>
             <SelectContent 
               className={`bg-white border border-gray-300 rounded-lg shadow-lg max-h-[300px] overflow-y-auto ${
-                isMobile ? 'z-[9999] w-[calc(100vw-2rem)] mx-4' : 'z-50'
+                isMobile ? 'z-[9999]' : 'z-50'
               }`}
               position="popper"
-              side={isMobile ? "bottom" : "bottom"}
-              align={isMobile ? "start" : "start"}
-              sideOffset={isMobile ? 8 : 4}
+              sideOffset={4}
             >
               <SelectItem 
                 value="no-technician" 

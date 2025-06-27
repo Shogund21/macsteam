@@ -24,6 +24,26 @@
 
   /* Mobile form field improvements */
   @media (max-width: 768px) {
+    /* Prevent viewport bouncing and movement on iOS */
+    html, body {
+      position: fixed !important;
+      overflow: hidden !important;
+      width: 100% !important;
+      height: 100% !important;
+      -webkit-overflow-scrolling: touch !important;
+      overscroll-behavior: none !important;
+    }
+
+    /* Ensure the root container allows scrolling */
+    #root {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      overflow: hidden !important;
+    }
+
     /* Form input fields */
     .mobile-form-field {
       width: 100% !important;
@@ -70,6 +90,34 @@
       z-index: 50 !important;
     }
 
+    /* Critical dropdown fixes for mobile */
+    [data-radix-select-content] {
+      position: fixed !important;
+      z-index: 9999 !important;
+      background-color: white !important;
+      border: 1px solid #e5e7eb !important;
+      border-radius: 8px !important;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+      max-height: 60vh !important;
+      overflow-y: auto !important;
+      width: calc(100vw - 2rem) !important;
+      left: 1rem !important;
+      right: 1rem !important;
+    }
+
+    /* Dropdown positioning wrapper */
+    [data-radix-popper-content-wrapper] {
+      z-index: 9999 !important;
+      position: fixed !important;
+    }
+
+    /* Ensure dropdowns are always visible */
+    [data-state="open"][data-radix-select-content] {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+    }
+
     /* Form spacing improvements */
     .mobile-form-grid {
       display: flex !important;
@@ -111,6 +159,11 @@
       padding: 12px 16px !important;
       font-size: 16px !important;
       touch-action: manipulation !important;
+    }
+
+    /* Prevent scroll on background when dropdown is open */
+    body:has([data-state="open"][data-radix-select-content]) {
+      overflow: hidden !important;
     }
   }
 

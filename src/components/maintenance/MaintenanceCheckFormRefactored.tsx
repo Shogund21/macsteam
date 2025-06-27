@@ -82,33 +82,23 @@ const MaintenanceCheckForm = ({
               equipmentType={equipmentType}
               isMobile={isMobile}
             >
-              <div 
-                className={`w-full ${isMobile ? 'h-screen flex flex-col bg-white' : 'max-w-4xl mx-auto px-6'}`}
-                data-component="maintenance-form-container"
-                style={isMobile ? { touchAction: 'pan-y' } : {}}
-              >
+              <div className={`w-full ${isMobile ? 'h-screen flex flex-col' : 'max-w-4xl mx-auto px-6'}`}>
                 <Form {...form}>
                   <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full h-full flex flex-col">
                     {isMobile ? (
                       <>
-                        {/* Header - fixed */}
-                        <div className="flex-shrink-0 px-4 py-3 bg-white border-b border-gray-200 relative z-10">
+                        {/* Mobile Header - fixed at top */}
+                        <div className="flex-shrink-0 px-4 py-3 bg-white border-b border-gray-200 sticky top-0 z-40">
                           <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
                         </div>
                         
-                        {/* Form Body - scrollable */}
-                        <div 
-                          className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50 relative"
-                          style={{ 
-                            WebkitOverflowScrolling: 'touch',
-                            overscrollBehavior: 'contain'
-                          }}
-                        >
+                        {/* Mobile Form Body - scrollable middle */}
+                        <div className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50">
                           <MaintenanceFormBody />
                         </div>
                         
-                        {/* Form Actions - fixed bottom */}
-                        <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-200 relative z-10">
+                        {/* Mobile Form Actions - fixed at bottom */}
+                        <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-200 sticky bottom-0 z-40">
                           <FormActions 
                             onCancel={onComplete}
                             isEditing={!!initialData}

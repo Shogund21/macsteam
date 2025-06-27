@@ -48,16 +48,6 @@ const MaintenanceChecks = () => {
     window.location.reload();
   };
 
-  // Debug the rendering decision
-  console.log('🔧 MaintenanceChecks render decision:', {
-    mounted,
-    isMobile,
-    showForm,
-    activeTab,
-    shouldShowForm: showForm,
-    shouldShowTabs: !showForm
-  });
-
   if (!mounted) {
     return (
       <Layout>
@@ -68,6 +58,15 @@ const MaintenanceChecks = () => {
           </div>
         </div>
       </Layout>
+    );
+  }
+
+  // Mobile form takes full screen
+  if (isMobile && showForm) {
+    return (
+      <div className="fixed inset-0 z-50 bg-white">
+        <MaintenanceCheckForm onComplete={handleHideForm} />
+      </div>
     );
   }
 
@@ -85,39 +84,39 @@ const MaintenanceChecks = () => {
           </div>
           
           <div className={`flex ${isMobile ? 'flex-col w-full' : 'flex-row'} gap-2`}>
-            {showForm && isMobile ? (
-              <Button 
-                onClick={handleHideForm}
-                variant="outline"
-                className={`${isMobile ? 'w-full min-h-[48px] text-base' : ''} flex items-center justify-center`}
-                size={isMobile ? "default" : "lg"}
-              >
-                <ArrowLeft className="mr-2 h-4 w-4" /> Back to List
-              </Button>
-            ) : (
-              <>
-                <Button 
-                  onClick={handleRefresh}
-                  variant="outline"
-                  className={`${isMobile ? 'w-full min-h-[48px] text-base' : ''} flex items-center justify-center`}
-                  size={isMobile ? "default" : "lg"}
-                >
-                  <RefreshCcw className="mr-2 h-4 w-4" /> Refresh
-                </Button>
-                <Button 
-                  onClick={handleShowForm}
-                  className={`${isMobile ? 'w-full py-2 text-sm min-h-[48px]' : ''} bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow transition-all duration-200`}
-                  size={isMobile ? "default" : "lg"}
-                >
-                  <Plus className={`${isMobile ? 'mr-1 h-4 w-4' : 'mr-2 h-5 w-5'}`} /> New Check
-                </Button>
-              </>
-            )}
+            <Button 
+              onClick={handleRefresh}
+              variant="outline"
+              className={`${isMobile ? 'w-full min-h-[48px] text-base' : ''} flex items-center justify-center`}
+              size={isMobile ? "default" : "lg"}
+            >
+              <RefreshCcw className="mr-2 h-4 w-4" /> Refresh
+            </Button>
+            <Button 
+              onClick={handleShowForm}
+              className={`${isMobile ? 'w-full py-2 text-sm min-h-[48px]' : ''} bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow transition-all duration-200`}
+              size={isMobile ? "default" : "lg"}
+            >
+              <Plus className={`${isMobile ? 'mr-1 h-4 w-4' : 'mr-2 h-5 w-5'}`} /> New Check
+            </Button>
           </div>
         </div>
 
-        {/* Always render both sections with conditional display instead of conditional mounting */}
-        <div style={{ display: showForm ? 'none' : 'block' }}>
+        {/* Desktop form or tabs */}
+        {showForm && !isMobile ? (
+          <div className="bg-white rounded-lg shadow-sm p-4">
+            <div className="flex items-center mb-4">
+              <Button 
+                onClick={handleHideForm}
+                variant="outline"
+                className="flex items-center"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" /> Back to List
+              </Button>
+            </div>
+            <MaintenanceCheckForm onComplete={handleHideForm} />
+          </div>
+        ) : (
           <Tabs 
             defaultValue="history" 
             value={activeTab}
@@ -143,17 +142,7 @@ const MaintenanceChecks = () => {
               </div>
             </TabsContent>
           </Tabs>
-        </div>
-
-        <div 
-          style={{ display: showForm ? 'block' : 'none' }}
-          className={`w-full ${isMobile ? 'fixed inset-0 z-40 bg-white' : 'bg-white rounded-lg shadow-sm p-4'}`}
-          data-testid="maintenance-form-container"
-        >
-          {showForm && (
-            <MaintenanceCheckForm onComplete={handleHideForm} />
-          )}
-        </div>
+        )}
       </div>
     </Layout>
   );
