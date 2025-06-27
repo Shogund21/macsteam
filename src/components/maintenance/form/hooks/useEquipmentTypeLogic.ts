@@ -48,7 +48,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     
     const name = equipment.name.toLowerCase();
     
-    // Enhanced detection with more patterns
+    // Enhanced detection with standardized return values that match the switch statement
     if (name.includes('ahu') || name.includes('air handler') || name.includes('air-handler') || 
         name.includes('rtu') || name.includes('rooftop') || name.includes('roof-top')) {
       return 'ahu';
@@ -57,7 +57,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
       return 'chiller';
     }
     if (name.includes('cooling tower') || name.includes('tower') || name.includes('ct-')) {
-      return 'cooling_tower';
+      return 'cooling tower'; // Match the switch case exactly
     }
     if (name.includes('elevator') || name.includes('lift') || name.includes('elev')) {
       return 'elevator';
