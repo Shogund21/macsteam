@@ -10,7 +10,8 @@
     min-height: calc(100vh - 120px) !important;
     overflow-y: auto !important;
     -webkit-overflow-scrolling: touch !important;
-    padding-bottom: 100px !important; /* Space for sticky buttons */
+    padding-bottom: 120px !important; /* More space for sticky buttons */
+    overscroll-behavior: contain !important;
   }
 
   /* Form section mobile optimizations */
@@ -24,7 +25,7 @@
 
   /* Mobile form field improvements */
   @media (max-width: 768px) {
-    /* FIXED: Allow proper scrolling instead of locking viewport */
+    /* CRITICAL: Enable proper scrolling on mobile */
     html, body {
       width: 100% !important;
       height: auto !important;
@@ -32,26 +33,47 @@
       -webkit-overflow-scrolling: touch !important;
       overscroll-behavior: contain !important;
       position: static !important;
+      touch-action: pan-y !important;
     }
 
-    /* FIXED: Allow scrolling in root container */
+    /* CRITICAL: Allow scrolling in root container */
     #root {
       width: 100% !important;
       height: auto !important;
-      overflow: auto !important;
+      overflow: visible !important;
       position: static !important;
+      min-height: 100vh !important;
+    }
+
+    /* Form container must scroll */
+    .maintenance-form-mobile {
+      height: 100vh !important;
+      overflow: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+
+    /* Form body must be scrollable */
+    .maintenance-form-mobile .mobile-form-container {
+      flex: 1 !important;
+      overflow-y: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      padding: 1rem !important;
+      padding-bottom: 120px !important;
+      background-color: #f9fafb !important;
     }
 
     /* Form input fields */
     .mobile-form-field {
       width: 100% !important;
-      min-height: 44px !important; /* Apple recommended touch target */
+      min-height: 44px !important;
       padding: 12px 16px !important;
-      font-size: 16px !important; /* Prevent zoom on iOS */
+      font-size: 16px !important;
       line-height: 1.4 !important;
       border-radius: 8px !important;
       border: 1px solid #d1d5db !important;
       background-color: white !important;
+      touch-action: manipulation !important;
     }
 
     /* Form labels */
@@ -91,7 +113,7 @@
     /* SIMPLIFIED: Mobile dropdown fixes */
     [data-radix-select-content] {
       position: fixed !important;
-      z-index: 100 !important;
+      z-index: 9999 !important;
       background-color: white !important;
       border: 1px solid #e5e7eb !important;
       border-radius: 8px !important;
@@ -101,13 +123,13 @@
       width: calc(100vw - 2rem) !important;
       left: 1rem !important;
       right: 1rem !important;
-      top: 50% !important;
-      transform: translateY(-50%) !important;
+      top: 20% !important;
+      transform: none !important;
     }
 
     /* Dropdown positioning wrapper */
     [data-radix-popper-content-wrapper] {
-      z-index: 100 !important;
+      z-index: 9999 !important;
       position: fixed !important;
     }
 
@@ -127,10 +149,22 @@
       touch-action: manipulation !important;
     }
 
-    /* REMOVED: Performance-heavy CSS rules that cause freezing */
-    /* Removed: body locking when dropdown is open */
-    /* Removed: complex contain and will-change rules */
-    /* Removed: user-select prevention */
+    /* Equipment checklist sections need proper spacing */
+    .equipment-checklist-section {
+      margin-bottom: 2rem !important;
+      padding: 1rem !important;
+      background: white !important;
+      border-radius: 8px !important;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    /* Ensure form fields stack properly */
+    .form-field-stack {
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 1rem !important;
+      width: 100% !important;
+    }
   }
 
   /* Landscape mobile adjustments */

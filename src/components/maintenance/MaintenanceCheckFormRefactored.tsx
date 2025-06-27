@@ -92,8 +92,17 @@ const MaintenanceCheckForm = ({
                           <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
                         </div>
                         
-                        {/* Mobile Form Body - scrollable middle */}
-                        <div className="flex-1 overflow-y-auto px-4 py-4 bg-gray-50 mobile-form-container">
+                        {/* Mobile Form Body - CRITICAL: Must be scrollable */}
+                        <div 
+                          className="flex-1 mobile-form-container"
+                          style={{
+                            overflowY: 'auto',
+                            WebkitOverflowScrolling: 'touch',
+                            height: 'calc(100vh - 140px)', // Account for header and footer
+                            padding: '1rem',
+                            paddingBottom: '120px' // Space for sticky actions
+                          }}
+                        >
                           <MaintenanceFormBody />
                         </div>
                         

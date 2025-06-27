@@ -33,16 +33,18 @@ const MaintenanceFormBody = () => {
 
   // Memoize sections to prevent unnecessary re-renders
   const basicInfoSection = useMemo(() => (
-    <FormSection title="Basic Information">
-      <div className="w-full">
-        <MaintenanceBasicInfo 
-          form={form} 
-          equipment={equipment} 
-          technicians={technicians} 
-        />
-      </div>
-    </FormSection>
-  ), [form, equipment, technicians]);
+    <div className={`w-full ${isMobile ? 'mobile-form-section' : ''}`}>
+      <FormSection title="Basic Information">
+        <div className="w-full">
+          <MaintenanceBasicInfo 
+            form={form} 
+            equipment={equipment} 
+            technicians={technicians} 
+          />
+        </div>
+      </FormSection>
+    </div>
+  ), [form, equipment, technicians, isMobile]);
 
   const equipmentSection = useMemo(() => {
     if (!formEquipmentId) {
@@ -58,7 +60,7 @@ const MaintenanceFormBody = () => {
     
     return (
       <div 
-        className="w-full"
+        className={`w-full ${isMobile ? 'mobile-form-section equipment-checklist-section' : ''}`}
         data-component="equipment-details-wrapper"
       >
         <FormSection title="Equipment Maintenance Checklist">
@@ -68,17 +70,19 @@ const MaintenanceFormBody = () => {
         </FormSection>
       </div>
     );
-  }, [formEquipmentId, equipmentType, selectedEquipment]);
+  }, [formEquipmentId, equipmentType, selectedEquipment, isMobile]);
 
   const documentsSection = useMemo(() => (
-    <FormSection title="Documents">
-      <DocumentManager equipmentId={formEquipmentId} />
-    </FormSection>
-  ), [formEquipmentId]);
+    <div className={`w-full ${isMobile ? 'mobile-form-section' : ''}`}>
+      <FormSection title="Documents">
+        <DocumentManager equipmentId={formEquipmentId} />
+      </FormSection>
+    </div>
+  ), [formEquipmentId, isMobile]);
 
   return (
     <div 
-      className={`w-full space-y-6 ${isMobile ? 'pb-4' : 'pb-8'}`} 
+      className={`w-full ${isMobile ? 'form-field-stack' : 'space-y-6'} ${isMobile ? 'pb-4' : 'pb-8'}`} 
       data-component="maintenance-form-body"
     >
       {/* Basic Information Section */}
