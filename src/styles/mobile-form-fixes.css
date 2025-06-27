@@ -24,24 +24,22 @@
 
   /* Mobile form field improvements */
   @media (max-width: 768px) {
-    /* Prevent viewport bouncing and movement on iOS */
+    /* FIXED: Allow proper scrolling instead of locking viewport */
     html, body {
-      position: fixed !important;
-      overflow: hidden !important;
       width: 100% !important;
-      height: 100% !important;
+      height: auto !important;
+      overflow: auto !important;
       -webkit-overflow-scrolling: touch !important;
-      overscroll-behavior: none !important;
+      overscroll-behavior: contain !important;
+      position: static !important;
     }
 
-    /* Ensure the root container allows scrolling */
+    /* FIXED: Allow scrolling in root container */
     #root {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
       width: 100% !important;
-      height: 100% !important;
-      overflow: hidden !important;
+      height: auto !important;
+      overflow: auto !important;
+      position: static !important;
     }
 
     /* Form input fields */
@@ -90,10 +88,10 @@
       z-index: 50 !important;
     }
 
-    /* Critical dropdown fixes for mobile */
+    /* SIMPLIFIED: Mobile dropdown fixes */
     [data-radix-select-content] {
       position: fixed !important;
-      z-index: 9999 !important;
+      z-index: 100 !important;
       background-color: white !important;
       border: 1px solid #e5e7eb !important;
       border-radius: 8px !important;
@@ -103,19 +101,14 @@
       width: calc(100vw - 2rem) !important;
       left: 1rem !important;
       right: 1rem !important;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
     }
 
     /* Dropdown positioning wrapper */
     [data-radix-popper-content-wrapper] {
-      z-index: 9999 !important;
+      z-index: 100 !important;
       position: fixed !important;
-    }
-
-    /* Ensure dropdowns are always visible */
-    [data-state="open"][data-radix-select-content] {
-      display: block !important;
-      visibility: visible !important;
-      opacity: 1 !important;
     }
 
     /* Form spacing improvements */
@@ -123,33 +116,6 @@
       display: flex !important;
       flex-direction: column !important;
       gap: 1rem !important;
-    }
-
-    /* Loading state for mobile */
-    .mobile-loading-state {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      min-height: 200px !important;
-      font-size: 16px !important;
-      color: #6b7280 !important;
-    }
-
-    /* Error state for mobile */
-    .mobile-error-state {
-      padding: 16px !important;
-      background-color: #fef2f2 !important;
-      border: 1px solid #fecaca !important;
-      border-radius: 8px !important;
-      color: #dc2626 !important;
-      font-size: 14px !important;
-    }
-
-    /* Mobile viewport fixes */
-    .mobile-viewport-container {
-      width: 100vw !important;
-      max-width: 100vw !important;
-      overflow-x: hidden !important;
     }
 
     /* Touch-friendly select components */
@@ -161,43 +127,10 @@
       touch-action: manipulation !important;
     }
 
-    /* Prevent scroll on background when dropdown is open */
-    body:has([data-state="open"][data-radix-select-content]) {
-      overflow: hidden !important;
-    }
-
-    /* Prevent freezing and performance issues */
-    .maintenance-form-mobile {
-      contain: layout style paint !important;
-      will-change: transform !important;
-      transform: translateZ(0) !important;
-    }
-
-    /* Optimize select performance */
-    [data-radix-select-content] * {
-      contain: strict !important;
-      will-change: auto !important;
-    }
-
-    /* Ensure proper touch events */
-    .mobile-form-container * {
-      -webkit-touch-callout: none !important;
-      -webkit-user-select: none !important;
-      -khtml-user-select: none !important;
-      -moz-user-select: none !important;
-      -ms-user-select: none !important;
-      user-select: none !important;
-    }
-
-    /* Allow text selection in form inputs */
-    .mobile-form-container input,
-    .mobile-form-container textarea,
-    .mobile-form-container [contenteditable] {
-      -webkit-user-select: text !important;
-      -moz-user-select: text !important;
-      -ms-user-select: text !important;
-      user-select: text !important;
-    }
+    /* REMOVED: Performance-heavy CSS rules that cause freezing */
+    /* Removed: body locking when dropdown is open */
+    /* Removed: complex contain and will-change rules */
+    /* Removed: user-select prevention */
   }
 
   /* Landscape mobile adjustments */

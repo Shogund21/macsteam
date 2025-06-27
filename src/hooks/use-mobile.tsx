@@ -15,15 +15,6 @@ export function useIsMobile() {
     const viewportWidth = window.innerWidth;
     const isMobileViewport = viewportWidth <= MOBILE_BREAKPOINT;
     
-    // Debug logging with more context
-    console.log('📱 Mobile Detection DEBUG:', {
-      viewportWidth,
-      breakpoint: MOBILE_BREAKPOINT,
-      isMobileViewport,
-      userAgent: window.navigator.userAgent.substring(0, 50) + '...',
-      timestamp: new Date().toISOString()
-    });
-    
     return isMobileViewport;
   }, []);
   
@@ -33,9 +24,8 @@ export function useIsMobile() {
     // Set initial value
     const initialMobileState = checkIfMobile();
     setIsMobile(initialMobileState);
-    console.log('📱 Initial mobile state set to:', initialMobileState);
     
-    // Handle resize with debouncing
+    // OPTIMIZED: Reduced logging and longer debounce time
     let timeoutId: number | undefined;
     
     const handleViewportChange = () => {
@@ -43,9 +33,10 @@ export function useIsMobile() {
       
       timeoutId = window.setTimeout(() => {
         const newMobileState = checkIfMobile();
-        console.log('📱 Mobile state changing from', isMobile, 'to', newMobileState);
-        setIsMobile(newMobileState);
-      }, 150);
+        if (newMobileState !== isMobile) {
+          setIsMobile(newMobileState);
+        }
+      }, 300); // Increased debounce time to reduce re-renders
     };
     
     window.addEventListener('resize', handleViewportChange, { passive: true });
@@ -59,7 +50,7 @@ export function useIsMobile() {
         window.clearTimeout(timeoutId);
       }
     };
-  }, [checkIfMobile]);
+  }, [checkIfMobile, isMobile]);
 
   return isMobile;
 }

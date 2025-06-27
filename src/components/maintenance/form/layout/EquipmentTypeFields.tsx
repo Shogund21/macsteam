@@ -12,21 +12,8 @@ import MaintenanceObservations from '../MaintenanceObservations';
 const EquipmentTypeFields = memo(() => {
   const { form, equipmentType, selectedEquipment, isMobile } = useMaintenanceFormContext();
   
-  console.log('🔧 EquipmentTypeFields render:', { 
-    equipmentType, 
-    selectedEquipmentId: selectedEquipment?.id,
-    selectedEquipmentName: selectedEquipment?.name,
-    isMobile 
-  });
-
   const renderEquipmentFields = useCallback(() => {
     if (!equipmentType || !selectedEquipment) {
-      console.log('🔧 EquipmentTypeFields: Missing data:', {
-        hasEquipmentType: !!equipmentType,
-        hasSelectedEquipment: !!selectedEquipment,
-        equipmentType,
-        equipmentName: selectedEquipment?.name
-      });
       return (
         <div className="p-4 text-center text-gray-500">
           <p>Please select equipment to see maintenance checklist</p>
@@ -34,31 +21,21 @@ const EquipmentTypeFields = memo(() => {
       );
     }
 
-    console.log('🔧 EquipmentTypeFields: Processing equipment type:', {
-      equipmentType,
-      equipmentName: selectedEquipment.name
-    });
-
-    // SIMPLIFIED: Direct switch without normalization to avoid mismatches
+    // SIMPLIFIED: Direct switch without complex logging to improve performance
     switch (equipmentType) {
       case 'coolingtower':
-        console.log('🔧 EquipmentTypeFields: Rendering CoolingTowerFields');
         return <CoolingTowerFields form={form} />;
         
       case 'ahu':
-        console.log('🔧 EquipmentTypeFields: Rendering AHUMaintenanceFields');
         return <AHUMaintenanceFields form={form} />;
         
       case 'elevator':
-        console.log('🔧 EquipmentTypeFields: Rendering ElevatorMaintenanceFields');
         return <ElevatorMaintenanceFields form={form} />;
         
       case 'restroom':
-        console.log('🔧 EquipmentTypeFields: Rendering RestroomMaintenanceFields');
         return <RestroomMaintenanceFields form={form} />;
         
       case 'chiller':
-        console.log('🔧 EquipmentTypeFields: Rendering Chiller maintenance fields');
         return (
           <div className="w-full space-y-4">
             <div className={`bg-blue-50 p-4 rounded-lg border border-blue-200 ${isMobile ? 'mb-4' : 'mb-6'}`}>
@@ -78,7 +55,6 @@ const EquipmentTypeFields = memo(() => {
         
       case 'general':
       default:
-        console.log('🔧 EquipmentTypeFields: Rendering General maintenance fields');
         return (
           <div className="w-full space-y-4">
             <div className={`bg-gray-50 p-4 rounded-lg border border-gray-200 ${isMobile ? 'mb-4' : 'mb-6'}`}>
