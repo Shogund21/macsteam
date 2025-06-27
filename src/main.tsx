@@ -2,23 +2,53 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
-// Import styles in the correct order
 import './styles/index.css'
 import './index.css'
 
-// Get root element
-const rootElement = document.getElementById('root');
+// Force visibility immediately
+document.documentElement.style.display = 'block';
+document.documentElement.style.visibility = 'visible';
+document.body.style.display = 'block';
+document.body.style.visibility = 'visible';
 
+// Get or create root element
+let rootElement = document.getElementById('root');
 if (!rootElement) {
-  // Create root element if it doesn't exist (extreme fallback)
-  const newRoot = document.createElement('div');
-  newRoot.id = 'root';
-  document.body.appendChild(newRoot);
-  console.error("Root element was missing - created fallback root");
+  rootElement = document.createElement('div');
+  rootElement.id = 'root';
+  document.body.appendChild(rootElement);
 }
 
-// Get root element and render App within React's control
-ReactDOM.createRoot(rootElement || document.getElementById('root')!).render(<App />);
+// Force root visibility
+rootElement.style.display = 'block';
+rootElement.style.visibility = 'visible';
+rootElement.style.minHeight = '100vh';
+
+// Emergency fallback content
+const showFallback = () => {
+  if (!rootElement!.hasChildNodes()) {
+    rootElement!.innerHTML = `
+      <div style="padding: 20px; text-align: center; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+        <h2>AssetGuardian</h2>
+        <p>Loading application...</p>
+        <button onclick="window.location.reload()" style="margin-top: 10px; padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 4px;">
+          Refresh
+        </button>
+      </div>
+    `;
+  }
+};
+
+// Show fallback immediately if needed
+setTimeout(showFallback, 100);
+
+// Render React app
+try {
+  ReactDOM.createRoot(rootElement).render(<App />);
+} catch (error) {
+  console.error('React render error:', error);
+  showFallback();
+}
 
 // Set viewport height for mobile devices
 const setViewportHeight = () => {
@@ -26,9 +56,18 @@ const setViewportHeight = () => {
   document.documentElement.style.setProperty('--vh', `${vh}px`);
 };
 
-// Set viewport height once and on resize
 setViewportHeight();
 window.addEventListener('resize', setViewportHeight);
 
-// Log successful initialization
-console.log('Application successfully initialized');
+// Force content visibility after render
+setTimeout(() => {
+  document.querySelectorAll('#root, #root > *, body, html').forEach(el => {
+    if (el instanceof HTMLElement) {
+      el.style.display = 'block';
+      el.style.visibility = 'visible';
+      el.style.opacity = '1';
+    }
+  });
+}, 200);
+
+console.log('Application initialization complete');

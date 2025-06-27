@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { MobileLayout } from "@/components/layout/MobileLayout";
@@ -12,37 +12,67 @@ interface LayoutProps {
 
 const Layout = ({ children }: LayoutProps) => {
   const isMobile = useIsMobile();
+  const [isClient, setIsClient] = useState(false);
   
   // Apply viewport height adjustment
   useViewportHeight();
   
-  // Force reflow on device type change to avoid layout issues
+  // Ensure client-side rendering
   useEffect(() => {
-    // Small timeout to ensure DOM is ready
-    const timeout = setTimeout(() => {
-      // Force a reflow by accessing offsetHeight
-      document.body.offsetHeight;
-    }, 50);
+    setIsClient(true);
     
-    return () => clearTimeout(timeout);
-  }, [isMobile]);
+    // Force visibility on mount
+    const forceVisibility = () => {
+      document.querySelectorAll('#root, #root > *, body').forEach(el => {
+        if (el instanceof HTMLElement) {
+          el.style.display = 'block';
+          el.style.visibility = 'visible';
+          el.style.opacity = '1';
+        }
+      });
+    };
+    
+    forceVisibility();
+    setTimeout(forceVisibility, 100);
+  }, []);
+
+  // Show loading state during hydration
+  if (!isClient) {
+    return (
+      <div style={{ 
+        display: 'block', 
+        visibility: 'visible', 
+        padding: '20px', 
+        minHeight: '100vh',
+        backgroundColor: 'white'
+      }}>
+        <div style={{ textAlign: 'center', paddingTop: '50px' }}>
+          <h2>AssetGuardian</h2>
+          <p>Loading...</p>
+        </div>
+      </div>
+    );
+  }
   
   // Use different layout approach for mobile vs desktop
-  // Only wrap desktop layout with SidebarProvider
   if (isMobile) {
     return (
-      <MobileLayout>
-        {children}
-      </MobileLayout>
+      <div style={{ display: 'block', visibility: 'visible', minHeight: '100vh' }}>
+        <MobileLayout>
+          {children}
+        </MobileLayout>
+      </div>
     );
   }
 
   return (
-    <SidebarProvider defaultOpen={true}>
-      <DesktopLayout>
-        {children}
-      </DesktopLayout>
-    </SidebarProvider>
+    <div style={{ display: 'block', visibility: 'visible', minHeight: '100vh' }}>
+      <SidebarProvider defaultOpen={true}>
+        <DesktopLayout>
+          {children}
+        </DesktopLayout>
+      </SidebarProvider>
+    </div>
   );
 };
 

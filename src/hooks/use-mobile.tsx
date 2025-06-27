@@ -1,56 +1,44 @@
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 
-const MOBILE_BREAKPOINT = 640 // Mobile breakpoint as specified in requirements
+const MOBILE_BREAKPOINT = 640
 
 export function useIsMobile() {
-  // Default to false to prevent unnecessary mobile exclusions
   const [isMobile, setIsMobile] = useState<boolean>(false);
   
-  const checkIfMobile = useCallback(() => {
-    // Only run in browser environment
-    if (typeof window === 'undefined') return false;
-    
-    // Use viewport width for mobile detection
-    const viewportWidth = window.innerWidth;
-    const isMobileViewport = viewportWidth <= MOBILE_BREAKPOINT;
-    
-    return isMobileViewport;
-  }, []);
-  
   useEffect(() => {
+    // Only run in browser environment
     if (typeof window === 'undefined') return;
     
-    // Set initial value
-    const initialMobileState = checkIfMobile();
-    setIsMobile(initialMobileState);
+    const checkIfMobile = () => {
+      const viewportWidth = window.innerWidth;
+      return viewportWidth <= MOBILE_BREAKPOINT;
+    };
     
-    // OPTIMIZED: Reduced logging and longer debounce time
+    // Set initial value
+    setIsMobile(checkIfMobile());
+    
+    // Simplified resize handler with longer debounce
     let timeoutId: number | undefined;
     
-    const handleViewportChange = () => {
+    const handleResize = () => {
       if (timeoutId) window.clearTimeout(timeoutId);
       
       timeoutId = window.setTimeout(() => {
         const newMobileState = checkIfMobile();
-        if (newMobileState !== isMobile) {
-          setIsMobile(newMobileState);
-        }
-      }, 300); // Increased debounce time to reduce re-renders
+        setIsMobile(newMobileState);
+      }, 500); // Longer debounce to reduce re-renders
     };
     
-    window.addEventListener('resize', handleViewportChange, { passive: true });
-    window.addEventListener('orientationchange', handleViewportChange, { passive: true });
+    window.addEventListener('resize', handleResize, { passive: true });
     
-    // Clean up
     return () => {
-      window.removeEventListener('resize', handleViewportChange);
-      window.removeEventListener('orientationchange', handleViewportChange);
+      window.removeEventListener('resize', handleResize);
       if (timeoutId) {
         window.clearTimeout(timeoutId);
       }
     };
-  }, [checkIfMobile, isMobile]);
+  }, []);
 
   return isMobile;
 }
