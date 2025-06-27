@@ -83,30 +83,51 @@ const MaintenanceCheckForm = ({
               isMobile={isMobile}
             >
               <div 
-                className={`w-full ${isMobile ? 'flex flex-col min-h-screen' : 'max-w-4xl mx-auto px-6'}`}
+                className={`w-full ${isMobile ? 'h-full' : 'max-w-4xl mx-auto px-6'}`}
                 data-component="maintenance-form-container"
               >
                 <Form {...form}>
-                  <form onSubmit={form.handleSubmit(onSubmitForm)} className={`w-full ${isMobile ? 'flex flex-col flex-1' : ''}`}>
-                    {/* Header */}
-                    <div className={`${isMobile ? 'flex-shrink-0 px-4 py-4' : ''}`}>
-                      <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
-                    </div>
-                    
-                    {/* Form Body - scrollable content */}
-                    <div className={`${isMobile ? 'flex-1 px-4 pb-4 overflow-y-auto' : 'pb-8'}`}>
-                      <MaintenanceFormBody />
-                    </div>
-                    
-                    {/* Form Actions - at bottom but not fixed */}
-                    <div className={`${isMobile ? 'flex-shrink-0 px-4 py-4 bg-white border-t border-gray-200' : 'mt-6'}`}>
-                      <FormActions 
-                        onCancel={onComplete}
-                        isEditing={!!initialData}
-                        isSubmitting={isSubmitting}
-                        onSubmit={manualSubmit}
-                      />
-                    </div>
+                  <form onSubmit={form.handleSubmit(onSubmitForm)} className="w-full h-full">
+                    {isMobile ? (
+                      // Mobile layout: simple vertical stack with proper spacing
+                      <div className="h-full flex flex-col">
+                        {/* Header */}
+                        <div className="px-4 py-4 bg-white border-b">
+                          <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
+                        </div>
+                        
+                        {/* Form Body - scrollable */}
+                        <div className="flex-1 overflow-y-auto px-4 py-4">
+                          <MaintenanceFormBody />
+                        </div>
+                        
+                        {/* Form Actions - sticky bottom */}
+                        <div className="px-4 py-4 bg-white border-t">
+                          <FormActions 
+                            onCancel={onComplete}
+                            isEditing={!!initialData}
+                            isSubmitting={isSubmitting}
+                            onSubmit={manualSubmit}
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      // Desktop layout
+                      <>
+                        <MaintenanceFormHeader initialData={initialData} isMobile={isMobile} />
+                        <div className="pb-8">
+                          <MaintenanceFormBody />
+                        </div>
+                        <div className="mt-6">
+                          <FormActions 
+                            onCancel={onComplete}
+                            isEditing={!!initialData}
+                            isSubmitting={isSubmitting}
+                            onSubmit={manualSubmit}
+                          />
+                        </div>
+                      </>
+                    )}
                   </form>
                 </Form>
               </div>
