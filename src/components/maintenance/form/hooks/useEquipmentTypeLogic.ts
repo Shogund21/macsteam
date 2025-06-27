@@ -29,6 +29,7 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
           equipmentName: foundEquipment.name,
           equipmentId: foundEquipment.id,
           detectedType,
+          rawName: foundEquipment.name.toLowerCase(),
           isMobile: typeof window !== 'undefined' ? window.innerWidth <= 768 : false
         });
       } else {
@@ -43,29 +44,40 @@ export const useEquipmentTypeLogic = (equipment: Equipment[], form: any) => {
     }
   }, [equipmentId, equipment]);
 
+  // STANDARDIZED: Equipment type detection that returns consistent values
   const getEquipmentType = (equipment: Equipment): string => {
-    if (!equipment) return 'general';
+    if (!equipment) {
+      console.log('getEquipmentType: No equipment provided, returning general');
+      return 'general';
+    }
     
     const name = equipment.name.toLowerCase();
+    console.log('getEquipmentType: Analyzing equipment name:', name);
     
-    // Enhanced detection with standardized return values that match the switch statement
+    // Return standardized equipment types that match the switch cases exactly
     if (name.includes('ahu') || name.includes('air handler') || name.includes('air-handler') || 
         name.includes('rtu') || name.includes('rooftop') || name.includes('roof-top')) {
+      console.log('getEquipmentType: Detected AHU');
       return 'ahu';
     }
     if (name.includes('chiller') || name.includes('ch-') || name.includes('cooling unit')) {
+      console.log('getEquipmentType: Detected Chiller');
       return 'chiller';
     }
     if (name.includes('cooling tower') || name.includes('tower') || name.includes('ct-')) {
-      return 'cooling tower'; // Match the switch case exactly
+      console.log('getEquipmentType: Detected Cooling Tower');
+      return 'coolingtower'; // FIXED: Return normalized version to match switch case
     }
     if (name.includes('elevator') || name.includes('lift') || name.includes('elev')) {
+      console.log('getEquipmentType: Detected Elevator');
       return 'elevator';
     }
     if (name.includes('restroom') || name.includes('bathroom') || name.includes('washroom')) {
+      console.log('getEquipmentType: Detected Restroom');
       return 'restroom';
     }
     
+    console.log('getEquipmentType: No specific type detected, returning general');
     return 'general';
   };
 

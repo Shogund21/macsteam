@@ -21,76 +21,80 @@ const EquipmentTypeFields = memo(() => {
 
   const renderEquipmentFields = useCallback(() => {
     if (!equipmentType || !selectedEquipment) {
-      console.log('🔧 No equipment type or selected equipment');
-      return null;
-    }
-
-    try {
-      // Normalize the equipment type for consistent matching
-      const normalizedType = equipmentType.toLowerCase().replace(/[_\s-]/g, '');
-      
-      console.log('🔧 Processing equipment type:', {
-        original: equipmentType,
-        normalized: normalizedType
+      console.log('🔧 EquipmentTypeFields: Missing data:', {
+        hasEquipmentType: !!equipmentType,
+        hasSelectedEquipment: !!selectedEquipment,
+        equipmentType,
+        equipmentName: selectedEquipment?.name
       });
-
-      switch (normalizedType) {
-        case 'coolingtower':
-        case 'tower':
-          return <CoolingTowerFields form={form} />;
-        case 'ahu':
-        case 'airhandler':
-        case 'airhandlingunit':
-          return <AHUMaintenanceFields form={form} />;
-        case 'elevator':
-          return <ElevatorMaintenanceFields form={form} />;
-        case 'restroom':
-          return <RestroomMaintenanceFields form={form} />;
-        case 'chiller':
-          // For chiller, use the general maintenance fields
-          return (
-            <div className="w-full space-y-4">
-              <div className={`bg-blue-50 p-4 rounded-lg border border-blue-200 ${isMobile ? 'mb-4' : 'mb-6'}`}>
-                <div className="flex items-center space-x-2">
-                  <div className="text-blue-600 text-2xl">❄️</div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-blue-800">Chiller Maintenance Checklist</h3>
-                    <p className="text-sm text-blue-600">Complete all inspection items below</p>
-                  </div>
-                </div>
-              </div>
-              <MaintenanceReadings form={form} />
-              <MaintenanceStatus form={form} />
-              <MaintenanceObservations form={form} />
-            </div>
-          );
-        default:
-          // General maintenance form for any unrecognized equipment type
-          return (
-            <div className="w-full space-y-4">
-              <div className={`bg-gray-50 p-4 rounded-lg border border-gray-200 ${isMobile ? 'mb-4' : 'mb-6'}`}>
-                <div className="flex items-center space-x-2">
-                  <div className="text-gray-600 text-2xl">🔧</div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-800">General Maintenance Checklist</h3>
-                    <p className="text-sm text-gray-600">Equipment: {selectedEquipment.name}</p>
-                  </div>
-                </div>
-              </div>
-              <MaintenanceReadings form={form} />
-              <MaintenanceStatus form={form} />
-              <MaintenanceObservations form={form} />
-            </div>
-          );
-      }
-    } catch (error) {
-      console.error('🔧 Error rendering equipment fields:', error);
       return (
-        <div className="p-4 text-center text-red-500">
-          <p>Error loading maintenance form for this equipment type.</p>
-          <p className="text-sm mt-2">Please try refreshing the page.</p>
+        <div className="p-4 text-center text-gray-500">
+          <p>Please select equipment to see maintenance checklist</p>
         </div>
       );
+    }
+
+    console.log('🔧 EquipmentTypeFields: Processing equipment type:', {
+      equipmentType,
+      equipmentName: selectedEquipment.name
+    });
+
+    // SIMPLIFIED: Direct switch without normalization to avoid mismatches
+    switch (equipmentType) {
+      case 'coolingtower':
+        console.log('🔧 EquipmentTypeFields: Rendering CoolingTowerFields');
+        return <CoolingTowerFields form={form} />;
+        
+      case 'ahu':
+        console.log('🔧 EquipmentTypeFields: Rendering AHUMaintenanceFields');
+        return <AHUMaintenanceFields form={form} />;
+        
+      case 'elevator':
+        console.log('🔧 EquipmentTypeFields: Rendering ElevatorMaintenanceFields');
+        return <ElevatorMaintenanceFields form={form} />;
+        
+      case 'restroom':
+        console.log('🔧 EquipmentTypeFields: Rendering RestroomMaintenanceFields');
+        return <RestroomMaintenanceFields form={form} />;
+        
+      case 'chiller':
+        console.log('🔧 EquipmentTypeFields: Rendering Chiller maintenance fields');
+        return (
+          <div className="w-full space-y-4">
+            <div className={`bg-blue-50 p-4 rounded-lg border border-blue-200 ${isMobile ? 'mb-4' : 'mb-6'}`}>
+              <div className="flex items-center space-x-2">
+                <div className="text-blue-600 text-2xl">❄️</div>
+                <div>
+                  <h3 className="text-lg font-semibold text-blue-800">Chiller Maintenance Checklist</h3>
+                  <p className="text-sm text-blue-600">Complete all inspection items below</p>
+                </div>
+              </div>
+            </div>
+            <MaintenanceReadings form={form} />
+            <MaintenanceStatus form={form} />
+            <MaintenanceObservations form={form} />
+          </div>
+        );
+        
+      case 'general':
+      default:
+        console.log('🔧 EquipmentTypeFields: Rendering General maintenance fields');
+        return (
+          <div className="w-full space-y-4">
+            <div className={`bg-gray-50 p-4 rounded-lg border border-gray-200 ${isMobile ? 'mb-4' : 'mb-6'}`}>
+              <div className="flex items-center space-x-2">
+                <div className="text-gray-600 text-2xl">🔧</div>
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-800">General Maintenance Checklist</h3>
+                  <p className="text-sm text-gray-600">Equipment: {selectedEquipment.name}</p>
+                </div>
+              </div>
+            </div>
+            <MaintenanceReadings form={form} />
+            <MaintenanceStatus form={form} />
+            <MaintenanceObservations form={form} />
+          </div>
+        );
     }
   }, [equipmentType, selectedEquipment, form, isMobile]);
 

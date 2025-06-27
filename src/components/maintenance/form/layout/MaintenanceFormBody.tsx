@@ -7,7 +7,7 @@ import DocumentManager from '../../documents/DocumentManager';
 import EquipmentTypeFields from './EquipmentTypeFields';
 
 const MaintenanceFormBody = () => {
-  const { form, equipment, technicians, isMobile } = useMaintenanceFormContext();
+  const { form, equipment, technicians, isMobile, equipmentType, selectedEquipment } = useMaintenanceFormContext();
   
   const formEquipmentId = form.watch('equipment_id');
   const locationId = form.watch('location_id');
@@ -17,8 +17,19 @@ const MaintenanceFormBody = () => {
     formEquipmentId,
     locationId,
     equipmentCount: equipment?.length || 0,
+    equipmentType,
+    selectedEquipmentName: selectedEquipment?.name,
     timestamp: new Date().toISOString()
   });
+
+  // Debug equipment type changes
+  useEffect(() => {
+    console.log('🔧 MaintenanceFormBody - Equipment Type Changed:', {
+      equipmentType,
+      selectedEquipment: selectedEquipment?.name,
+      formEquipmentId
+    });
+  }, [equipmentType, selectedEquipment, formEquipmentId]);
 
   // Memoize sections to prevent unnecessary re-renders
   const basicInfoSection = useMemo(() => (
@@ -34,7 +45,16 @@ const MaintenanceFormBody = () => {
   ), [form, equipment, technicians]);
 
   const equipmentSection = useMemo(() => {
-    if (!formEquipmentId) return null;
+    if (!formEquipmentId) {
+      console.log('🔧 MaintenanceFormBody: No equipment selected, hiding checklist section');
+      return null;
+    }
+    
+    console.log('🔧 MaintenanceFormBody: Rendering equipment section for:', {
+      formEquipmentId,
+      equipmentType,
+      selectedEquipmentName: selectedEquipment?.name
+    });
     
     return (
       <div 
@@ -48,7 +68,7 @@ const MaintenanceFormBody = () => {
         </FormSection>
       </div>
     );
-  }, [formEquipmentId]);
+  }, [formEquipmentId, equipmentType, selectedEquipment]);
 
   const documentsSection = useMemo(() => (
     <FormSection title="Documents">
